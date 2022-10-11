@@ -10,8 +10,11 @@ namespace Standard {
 	 * Place this Attribute [SelectionBase] on script in 
 	 */
 	[SelectionBase]
+	// Use where a component is required for script to work, gets added to GameObject when script dragged onto it 
+	[RequireComponent(typeof(Camera))]
 	public class CodeStandard : MonoBehaviour { // Inline curly brackets (change your IDE settings)
 		/*	A note on comments:
+		 * Only English characters in comments, write in english! (Several reasons, one is UTF character encoding, other is readability)
 		 * Before commenting; ask yourself if the method/variable name can be changed to explain what it does instead. 
 		 * Google: "Self Documenting Code"
 		 * Your code should be clear enough without comments.
@@ -21,6 +24,8 @@ namespace Standard {
 		 * This document is horrible for how many comments there are! I cannot see the code for all the comments!
 		 */
 
+		private const string StringlyTypedValue = "string";	// make variables for "stringly" typed variables e.g. Input.GetAxisRaw("Horizontal");
+		
 		// group class variables together, separate with whitespaces when it makes sense. Comment sections if needed
 		private const float ConstantNumber = .1f; // type out decimals for clarity, integer part can be left out if 0
 
