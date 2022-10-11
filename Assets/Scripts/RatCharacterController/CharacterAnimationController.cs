@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace CharacterController { 
+namespace RatCharacterController { 
 	public class CharacterAnimationController : MonoBehaviour {
 
 		private static readonly int VelocityZ = Animator.StringToHash("VelocityZ");
 		private static readonly int VelocityX = Animator.StringToHash("VelocityX");
+		private Transform _camera;
 		private Animator _animator;
 		private NavMeshAgent _navMeshAgent;
 		private Transform _transform;
@@ -18,40 +19,41 @@ namespace CharacterController {
 		private float smoothTime = .1f;
 		private float _currentVelX;
 		private float _currentVelZ;
-		
+		private Vector3 _inputVector;
 		private void Awake() {
 			_transform = transform;
 			_animator = GetComponent<Animator>();
+			_camera = FindObjectOfType<Camera>().transform;
 			// _navMeshAgent = GetComponent<NavMeshAgent>();
 			// _navMeshAgent.updatePosition = false;
 			// _navMeshAgent.updateRotation = false;
 		}
 		
 		private void Update() {
-			Vector3 inputVector = InputVector();
 
-			_velX = Mathf.SmoothDamp(_velX, inputVector.x, ref _currentVelX, smoothTime);
-			_velZ = Mathf.SmoothDamp(_velZ, inputVector.z, ref _currentVelZ, smoothTime);
+			_velX = Mathf.SmoothDamp(_velX, _inputVector.x, ref _currentVelX, smoothTime);
+			_velZ = Mathf.SmoothDamp(_velZ, _inputVector.z, ref _currentVelZ, smoothTime);
 			_animator.SetFloat(VelocityZ, _velZ);
 			_animator.SetFloat(VelocityX, _velX);
 
 			// _navMeshAgent.nextPosition = transform.position;
 		}
 
-		private Vector3 InputVector() {
-			bool shiftHeld = Input.GetKey(KeyCode.LeftShift);
-			float horizontalInput = Input.GetAxisRaw("Horizontal");
-			float verticalInput = Input.GetAxisRaw("Vertical");
+		public void InputVector(Vector2 inputVector) {
+
+			// bool shiftHeld = Input.GetKey(KeyCode.LeftShift);
+			// float horizontalInput = Input.GetAxisRaw("Horizontal");
+			// float verticalInput = Input.GetAxisRaw("Vertical");
 			
-			Vector3 inputVector = new Vector3(horizontalInput, 0.0f, verticalInput);
+			// Vector3 inputVector = new Vector3(horizontalInput, 0.0f, verticalInput);
 
 			if (inputVector.magnitude > 1)
 				inputVector.Normalize();
 
-			if (shiftHeld)
-				inputVector *= .5f;
+			// if (shiftHeld)
+			// 	inputVector *= .5f;
 
-			return inputVector;
+			_inputVector = new Vector3(inputVector.x, 0.0f, inputVector.y);
 		}
 	}
 }
