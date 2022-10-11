@@ -30,7 +30,10 @@ namespace RatCharacterController {
          Vector3 input3 = new Vector3(input.x, 0, input.y);
 
          Vector3 projectedInput = InputToCameraProjection(input3);
-
+         
+         if (projectedInput.magnitude > 1.0f) 
+            projectedInput.Normalize();
+         
          Vector3 transformInputDir = transform.InverseTransformDirection(projectedInput);
 
          Vector2 v2 = new Vector2(transformInputDir.x, transformInputDir.z);
@@ -60,7 +63,10 @@ namespace RatCharacterController {
          Vector3 cameraRotation = _cameraTransform.transform.rotation.eulerAngles;
          // cameraRotation.x = Mathf.Min(cameraRotation.x, _planeNormal.y);
          input = Quaternion.Euler(cameraRotation) * input;
-         return Vector3.ProjectOnPlane(input, Vector3.up).normalized;
+
+         float magnitude = input.magnitude;
+         
+         return Vector3.ProjectOnPlane(input, Vector3.up).normalized * magnitude;
       }
    }
 }
