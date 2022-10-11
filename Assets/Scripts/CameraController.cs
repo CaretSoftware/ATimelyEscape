@@ -1,6 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour {
 	private Transform _camera;
@@ -52,22 +53,30 @@ public class CameraController : MonoBehaviour {
 	}
 
 	private void Update() {
-		Input();
 		MoveCamera();
 	}
 	
-	private void Input() {
-
-		_mouseMovement.x += UnityEngine.Input.GetAxisRaw("Mouse X") * mouseSensitivityX;
-		_mouseMovement.y -= UnityEngine.Input.GetAxisRaw("Mouse Y") * mouseSensitivityY;
-		// _mouseMovement.y = Mathf.Clamp(_mouseMovement.y, clampLookupMax, clampLookupMin);
+	private void MouseInput(InputAction.CallbackContext context) {
+		Vector2 mousedDelta = context.ReadValue<Vector2>();
+		_mouseMovement.x += mousedDelta.x * mouseSensitivityX; 
+			// UnityEngine.Input.GetAxisRaw("Mouse X") * mouseSensitivityX;
+		_mouseMovement.y -= mousedDelta.y * mouseSensitivityY; 
+			// UnityEngine.Input.GetAxisRaw("Mouse Y") * mouseSensitivityY;
+		// _mouseMovement.y = Mathf.Clamp(_mouseMovement.y, clampLookupMax, clampLookupMin); // TODO Clamp camera
 	}
-	
-	
+
+	private void StickInput(InputAction.CallbackContext context) {
+		const float stickSensitivity = 1.0f;
+		
+		Vector2 stickDelta = context.ReadValue<Vector2>();
+
+		_mouseMovement.x += stickDelta.x * stickSensitivity;
+		_mouseMovement.y -= stickDelta.y * stickSensitivity;
+	}
 
 	private Vector3 _lerpOffset;
 	private void MoveCamera() {
-		
+
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 	
 		if (firstPerson) {
