@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 	
@@ -36,11 +37,15 @@ namespace Standard {
 		[SerializeField, Tooltip("Turn true to make object move upwards!")] // Attributes on line above class variable
 		private bool active = false; // don't underscore [SerializeField] private variables, treat like public
 
-
+		[SerializeField] private List<Vector3> positions;
+			
+		
 		// Use start for initialising when possible. Use Awake when it needs to be initialised before something else 
 		private void Start() {
 			Number = ConstantNumber;
-			_transform = transform;
+			// _transform ??= transform;		// Do _NOT_ use null-coalescing operators for Unity Components! They've overloaded the equals operator for UnityEngine.Object and broke this
+			_transform = transform;				// cache transforms for performance
+			positions ??= new List<Vector3>();	// This is fine!
 		}
 
 		private void Update() {
