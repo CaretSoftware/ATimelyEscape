@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour {
 	private Vector2 _mouseMovement;
 	private Vector3 _cameraPos;
 	
-	private float _clampLookupMax = 20.0f;
+	private float _clampLookupMax = 50.0f;
 	private float _clampLookupMin = 175.0f;
 	public float smoothDampMinVal;
 	public float smoothDampMaxVal;
@@ -57,13 +57,10 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	public void MouseInput(InputAction.CallbackContext context) {
-		const float lookOffset = 90;
 		Vector2 mouseDelta = context.ReadValue<Vector2>();
 
 		_mouseMovement.x += mouseDelta.x * mouseSensitivityX;
-		_mouseMovement.y -= mouseDelta.y * mouseSensitivityY; 
-		
-		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, _clampLookupMax - lookOffset, _clampLookupMin - lookOffset);
+		_mouseMovement.y -= mouseDelta.y * mouseSensitivityY;
 	}
 
 	public void StickInput(InputAction.CallbackContext context) {
@@ -78,8 +75,10 @@ public class CameraController : MonoBehaviour {
 
 	private Vector3 _lerpOffset;
 	private void MoveCamera() {
+		const float lookOffset = 90;
 
 		_mouseMovement += _thumbstickDelta;
+		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, _clampLookupMax - lookOffset, _clampLookupMin - lookOffset);
 		
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 	
