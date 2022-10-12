@@ -24,13 +24,22 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Camera",
+                    "name": "Camera Thumbstick",
                     "type": "Value",
                     "id": "47dc0126-3967-4559-a1cf-76d0e2da657b",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Camera Mouse Input",
+                    "type": "Button",
+                    "id": "98abcb51-e81d-4566-94ec-e17bc624ad21",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -129,18 +138,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "Camera Thumbstick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "083532c1-9468-4d4e-9848-1004853849c7",
-                    "path": "<Mouse>/position",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "Camera Mouse Input",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -155,30 +164,8 @@
         {
             "name": "MenuInterraction",
             "id": "fd457262-b1d7-47cb-af93-d269b2deb86d",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "3a7b286a-cfdb-46f5-8234-b70dbf69a5e6",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "b31c2fd2-d566-405d-9dc9-f7372fd1bb5f",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "New action",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
+            "actions": [],
+            "bindings": []
         }
     ],
     "controlSchemes": []

@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace RatCharacterController { 
+namespace RatCharacterController {
+	[SelectionBase]
 	public class CharacterAnimationController : MonoBehaviour {
 
 		private static readonly int VelocityZ = Animator.StringToHash("VelocityZ");
 		private static readonly int VelocityX = Animator.StringToHash("VelocityX");
+		private static readonly int Jump = Animator.StringToHash("Jump");
 		private Transform _camera;
 		private Animator _animator;
 		private NavMeshAgent _navMeshAgent;
@@ -20,6 +22,8 @@ namespace RatCharacterController {
 		private float _currentVelX;
 		private float _currentVelZ;
 		private Vector3 _inputVector;
+		private static readonly int Grounded = Animator.StringToHash("Grounded");
+
 		private void Awake() {
 			_transform = transform;
 			_animator = GetComponent<Animator>();
@@ -54,6 +58,14 @@ namespace RatCharacterController {
 			// 	inputVector *= .5f;
 
 			_inputVector = new Vector3(inputVector.x, 0.0f, inputVector.y);
+		}
+
+		public void JumpToFreeHang() {
+			_animator.SetTrigger(Jump);
+		}
+
+		public void SetGrounded(bool grounded) {
+			_animator.SetBool(Grounded, grounded);
 		}
 	}
 }
