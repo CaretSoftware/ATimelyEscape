@@ -12,7 +12,6 @@ public class CameraFollow : MonoBehaviour {
 		if (follow == null)
 			follow = FindObjectOfType<CharacterAnimationController>().transform;
 		
-		Debug.Log($"follow = null {follow == null}");
 		_transform = transform;
 	}
 
