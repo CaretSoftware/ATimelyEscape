@@ -40,9 +40,9 @@ public class LightDetection : MonoBehaviour
     /// <summary>
     /// Updates the light value each x seconds.
     /// </summary>
-    /// <param name="_fUpdateTime">Time in seconds between updates.</param>
+    /// <param name="updateTime">Time in seconds between updates.</param>
     /// <returns></returns>
-    private IEnumerator LightDetectionUpdate(float _fUpdateTime)
+    private IEnumerator LightDetectionUpdate(float updateTime)
     {
         while (true)
         {
@@ -72,7 +72,7 @@ public class LightDetection : MonoBehaviour
                 Debug.Log("Light Value: " + lightValue);
             }
 
-            yield return new WaitForSeconds(_fUpdateTime);
+            yield return new WaitForSeconds(updateTime);
         }
     }
 }
