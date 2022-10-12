@@ -22,6 +22,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Camera Thumbstick",
+                    "type": "Value",
+                    "id": "47dc0126-3967-4559-a1cf-76d0e2da657b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Camera Mouse Input",
+                    "type": "Button",
+                    "id": "98abcb51-e81d-4566-94ec-e17bc624ad21",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -112,12 +130,40 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2d05349-30ad-4311-9070-a71139f7022b",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Thumbstick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "083532c1-9468-4d4e-9848-1004853849c7",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Mouse Input",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
         {
             "name": "BoxMovement",
             "id": "2e08cb11-5f6e-4285-ac31-89cc6774cf6d",
+            "actions": [],
+            "bindings": []
+        },
+        {
+            "name": "MenuInterraction",
+            "id": "fd457262-b1d7-47cb-af93-d269b2deb86d",
             "actions": [],
             "bindings": []
         }

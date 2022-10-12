@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using RatCharacterController;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
@@ -8,6 +9,9 @@ public class CameraFollow : MonoBehaviour {
 	private Transform _transform;
 
 	private void Start() {
+		if (follow == null)
+			follow = FindObjectOfType<CharacterAnimationController>().transform;
+		
 		_transform = transform;
 	}
 
