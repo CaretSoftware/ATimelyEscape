@@ -12,11 +12,11 @@ namespace CallbackSystem {
         public void Invoke() { EventSystem.Current.FireEvent(this); }
 
         // would really like to do this without the generic parameter, but I'm not smart enough to figure out how reflection works
-        public void AddListener<T>(System.Action<T> listener) where T : Event {
+        public static void AddListener<T>(System.Action<T> listener) where T : Event {
             EventSystem.Current.RegisterListener<T>(listener);
         }
 
-        public void RemoveListener<T>(System.Action<T> listener) where T : Event {
+        public static void RemoveListener<T>(System.Action<T> listener) where T : Event {
             EventSystem.Current.UnregisterListener<T>(listener);
         }
     }

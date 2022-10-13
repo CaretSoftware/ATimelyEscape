@@ -5,12 +5,14 @@ using UnityEngine;
 
 namespace CallbackSystem {
     public class EventSystem : MonoBehaviour {
-        private Dictionary<Type, List<EventInfo>> eventListeners;
+        private Dictionary<Type, HashSet<EventInfo>> eventListeners;
+        private Dictionary<object, List<EventInfo>> listenersByTarget;
 
 
         private void OnEnable() {
             current = this;
-            eventListeners = new Dictionary<Type, List<EventInfo>>();
+            eventListeners = new Dictionary<Type, HashSet<EventInfo>>();
+            listenersByTarget = new Dictionary<object, List<EventInfo>>();
         }
 
         //singleton setup
@@ -26,26 +28,31 @@ namespace CallbackSystem {
         public delegate void EventListener(Event eventToListenFor);
 
         public void RegisterListener<T>(System.Action<T> listener) where T : Event {
-            Type eventType = typeof(T);
-            if (!eventListeners.ContainsKey(eventType) || eventListeners[eventType] == null)
-                eventListeners[eventType] = new List<EventInfo>();
-            EventListener wrapper = (eventToListenFor) => { listener((T)eventToListenFor); };
-            eventListeners[eventType].Add(new EventInfo(wrapper, listener.Target.GetType(), listener.Target));
+            var eventType = typeof(T);
+            if (!eventListeners.ContainsKey(eventType)) eventListeners[eventType] = new HashSet<EventInfo>();
+            if (!listenersByTarget.ContainsKey(listener.Target))
+                listenersByTarget.Add(listener.Target, new List<EventInfo>());
+            void Wrapper(Event eventToListenFor) { listener((T)eventToListenFor); }
+            var info = new EventInfo(Wrapper, listener.Target.GetType(), eventType, listener.Target);
+            eventListeners[eventType].Add(info);
+            listenersByTarget[listener.Target].Add(info);
         }
 
         public void UnregisterListener<T>(System.Action<T> listener) where T : Event {
-            Type eventType = typeof(T);
-            if (!eventListeners.ContainsKey(eventType) || eventListeners[eventType] == null) return;
+            var eventType = typeof(T);
+            if (!eventListeners.ContainsKey(eventType) || !listenersByTarget.ContainsKey(listener.Target)) return;
 
-            for (int i = eventListeners[eventType].Count - 1; i >= 0; i--) {
-                if (eventListeners[eventType][i].targetType == listener.Target.GetType() &&
-                    listener.Target == eventListeners[eventType][i].target)
-                    eventListeners[eventType].RemoveAt(i);
-            }
+            if (listenersByTarget.ContainsKey(listener.Target))
+                for (int i = listenersByTarget[listener.Target].Count - 1; i >= 0; i--) {
+                    if (listenersByTarget[listener.Target][i].targetType == listener.Target.GetType()) {
+                        eventListeners[eventType].Remove(listenersByTarget[listener.Target][i]);
+                        listenersByTarget[listener.Target].RemoveAt(i);
+                    }
+                }
         }
 
         public void FireEvent(Event eventToFire) {
-            System.Type eventType = eventToFire.GetType();
+            var eventType = eventToFire.GetType();
             if (!eventListeners.ContainsKey(eventType) || eventListeners[eventType] == null) return;
             /* walks up the event hierarchy and makes sure that listeners to the superclass of the event also get called */
             do {
@@ -59,14 +66,16 @@ namespace CallbackSystem {
         }
 
         private class EventInfo {
-            public EventInfo(EventListener eventListener, Type targetType, System.Object target) {
+            public EventInfo(EventListener eventListener, Type targetType, Type eventType, System.Object target) {
                 listener = eventListener;
                 this.targetType = targetType;
+                this.eventType = eventType;
                 this.target = target;
             }
 
             public readonly EventListener listener;
             public readonly Type targetType;
+            public readonly Type eventType;
             public readonly System.Object target;
         }
     }

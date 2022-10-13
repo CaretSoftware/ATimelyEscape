@@ -10,19 +10,19 @@ public class EventTester : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        dieEvent.AddListener<DieEvent>(Dummy);
+        DieEvent.AddListener<DieEvent>(Dummy);
         dieEvent.timeToDestroy = 0.2f;
     }
 
     // Update is called once per frame
     void Update() {
         if (!useDToDelete && Input.GetKey(KeyCode.Space)) {
-            dieEvent.RemoveListener<DieEvent>(Dummy);
+            DieEvent.RemoveListener<DieEvent>(Dummy);
             /*print("Unregistering!");*/
         }
 
         if (useDToDelete && Input.GetKey(KeyCode.D))
-            dieEvent.RemoveListener<DieEvent>(Dummy);
+            DieEvent.RemoveListener<DieEvent>(Dummy);
 
         if (Input.GetKey(KeyCode.W)) {
             /*print("Invoking!");*/
@@ -31,7 +31,7 @@ public class EventTester : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.S)) {
             /*print("Registering!");*/
-            dieEvent.AddListener<DieEvent>(Dummy);
+            DieEvent.AddListener<DieEvent>(Dummy);
         }
     }
 
