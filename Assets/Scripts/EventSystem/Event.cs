@@ -31,4 +31,8 @@ namespace CallbackSystem {
         public List<ParticleSystem> particleSystems;
         public Renderer renderer;
     }
+
+    public class DestinyChanged : DebugEvent {
+        public TimeTravelObject changedObject;
+    }
 }
