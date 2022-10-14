@@ -19,14 +19,15 @@ public class PingPong : MonoBehaviour {
 
 
    private void Update() {
-      _t = Mathf.Sin(Time.time) * .5f + .5f;
+      // _t = Mathf.Sin(Time.time * 2.0f) * .5f + .5f;
+      _t = Time.time;
       VoronoiOffset(_t);
    }
 
    private void VoronoiOffset(float t) {
-      float offset = Mathf.Lerp(-1, 1, t);
-      Debug.Log(offset);
-      mpb.SetFloat(VoronoiAngleOffset, offset);
+      // float offset = Mathf.Lerp(-2, 2, t);
+      // Debug.Log(offset);
+      mpb.SetFloat(VoronoiAngleOffset, t);
       mr.SetPropertyBlock(mpb);
    }
 }
