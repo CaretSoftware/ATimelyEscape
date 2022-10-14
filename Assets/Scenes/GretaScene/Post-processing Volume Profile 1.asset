@@ -37,16 +37,16 @@ MonoBehaviour:
   active: 1
   color:
     m_OverrideState: 1
-    m_Value: {r: 0.41037738, g: 0.8556654, b: 1, a: 1}
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
   center:
     m_OverrideState: 1
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.17
+    m_Value: 0.245
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.55
+    m_Value: 0.239
   rounded:
     m_OverrideState: 1
     m_Value: 1
@@ -108,6 +108,7 @@ MonoBehaviour:
   - {fileID: -6130134939405358876}
   - {fileID: -6058901332865484957}
   - {fileID: -8060587160909474577}
+  - {fileID: 4966788749664553474}
 --- !u!114 &788761611569000884
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -149,6 +150,40 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 1
     m_Value: 0
+--- !u!114 &4966788749664553474
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
+  m_Name: ShadowsMidtonesHighlights
+  m_EditorClassIdentifier: 
+  active: 1
+  shadows:
+    m_OverrideState: 1
+    m_Value: {x: 0.7421666, y: 0.754651, z: 1, w: 0}
+  midtones:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  highlights:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  shadowsStart:
+    m_OverrideState: 0
+    m_Value: 0
+  shadowsEnd:
+    m_OverrideState: 0
+    m_Value: 0.3
+  highlightsStart:
+    m_OverrideState: 0
+    m_Value: 0.55
+  highlightsEnd:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &5613003696741239076
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -210,16 +245,16 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 2.5
+    m_Value: 0.2
   contrast:
     m_OverrideState: 1
     m_Value: 5
   colorFilter:
-    m_OverrideState: 1
-    m_Value: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   hueShift:
     m_OverrideState: 1
     m_Value: 5
   saturation:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: -39
