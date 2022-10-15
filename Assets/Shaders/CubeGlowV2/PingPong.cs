@@ -20,7 +20,7 @@ public class PingPong : MonoBehaviour {
 
    private void Update() {
       // _t = Mathf.Sin(Time.time * 2.0f) * .5f + .5f;
-      _t = Time.time;
+      _t = Time.time * .25f;
       VoronoiOffset(_t);
    }
 
