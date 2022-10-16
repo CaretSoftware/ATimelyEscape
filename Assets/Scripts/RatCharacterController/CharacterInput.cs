@@ -16,7 +16,7 @@ namespace RatCharacterController {
       private Transform _cameraTransform;
       private CameraController _camController;
       private PlayerInputActions _playerInputActions;
-      private Collider _collider;
+      private CapsuleCollider _collider;
       [SerializeField] private LayerMask groundedLayerMask;
 
       private void Start() {
@@ -114,9 +114,15 @@ namespace RatCharacterController {
       }
 
       private bool Grounded() {
-         Ray ray = new Ray(transform.position + Vector3.up * .2f, Vector3.down);
-         Debug.DrawRay(transform.position + Vector3.up * .2f, Vector3.down * .5f);
-         return Physics.Raycast(ray, .5f, groundedLayerMask);
+         float radius = _collider.radius;
+         Vector3 origin = transform.position + (radius + 0.05f)* Vector3.up;
+         const float maxDistance = .2f;
+         Ray ray = new Ray(origin, Vector3.down);
+         
+         Debug.DrawRay(origin, Vector3.down * radius);
+         
+         return Physics.SphereCast(ray, radius, maxDistance);
+         // return Physics.Raycast(ray, .5f, groundedLayerMask);
       }
    }
 }
