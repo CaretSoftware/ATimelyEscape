@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -55,7 +56,7 @@ public class CameraController : MonoBehaviour {
 	private void Update() {
 		MoveCamera();
 	}
-	
+
 	public void MouseInput(InputAction.CallbackContext context) {
 		Vector2 mouseDelta = context.ReadValue<Vector2>();
 
