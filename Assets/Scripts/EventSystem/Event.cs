@@ -35,4 +35,9 @@ namespace CallbackSystem {
     public class DestinyChanged : DebugEvent {
         public TimeTravelObject changedObject;
     }
+
+    public class TimePeriodChanged : DebugEvent {
+        public TimeTravelPeriod from;
+        public TimeTravelPeriod to;
+    }
 }
