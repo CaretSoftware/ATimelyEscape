@@ -13,6 +13,7 @@ namespace RatCharacterController {
       private const string CharacterMovement = "CharacterMovement";
       private const string BoxMovement = "BoxMovement";
       private CharacterAnimationController _characterAnimationController;
+      private CameraFollow _cameraFollow;
       private Transform _cameraTransform;
       private CameraController _camController;
       private PlayerInputActions _playerInputActions;
@@ -20,16 +21,35 @@ namespace RatCharacterController {
       private CapsuleCollider _collider;
       [SerializeField] private LayerMask groundedLayerMask;
       [SerializeField] private LayerMask cubeLayerMask;
-
+      private Transform _playerTransform;
+      private Rigidbody _rigidBody;
+      private Vector3 _pushedCubeOffset;
+      private bool _pushing;
+      
       private void Start() {
          _cameraTransform = FindObjectOfType<Camera>().transform;
          _camController = FindObjectOfType<CameraController>();
+         _cameraFollow = FindObjectOfType<CameraFollow>();
+         _playerTransform = transform;
+         _rigidBody = _playerTransform.GetComponent<Rigidbody>();
          _characterAnimationController = GetComponent<CharacterAnimationController>();
          _collider = GetComponent<CapsuleCollider>();
          _playerInput = GetComponent<PlayerInput>();
 
          if (_camController == null)
             Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode", this.gameObject);
+      }
+      
+      
+      private void Update() {
+         // CameraInput();
+         _characterAnimationController.SetGrounded(Grounded());
+         
+         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+         if (_pushing)
+            PushCubeInput(input);
+         else
+            MovementInput(input);
       }
 
       public void Jump(InputAction.CallbackContext context) {
@@ -43,8 +63,13 @@ namespace RatCharacterController {
             Debug.DrawLine(ray.origin, ray.origin + ray.direction * 1.0f, Color.cyan, 1.0f);
             
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f, cubeLayerMask)) {
-               Debug.Log("HIT");
-               hitInfo.collider.GetComponent<CubePush>().Closest();
+               Transform cube = hitInfo.transform; 
+               cube.GetComponent<CubePush>().Closest();
+               Transform playerTransform = _playerTransform;
+               _playerTransform.parent = cube;
+               _cameraFollow.SetFollowTransform(CubePush.closestCube.transform);
+               _pushedCubeOffset = playerTransform.localPosition;
+               _rigidBody.isKinematic = true;
                _playerInput.SwitchCurrentActionMap("BoxMovement");
                _characterAnimationController.Push(true);
             }
@@ -58,39 +83,57 @@ namespace RatCharacterController {
 
       public void StopPushCube(InputAction.CallbackContext context) {
          if (context.performed) {
-            Debug.Log("STOP");
+            _pushing = false;
             _characterAnimationController.Push(false);
+            _playerTransform.parent = null;
+            _cameraFollow.SetFollowTransform(_playerTransform);
+            _rigidBody.isKinematic = false;
             _playerInput.SwitchCurrentActionMap("CharacterMovement");
             CubePush.NotClosest();
          }
       }
 
       public void PushCube(InputAction.CallbackContext context) {
-         Vector2 direction = context.ReadValue<Vector2>();
+         if (context.performed) {
+            _pushing = true;
 
-         Vector3 dir = new Vector3(direction.x, 0, direction.y);
+            // Vector2 direction = context.ReadValue<Vector2>();
+            //
+            // Vector3 dir = new Vector3(direction.x, 0, direction.y);
+            //
+            // Vector3 projectedInput = InputToCameraProjection(dir);
+            //
+            // if (projectedInput.magnitude > 1.0f)
+            //    projectedInput.Normalize();
+            //
+            // // Vector3 transformInputDir = transform.InverseTransformDirection(projectedInput);
+            //
+            // Vector2 v2 = new Vector2(projectedInput.x, projectedInput.z);
+            //
+            // if (CubePush.closestCube != null)
+            //    CubePush.closestCube.Push(v2);
+         }
+      }
+
+      private void PushCubeInput(Vector3 input) {
+
+         Vector3 dir = new Vector3(input.x, 0, input.y);
 
          Vector3 projectedInput = InputToCameraProjection(dir);
 
          if (projectedInput.magnitude > 1.0f)
             projectedInput.Normalize();
 
-         // Vector3 transformInputDir = transform.InverseTransformDirection(projectedInput);
-
          Vector2 v2 = new Vector2(projectedInput.x, projectedInput.z);
          
          if (CubePush.closestCube != null)
             CubePush.closestCube.Push(v2);
+
+         _playerTransform.localPosition = _pushedCubeOffset;
       }
 
-      private void Update() {
-         // CameraInput();
-         _characterAnimationController.SetGrounded(Grounded());
-         MovementInput();
-      }
-
-      private void MovementInput() {
-         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+      private void MovementInput(Vector3 input) {
+         
             // _playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>();
          
          Vector3 input3 = new Vector3(input.x, 0, input.y);
