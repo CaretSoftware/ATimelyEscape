@@ -10,6 +10,12 @@ public class LightDetection : MonoBehaviour
     public bool lightValueLog = false;
     [Tooltip("Time between light value updates")]
     public float updateTime = 0.1f;
+    [Tooltip("Less light than this and Darkness starts coming")]
+    public float minumumLight;
+    [Tooltip("If light is zero, this is the speed att witch the deaths approaches")]
+    public float maxTimeInTotalDarkness;
+    [Tooltip("")]
+    public float theoreticalTimesLongerInCompletLight;
    
 
     public static float lightValue;
@@ -20,7 +26,7 @@ public class LightDetection : MonoBehaviour
     private RenderTexture texTemp;
     private Rect rectLight;
     private Color lightPixel;
-    private int sides;
+    private float timer = 0f;
 
     
 
@@ -39,6 +45,17 @@ public class LightDetection : MonoBehaviour
         rectLight = new Rect(0f, 0f, textureSize, textureSize);
 
         StartCoroutine(LightDetectionUpdate(updateTime));
+    }
+
+    private void Update()
+    {
+        if (lightValue < minumumLight)
+        {
+            timer += (Time.deltaTime / maxTimeInTotalDarkness) /
+                (theoreticalTimesLongerInCompletLight - (theoreticalTimesLongerInCompletLight * (1 - lightValue)));
+        }
+        else
+            timer = 0f;
     }
 
     /// <summary>
@@ -79,4 +96,6 @@ public class LightDetection : MonoBehaviour
             yield return new WaitForSeconds(updateTime);
         }
     }
+
+    
 }
