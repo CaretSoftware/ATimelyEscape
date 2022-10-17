@@ -75,10 +75,9 @@ namespace RatCharacterController {
          if (projectedInput.magnitude > 1.0f)
             projectedInput.Normalize();
 
-         Vector3 transformInputDir = transform.InverseTransformDirection(projectedInput);
+         // Vector3 transformInputDir = transform.InverseTransformDirection(projectedInput);
 
-         Vector2 v2 = new Vector2(transformInputDir.x, transformInputDir.z);
-         
+         Vector2 v2 = new Vector2(projectedInput.x, projectedInput.z);
          
          if (CubePush.closestCube != null)
             CubePush.closestCube.Push(v2);

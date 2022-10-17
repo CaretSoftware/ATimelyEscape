@@ -15,16 +15,15 @@ public class CubePush : MonoBehaviour {
 
 	public void Closest() {
 		closestCube = this;
-		Debug.Log("closest", this);
 	}
 
 	public static void NotClosest() {
-		Debug.Log("NOT CLOSEST");
 		// closestCube = null;
 	} 
 	
 	public void Push(Vector2 direction) {
 		Vector3 dir = new Vector3(direction.x, 0.0f, direction.y);
-		rb.MovePosition(transform.position + Time.deltaTime * pushSpeed * dir);
+		rb.velocity = dir * pushSpeed;
+		// rb.MovePosition(transform.position + Time.deltaTime * pushSpeed * dir);
 	}
 }
