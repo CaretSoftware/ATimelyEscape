@@ -27,12 +27,16 @@ public class LightDetection : MonoBehaviour
     private Rect rectLight;
     private Color lightPixel;
     private float timer = 0f;
+    private DieEvent fail;
+    
 
 
 
     private void Start()
     {
         StartLightDetection();
+        fail = new();
+
     }
 
     /// <summary>
@@ -58,10 +62,10 @@ public class LightDetection : MonoBehaviour
             timer = 0f;
         if(timer >= 1)
         {
-            LightDetection();
+            LightDetectior();
             if (lightValue > minumumLight)
             {
-
+                fail.Invoke();
             }
 
         }
@@ -77,12 +81,12 @@ public class LightDetection : MonoBehaviour
         while (true)
         {
 
-            LightDetection()
+            LightDetectior();
             yield return new WaitForSeconds(updateTime);
         }
     }
 
-    private void LightDetection()
+    private void LightDetectior()
     {
         //Set the target texture of the cam.
         lightScan.targetTexture = texTemp;
@@ -109,6 +113,12 @@ public class LightDetection : MonoBehaviour
         {
             Debug.Log("Light Value: " + lightValue);
         }
+
+    }
+
+    public float GetFailTimer()
+    {
+        return timer;
     }
 
     
