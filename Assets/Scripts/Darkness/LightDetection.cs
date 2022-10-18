@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 public class LightDetection : MonoBehaviour
 {
-    
+
     [Header("Settings")]
     [Tooltip("The camera who scans for light.")]
     public Camera lightScan;
@@ -16,7 +16,7 @@ public class LightDetection : MonoBehaviour
     public float maxTimeInTotalDarkness;
     [Tooltip("")]
     public float theoreticalTimesLongerInCompletLight;
-   
+
 
     public static float lightValue;
 
@@ -28,7 +28,7 @@ public class LightDetection : MonoBehaviour
     private Color lightPixel;
     private float timer = 0f;
 
-    
+
 
     private void Start()
     {
@@ -56,6 +56,15 @@ public class LightDetection : MonoBehaviour
         }
         else
             timer = 0f;
+        if(timer >= 1)
+        {
+            LightDetection();
+            if (lightValue > minumumLight)
+            {
+
+            }
+
+        }
     }
 
     /// <summary>
@@ -67,33 +76,38 @@ public class LightDetection : MonoBehaviour
     {
         while (true)
         {
-            //Set the target texture of the cam.
-            lightScan.targetTexture = texTemp;
-            //Render into the set target texture.
-            lightScan.Render();
 
-            //Set the target texture as the active rendered texture.
-            RenderTexture.active = texTemp;
-            //Read the active rendered texture.
-            texLight.ReadPixels(rectLight, 0, 0);
-
-            //Reset the active rendered texture.
-            RenderTexture.active = null;
-            //Reset the target texture of the cam.
-            lightScan.targetTexture = null;
-
-            //Read the pixel in middle of the texture.
-            lightPixel = texLight.GetPixel(textureSize / 2, textureSize / 2);
-
-            //Calculate light value, based on color intensity (from 0f to 1f).
-            lightValue = (lightPixel.r + lightPixel.g + lightPixel.b) / 3f;
-
-            if (lightValueLog)
-            {
-                Debug.Log("Light Value: " + lightValue);
-            }
-
+            LightDetection()
             yield return new WaitForSeconds(updateTime);
+        }
+    }
+
+    private void LightDetection()
+    {
+        //Set the target texture of the cam.
+        lightScan.targetTexture = texTemp;
+        //Render into the set target texture.
+        lightScan.Render();
+
+        //Set the target texture as the active rendered texture.
+        RenderTexture.active = texTemp;
+        //Read the active rendered texture.
+        texLight.ReadPixels(rectLight, 0, 0);
+
+        //Reset the active rendered texture.
+        RenderTexture.active = null;
+        //Reset the target texture of the cam.
+        lightScan.targetTexture = null;
+
+        //Read the pixel in middle of the texture.
+        lightPixel = texLight.GetPixel(textureSize / 2, textureSize / 2);
+
+        //Calculate light value, based on color intensity (from 0f to 1f).
+        lightValue = (lightPixel.r + lightPixel.g + lightPixel.b) / 3f;
+
+        if (lightValueLog)
+        {
+            Debug.Log("Light Value: " + lightValue);
         }
     }
 
