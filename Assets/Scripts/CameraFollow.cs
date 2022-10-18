@@ -19,6 +19,4 @@ public class CameraFollow : MonoBehaviour {
 	private void LateUpdate() {
 		_transform.position = follow.position;	// TODO smoothDamp, turn CameraFollow into CineMachine
 	}
-
-	public void SetFollowTransform(Transform transform) => follow = transform;
 }
