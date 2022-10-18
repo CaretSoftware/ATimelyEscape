@@ -23,6 +23,7 @@ namespace RatCharacterController {
 		private float _currentVelZ;
 		private Vector3 _inputVector;
 		private static readonly int Grounded = Animator.StringToHash("Grounded");
+		private static readonly int Pushing = Animator.StringToHash("Push");
 
 		private void Awake() {
 			_transform = transform;
@@ -58,6 +59,10 @@ namespace RatCharacterController {
 			// 	inputVector *= .5f;
 
 			_inputVector = new Vector3(inputVector.x, 0.0f, inputVector.y);
+		}
+
+		public void Push(bool push) {
+			_animator.SetBool(Pushing, push);
 		}
 
 		public void JumpToFreeHang() {

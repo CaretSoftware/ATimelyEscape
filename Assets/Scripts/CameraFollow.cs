@@ -8,14 +8,17 @@ public class CameraFollow : MonoBehaviour {
 	[SerializeField] private Transform follow;
 	private Transform _transform;
 
-	private void Start() {
+	private void Awake() {
 		if (follow == null)
 			follow = FindObjectOfType<CharacterAnimationController>().transform;
 		
 		_transform = transform;
+		_transform.position = follow.position;
 	}
 
 	private void LateUpdate() {
 		_transform.position = follow.position;	// TODO smoothDamp, turn CameraFollow into CineMachine
 	}
+
+	public void SetFollowTransform(Transform transform) => follow = transform;
 }

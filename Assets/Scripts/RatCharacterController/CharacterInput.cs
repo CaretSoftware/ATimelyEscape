@@ -13,34 +13,127 @@ namespace RatCharacterController {
       private const string CharacterMovement = "CharacterMovement";
       private const string BoxMovement = "BoxMovement";
       private CharacterAnimationController _characterAnimationController;
+      private CameraFollow _cameraFollow;
       private Transform _cameraTransform;
       private CameraController _camController;
       private PlayerInputActions _playerInputActions;
-      private Collider _collider;
+      private PlayerInput _playerInput;
+      private CapsuleCollider _collider;
       [SerializeField] private LayerMask groundedLayerMask;
-
+      [SerializeField] private LayerMask cubeLayerMask;
+      private Transform _playerTransform;
+      private Rigidbody _rigidBody;
+      private Vector3 _pushedCubeOffset;
+      private bool _pushing;
+      
       private void Start() {
+         _cameraTransform = FindObjectOfType<Camera>().transform;
          _camController = FindObjectOfType<CameraController>();
+         _cameraFollow = FindObjectOfType<CameraFollow>();
+         _playerTransform = transform;
+         _rigidBody = _playerTransform.GetComponent<Rigidbody>();
          _characterAnimationController = GetComponent<CharacterAnimationController>();
          _collider = GetComponent<CapsuleCollider>();
-         _cameraTransform = FindObjectOfType<Camera>().transform;
+         _playerInput = GetComponent<PlayerInput>();
 
          if (_camController == null)
             Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode", this.gameObject);
+      }
+      
+      
+      private void Update() {
+         // CameraInput();
+         _characterAnimationController.SetGrounded(Grounded());
+         
+         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+         if (_pushing)
+            PushCubeInput(input);
+         else
+            MovementInput(input);
       }
 
       public void Jump(InputAction.CallbackContext context) {
          if (context.performed) _characterAnimationController.JumpToFreeHang();
       }
 
-      private void Update() {
-         // CameraInput();
-         _characterAnimationController.SetGrounded(Grounded());
-         MovementInput();
+      public void Interact(InputAction.CallbackContext context) {
+         
+         if (context.performed) {
+            Ray ray = new Ray(transform.position + Vector3.up, transform.forward);
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 1.0f, Color.cyan, 1.0f);
+            
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f, cubeLayerMask)) {
+               Transform cube = hitInfo.transform; 
+               cube.GetComponent<CubePush>().Closest();
+               Transform playerTransform = _playerTransform;
+               _playerTransform.parent = cube;
+               _cameraFollow.SetFollowTransform(CubePush.closestCube.transform);
+               _pushedCubeOffset = playerTransform.localPosition;
+               _rigidBody.isKinematic = true;
+               _playerInput.SwitchCurrentActionMap("BoxMovement");
+               _characterAnimationController.Push(true);
+            }
+         }
+         
+         // } else if (context.canceled) {
+         //    _characterAnimationController.Push(false);
+         //    _playerInput.SwitchCurrentActionMap("CharacterMovement");
+         //    CubePush.NotClosest();
       }
 
-      private void MovementInput() {
-         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+      public void StopPushCube(InputAction.CallbackContext context) {
+         if (context.performed) {
+            _pushing = false;
+            _characterAnimationController.Push(false);
+            _playerTransform.parent = null;
+            _cameraFollow.SetFollowTransform(_playerTransform);
+            _rigidBody.isKinematic = false;
+            _playerInput.SwitchCurrentActionMap("CharacterMovement");
+            CubePush.NotClosest();
+         }
+      }
+
+      public void PushCube(InputAction.CallbackContext context) {
+         if (context.performed) {
+            _pushing = true;
+
+            // Vector2 direction = context.ReadValue<Vector2>();
+            //
+            // Vector3 dir = new Vector3(direction.x, 0, direction.y);
+            //
+            // Vector3 projectedInput = InputToCameraProjection(dir);
+            //
+            // if (projectedInput.magnitude > 1.0f)
+            //    projectedInput.Normalize();
+            //
+            // // Vector3 transformInputDir = transform.InverseTransformDirection(projectedInput);
+            //
+            // Vector2 v2 = new Vector2(projectedInput.x, projectedInput.z);
+            //
+            // if (CubePush.closestCube != null)
+            //    CubePush.closestCube.Push(v2);
+         }
+      }
+
+      private void PushCubeInput(Vector3 input) {
+
+         Vector3 dir = new Vector3(input.x, 0, input.y);
+
+         Vector3 projectedInput = InputToCameraProjection(dir);
+
+         if (projectedInput.magnitude > 1.0f)
+            projectedInput.Normalize();
+
+         Vector2 v2 = new Vector2(projectedInput.x, projectedInput.z);
+         
+         if (CubePush.closestCube != null)
+            CubePush.closestCube.Push(v2);
+
+         _playerTransform.localPosition = _pushedCubeOffset;
+      }
+
+      private void MovementInput(Vector3 input) {
+         
             // _playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>();
          
          Vector3 input3 = new Vector3(input.x, 0, input.y);
@@ -114,9 +207,15 @@ namespace RatCharacterController {
       }
 
       private bool Grounded() {
-         Ray ray = new Ray(transform.position + Vector3.up * .2f, Vector3.down);
-         Debug.DrawRay(transform.position + Vector3.up * .2f, Vector3.down * .5f);
-         return Physics.Raycast(ray, .5f, groundedLayerMask);
+         float radius = _collider.radius;
+         Vector3 origin = transform.position + (radius + 0.05f)* Vector3.up;
+         const float maxDistance = .2f;
+         Ray ray = new Ray(origin, Vector3.down);
+         
+         Debug.DrawRay(origin, Vector3.down * radius);
+         
+         return Physics.SphereCast(ray, radius, maxDistance);
+         // return Physics.Raycast(ray, .5f, groundedLayerMask);
       }
    }
 }
