@@ -10,7 +10,6 @@ public class ChaseNode : Node
     private Transform target;
     private NavMeshAgent agent;
     private EnemyAI ai;
-
     public ChaseNode(Transform target, NavMeshAgent agent, EnemyAI ai)
     {
         this.target = target;

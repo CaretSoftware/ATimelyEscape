@@ -5,6 +5,10 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    private const float FrameTimeDuration = 1e-5f;
+    private const float SpeedMultiplier = 1.0f;
+    private const float SmallNumber = 0.025f;
+
     [SerializeField] private float startingHealth;
     [SerializeField] private float lowHealthThreshold;
     [SerializeField] private float healthRestorationRate;
@@ -13,26 +17,35 @@ public class EnemyAI : MonoBehaviour
 
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Cover[] availableCovers;
+    [SerializeField] private Transform[] activityWaypoints;
 
     public Transform BestCoverSpot { get; set; }
     public float CurrentHealth { get { return _currentHealth; } private set { _currentHealth = Mathf.Clamp(value, 0, startingHealth); } }
     private float _currentHealth;
     public Color Color { get { return material.color; } set { material.color = value; } }
 
-
-    private Material material;
-    private Node topNode;
     private NavMeshAgent agent;
+    private Material material;
+    private Animator anim;
+    private Node topNode;
+
+    private Vector3 worldDeltaPosition;
+    private Vector3 groundDeltaPosition;
+    private Vector2 velocity;
+    private bool shouldMove;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         material = GetComponent<MeshRenderer>().material;
+        anim = GetComponent<Animator>();
+        agent.updatePosition = false;
     }
     private void Start()
     {
         CurrentHealth = startingHealth;
         ConstructBehaviourTree();
+
     }
 
     private void ConstructBehaviourTree()
@@ -57,24 +70,47 @@ public class EnemyAI : MonoBehaviour
         topNode = new Selector(new List<Node> {mainCoverSequence, shootSequence, chaseSequence});
     }
 
+    
     private void Update()
     {
+        ConvertMovementToAnim();
         topNode.Evaluate();
         if (topNode.nodeState == NodeState.FAILURE)
         {
             Color = Color.red;
             agent.isStopped = true;
         }
-        RestoreHealth();
     }
 
-    private void RestoreHealth()
+    //accounts for small offset between the character- and agent component position that occurs each frame.
+    private void OnAnimatorMove()
     {
-        CurrentHealth += Time.deltaTime * healthRestorationRate;
+        transform.position = agent.nextPosition;
     }
 
     private void OnMouseDown()
     {
         CurrentHealth -= 10f;
+    }
+
+    private void ConvertMovementToAnim()
+    {
+        //compare next destination to current position.
+        worldDeltaPosition = agent.nextPosition - transform.position;
+        //get components in forward/sideways directions.
+        groundDeltaPosition.x = Vector3.Dot(transform.right, worldDeltaPosition);
+        groundDeltaPosition.y = Vector3.Dot(transform.forward, worldDeltaPosition);
+
+        //divide my duration of frame to get the velocity of which the character should move.
+        velocity = (Time.deltaTime > FrameTimeDuration) ? groundDeltaPosition / Time.deltaTime : velocity = Vector2.zero;
+        //check if velocity is greater than a small number and if we have not yet arrived at our destination.
+        shouldMove = velocity.magnitude > SmallNumber && agent.remainingDistance > agent.radius;
+
+        velocity.x *= SpeedMultiplier;
+        velocity.y *= SpeedMultiplier;
+        //set anim parameters accoringly.
+        anim.SetBool("move", shouldMove);
+        anim.SetFloat("velx", velocity.x);
+        anim.SetFloat("vely", velocity.y);
     }
 }
