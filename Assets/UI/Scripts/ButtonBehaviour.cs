@@ -4,21 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
+public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     [SerializeField] private Image image;
-    [SerializeField] private Sprite neutral, pressed, selected;
+    [SerializeField] private Sprite neutral, pressed;
     // [SerializeField] private AudioClip compressClip, unCompressClip;
     // [SerializeField] private AudioSource audioSource; 
 
     // Method when user has pressed the mousebutton
-
-    private void Start()
-    {
-        image = gameObject.GetComponent<Image>();
-        image.sprite = neutral;
-    }
-
     public void OnPointerDown(PointerEventData eventData)
     {
         image.sprite = pressed;
@@ -33,15 +26,5 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void OnClicked()
     {
         Debug.Log("Clicked!");
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        image.sprite = selected;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        image.sprite = neutral;
     }
 }
