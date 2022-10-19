@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,7 +9,7 @@ public class CameraController : MonoBehaviour {
 	private Vector2 _mouseMovement;
 	private Vector3 _cameraPos;
 	
-	private float _clampLookupMax = 20.0f;
+	private float _clampLookupMax = 50.0f;
 	private float _clampLookupMin = 175.0f;
 	public float smoothDampMinVal;
 	public float smoothDampMaxVal;
@@ -40,30 +41,25 @@ public class CameraController : MonoBehaviour {
 	
 	private void Start() {
 		_camera = GetComponentInChildren<Camera>().transform;
-
+		
+		// init smoothDamp variables and set camera position
+		_lerpOffset = cameraOffset;
+		_cameraPos = transform.position;
+		_camera.position = _cameraPos + cameraOffset;
+		
 		Cursor.visible = false;
-		
-		// Releases the cursor
-		// Cursor.lockState = CursorLockMode.None;
-		// Locks the cursor
 		Cursor.lockState = CursorLockMode.Locked;
-		// Confines the cursor
-		// Cursor.lockState = CursorLockMode.Confined;
-		
 	}
 
 	private void Update() {
 		MoveCamera();
 	}
-	
+
 	public void MouseInput(InputAction.CallbackContext context) {
-		const float lookOffset = 90;
 		Vector2 mouseDelta = context.ReadValue<Vector2>();
 
 		_mouseMovement.x += mouseDelta.x * mouseSensitivityX;
-		_mouseMovement.y -= mouseDelta.y * mouseSensitivityY; 
-		
-		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, _clampLookupMax - lookOffset, _clampLookupMin - lookOffset);
+		_mouseMovement.y -= mouseDelta.y * mouseSensitivityY;
 	}
 
 	public void StickInput(InputAction.CallbackContext context) {
@@ -78,8 +74,10 @@ public class CameraController : MonoBehaviour {
 
 	private Vector3 _lerpOffset;
 	private void MoveCamera() {
+		const float lookOffset = 90;
 
 		_mouseMovement += _thumbstickDelta;
+		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, _clampLookupMax - lookOffset, _clampLookupMin - lookOffset);
 		
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 	
@@ -89,10 +87,11 @@ public class CameraController : MonoBehaviour {
 		}
 	
 		_cameraPos = Vector3.SmoothDamp(_cameraPos, transform.position, 
-			ref _smoothDampCurrentVelocityLateral, smoothness);
+				ref _smoothDampCurrentVelocityLateral, smoothness);
 		Vector3 abovePlayer = _cameraPos + Vector3.up * _headHeight;
 		Vector3 offsetTarget = abovePlayer + _camera.rotation * cameraOffset;
 		Vector3 offsetDirection = offsetTarget - abovePlayer;
+		
 		Physics.SphereCast(abovePlayer, 
 			_cameraCollisionRadius, 
 			offsetDirection.normalized, 
@@ -100,18 +99,16 @@ public class CameraController : MonoBehaviour {
 			offsetDirection.magnitude, 
 			collisionMask);
 	
-		Vector3 offset = Vector3.zero;
+		Vector3 offset;
 		if (hit.collider)
 			offset = cameraOffset.normalized * hit.distance;
 		else
 			offset = cameraOffset;
-		
-		// _debugHit = hit.collider;
-	
+
 		float smoothDollyTime = hit.collider ? smoothDampMinVal : smoothDampMaxVal;
 		_lerpOffset = Vector3.SmoothDamp(_lerpOffset, offset, ref _smoothDampCurrentVelocity, smoothDollyTime);
-		_camera.position = //cameraTarget + 
-			abovePlayer + _camera.rotation * _lerpOffset;
+		
+		_camera.position = abovePlayer + _camera.rotation * _lerpOffset;
 	}
 }
 	
