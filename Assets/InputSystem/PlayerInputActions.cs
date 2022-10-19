@@ -222,6 +222,24 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Camera Mouse Input"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ad793aa-ccef-4fdb-9e79-4a7f8a5e5d8b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Camera Thumbstick"",
+                    ""type"": ""Value"",
+                    ""id"": ""b89752e7-2677-4223-96d0-f8904a4048e8"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""dd5f9090-a957-4e08-b723-c947ddc33f89"",
@@ -319,6 +337,28 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f2a80b7-a701-429b-bf32-639fc8c60e41"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera Thumbstick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8478d300-50b3-4932-a50a-27cd1d5d2fdc"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera Mouse Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -341,6 +381,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // BoxMovement
         m_BoxMovement = asset.FindActionMap("BoxMovement", throwIfNotFound: true);
         m_BoxMovement_Push = m_BoxMovement.FindAction("Push", throwIfNotFound: true);
+        m_BoxMovement_CameraMouseInput = m_BoxMovement.FindAction("Camera Mouse Input", throwIfNotFound: true);
+        m_BoxMovement_CameraThumbstick = m_BoxMovement.FindAction("Camera Thumbstick", throwIfNotFound: true);
         m_BoxMovement_Interact = m_BoxMovement.FindAction("Interact", throwIfNotFound: true);
         // MenuInterraction
         m_MenuInterraction = asset.FindActionMap("MenuInterraction", throwIfNotFound: true);
@@ -469,12 +511,16 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_BoxMovement;
     private IBoxMovementActions m_BoxMovementActionsCallbackInterface;
     private readonly InputAction m_BoxMovement_Push;
+    private readonly InputAction m_BoxMovement_CameraMouseInput;
+    private readonly InputAction m_BoxMovement_CameraThumbstick;
     private readonly InputAction m_BoxMovement_Interact;
     public struct BoxMovementActions
     {
         private @PlayerInputActions m_Wrapper;
         public BoxMovementActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Push => m_Wrapper.m_BoxMovement_Push;
+        public InputAction @CameraMouseInput => m_Wrapper.m_BoxMovement_CameraMouseInput;
+        public InputAction @CameraThumbstick => m_Wrapper.m_BoxMovement_CameraThumbstick;
         public InputAction @Interact => m_Wrapper.m_BoxMovement_Interact;
         public InputActionMap Get() { return m_Wrapper.m_BoxMovement; }
         public void Enable() { Get().Enable(); }
@@ -488,6 +534,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Push.started -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnPush;
                 @Push.performed -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnPush;
                 @Push.canceled -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnPush;
+                @CameraMouseInput.started -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnCameraMouseInput;
+                @CameraMouseInput.performed -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnCameraMouseInput;
+                @CameraMouseInput.canceled -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnCameraMouseInput;
+                @CameraThumbstick.started -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnCameraThumbstick;
+                @CameraThumbstick.performed -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnCameraThumbstick;
+                @CameraThumbstick.canceled -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnCameraThumbstick;
                 @Interact.started -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_BoxMovementActionsCallbackInterface.OnInteract;
@@ -498,6 +550,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Push.started += instance.OnPush;
                 @Push.performed += instance.OnPush;
                 @Push.canceled += instance.OnPush;
+                @CameraMouseInput.started += instance.OnCameraMouseInput;
+                @CameraMouseInput.performed += instance.OnCameraMouseInput;
+                @CameraMouseInput.canceled += instance.OnCameraMouseInput;
+                @CameraThumbstick.started += instance.OnCameraThumbstick;
+                @CameraThumbstick.performed += instance.OnCameraThumbstick;
+                @CameraThumbstick.canceled += instance.OnCameraThumbstick;
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
@@ -541,6 +599,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     public interface IBoxMovementActions
     {
         void OnPush(InputAction.CallbackContext context);
+        void OnCameraMouseInput(InputAction.CallbackContext context);
+        void OnCameraThumbstick(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
     }
     public interface IMenuInterractionActions
