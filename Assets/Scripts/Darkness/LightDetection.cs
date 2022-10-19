@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
+
+
 public class LightDetection : MonoBehaviour
 {
     [Header("Settings")]
