@@ -18,9 +18,9 @@ public class CameraController : MonoBehaviour {
 	private Vector3 _smoothDampCurrentVelocity;
 		
 	[Header("Mouse Sensitivity")]
-	[SerializeField] [Range(0.1f, 10.0f)]
+	[SerializeField] [Range(0.001f, 10.0f)]
 	private float mouseSensitivityX = 1.0f;
-	[SerializeField, Range(0.1f, 10.0f)]
+	[SerializeField, Range(0.001f, 10.0f)]
 	private float mouseSensitivityY = 1.0f;
 	
 	[Header("Camera Settings")]
