@@ -8,6 +8,7 @@ public abstract class Node
     protected NodeState _nodeState;
     public NodeState nodeState { get; private set; }
     public abstract NodeState Evaluate();
+
 }
 
 public enum NodeState
