@@ -25,6 +25,7 @@ namespace RatCharacterController {
       private Rigidbody _rigidBody;
       private Vector3 _pushedCubeOffset;
       private bool _pushing;
+      private float _characterHalfHeight;
       
       private void Start() {
          _cameraTransform = FindObjectOfType<Camera>().transform;
@@ -34,6 +35,7 @@ namespace RatCharacterController {
          _rigidBody = _playerTransform.GetComponent<Rigidbody>();
          _characterAnimationController = GetComponent<CharacterAnimationController>();
          _collider = GetComponent<CapsuleCollider>();
+         _characterHalfHeight = _collider.height * .5f;
          _playerInput = GetComponent<PlayerInput>();
 
          if (_camController == null)
@@ -59,10 +61,11 @@ namespace RatCharacterController {
       public void Interact(InputAction.CallbackContext context) {
          
          if (context.performed) {
-            Ray ray = new Ray(transform.position + Vector3.up, transform.forward);
-            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 1.0f, Color.cyan, 1.0f);
+            Ray ray = new Ray(transform.position + Vector3.up * _characterHalfHeight * transform.localScale.y, transform.forward);
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * .1f, Color.cyan, 1.0f);
+            Debug.Log("DrawLine");
             
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f, cubeLayerMask)) {
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, .1f, cubeLayerMask)) {
                Transform cube = hitInfo.transform; 
                cube.GetComponent<CubePush>().Closest();
                Transform playerTransform = _playerTransform;
@@ -79,18 +82,6 @@ namespace RatCharacterController {
          //    _characterAnimationController.Push(false);
          //    _playerInput.SwitchCurrentActionMap("CharacterMovement");
          //    CubePush.NotClosest();
-      }
-
-      public void StopPushCube(InputAction.CallbackContext context) {
-         if (context.performed) {
-            _pushing = false;
-            _characterAnimationController.Push(false);
-            _playerTransform.parent = null;
-            _cameraFollow.SetFollowTransform(_playerTransform);
-            _rigidBody.isKinematic = false;
-            _playerInput.SwitchCurrentActionMap("CharacterMovement");
-            CubePush.NotClosest();
-         }
       }
 
       public void PushCube(InputAction.CallbackContext context) {
@@ -112,6 +103,18 @@ namespace RatCharacterController {
             //
             // if (CubePush.closestCube != null)
             //    CubePush.closestCube.Push(v2);
+         }
+      }
+
+      public void StopPushCube(InputAction.CallbackContext context) {
+         if (context.performed) {
+            _pushing = false;
+            _characterAnimationController.Push(false);
+            _playerTransform.parent = null;
+            _cameraFollow.SetFollowTransform(_playerTransform);
+            _rigidBody.isKinematic = false;
+            _playerInput.SwitchCurrentActionMap("CharacterMovement");
+            CubePush.NotClosest();
          }
       }
 
