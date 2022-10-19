@@ -5,9 +5,10 @@ using UnityEngine.AI;
 
 public class PerformActivityNode : Node
 {
-    private NavMeshAgent agent;
     private static DummyBehaviour Instance;
-    GameObject GO = new GameObject();
+    private GameObject GO = new GameObject();
+
+    private NavMeshAgent agent;
     private bool timerDone;
 
     public PerformActivityNode(NavMeshAgent agent)
@@ -33,6 +34,7 @@ public override NodeState Evaluate()
 
     private IEnumerator Timer()
     {
+        timerDone = false;
         yield return new WaitForSeconds(3f);
         timerDone = true;
     }

@@ -35,6 +35,8 @@ public class EnemyAI : MonoBehaviour
     private Vector2 velocity;
     private bool shouldMove;
 
+    public Transform CurrentActivityPosition { get; set;}
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -58,11 +60,10 @@ public class EnemyAI : MonoBehaviour
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, transform);
         CaptureNode captureNode = new CaptureNode(agent, playerTransform);
 
-        Sequence activitySequence = new Sequence(new List<Node> {goToActivityNode, performActivityNode});
         Sequence chaseSequence = new Sequence(new List<Node> {chasingRangeNode, chaseNode});
         Sequence captureSequence = new Sequence(new List<Node> {captureRangeNode, captureNode});
 
-        topNode = new Selector(new List<Node> {captureSequence, chaseSequence, activitySequence});
+        topNode = new Selector(new List<Node> {captureSequence, chaseSequence, goToActivityNode});
     }
 
 
