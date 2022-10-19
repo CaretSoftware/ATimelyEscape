@@ -15,7 +15,7 @@ public class GoToActivityNode : Node
     private bool timerDone;
     private bool nextDestinationReached;
 
-    public GoToActivityNode(Transform[] waypoints, NavMeshAgent agent)
+    public GoToActivityNode(Transform[] waypoints, NavMeshAgent agent, Animator animator)
     {
         this.waypoints = waypoints;
         this.agent = agent;

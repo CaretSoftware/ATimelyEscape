@@ -27,7 +27,7 @@ public class EnemyAI : MonoBehaviour
 
     private NavMeshAgent agent;
     private Material material;
-    private Animator anim;
+    private Animator animator;
     private Node topNode;
 
     private Vector3 worldDeltaPosition;
@@ -41,7 +41,7 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         material = GetComponent<MeshRenderer>().material;
-        anim = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         agent.updatePosition = false;
     }
     private void Start()
@@ -53,7 +53,7 @@ public class EnemyAI : MonoBehaviour
 
     private void ConstructBehaviourTreePersonnel()
     {
-        GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent);
+        GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator);
         PerformActivityNode performActivityNode = new PerformActivityNode(agent);
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, this);
         RangeNode chasingRangeNode = new RangeNode(chasingRange, playerTransform, transform);
@@ -105,9 +105,9 @@ public class EnemyAI : MonoBehaviour
         velocity.x *= SpeedMultiplier;
         velocity.y *= SpeedMultiplier;
         //set anim parameters accoringly.
-        anim.SetBool("move", shouldMove);
-        anim.SetFloat("velx", velocity.x);
-        anim.SetFloat("vely", velocity.y);
+        animator.SetBool("move", shouldMove);
+        animator.SetFloat("velx", velocity.x);
+        animator.SetFloat("vely", velocity.y);
     }
 
     /*
