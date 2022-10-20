@@ -111,7 +111,10 @@ public class LineEditor : EditorWindow
             EditorGUI.indentLevel -= 2;
             GUILayout.BeginHorizontal();
             GUILayout.Space(40);
+            if(lineRenderer != null)
+            {
             lineRenderer.widthCurve = EditorGUILayout.CurveField(lineWidth);
+            }
             GUILayout.Space(40);
             GUILayout.EndHorizontal();
 
