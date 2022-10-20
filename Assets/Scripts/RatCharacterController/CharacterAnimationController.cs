@@ -17,22 +17,25 @@ namespace RatCharacterController {
 		private Transform _transform;
 		private float _velX;
 		private float _velZ;
-		[SerializeField] 
-		private float smoothTime = .1f;
+		[SerializeField] private float smoothTime = .1f;
 		private float _currentVelX;
 		private float _currentVelZ;
 		private Vector3 _inputVector;
 		private static readonly int Grounded = Animator.StringToHash("Grounded");
+		private static readonly int Pushing = Animator.StringToHash("Push");
+		private Rigidbody rb;
+		private float _mantleAnimationLength = .833f + .460f;
 
 		private void Awake() {
 			_transform = transform;
 			_animator = GetComponent<Animator>();
 			_camera = FindObjectOfType<Camera>().transform;
+			rb = GetComponent<Rigidbody>();
 			// _navMeshAgent = GetComponent<NavMeshAgent>();
 			// _navMeshAgent.updatePosition = false;
 			// _navMeshAgent.updateRotation = false;
 		}
-		
+
 		private void Update() {
 
 			_velX = Mathf.SmoothDamp(_velX, _inputVector.x, ref _currentVelX, smoothTime);
@@ -48,7 +51,7 @@ namespace RatCharacterController {
 			// bool shiftHeld = Input.GetKey(KeyCode.LeftShift);
 			// float horizontalInput = Input.GetAxisRaw("Horizontal");
 			// float verticalInput = Input.GetAxisRaw("Vertical");
-			
+
 			// Vector3 inputVector = new Vector3(horizontalInput, 0.0f, verticalInput);
 
 			if (inputVector.magnitude > 1)
@@ -60,12 +63,31 @@ namespace RatCharacterController {
 			_inputVector = new Vector3(inputVector.x, 0.0f, inputVector.y);
 		}
 
+		public void Push(bool push) {
+			_animator.SetBool(Pushing, push);
+		}
+
 		public void JumpToFreeHang() {
+			DeactivatePhysics(true);
+			StartCoroutine(PhysicsDelay());
 			_animator.SetTrigger(Jump);
 		}
 
 		public void SetGrounded(bool grounded) {
 			_animator.SetBool(Grounded, grounded);
+		}
+
+		private IEnumerator PhysicsDelay() {
+			yield return new WaitForSeconds(_mantleAnimationLength);
+			DeactivatePhysics(false);
+		}
+
+		private void DeactivatePhysics(bool deactivate) {
+			if (!deactivate) {
+				rb.Sleep();
+				rb.velocity = Vector3.zero;
+			}
+			rb.isKinematic = deactivate;
 		}
 	}
 }
