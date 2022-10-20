@@ -55,7 +55,7 @@ namespace RatCharacterController {
       }
 
       public void Jump(InputAction.CallbackContext context) {
-         if (context.performed) _characterAnimationController.JumpToFreeHang();
+         if (context.performed && Grounded()) _characterAnimationController.JumpToFreeHang();
       }
 
       public void Interact(InputAction.CallbackContext context) {
@@ -210,14 +210,15 @@ namespace RatCharacterController {
       }
 
       private bool Grounded() {
-         float radius = _collider.radius;
-         Vector3 origin = transform.position + (radius + 0.05f)* Vector3.up;
-         const float maxDistance = .2f;
+         float radius = _collider.radius * transform.localScale.y;
+         float margin = 0.01f;
+         float maxDistance = .02f + margin;
+         Vector3 origin = transform.position + (radius * Vector3.up) + (margin * Vector3.up);
          Ray ray = new Ray(origin, Vector3.down);
          
-         Debug.DrawRay(origin, Vector3.down * radius);
+         Debug.DrawRay(origin, Vector3.down * maxDistance);
          
-         return Physics.SphereCast(ray, radius, maxDistance);
+         return Physics.SphereCast(ray, radius, maxDistance, groundedLayerMask);
          // return Physics.Raycast(ray, .5f, groundedLayerMask);
       }
    }
