@@ -63,8 +63,7 @@ namespace RatCharacterController {
          if (context.performed) {
             Ray ray = new Ray(transform.position + Vector3.up * _characterHalfHeight * transform.localScale.y, transform.forward);
             Debug.DrawLine(ray.origin, ray.origin + ray.direction * .1f, Color.cyan, 1.0f);
-            Debug.Log("DrawLine");
-            
+
             if (Physics.Raycast(ray, out RaycastHit hitInfo, .1f, cubeLayerMask)) {
                Transform cube = hitInfo.transform; 
                cube.GetComponent<CubePush>().Closest();
