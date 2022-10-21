@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,9 +18,9 @@ public class CameraController : MonoBehaviour {
 	private Vector3 _smoothDampCurrentVelocity;
 		
 	[Header("Mouse Sensitivity")]
-	[SerializeField] [Range(0.1f, 10.0f)]
+	[SerializeField] [Range(0.001f, 10.0f)]
 	private float mouseSensitivityX = 1.0f;
-	[SerializeField, Range(0.1f, 10.0f)]
+	[SerializeField, Range(0.001f, 10.0f)]
 	private float mouseSensitivityY = 1.0f;
 	
 	[Header("Camera Settings")]
@@ -40,22 +41,20 @@ public class CameraController : MonoBehaviour {
 	
 	private void Start() {
 		_camera = GetComponentInChildren<Camera>().transform;
-
+		
+		// init smoothDamp variables and set camera position
+		_lerpOffset = cameraOffset;
+		_cameraPos = transform.position;
+		_camera.position = _cameraPos + cameraOffset;
+		
 		Cursor.visible = false;
-		
-		// Releases the cursor
-		// Cursor.lockState = CursorLockMode.None;
-		// Locks the cursor
 		Cursor.lockState = CursorLockMode.Locked;
-		// Confines the cursor
-		// Cursor.lockState = CursorLockMode.Confined;
-		
 	}
 
 	private void Update() {
 		MoveCamera();
 	}
-	
+
 	public void MouseInput(InputAction.CallbackContext context) {
 		Vector2 mouseDelta = context.ReadValue<Vector2>();
 
@@ -88,10 +87,11 @@ public class CameraController : MonoBehaviour {
 		}
 	
 		_cameraPos = Vector3.SmoothDamp(_cameraPos, transform.position, 
-			ref _smoothDampCurrentVelocityLateral, smoothness);
+				ref _smoothDampCurrentVelocityLateral, smoothness);
 		Vector3 abovePlayer = _cameraPos + Vector3.up * _headHeight;
 		Vector3 offsetTarget = abovePlayer + _camera.rotation * cameraOffset;
 		Vector3 offsetDirection = offsetTarget - abovePlayer;
+		
 		Physics.SphereCast(abovePlayer, 
 			_cameraCollisionRadius, 
 			offsetDirection.normalized, 
@@ -99,18 +99,16 @@ public class CameraController : MonoBehaviour {
 			offsetDirection.magnitude, 
 			collisionMask);
 	
-		Vector3 offset = Vector3.zero;
+		Vector3 offset;
 		if (hit.collider)
 			offset = cameraOffset.normalized * hit.distance;
 		else
 			offset = cameraOffset;
-		
-		// _debugHit = hit.collider;
-	
+
 		float smoothDollyTime = hit.collider ? smoothDampMinVal : smoothDampMaxVal;
 		_lerpOffset = Vector3.SmoothDamp(_lerpOffset, offset, ref _smoothDampCurrentVelocity, smoothDollyTime);
-		_camera.position = //cameraTarget + 
-			abovePlayer + _camera.rotation * _lerpOffset;
+		
+		_camera.position = abovePlayer + _camera.rotation * _lerpOffset;
 	}
 }
 	
