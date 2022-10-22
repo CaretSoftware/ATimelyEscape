@@ -1,78 +1,111 @@
+using CallbackSystem;
 using System.Collections;
 using UnityEngine;
 
-public class LightDetection : MonoBehaviour
+
+namespace CallbackSystem
 {
-    [Header("Settings")]
-    [Tooltip("The camera who scans for light.")]
-    public Camera lightScan;
-    [Tooltip("Show the light value in the log.")]
-    public bool lightValueLog = false;
-    [Tooltip("Time between light value updates (default = 0.1f).")]
-    public float updateTime = 0.1f;
-
-    public static float lightValue;
-
-    private const int textureSize = 1;
-
-    private Texture2D m_texLight;
-    private RenderTexture m_texTemp;
-    private Rect m_rectLight;
-    private Color m_LightPixel;
-
-    private void Start()
+    public class LightDetection : MonoBehaviour
     {
-        StartLightDetection();
-    }
+        [Header("Settings")]
+        [Tooltip("The camera who scans for light.")]
+        public Camera lightScan;
+        [Tooltip("Show the light value in the log.")]
+        public bool lightValueLog = false;
+        [Tooltip("Time between light value updates")]
+        public float updateTime = 0.1f;
+        [Tooltip("Less light than this and Darkness starts coming")]
+        public float minumumLight = .3f;
+        [Tooltip("This is the speed att which the deaths approaches in just under minimumLight")]
+        public float timeInMinumumLight = 25f;
+        [Tooltip("This is the speed att which the deaths approaches in Total Darkness")]
+        public float timeInTotalDarkness = 1f;
 
-    /// <summary>
-    /// Prepare all needed variables and start the light detection coroutine.
-    /// </summary>
-    private void StartLightDetection()
-    {
-        m_texLight = new Texture2D(textureSize, textureSize, TextureFormat.RGB24, false);
-        m_texTemp = new RenderTexture(textureSize, textureSize, 24);
-        m_rectLight = new Rect(0f, 0f, textureSize, textureSize);
 
-        StartCoroutine(LightDetectionUpdate(updateTime));
-    }
+        public static float lightValue;
 
-    /// <summary>
-    /// Updates the light value each x seconds.
-    /// </summary>
-    /// <param name="updateTime">Time in seconds between updates.</param>
-    /// <returns></returns>
-    private IEnumerator LightDetectionUpdate(float updateTime)
-    {
-        while (true)
+        private const int textureSize = 1;
+
+        private Texture2D texLight;
+        private RenderTexture texTemp;
+        private Rect rectLight;
+        private Color lightPixel;
+        private float timer = 0f;
+        private DieEvent fail;
+
+        private void Start()
         {
-            //Set the target texture of the cam.
-            lightScan.targetTexture = m_texTemp;
-            //Render into the set target texture.
+            fail = new();
+            StartLightDetection();
+        }
+
+        private void Update()
+        {
+            if (lightValue < minumumLight)
+            {
+                timer += (Time.deltaTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, lightValue * (1/minumumLight))); 
+                Debug.Log(timer);
+            }
+            else
+                timer = 0f;
+            if (timer >= 1)
+            {
+                LightDetectior();
+                if (lightValue < minumumLight)
+                {
+                    Debug.Log(1);
+                    fail.Invoke();
+                }
+
+            }
+        }
+
+
+        private void StartLightDetection()
+        {
+            texLight = new Texture2D(textureSize, textureSize, TextureFormat.RGB24, false);
+            texTemp = new RenderTexture(textureSize, textureSize, 24);
+            rectLight = new Rect(0f, 0f, textureSize, textureSize);
+
+            StartCoroutine(LightDetectionUpdate(updateTime));
+        }
+
+        private IEnumerator LightDetectionUpdate(float updateTime)
+        {
+            while (true)
+            {
+                LightDetectior();
+                yield return new WaitForSeconds(updateTime);
+            }
+        }
+
+        private void LightDetectior()
+        {
+            lightScan.targetTexture = texTemp;
+
             lightScan.Render();
 
-            //Set the target texture as the active rendered texture.
-            RenderTexture.active = m_texTemp;
-            //Read the active rendered texture.
-            m_texLight.ReadPixels(m_rectLight, 0, 0);
+            RenderTexture.active = texTemp;
 
-            //Reset the active rendered texture.
+            texLight.ReadPixels(rectLight, 0, 0);
+
             RenderTexture.active = null;
-            //Reset the target texture of the cam.
+
             lightScan.targetTexture = null;
 
-            //Read the pixel in middle of the texture.
-            m_LightPixel = m_texLight.GetPixel(textureSize / 2, textureSize / 2);
+            lightPixel = texLight.GetPixel(textureSize / 2, textureSize / 2);
 
-            //Calculate light value, based on color intensity (from 0f to 1f).
-            lightValue = (m_LightPixel.r + m_LightPixel.g + m_LightPixel.b) / 3f;
+            lightValue = (lightPixel.r + lightPixel.g + lightPixel.b) / 3f;
 
             if (lightValueLog)
             {
                 Debug.Log("Light Value: " + lightValue);
             }
+        }
 
-            yield return new WaitForSeconds(updateTime);
+        public float GetFailTimer()
+        {
+            return timer;
         }
     }
 }
