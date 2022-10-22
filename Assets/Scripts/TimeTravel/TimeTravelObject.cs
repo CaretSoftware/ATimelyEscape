@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CallbackSystem;
 using UnityEngine;
 using StateMachines;
+using UnityEngine.Rendering.Universal;
 
 public class TimeTravelObject : MonoBehaviour {
     private TimeTravelObject pastSelf;
@@ -12,24 +13,77 @@ public class TimeTravelObject : MonoBehaviour {
     public Rigidbody Rigidbody { get; private set; }
     private StateMachine stateMachine;
     public State CurrentState => stateMachine.CurrentState;
+    private TimeTravelObjectState timeObjectState;
+    private Renderer mRenderer;
+    private DecalProjector decalProjector;
+
 
     public void SetUpTimeTravelObject(TimeTravelObjectManager manager, TimeTravelObject pastSelf = null) {
         this.manager = manager;
         stateMachine = new StateMachine(this, new State[] { new TimeTravelIdleState(), new TimeTravelMovingState() });
-        this.pastSelf = pastSelf;
-        Rigidbody = GetComponent<Rigidbody>();
-        if (pastSelf != null) {
-            var destinyObject = new GameObject(name + "Destiny");
-            destinyObject.transform.position = transform.position;
-            destinyObject.transform.parent = transform.parent;
-            destiny = destinyObject.transform;
-        } else destiny = transform;
 
-        if (manager.CanBeMoved && Rigidbody == null)
-            throw new MissingComponentException("Movable time travel objects require a rigidbody component!");
+        switch (manager.ObjectState) {
+            case TimeTravelObjectState.Decal:
+            case TimeTravelObjectState.DecalMoving:
+            case TimeTravelObjectState.DecalSwitchingMaterial:
+                decalProjector = GetComponent<DecalProjector>();
+                if (!decalProjector)
+                    throw new MissingComponentException(
+                        $"Decal {nameof(TimeTravelObject)}s require a {nameof(DecalProjector)} component!");
+                break;
+            case TimeTravelObjectState.MeshChanging: break;
+            case TimeTravelObjectState.MeshChangingMoving: break;
 
-        if (pastSelf == null) return;
-        DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
+            case TimeTravelObjectState.MeshChangingPlayerMove:
+                this.pastSelf = pastSelf;
+                Rigidbody = GetComponent<Rigidbody>();
+
+                if (pastSelf != null) {
+                    var destinyObject = new GameObject(name + "Destiny") {
+                        transform = { position = transform.position, parent = transform.parent }
+                    };
+                    destiny = destinyObject.transform;
+                } else destiny = transform;
+
+                if (Rigidbody == null) {
+                    throw new MissingComponentException(
+                        $"Movable {nameof(TimeTravelObject)}s require a {nameof(Rigidbody)} component!");
+                }
+
+                DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
+                break;
+
+            case TimeTravelObjectState.MeshSwitchingMaterial:
+                mRenderer = GetComponent<Renderer>();
+                if (!mRenderer)
+                    throw new MissingComponentException(
+                        $"{nameof(TimeTravelObject)} switching materials require a {nameof(Renderer)} component!");
+                break;
+
+            case TimeTravelObjectState.Dummy: break;
+            default: throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    public void UpdateMaterials(TimeTravelPeriod period) {
+        switch (manager.ObjectState) {
+            case TimeTravelObjectState.DecalSwitchingMaterial:
+                decalProjector.material = period switch {
+                    TimeTravelPeriod.Past => manager.PastMaterials[0],
+                    TimeTravelPeriod.Present => manager.PresentMaterials[0],
+                    TimeTravelPeriod.Future => manager.FutureMaterials[0],
+                    _ => decalProjector.material
+                };
+                break;
+            case TimeTravelObjectState.MeshSwitchingMaterial:
+                mRenderer.materials = period switch {
+                    TimeTravelPeriod.Past => manager.PastMaterials,
+                    TimeTravelPeriod.Present => manager.PresentMaterials,
+                    TimeTravelPeriod.Future => manager.FutureMaterials,
+                    _ => mRenderer.materials
+                };
+                break;
+        }
     }
 
     private void Update() {

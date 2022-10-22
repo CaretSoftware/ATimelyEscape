@@ -4,11 +4,7 @@ using System.Collections.Generic;
 using CallbackSystem;
 using UnityEngine;
 using StateMachines;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEditor;
-using State = StateMachines.State;
-using StateMachine = StateMachines.StateMachine;
 
 public class TimeTravelManager : MonoBehaviour {
     private StateMachine stateMachine;
