@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using RatCharacterController;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,7 +25,6 @@ namespace RatCharacterController {
       private Vector3 _pushedCubeOffset;
       private bool _pushing;
       private float _characterHalfHeight;
-      private bool _characterMovement = true;
 
       private void Start() {
          _playerInputActions = new PlayerInputActions();
@@ -65,9 +65,72 @@ namespace RatCharacterController {
          // lerp player in front of box
          // slerp players rotation to inverse raycast.normalDirection
          // Jump To freeHang
-         if (Grounded()) _characterAnimationController.JumpToFreeHang();
+         Transform playerTransform = _playerTransform;
+         Vector3 playerPosition = playerTransform.position;
+         float playerScale = playerTransform.localScale.y;
+         float margin = .1f * playerScale;
+         Ray ray = RayAtHalfHeight(playerTransform);
+         CapsuleCollider capsuleCollider = _collider;
+         float radius = capsuleCollider.radius * playerScale;
+         playerForward = playerTransform.forward;
+
+         if (Grounded() && LedgeAhead()) {
+            playerTransform.rotation = Quaternion.LookRotation(playerForward, Vector3.up);
+            _characterAnimationController.JumpToFreeHang();
+         } else {
+            // Skip
+         }
+
+         bool LedgeAhead() {
+            Vector3 ledgeHeight = 2.0f * playerScale * Vector3.up;
+         
+            _point0 = playerPosition + 
+                      ledgeHeight + 
+                      (radius + margin) * Vector3.up;
+            _point1 = playerPosition + 
+                      ledgeHeight + 
+                      (_collider.height + margin) * playerScale * Vector3.up - 
+                      radius * Vector3.up;
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f * playerScale) && 
+                Physics.OverlapCapsule(_point0, _point1, radius).Length < 1) {
+
+               playerForward = -hitInfo.normal.ProjectOnPlane();
+
+               return !Physics.CapsuleCast(
+                  point1: _point0,
+                  point2: _point1,
+                  radius: radius - margin,
+                  direction: playerForward,
+                  maxDistance: 1.0f * playerScale);
+            }
+
+            return false;
+         }
       }
 
+      private Vector3 _point0;
+      private Vector3 _point1;
+      private Vector3 playerForward;
+#if UNITY_EDITOR
+      private void OnDrawGizmos() {
+         if (!Application.isPlaying) return;
+         float radius = _collider.radius * _playerTransform.localScale.y;
+         Vector3 point1 = _point0 + _playerTransform.localScale.z * playerForward;
+         Vector3 point2 = _point1 + _playerTransform.localScale.z * playerForward;
+         Gizmos.DrawWireSphere(point1, radius);
+         Gizmos.DrawWireSphere(point2, radius);
+         Gizmos.DrawLine(point1 + radius * Vector3.forward, point2 + radius * Vector3.forward);
+         Gizmos.DrawLine(point1 + radius * Vector3.back, point2 + radius * Vector3.back);
+         Gizmos.DrawLine(point1 + radius * Vector3.left, point2 + radius * Vector3.left);
+         Gizmos.DrawLine(point1 + radius * Vector3.right, point2 + radius * Vector3.right);
+      }
+#endif
+      
+      private Ray RayAtHalfHeight(Transform playerTransform) {
+         return new Ray(
+               transform.position + Vector3.up * _characterHalfHeight * playerTransform.localScale.y, 
+               playerTransform.forward);
+      }
       private void CameraInput() {
 
          Vector2 cameraStickInput = _playerInputActions.CameraControls.CameraThumbstick.ReadValue<Vector2>();
