@@ -2,6 +2,93 @@
     "name": "PlayerInputActions",
     "maps": [
         {
+            "name": "CameraControls",
+            "id": "d82bf2e8-ae35-4849-8c7c-00e527a27bbb",
+            "actions": [
+                {
+                    "name": "Camera Thumbstick",
+                    "type": "Value",
+                    "id": "efef3ced-bf4f-4996-bbf2-1156f77bf46e",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Camera Mouse Input",
+                    "type": "Button",
+                    "id": "a64bd264-79ba-411d-882b-ae1cb1a8934e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e72ee119-5d9c-47ad-80d0-ebfa716e736b",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Thumbstick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a4832785-0d42-432d-aed0-a89ce1f0b5de",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Mouse Input",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Interact",
+            "id": "83a4b3ac-9e3a-4c63-92cf-d56a259c5916",
+            "actions": [
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "c2efffee-0f04-4e0b-a56e-c09d78e87866",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "dd373f41-97ca-4601-b434-6f1d719f0525",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e66fafcb-156a-4491-9e9f-5561ba8ddb86",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "CharacterMovement",
             "id": "4bf87acb-47c0-458d-a0e0-ba35bfdef775",
             "actions": [
@@ -22,33 +109,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Camera Thumbstick",
-                    "type": "Value",
-                    "id": "47dc0126-3967-4559-a1cf-76d0e2da657b",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Camera Mouse Input",
-                    "type": "Button",
-                    "id": "98abcb51-e81d-4566-94ec-e17bc624ad21",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Interact",
-                    "type": "Button",
-                    "id": "9535befa-4346-48a6-a228-963bea0e0a55",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -139,50 +199,6 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f2d05349-30ad-4311-9070-a71139f7022b",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Camera Thumbstick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "083532c1-9468-4d4e-9848-1004853849c7",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Camera Mouse Input",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "10bfd294-3e54-41f0-84cb-176088b5438a",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1c27d6c8-530a-4aa5-a120-43b87e2f8ef1",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
@@ -191,40 +207,13 @@
             "id": "2e08cb11-5f6e-4285-ac31-89cc6774cf6d",
             "actions": [
                 {
-                    "name": "Push",
+                    "name": "Movement",
                     "type": "Value",
                     "id": "57d5937c-e305-4a9f-8fc2-eca903501b16",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Camera Mouse Input",
-                    "type": "Button",
-                    "id": "0ad793aa-ccef-4fdb-9e79-4a7f8a5e5d8b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Camera Thumbstick",
-                    "type": "Value",
-                    "id": "b89752e7-2677-4223-96d0-f8904a4048e8",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Interact",
-                    "type": "Button",
-                    "id": "dd5f9090-a957-4e08-b723-c947ddc33f89",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -235,7 +224,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Push",
+                    "action": "Movement",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -246,7 +235,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Push",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -257,7 +246,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Push",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -268,7 +257,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Push",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -279,7 +268,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Push",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -290,51 +279,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Push",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3ef50f44-4194-4b5e-898a-2cfd86c4d8f7",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1daafdc8-4f79-4b03-abd4-2b4421bc3d99",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0f2a80b7-a701-429b-bf32-639fc8c60e41",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Camera Thumbstick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8478d300-50b3-4932-a50a-27cd1d5d2fdc",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Camera Mouse Input",
+                    "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
