@@ -55,16 +55,17 @@ public class CameraController : MonoBehaviour {
 		MoveCamera();
 	}
 
-	public void MouseInput(InputAction.CallbackContext context) {
-		Vector2 mouseDelta = context.ReadValue<Vector2>();
+	public void MouseInput(Vector2 mouseDelta) {
+		//mouseDelta = context.ReadValue<Vector2>();
 
 		_mouseMovement.x += mouseDelta.x * mouseSensitivityX;
 		_mouseMovement.y -= mouseDelta.y * mouseSensitivityY;
 	}
 
-	public void StickInput(InputAction.CallbackContext context) {
-		const float stickSensitivity = 1.0f;
-		Vector2 stickDelta = context.ReadValue<Vector2>();
+	public void StickInput(Vector2 stickDelta) {
+		const float stickSensitivity = .75f;
+		
+		// Vector2 stickDelta = context.ReadValue<Vector2>();
 		
 		_thumbstickDelta = new Vector2(stickDelta.x, -stickDelta.y) * stickSensitivity;
 		
