@@ -46,21 +46,18 @@ namespace RatCharacterController {
 			// _navMeshAgent.nextPosition = transform.position;
 		}
 
-		public void InputVector(Vector2 inputVector) {
-
+		public void InputVector(Vector2 inputVector) => InputVector(inputVector.ToVector3());
+		public void InputVector(Vector3 inputVector) {
+			
 			// bool shiftHeld = Input.GetKey(KeyCode.LeftShift);
-			// float horizontalInput = Input.GetAxisRaw("Horizontal");
-			// float verticalInput = Input.GetAxisRaw("Vertical");
-
-			// Vector3 inputVector = new Vector3(horizontalInput, 0.0f, verticalInput);
 
 			if (inputVector.magnitude > 1)
 				inputVector.Normalize();
 
 			// if (shiftHeld)
 			// 	inputVector *= .5f;
-
-			_inputVector = new Vector3(inputVector.x, 0.0f, inputVector.y);
+			
+			_inputVector = inputVector;
 		}
 
 		public void Push(bool push) {
