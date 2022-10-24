@@ -8,12 +8,10 @@ public class LineEditor : EditorWindow
     private GameObject line = null;
     private LineRenderer lineRenderer = null;
     public List<GameObject> points;
-    public AnimationCurve lineWidth = null;
     public int vertexCount = 12;
 
 
     SerializedObject so;
-    SerializedProperty propLineWidth;
     SerializedProperty propVertexCount;
 
     [MenuItem("Tools/LineEditor")]
@@ -39,25 +37,8 @@ public class LineEditor : EditorWindow
     {
         so = new SerializedObject(this);
 
-        propLineWidth = so.FindProperty("lineWidth");
         propVertexCount = so.FindProperty("vertexCount");
     }
-
-
-    // Update is called once per frame
-    /*void Update()
-    {
-        var pointList = new List<Vector3>();
-        for (float ratio = 0; ratio <= 1; ratio += 1.0f / vertexCount)
-        {
-            var tangentLineVertex1 = Vector3.Lerp(point1.position, point2.position, ratio);
-            var tangentLineVertex2 = Vector3.Lerp(point2.position, point3.position, ratio);
-            var bezierPoint = Vector3.Lerp(tangentLineVertex1, tangentLineVertex2, ratio);
-            pointList.Add(bezierPoint);
-        }
-        lineRenderer.positionCount = pointList.Count;
-        lineRenderer.SetPositions(pointList.ToArray());
-    }*/
 
     void DuringSceneGUI(SceneView sceneView)
     {
@@ -104,31 +85,13 @@ public class LineEditor : EditorWindow
             GUILayout.Space(40);
             GUILayout.EndHorizontal();
             GUILayout.Space(20);
-           
-           
-            EditorGUI.indentLevel += 2;
-            EditorGUILayout.LabelField("Line width");
-            EditorGUI.indentLevel -= 2;
-            GUILayout.BeginHorizontal();
-            GUILayout.Space(40);
-            if(lineRenderer != null)
-            {
-            lineRenderer.widthCurve = EditorGUILayout.CurveField(lineWidth);
-            }
-            GUILayout.Space(40);
-            GUILayout.EndHorizontal();
 
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Space(40);
-            
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(propVertexCount, new GUIContent("Vertex count"));
             propVertexCount.intValue = Mathf.Max(0, propVertexCount.intValue);
             propVertexCount.intValue = Mathf.Min(100, propVertexCount.intValue);
 
             GUILayout.Space(40);
-            GUILayout.EndHorizontal();
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -213,11 +176,11 @@ public class LineEditor : EditorWindow
 
         points = new List<GameObject>();
         lineRenderer = line.AddComponent<LineRenderer>();
-        /*GameObject point = new GameObject("Point");
-        Undo.RegisterCreatedObjectUndo(point, "Create New Line");
-        point.transform.parent = line.gameObject.transform;
 
-        points.Add(point);*/
+        var width = 0.2f;
+
+        lineRenderer.startWidth = width;
+        lineRenderer.endWidth = width;
     }
 
     private void LoadExistingLine()
