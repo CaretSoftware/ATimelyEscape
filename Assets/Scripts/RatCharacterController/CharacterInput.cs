@@ -58,6 +58,11 @@ namespace RatCharacterController {
          else
             PushCubeInput( _playerInputActions.BoxMovement.Movement.ReadValue<Vector2>() );
       }
+
+      private bool _jumping;
+      public void JumpComplete() {
+         _jumping = false;
+      }
       
       private void Jump(InputAction.CallbackContext context) {
          // TODO
@@ -74,7 +79,8 @@ namespace RatCharacterController {
          float radius = capsuleCollider.radius * playerScale;
          playerForward = playerTransform.forward;
 
-         if (Grounded() && LedgeAhead()) {
+         if (!_jumping && Grounded() && LedgeAhead()) {
+            _jumping = true;
             playerTransform.rotation = Quaternion.LookRotation(playerForward, Vector3.up);
             _characterAnimationController.JumpToFreeHang();
          } else {

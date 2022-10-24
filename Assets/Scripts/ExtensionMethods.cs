@@ -13,4 +13,9 @@ public static class ExtensionMethods {
    public static Vector3 ProjectOnPlane(this Vector3 vector3) {
       return Vector3.ProjectOnPlane(vector3, Vector3.up);
    }
+   
+   // public static Vector3 operator= (Vector3 b, Vector3 c) {
+   //    
+   //    return b;
+   // }
 }
