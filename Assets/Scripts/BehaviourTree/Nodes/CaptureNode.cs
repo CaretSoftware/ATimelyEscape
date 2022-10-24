@@ -5,42 +5,52 @@ using UnityEngine.AI;
 
 public class CaptureNode : Node
 {
-    [SerializeField] private float captureDistance;
+    private GameOverScreen gameOverScreen;
     private NavMeshAgent agent;
     private Transform target;
-    public CaptureNode(NavMeshAgent agent, Transform target)
+    private Transform agentTransform;
+    private float captureDistance;
+    private bool endScreenTriggered;
+
+    private float axisOffsetX;
+    private float axisOffsetZ;
+
+    public CaptureNode(NavMeshAgent agent, Transform target, float captureDistance, GameOverScreen gameOverScreen, Transform agentTransform)
     {
         this.agent = agent;
         this.target = target;
+        this.captureDistance = captureDistance;
+        this.gameOverScreen = gameOverScreen;
+        this.agentTransform = agentTransform;
     }
+
 
     public override NodeState Evaluate()
     {
-        float dist = Vector3.Distance(target.position, agent.transform.position);
-        if (dist > captureDistance)
+        Debug.Log("Trying to capture");
+
+        //axisOffsetX = Mathf.Abs(target.position.x - agentTransform.position.x);
+        //axisOffsetZ = Mathf.Abs(target.position.z - agentTransform.position.z);
+
+        float dist = Vector3.Distance(target.position, agentTransform.transform.position);
+        //if (axisOffsetX < captureDistance || axisOffsetZ < captureDistance)
+        if(dist < captureDistance)
+        {
+            Debug.Log("CAPTURED");
+            if (!endScreenTriggered)
+            {
+                //TODO add universal variable-setup script
+                gameOverScreen.FadeCanvasGroup(2);
+                endScreenTriggered = true;
+            }
+            agent.isStopped = true;
+            return NodeState.SUCCESS;
+        }
+        else
         {
             agent.isStopped = false;
             agent.SetDestination(target.position);
             return NodeState.RUNNING;
         }
-        else
-        {
-            agent.isStopped = true;
-            return NodeState.SUCCESS;
-        }
-    }
-
-    private IEnumerator LookAtTarget()
-    {
-        Quaternion lookRotation = Quaternion.LookRotation(target.position - agent.transform.position);
-        float time = 0;
-
-        while(time < 1)
-        {
-            agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, lookRotation, time);
-            time += Time.deltaTime * 2;
-            yield return null;
-        }
-        agent.transform.rotation = lookRotation;
     }
 }

@@ -8,19 +8,20 @@ public class ChaseNode : Node
     private const float triggerDistance = 0.2f;
 
     private Transform target;
+    private Transform agentTransform;
     private NavMeshAgent agent;
-    private EnemyAI ai;
-    public ChaseNode(Transform target, NavMeshAgent agent, EnemyAI ai)
+
+    public ChaseNode(Transform target, NavMeshAgent agent, Transform agentTransform)
     {
         this.target = target;
         this.agent = agent;
-        this.ai = ai;
+        this.agentTransform = agentTransform;
     }
 
     public override NodeState Evaluate()
     {
-        ai.Color = Color.yellow;
-        float dist = Vector3.Distance(target.position, agent.transform.position);
+        Debug.Log("Chasing");
+        float dist = Vector3.Distance(target.position, agentTransform.position);
         if(dist > triggerDistance)
         {
             agent.isStopped = false;

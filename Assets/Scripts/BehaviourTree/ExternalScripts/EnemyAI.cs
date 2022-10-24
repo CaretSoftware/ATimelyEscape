@@ -20,6 +20,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Cover[] availableCovers;
     [SerializeField] private Transform[] activityWaypoints;
+    [SerializeField] private GameOverScreen gameOverScreen;
 
     public Transform BestCoverSpot { get; set; }
     public float CurrentHealth { get { return _currentHealth; } private set { _currentHealth = Mathf.Clamp(value, 0, startingHealth); } }
@@ -30,6 +31,8 @@ public class EnemyAI : MonoBehaviour
     private Material material;
     private Animator animator;
     private Node topNode;
+    //TODO replace this with instantiate
+    [SerializeField] private Transform agentCenterTransform;
 
     private Vector3 worldDeltaPosition;
     private Vector3 groundDeltaPosition;
@@ -56,10 +59,10 @@ public class EnemyAI : MonoBehaviour
     {
         GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, activityIdleTime);
         //PerformActivityNode performActivityNode = new PerformActivityNode(agent);
-        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, this);
-        RangeNode chasingRangeNode = new RangeNode(chasingRange, playerTransform, transform);
-        RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, transform);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform);
+        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform);
+        RangeNode chasingRangeNode = new RangeNode(chasingRange, playerTransform, agentCenterTransform);
+        RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform);
+        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, gameOverScreen, agentCenterTransform);
 
         Sequence chaseSequence = new Sequence(new List<Node> {chasingRangeNode, chaseNode});
         Sequence captureSequence = new Sequence(new List<Node> {captureRangeNode, captureNode});
@@ -67,27 +70,13 @@ public class EnemyAI : MonoBehaviour
         topNode = new Selector(new List<Node> {captureSequence, chaseSequence, goToActivityNode});
     }
 
-
     private void Update()
     {
         ConvertMovementToAnim();
         topNode.Evaluate();
         if (topNode.nodeState == NodeState.FAILURE)
-        {
-            Color = Color.red;
             agent.isStopped = true;
-        }
-    }
-
-    //accounts for small offset between the character- and agent component position that occurs each frame.
-    private void OnAnimatorMove()
-    {
-        transform.position = agent.nextPosition;
-    }
-
-    private void OnMouseDown()
-    {
-        CurrentHealth -= 10f;
+        
     }
 
     private void ConvertMovementToAnim()
@@ -109,6 +98,12 @@ public class EnemyAI : MonoBehaviour
         animator.SetBool("move", shouldMove);
         animator.SetFloat("velx", velocity.x);
         animator.SetFloat("vely", velocity.y);
+    }
+
+    //accounts for small offset between the character- and agent component position that occurs each frame.
+    private void OnAnimatorMove()
+    {
+        transform.position = agent.nextPosition;
     }
 
     /*
