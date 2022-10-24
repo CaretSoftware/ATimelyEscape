@@ -12,8 +12,9 @@ public class TimeTravelObjectManager : MonoBehaviour {
     [SerializeField]
     private bool changesMesh;
 
-    [Tooltip(
-        "Whether the object changes materials upon travelling between different time periods. NOTE: Materials specific for each period have to be already applied to the meshes in question")]
+    [Tooltip("Whether the object changes materials upon travelling between different time periods. " +
+             "ATTENTION: It's very important that the renderers are added in the arrays in the SAME ORDER as the materials otherwise it will not work properly." +
+             " NOTE: Materials specific for each period have to be already applied to the meshes in question")]
     [DisableIf(EConditionOperator.Or, nameof(canBeMovedByPlayer), nameof(changesPosition), nameof(changesMesh))]
     [OnValueChanged(nameof(OnCheckMaterialsChange))]
     [SerializeField]
@@ -45,16 +46,25 @@ public class TimeTravelObjectManager : MonoBehaviour {
     private bool isDecal;
 
     [ShowIf(nameof(changesMaterials))]
+    [AllowNesting]
     [SerializeField]
-    private Material[] pastMaterials;
+    private MaterialInfo[] pastMaterials;
+
+
+    [ShowIf(nameof(changesMaterials))]
+    [AllowNesting]
+    [SerializeField]
+    private MaterialInfo[] presentMaterials;
+
+
+    [ShowIf(nameof(changesMaterials))]
+    [AllowNesting]
+    [SerializeField]
+    private MaterialInfo[] futureMaterials;
 
     [ShowIf(nameof(changesMaterials))]
     [SerializeField]
-    private Material[] presentMaterials;
-
-    [ShowIf(nameof(changesMaterials))]
-    [SerializeField]
-    private Material[] futureMaterials;
+    private Renderer[] renderers;
 
 
     [ShowIf(EConditionOperator.Or, nameof(changesMesh), nameof(canBeMovedByPlayer), nameof(changesPosition))]
@@ -68,22 +78,24 @@ public class TimeTravelObjectManager : MonoBehaviour {
     public TimeTravelObjectState ObjectState { get; private set; }
 
     public bool CanBeMovedByPlayer => canBeMovedByPlayer;
-    public Material[] PastMaterials => pastMaterials;
-    public Material[] PresentMaterials => presentMaterials;
-    public Material[] FutureMaterials => futureMaterials;
+    public MaterialInfo[] PastMaterials => pastMaterials;
+    public MaterialInfo[] PresentMaterials => presentMaterials;
+    public MaterialInfo[] FutureMaterials => futureMaterials;
+    public Renderer[] Renderers => renderers;
 
 
     private void Awake() {
+        CheckForMissingComponents();
+        DetermineTimeTravelObjectState();
+
         if (changesMesh || changesPosition || canBeMovedByPlayer) {
             past.SetUpTimeTravelObject(this);
             present.SetUpTimeTravelObject(this, past);
             future.SetUpTimeTravelObject(this, present);
         } else timeTravelObject.SetUpTimeTravelObject(this);
 
-
         TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
-        CheckForMissingComponents();
-        DetermineTimeTravelObjectState();
+        PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
     }
 
     private void CheckForMissingComponents() {
@@ -104,7 +116,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
     }
 
     private void DetermineTimeTravelObjectState() {
-        /*objectState = changesMesh switch {
+        /*ObjectState = changesMesh switch {
             true when !canBeMovedByPlayer && !changesPosition => TimeTravelObjectState.MeshChanging,
             true when !canBeMovedByPlayer && changesPosition => TimeTravelObjectState.MeshChangingMoving,
             true when canBeMovedByPlayer && !changesPosition => TimeTravelObjectState.MeshChangingPlayerMove,
@@ -114,21 +126,81 @@ public class TimeTravelObjectManager : MonoBehaviour {
                 _ => isDecal switch {
                     true when !changesMaterials && !changesPosition => TimeTravelObjectState.Decal,
                     true when changesPosition && !changesMaterials => TimeTravelObjectState.DecalMoving,
-                    _ => objectState
+                    _ => ObjectState
                 }
             }
         };*/
 
-        //this is ugly af, gonna try to do it better later
-        if (changesMesh && !canBeMovedByPlayer && !changesPosition) ObjectState = TimeTravelObjectState.MeshChanging;
-        if (changesMesh && !canBeMovedByPlayer && changesPosition)
-            ObjectState = TimeTravelObjectState.MeshChangingMoving;
-        if (changesMesh && canBeMovedByPlayer && !changesPosition)
-            ObjectState = TimeTravelObjectState.MeshChangingPlayerMove;
-        if (isDecal && !changesMaterials && !changesPosition) ObjectState = TimeTravelObjectState.Decal;
-        if (isDecal && !changesMaterials && changesPosition) ObjectState = TimeTravelObjectState.DecalMoving;
-        if (isDecal && changesMaterials && !changesPosition) ObjectState = TimeTravelObjectState.DecalSwitchingMaterial;
-        if (!isDecal && changesMaterials) ObjectState = TimeTravelObjectState.MeshSwitchingMaterial;
+        switch (changesMesh) {
+            case true when !canBeMovedByPlayer && !changesPosition:
+                ObjectState = TimeTravelObjectState.MeshChanging;
+                return;
+            case true when canBeMovedByPlayer && !changesPosition:
+                ObjectState = TimeTravelObjectState.MeshChangingPlayerMove;
+                return;
+            case true when !canBeMovedByPlayer && changesPosition:
+                ObjectState = TimeTravelObjectState.MeshChangingMoving;
+                return;
+        }
+
+        switch (isDecal) {
+            case false when changesMaterials:
+                ObjectState = TimeTravelObjectState.MeshSwitchingMaterial;
+                return;
+            case true when changesMaterials && !changesPosition:
+                ObjectState = TimeTravelObjectState.DecalSwitchingMaterial;
+                return;
+            case true when !changesMaterials && changesPosition:
+                ObjectState = TimeTravelObjectState.DecalMoving;
+                return;
+            case true when !changesMaterials && !changesPosition:
+                ObjectState = TimeTravelObjectState.Decal;
+                break;
+        }
+    }
+
+    private void SetUpPreviewBox(TimeTravelObject travelObject, Color color) {
+        GameObject wireObj = new GameObject(travelObject.name + " preview");
+        wireObj.transform.parent = transform;
+        travelObject.previewBoxObject = wireObj;
+        travelObject.wireBox = travelObject.previewBoxObject.AddComponent<WireBox>();
+        travelObject.wireBox.Color = color;
+    }
+
+    private void Update() { UpdateWireBoxes(); }
+
+    private void UpdateWireBoxes() {
+        if (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
+            future.wireBox == null) return;
+
+        var activePos = Vector3.zero;
+        if (past.gameObject.activeSelf) activePos = past.transform.position;
+        else if (present.gameObject.activeSelf) activePos = present.transform.position;
+        else activePos = future.transform.position;
+
+        if (!past.gameObject.activeSelf && Vector3.Distance(past.transform.position, activePos) > 1f &&
+            ObjectState == TimeTravelObjectState.MeshChangingPlayerMove) {
+            past.wireBox.SetLinePositions();
+            past.previewBoxObject.SetActive(true);
+            past.previewBoxObject.transform.position = past.transform.position;
+            past.wireBox.Color = Color.white;
+        } else past.previewBoxObject?.SetActive(false);
+
+        if (!present.gameObject.activeSelf && Vector3.Distance(present.transform.position, activePos) > 1f &&
+            ObjectState == TimeTravelObjectState.MeshChangingPlayerMove) {
+            present.wireBox?.SetLinePositions();
+            present.previewBoxObject.SetActive(true);
+            present.previewBoxObject.transform.position = present.transform.position;
+            present.wireBox.Color = Color.gray;
+        } else present.previewBoxObject?.SetActive(false);
+
+        if (!future.gameObject.activeSelf && Vector3.Distance(future.transform.position, activePos) > 1f &&
+            ObjectState == TimeTravelObjectState.MeshChangingPlayerMove) {
+            future.wireBox.SetLinePositions();
+            future.previewBoxObject.SetActive(true);
+            future.previewBoxObject.transform.position = future.transform.position;
+            future.wireBox.Color = Color.blue;
+        } else future.previewBoxObject?.SetActive(false);
     }
 
     // callbacks
@@ -139,15 +211,35 @@ public class TimeTravelObjectManager : MonoBehaviour {
             case TimeTravelObjectState.MeshChanging:
             case TimeTravelObjectState.MeshChangingMoving:
             case TimeTravelObjectState.MeshChangingPlayerMove:
+                if (past.wireBox == null && ObjectState == TimeTravelObjectState.MeshChangingPlayerMove)
+                    SetUpPreviewBox(past, Color.white);
+                if (present.wireBox == null && ObjectState == TimeTravelObjectState.MeshChangingPlayerMove)
+                    SetUpPreviewBox(present, Color.gray);
+                if (future.wireBox == null && ObjectState == TimeTravelObjectState.MeshChangingPlayerMove)
+                    SetUpPreviewBox(future, Color.blue);
+
                 past.gameObject.SetActive(e.to == TimeTravelPeriod.Past ? true : false);
                 present.gameObject.SetActive(e.to == TimeTravelPeriod.Present ? true : false);
                 future.gameObject.SetActive(e.to == TimeTravelPeriod.Future ? true : false);
+
+
                 break;
             case TimeTravelObjectState.DecalSwitchingMaterial:
             case TimeTravelObjectState.MeshSwitchingMaterial:
                 timeTravelObject.UpdateMaterials(e.to);
                 break;
             case TimeTravelObjectState.Dummy: break;
+        }
+    }
+
+    private void OnPhysicsSimulationComplete(PhysicsSimulationComplete e) {
+        if (ObjectState == TimeTravelObjectState.MeshChangingPlayerMove) {
+            if (past.Rigidbody != null) {
+                past.Rigidbody.isKinematic = e.to is not TimeTravelPeriod.Past;
+            }
+
+            if (present.Rigidbody != null)
+                present.Rigidbody.isKinematic = e.from is TimeTravelPeriod.Future && e.to is TimeTravelPeriod.Present;
         }
     }
 
@@ -174,6 +266,11 @@ public class TimeTravelObjectManager : MonoBehaviour {
         if (changesMesh) return;
         changesPosition = false;
         canBeMovedByPlayer = false;
+    }
+
+    [Serializable]
+    public class MaterialInfo {
+        public Material[] materials;
     }
 }
 

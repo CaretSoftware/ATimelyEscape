@@ -40,4 +40,10 @@ namespace CallbackSystem {
         public TimeTravelPeriod from;
         public TimeTravelPeriod to;
     }
+
+    // this looks feels very redundant, looking into alternative solutions.
+    public class PhysicsSimulationComplete : DebugEvent {
+        public TimeTravelPeriod from;
+        public TimeTravelPeriod to;
+    }
 }
