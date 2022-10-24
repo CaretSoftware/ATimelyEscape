@@ -28,7 +28,7 @@ public class BoredBehaviour : StateMachineBehaviour
         {
             idleTime += Time.deltaTime;
             //Check to make sure we're not in the middle of an animation.
-            if (idleTime > timeUntilBored && stateInfo.normalizedTime % 1 < 0.02f)
+            if (idleTime > timeUntilBored && stateInfo.normalizedTime % 1 < StartOfAnimationValue)
             {
                 isBored = true;
                 boredAnimation = Random.Range(1, numberOfBoredAnimations + 1);

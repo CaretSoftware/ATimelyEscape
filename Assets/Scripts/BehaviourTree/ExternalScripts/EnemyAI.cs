@@ -15,6 +15,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float chasingRange;
     [SerializeField] private float shootingRange;
     [SerializeField] private float captureRange;
+    [SerializeField] private float activityIdleTime = 5.0f;
 
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Cover[] availableCovers;
@@ -53,8 +54,8 @@ public class EnemyAI : MonoBehaviour
 
     private void ConstructBehaviourTreePersonnel()
     {
-        GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator);
-        PerformActivityNode performActivityNode = new PerformActivityNode(agent);
+        GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, activityIdleTime);
+        //PerformActivityNode performActivityNode = new PerformActivityNode(agent);
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, this);
         RangeNode chasingRangeNode = new RangeNode(chasingRange, playerTransform, transform);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, transform);

@@ -6,19 +6,23 @@ using UnityEngine.AI;
 public class GoToActivityNode : Node
 {
     private static DummyBehaviour Instance;
-    private const float DestinationOffset = 0.2f;
-    private GameObject GO = new GameObject();
+    private const float DestinationOffset = 0.05f;
 
+    private GameObject GO = new GameObject();
     private Transform[] waypoints;
     private NavMeshAgent agent;
-    private int targetIndex = 0;
-    private bool timerDone;
-    private bool nextDestinationReached;
 
-    public GoToActivityNode(Transform[] waypoints, NavMeshAgent agent, Animator animator)
+    private bool coroutineRunning;
+    private bool timerDone;
+    private int targetIndex = 0;
+    private float idleTime;
+
+
+    public GoToActivityNode(Transform[] waypoints, NavMeshAgent agent, Animator animator, float idleTime)
     {
         this.waypoints = waypoints;
         this.agent = agent;
+        this.idleTime = idleTime;
         Instance = GO.AddComponent<DummyBehaviour>();
     }
 
@@ -35,7 +39,8 @@ public class GoToActivityNode : Node
         }
         else if (dist < DestinationOffset && !timerDone)
         {
-            Instance.StartCoroutine(Timer());
+            if(!coroutineRunning)
+                Instance.StartCoroutine(Timer());
             return NodeState.RUNNING;
         }
         else
@@ -51,7 +56,9 @@ public class GoToActivityNode : Node
 
     private IEnumerator Timer()
     {
-        yield return new WaitForSeconds(1.5f);
+        coroutineRunning = true;
+        yield return new WaitForSeconds(idleTime);
+        coroutineRunning = false;
         timerDone = true;
     }
 
