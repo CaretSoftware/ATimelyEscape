@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-
+    [Header("Settings")]
+    [Tooltip("The AllButonPressed instence responsable for opening the door")]
     [SerializeField] private AllButtonPressed controller;
+    [Tooltip("Time it takes from activation until door is completly open")]
     [SerializeField] private float timeToOpen = 3f;
+    [Tooltip("How high the door go.")]
     [SerializeField] private float hightOfOpenDoor = 1f; 
 
     private bool turnedOn;
