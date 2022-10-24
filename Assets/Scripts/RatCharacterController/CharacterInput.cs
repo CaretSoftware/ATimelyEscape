@@ -79,12 +79,15 @@ namespace RatCharacterController {
          float radius = capsuleCollider.radius * playerScale;
          playerForward = playerTransform.forward;
 
-         if (!_jumping && Grounded() && LedgeAhead()) {
-            _jumping = true;
-            playerTransform.rotation = Quaternion.LookRotation(playerForward, Vector3.up);
-            _characterAnimationController.JumpToFreeHang();
-         } else {
-            // Skip
+         if (!_jumping && Grounded()) {
+            if (LedgeAhead()) {
+               _jumping = true;
+               playerTransform.rotation = Quaternion.LookRotation(playerForward, Vector3.up);
+               _characterAnimationController.JumpToFreeHang();
+            }
+            else {
+               _characterAnimationController.LeapJump();
+            }
          }
 
          bool LedgeAhead() {
