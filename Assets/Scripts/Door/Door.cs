@@ -34,6 +34,7 @@ public class Door : MonoBehaviour
             this.turnedOn = turnedOn;
             if (!OD_running)
             {
+                StopAllCoroutines();
                 StartCoroutine(OpenDoor());
             }
         }
@@ -56,9 +57,10 @@ public class Door : MonoBehaviour
             }
             transform.position = Vector3.Lerp(lockPosition, unlockPosition, timer);
             yield return null;
-        }while (timer > 0 || timer < 1);
+        }while (timer > 0 && timer < 1);
 
-        OD_running = false;
+        Debug.Log("EXIT");
+        
 
         if (timer >= 1)
         {
@@ -68,5 +70,6 @@ public class Door : MonoBehaviour
         {
             timer = 0;
         }
+        OD_running = false;
     }
 }
