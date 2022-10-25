@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveObject_IconBehaviour : MonoBehaviour
 {
-    [SerializeField] private float maxDistance = 5;
+    private float maxDistance = 0;
 
     private CanvasGroup canvasGroup;
 
@@ -13,7 +13,7 @@ public class MoveObject_IconBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //maxDistance = gameObject.GetComponent<SphereCollider>().radius;
+        maxDistance = gameObject.GetComponent<SphereCollider>().radius;
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
 
         canvasGroup.alpha = 0;
@@ -27,7 +27,7 @@ public class MoveObject_IconBehaviour : MonoBehaviour
         }
     }
 
-    /*
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -44,5 +44,5 @@ public class MoveObject_IconBehaviour : MonoBehaviour
             canvasGroup.alpha = 0;
         }
     }
-    */
+    
 }
