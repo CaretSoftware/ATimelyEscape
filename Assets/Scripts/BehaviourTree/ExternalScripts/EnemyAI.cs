@@ -33,6 +33,7 @@ public class EnemyAI : MonoBehaviour
     private Node topNode;
     //TODO replace this with instantiate
     [SerializeField] private Transform agentCenterTransform;
+    //private Transform agentCenterTransform;
 
     private Vector3 worldDeltaPosition;
     private Vector3 groundDeltaPosition;
@@ -48,8 +49,10 @@ public class EnemyAI : MonoBehaviour
         animator = GetComponent<Animator>();
         agent.updatePosition = false;
     }
+
     private void Start()
     {
+        agentCenterTransform = Instantiate<GameObject>(new GameObject(), new Vector3(transform.position.x, transform.position.y + agent.height / 2, transform.position.z), Quaternion.identity, gameObject.transform).transform;
         CurrentHealth = startingHealth;
         ConstructBehaviourTreePersonnel();
     }
