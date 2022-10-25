@@ -41,6 +41,11 @@ public class CameraController : MonoBehaviour {
 	
 	private void Start() {
 		_camera = GetComponentInChildren<Camera>().transform;
+		CameraFollow cameraFollow = FindObjectOfType<CameraFollow>();
+		Vector3 initialCameraVector = cameraFollow.Follow.rotation.eulerAngles;
+		Debug.Log($"{initialCameraVector} {_mouseMovement}");
+		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
+		//_camera.rotation = Quaternion.Euler(initialCameraVector.y, initialCameraVector.x, 0.0f);
 		
 		// init smoothDamp variables and set camera position
 		_lerpOffset = cameraOffset;
