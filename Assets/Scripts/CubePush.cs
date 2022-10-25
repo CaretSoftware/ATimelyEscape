@@ -8,8 +8,11 @@ public class CubePush : MonoBehaviour {
 	private Rigidbody rb;
 	[SerializeField] private float pushSpeed = 1.5f;
 	public static CubePush closestCube;
-	
+	private Transform _camera;
+	private Vector3 desiredVelocity;
+
 	private void Start() {
+		_camera = FindObjectOfType<Camera>().transform;
 		rb = GetComponent<Rigidbody>();
 	}
 
@@ -18,12 +21,33 @@ public class CubePush : MonoBehaviour {
 	}
 
 	public static void NotClosest() {
-		// closestCube = null;
-	} 
-	
-	public void Push(Vector2 direction) {
-		Vector3 dir = new Vector3(direction.x, 0.0f, direction.y);
-		rb.velocity = dir * pushSpeed;
-		// rb.MovePosition(transform.position + Time.deltaTime * pushSpeed * dir);
+		closestCube = null;
+	}
+
+	public void Push(Vector2 direction) => Push(direction.ToVector3()); 
+	public void Push(Vector3 direction) {
+		Vector3 velocity = direction * pushSpeed;
+		desiredVelocity = velocity;
+		//RotateCube(velocity);
+	}
+
+	private void FixedUpdate() {
+		rb.velocity = desiredVelocity;
+		desiredVelocity = Vector3.zero;
+	}
+
+	private void RotateCube(Vector3 velocity) {
+		float magnitude = velocity.magnitude;
+
+		float t = Mathf.InverseLerp(0.0f, pushSpeed, magnitude);
+		
+		Debug.Log(magnitude);
+		
+		Vector3 currentDirection = velocity.ProjectOnPlane();
+		Vector3 desiredDirection = _camera.forward.ProjectOnPlane().normalized;
+		Vector3 vectorDelta = Vector3.Lerp(currentDirection, desiredDirection, t);
+		
+		rb.AddTorque(vectorDelta);
+		// cube.rotation = Quaternion.Slerp(current, desired, Time.deltaTime);
 	}
 }
