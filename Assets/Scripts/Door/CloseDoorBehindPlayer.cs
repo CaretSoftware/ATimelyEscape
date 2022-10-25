@@ -13,7 +13,6 @@ public class CloseDoorBehindPlayer : MonoBehaviour
         {
             doorProtection.enabled = true;
             door.TurnedOn(false);
-            Debug.Log(1);
         }
     }
 }

@@ -59,7 +59,6 @@ public class Door : MonoBehaviour
             yield return null;
         }while (timer > 0 && timer < 1);
 
-        Debug.Log("EXIT");
         
 
         if (timer >= 1)
