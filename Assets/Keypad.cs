@@ -11,7 +11,6 @@ public class Keypad : MonoBehaviour
     [SerializeField] private TextMeshProUGUI screen;
     public void KeypadDigitInput(int number)
     {
-        Debug.Log("Hej");
         if (screen.text.ToCharArray().Length < maxDigits)
         {
             StringBuilder sb = new();
@@ -24,7 +23,7 @@ public class Keypad : MonoBehaviour
     {
         if (screen.text != null && screen.text != "")
         {
-            screen.text.Remove(screen.text.Length - 1);
+            screen.text = screen.text.Remove(screen.text.Length - 1, 1);
         }
     }
 
