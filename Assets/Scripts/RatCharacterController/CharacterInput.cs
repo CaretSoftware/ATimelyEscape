@@ -27,6 +27,7 @@ namespace RatCharacterController {
       private float _characterHalfHeight;
 
       private void Start() {
+         Physics.queriesHitTriggers = false;    // ray-/capsule-/sphere-casts don't hit triggers
          _playerInputActions = new PlayerInputActions();
          _playerInputActions.CameraControls.Enable();
          _playerInputActions.CharacterMovement.Enable();
@@ -77,12 +78,12 @@ namespace RatCharacterController {
          Ray ray = RayAtHalfHeight(playerTransform);
          CapsuleCollider capsuleCollider = _collider;
          float radius = capsuleCollider.radius * playerScale;
-         playerForward = playerTransform.forward;
+         _playerForward = playerTransform.forward;
 
          if (!_jumping && Grounded()) {
             if (LedgeAhead()) {
                _jumping = true;
-               playerTransform.rotation = Quaternion.LookRotation(playerForward, Vector3.up);
+               playerTransform.rotation = Quaternion.LookRotation(_playerForward, Vector3.up);
                _characterAnimationController.JumpToFreeHang();
             }
             else {
@@ -101,16 +102,17 @@ namespace RatCharacterController {
                       (_collider.height + margin) * playerScale * Vector3.up - 
                       radius * Vector3.up;
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f * playerScale) && 
-                Physics.OverlapCapsule(_point0, _point1, radius).Length < 1) {
+                Physics.OverlapCapsule(_point0, _point1, radius, groundedLayerMask).Length < 1) {
 
-               playerForward = -hitInfo.normal.ProjectOnPlane();
+               _playerForward = -hitInfo.normal.ProjectOnPlane();
 
                return !Physics.CapsuleCast(
                   point1: _point0,
                   point2: _point1,
                   radius: radius - margin,
-                  direction: playerForward,
-                  maxDistance: 1.0f * playerScale);
+                  direction: _playerForward,
+                  maxDistance: 1.0f * playerScale,
+                  groundedLayerMask);
             }
 
             return false;
@@ -119,13 +121,14 @@ namespace RatCharacterController {
 
       private Vector3 _point0;
       private Vector3 _point1;
-      private Vector3 playerForward;
+      private Vector3 _playerForward;
 #if UNITY_EDITOR
       private void OnDrawGizmos() {
          if (!Application.isPlaying) return;
-         float radius = _collider.radius * _playerTransform.localScale.y;
-         Vector3 point1 = _point0 + _playerTransform.localScale.z * playerForward;
-         Vector3 point2 = _point1 + _playerTransform.localScale.z * playerForward;
+         float localScale = _playerTransform.localScale.z;
+         float radius = _collider.radius * localScale;
+         Vector3 point1 = _point0 + localScale * _playerForward;
+         Vector3 point2 = _point1 + localScale * _playerForward;
          Gizmos.DrawWireSphere(point1, radius);
          Gizmos.DrawWireSphere(point2, radius);
          Gizmos.DrawLine(point1 + radius * Vector3.forward, point2 + radius * Vector3.forward);

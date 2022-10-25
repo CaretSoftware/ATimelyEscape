@@ -63,7 +63,7 @@ public class CameraController : MonoBehaviour {
 	}
 
 	public void StickInput(Vector2 stickDelta) {
-		const float stickSensitivity = .75f;
+		const float stickSensitivity = 1.0f;
 		
 		// Vector2 stickDelta = context.ReadValue<Vector2>();
 		
