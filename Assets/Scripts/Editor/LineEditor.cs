@@ -8,12 +8,11 @@ public class LineEditor : EditorWindow
     private GameObject line = null;
     private LineRenderer lineRenderer = null;
     public List<GameObject> points;
-    public AnimationCurve lineWidth = null;
     public int vertexCount = 12;
+    private Camera camTf = null;
 
 
     SerializedObject so;
-    SerializedProperty propLineWidth;
     SerializedProperty propVertexCount;
 
     [MenuItem("Tools/LineEditor")]
@@ -39,28 +38,16 @@ public class LineEditor : EditorWindow
     {
         so = new SerializedObject(this);
 
-        propLineWidth = so.FindProperty("lineWidth");
         propVertexCount = so.FindProperty("vertexCount");
     }
 
-
-    // Update is called once per frame
-    /*void Update()
-    {
-        var pointList = new List<Vector3>();
-        for (float ratio = 0; ratio <= 1; ratio += 1.0f / vertexCount)
-        {
-            var tangentLineVertex1 = Vector3.Lerp(point1.position, point2.position, ratio);
-            var tangentLineVertex2 = Vector3.Lerp(point2.position, point3.position, ratio);
-            var bezierPoint = Vector3.Lerp(tangentLineVertex1, tangentLineVertex2, ratio);
-            pointList.Add(bezierPoint);
-        }
-        lineRenderer.positionCount = pointList.Count;
-        lineRenderer.SetPositions(pointList.ToArray());
-    }*/
-
     void DuringSceneGUI(SceneView sceneView)
     {
+        if (!camTf)
+        {
+            camTf = sceneView.camera;
+        }
+
         if (line != null)
         {
             if (points.Count > 1)
@@ -68,6 +55,7 @@ public class LineEditor : EditorWindow
                 OnDrawHandles();
             }
         }
+
     }
 
 
@@ -84,12 +72,17 @@ public class LineEditor : EditorWindow
             if (GUILayout.Button("Add point", GUILayout.Height(25)))
             {
                 AddPoint();
+                GenerateLine();
             }
             GUILayout.Space(10);
 
             if (GUILayout.Button("Remove point", GUILayout.Height(25)))
             {
                 RemovePoint();
+                if(points.Count > 1)
+                {
+                    GenerateLine();
+                }
             }
             GUILayout.Space(40);
             GUILayout.EndHorizontal();
@@ -104,37 +97,19 @@ public class LineEditor : EditorWindow
             GUILayout.Space(40);
             GUILayout.EndHorizontal();
             GUILayout.Space(20);
-           
-           
-            EditorGUI.indentLevel += 2;
-            EditorGUILayout.LabelField("Line width");
-            EditorGUI.indentLevel -= 2;
-            GUILayout.BeginHorizontal();
-            GUILayout.Space(40);
-            if(lineRenderer != null)
-            {
-            lineRenderer.widthCurve = EditorGUILayout.CurveField(lineWidth);
-            }
-            GUILayout.Space(40);
-            GUILayout.EndHorizontal();
 
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Space(40);
-            
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(propVertexCount, new GUIContent("Vertex count"));
             propVertexCount.intValue = Mathf.Max(0, propVertexCount.intValue);
             propVertexCount.intValue = Mathf.Min(100, propVertexCount.intValue);
 
             GUILayout.Space(40);
-            GUILayout.EndHorizontal();
 
             if (EditorGUI.EndChangeCheck())
             {
                 GenerateLine();
             }
-           
+
 
         }
 
@@ -144,6 +119,21 @@ public class LineEditor : EditorWindow
         if (GUILayout.Button("Create new", GUILayout.Height(25)))
         {
             CreateNewLine();
+        }
+        GUILayout.Space(40);
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(20);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(40);
+        if (GUILayout.Button("Load selected", GUILayout.Height(25)))
+        {
+            GameObject selectedObject = Selection.activeGameObject;
+            if (selectedObject && selectedObject != line && selectedObject.transform.CompareTag("Line"))
+            {
+                LoadExistingLine(selectedObject);
+            }
         }
         GUILayout.Space(40);
         GUILayout.EndHorizontal();
@@ -163,8 +153,8 @@ public class LineEditor : EditorWindow
         GameObject point = new GameObject("Point");
         Undo.RegisterCreatedObjectUndo(point, "Create New Line");
         point.transform.parent = line.gameObject.transform;
-        point.transform.position = line.gameObject.transform.position;
         points.Add(point);
+        point.transform.position = line.transform.position;
     }
 
     private void RemovePoint()
@@ -173,7 +163,7 @@ public class LineEditor : EditorWindow
         {
             GameObject point = null;
             GameObject selectedObject = Selection.activeGameObject;
-            if (selectedObject && selectedObject.transform.parent && selectedObject.transform.parent.tag == "Line")
+            if (selectedObject && selectedObject.transform.parent && selectedObject.transform.parent.CompareTag("Line"))
             {
                 point = selectedObject;
             }
@@ -208,21 +198,32 @@ public class LineEditor : EditorWindow
     private void CreateNewLine()
     {
         line = new GameObject("Line");
+        line.AddComponent<SpriteRenderer>();
         Undo.RegisterCreatedObjectUndo(line, "Create New Line");
+        line.transform.position = camTf.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 5f));
+
+
         line.tag = "Line";
 
         points = new List<GameObject>();
         lineRenderer = line.AddComponent<LineRenderer>();
-        /*GameObject point = new GameObject("Point");
-        Undo.RegisterCreatedObjectUndo(point, "Create New Line");
-        point.transform.parent = line.gameObject.transform;
 
-        points.Add(point);*/
+        var width = 0.2f;
+
+        lineRenderer.startWidth = width;
+        lineRenderer.endWidth = width;
     }
 
-    private void LoadExistingLine()
+    private void LoadExistingLine(GameObject selectedObject)
     {
+        line = selectedObject;
+        lineRenderer = line.GetComponent<LineRenderer>();
 
+        points = new List<GameObject>();
+        foreach (Transform child in line.transform)
+        {
+        points.Add(child.gameObject);
+        }
     }
 
 

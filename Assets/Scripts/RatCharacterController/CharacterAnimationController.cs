@@ -11,6 +11,7 @@ namespace RatCharacterController {
 		private static readonly int VelocityZ = Animator.StringToHash("VelocityZ");
 		private static readonly int VelocityX = Animator.StringToHash("VelocityX");
 		private static readonly int Jump = Animator.StringToHash("Jump");
+		private static readonly int Leap = Animator.StringToHash("Leap");
 		private Transform _camera;
 		private Animator _animator;
 		private NavMeshAgent _navMeshAgent;
@@ -68,6 +69,10 @@ namespace RatCharacterController {
 			DeactivatePhysics(true);
 			StartCoroutine(PhysicsDelay());
 			_animator.SetTrigger(Jump);
+		}
+
+		public void LeapJump() {
+			_animator.SetTrigger(Leap);
 		}
 
 		public void SetGrounded(bool grounded) {
