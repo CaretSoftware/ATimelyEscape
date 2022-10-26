@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,10 +19,10 @@ namespace RatCharacterController {
       private bool _pushing;
       private float _characterHalfHeight;
       private bool _canTimeTravel;
-      public static CharacterInput Instance { get; private set; }
+      private static CharacterInput _instance;
 
       private void Start() {
-         Instance = this;
+         _instance = this;
          Physics.queriesHitTriggers = false;    // ray-/capsule-/sphere-casts don't hit triggers
          _playerInputActions = new PlayerInputActions();
          _playerInputActions.CameraControls.Enable();
@@ -62,11 +61,17 @@ namespace RatCharacterController {
 
       private bool _jumping;
       public void JumpComplete() {
+         Invoke(nameof(KinematicOff), .2f);
+         _rigidBody.velocity = Vector3.zero;
          _jumping = false;
       }
 
+      private void KinematicOff() {
+         _rigidBody.isKinematic = false;
+      }
+
       public static void CanTimeTravel(bool timeTravel) {
-         Instance._canTimeTravel = timeTravel;
+         _instance._canTimeTravel = timeTravel;
       }
 
       private void TravelToPast(InputAction.CallbackContext context) {
@@ -184,7 +189,7 @@ namespace RatCharacterController {
       private void PushCubeInput(Vector2 input) => PushCubeInput(input.ToVector3());
       private void PushCubeInput(Vector3 input) {
          Transform playerTransform = _playerTransform;
-         Ray ray = new Ray(_playerTransform.position + Vector3.up * _characterHalfHeight * _playerTransform.localScale.y, _playerTransform.forward);
+         Ray ray = new Ray(_playerTransform.position + _characterHalfHeight * _playerTransform.localScale.y * Vector3.up, _playerTransform.forward);
 
          Vector3 projectedInput = InputToCameraProjection(input);
 
