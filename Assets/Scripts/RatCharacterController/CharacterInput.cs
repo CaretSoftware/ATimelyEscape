@@ -48,6 +48,14 @@ namespace RatCharacterController {
          if (_camController == null)
             Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode", this.gameObject);
       }
+      
+      public static void CanTimeTravel(bool timeTravel) {
+         _instance._canTimeTravel = timeTravel;
+      }
+
+      public static void SetMouseLookSensitivity(float value) {
+         
+      }
 
       private void Update() {
          CameraInput();
@@ -70,9 +78,6 @@ namespace RatCharacterController {
          _rigidBody.isKinematic = false;
       }
 
-      public static void CanTimeTravel(bool timeTravel) {
-         _instance._canTimeTravel = timeTravel;
-      }
 
       private void TravelToPast(InputAction.CallbackContext context) {
          if (_canTimeTravel)
