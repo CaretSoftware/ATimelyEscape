@@ -11,7 +11,6 @@ public class KillZone : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.transform.position = checkPoint.transform.position;
-            Debug.Log("SCIENTIST CAUGHT YOU!");
         }
     }
 }
