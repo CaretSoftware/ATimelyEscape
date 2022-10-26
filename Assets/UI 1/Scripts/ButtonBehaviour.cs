@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 
 public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private Image image;
+    private Image image;
+
     [SerializeField] private Sprite neutral, pressed, selected;
     // [SerializeField] private AudioClip compressClip, unCompressClip;
     // [SerializeField] private AudioSource audioSource; 
