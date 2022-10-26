@@ -7,7 +7,7 @@ namespace StateMachines {
         private State queuedState;
 
         private Stack<State> automaton;
-        private Dictionary<Type, State> stateDict = new Dictionary<Type, State>();
+        public Dictionary<Type, State> stateDict = new Dictionary<Type, State>();
 
 
         public StateMachine(object actor, State[] states) {
@@ -25,6 +25,7 @@ namespace StateMachines {
         }
 
         public void TransitionTo<T>() where T : State { queuedState = stateDict[typeof(T)]; }
+        public void TransitionTo(State state) { queuedState = state; }
 
         public void TransitionBack() {
             if (automaton.Count != 0) queuedState = automaton.Pop();
