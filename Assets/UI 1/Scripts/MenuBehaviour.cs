@@ -8,6 +8,8 @@ public class MenuBehaviour : MonoBehaviour
 
     [SerializeField] private bool isPauseMenu = false;
 
+    [SerializeField] private GameObject pauseMenu;
+
     private void Update()
     {
         if (Input.GetKey(KeyCode.Escape) && isPauseMenu)
@@ -32,11 +34,25 @@ public class MenuBehaviour : MonoBehaviour
     public void PauseGame()
     {
         Time.timeScale = 0f;
+
+        Debug.Log("Info: Paused game- TimeScale " + Time.timeScale);
+
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(true);
+        }
     }
 
     public void UnPauseGame()
     {
         Time.timeScale = 1f;
+
+        Debug.Log("Info: Unpaused game - TimeScale " + Time.timeScale);
+
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(false);
+        }
     }
 
     // Method to quit the application anytime
