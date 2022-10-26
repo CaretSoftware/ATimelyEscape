@@ -7,6 +7,7 @@ public class AllButtonPressed : MonoBehaviour
 
     [SerializeField] private Button[] buttons;
     [SerializeField] private bool allPressed;
+    private Door door;
 
 
     // Start is called before the first frame update
@@ -28,10 +29,15 @@ public class AllButtonPressed : MonoBehaviour
                 break;
             }
         }
-        Debug.Log(allPressed);
+        door.TurnedOn(allPressed);
     }
 
     public void AllPressedFalse() { allPressed = false; }   
+
+    public void SetDoor(Door door)
+    {
+        this.door = door;   
+    }
 
 
 }

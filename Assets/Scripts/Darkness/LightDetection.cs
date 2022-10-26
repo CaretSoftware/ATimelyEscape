@@ -44,7 +44,7 @@ namespace CallbackSystem
             if (lightValue < minumumLight)
             {
                 timer += (Time.deltaTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, lightValue * (1/minumumLight))); 
-                Debug.Log(timer);
+                //Debug.Log(timer);
             }
             else
                 timer = 0f;
@@ -53,7 +53,7 @@ namespace CallbackSystem
                 LightDetectior();
                 if (lightValue < minumumLight)
                 {
-                    Debug.Log(1);
+                    //Debug.Log(1);
                     fail.Invoke();
                 }
 
