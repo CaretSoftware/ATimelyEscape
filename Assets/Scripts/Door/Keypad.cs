@@ -79,7 +79,7 @@ public class Keypad : MonoBehaviour
         {
             if (Input.GetKeyDown(keyCodes[i]))
             {
-                usingKeyboardDigits = true;
+                
                 if(i < keyAmount)
                 {
                     KeypadDigitInput(i);                    
@@ -91,18 +91,18 @@ public class Keypad : MonoBehaviour
                 break;
             }
         }
-        if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
+        {
+            KeypadDeleteInput();
+        }
+        else if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             if (usingKeyboardDigits)
             {
                 KeypadEnterInput();
             }
         }
-        if(Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
-        {
-            KeypadDeleteInput();
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             currentKeypadKeysIndex = (currentKeypadKeysIndex + 1) % keypadKeys.Length;
         }
@@ -117,8 +117,11 @@ public class Keypad : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.UpArrow)) 
         { 
             currentKeypadKeysIndex = (currentKeypadKeysIndex - keypadColumns + keypadKeys.Length) % keypadKeys.Length;
+        }else if (Input.anyKeyDown)
+        {
+            usingKeyboardDigits = true;
         }
-        if(currentKeypadKeysIndex != previousKeypadIndex)
+        if (currentKeypadKeysIndex != previousKeypadIndex)
         {
             if (usingKeyboardDigits)
             {
@@ -135,5 +138,7 @@ public class Keypad : MonoBehaviour
         {
             EventSystem.current.SetSelectedGameObject(null);
         }
+        
+
     }
 }
