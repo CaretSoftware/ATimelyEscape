@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class Door : Device
 {
-    [Header("Settings")]
-    [Tooltip("The AllButonPressed instence responsable for opening the door")]
-    [SerializeField] private AllButtonPressed controller;
+    
     [Tooltip("Time it takes from activation until door is completly open")]
     [SerializeField] private float timeToOpen = 3f;
     [Tooltip("How high the door go.")]
@@ -27,7 +25,7 @@ public class Door : MonoBehaviour
         controller.SetDoor(this);
     }
 
-    public void TurnedOn(bool turnedOn)
+    public new void TurnedOn(bool turnedOn)
     {
         if (this.turnedOn != turnedOn)
         {
