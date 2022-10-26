@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using RatCharacterController;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CameraFollow : MonoBehaviour {
-	[SerializeField] private Transform follow;
+	[FormerlySerializedAs("follow")] [SerializeField]
+	private Transform follow;
+	public Transform Follow { get; private set; }
 	private Transform _transform;
 	private Transform _camera;
 	private Vector3 _currentVelocity;
@@ -16,12 +19,12 @@ public class CameraFollow : MonoBehaviour {
 	public float maxSpeed;
 	public float smoothTime;
 	private void Awake() {
-		if (follow == null)
-			follow = FindObjectOfType<CharacterAnimationController>().transform;
+		if (Follow == null)
+			Follow = FindObjectOfType<CharacterAnimationController>().transform;
 		
 		_transform = transform;
 		_camera = GetComponentInChildren<Camera>().transform; 
-		_transform.position = follow.position;
+		_transform.position = Follow.position;
 	}
 
 	public float superSonic = 5.0f;
@@ -30,7 +33,7 @@ public class CameraFollow : MonoBehaviour {
 	private void LateUpdate() {
 		Transform thisTransform = _transform;
 		Vector3 position = thisTransform.position;
-		Vector3 followPosition = follow.position;
+		Vector3 followPosition = Follow.position;
 		Vector3 direction = followPosition - position;
 		direction = _camera.InverseTransformDirection(direction);
 
@@ -46,5 +49,5 @@ public class CameraFollow : MonoBehaviour {
 		thisTransform.position = newPosition;
 	}
 
-	public void SetFollowTransform(Transform newTransform) => follow = newTransform;
+	public void SetFollowTransform(Transform newTransform) => Follow = newTransform;
 }
