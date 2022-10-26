@@ -123,12 +123,13 @@ public class TimeTravelObject : MonoBehaviour {
         }
     }
 
-
+#if UNITY_EDITOR
     private void OnDrawGizmos() {
         if (pastSelf != null) {
             Gizmos.DrawWireCube(destiny.position, Vector3.one);
         }
     }
+#endif
 }
 
 namespace StateMachines {
