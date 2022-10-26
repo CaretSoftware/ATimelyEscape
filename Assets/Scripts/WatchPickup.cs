@@ -28,9 +28,9 @@ public class WatchPickup : MonoBehaviour {
 	}
 
 	private Vector3 rot = new Vector3(.23f, .7f, .13f);
-	public bool debug;
+	// public bool debug;
 	private void Update() {
-		Time.timeScale = debug ? 0.0f : 1.0f;
+		// Time.timeScale = debug ? 0.0f : 1.0f;
 		
 		transform.rotation *=
 			Quaternion.Euler(Time.unscaledDeltaTime * rot * rotationSpeed).normalized;
