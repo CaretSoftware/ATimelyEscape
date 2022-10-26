@@ -83,6 +83,33 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Past"",
+                    ""type"": ""Button"",
+                    ""id"": ""895193d5-c338-43b9-9f7b-a29868db91e4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Present"",
+                    ""type"": ""Button"",
+                    ""id"": ""33d3daad-1e9a-4cb4-a316-8a15e096f503"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Future"",
+                    ""type"": ""Button"",
+                    ""id"": ""fe2addf2-b5e1-4c36-b881-eac78eb128be"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -105,6 +132,72 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25fb4524-8c45-48b8-ac36-23aceb53163a"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Past"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dba7c7f8-50b5-4162-93c3-d73213d11598"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Past"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a61b367-c5f8-4c05-bf8f-83a56eaa79b5"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Present"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a8b0ec8-2ec4-4f08-b843-38f88de375cd"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Present"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83744b12-09c1-47aa-bc9d-d3252ea63ae5"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Future"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f8ea3cb-8088-442b-80f5-1dc640b7d3ec"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Future"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -323,6 +416,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // Interact
         m_Interact = asset.FindActionMap("Interact", throwIfNotFound: true);
         m_Interact_Interact = m_Interact.FindAction("Interact", throwIfNotFound: true);
+        m_Interact_Past = m_Interact.FindAction("Past", throwIfNotFound: true);
+        m_Interact_Present = m_Interact.FindAction("Present", throwIfNotFound: true);
+        m_Interact_Future = m_Interact.FindAction("Future", throwIfNotFound: true);
         // CharacterMovement
         m_CharacterMovement = asset.FindActionMap("CharacterMovement", throwIfNotFound: true);
         m_CharacterMovement_Jump = m_CharacterMovement.FindAction("Jump", throwIfNotFound: true);
@@ -433,11 +529,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Interact;
     private IInteractActions m_InteractActionsCallbackInterface;
     private readonly InputAction m_Interact_Interact;
+    private readonly InputAction m_Interact_Past;
+    private readonly InputAction m_Interact_Present;
+    private readonly InputAction m_Interact_Future;
     public struct InteractActions
     {
         private @PlayerInputActions m_Wrapper;
         public InteractActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Interact => m_Wrapper.m_Interact_Interact;
+        public InputAction @Past => m_Wrapper.m_Interact_Past;
+        public InputAction @Present => m_Wrapper.m_Interact_Present;
+        public InputAction @Future => m_Wrapper.m_Interact_Future;
         public InputActionMap Get() { return m_Wrapper.m_Interact; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -450,6 +552,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Interact.started -= m_Wrapper.m_InteractActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_InteractActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_InteractActionsCallbackInterface.OnInteract;
+                @Past.started -= m_Wrapper.m_InteractActionsCallbackInterface.OnPast;
+                @Past.performed -= m_Wrapper.m_InteractActionsCallbackInterface.OnPast;
+                @Past.canceled -= m_Wrapper.m_InteractActionsCallbackInterface.OnPast;
+                @Present.started -= m_Wrapper.m_InteractActionsCallbackInterface.OnPresent;
+                @Present.performed -= m_Wrapper.m_InteractActionsCallbackInterface.OnPresent;
+                @Present.canceled -= m_Wrapper.m_InteractActionsCallbackInterface.OnPresent;
+                @Future.started -= m_Wrapper.m_InteractActionsCallbackInterface.OnFuture;
+                @Future.performed -= m_Wrapper.m_InteractActionsCallbackInterface.OnFuture;
+                @Future.canceled -= m_Wrapper.m_InteractActionsCallbackInterface.OnFuture;
             }
             m_Wrapper.m_InteractActionsCallbackInterface = instance;
             if (instance != null)
@@ -457,6 +568,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @Past.started += instance.OnPast;
+                @Past.performed += instance.OnPast;
+                @Past.canceled += instance.OnPast;
+                @Present.started += instance.OnPresent;
+                @Present.performed += instance.OnPresent;
+                @Present.canceled += instance.OnPresent;
+                @Future.started += instance.OnFuture;
+                @Future.performed += instance.OnFuture;
+                @Future.canceled += instance.OnFuture;
             }
         }
     }
@@ -568,6 +688,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     public interface IInteractActions
     {
         void OnInteract(InputAction.CallbackContext context);
+        void OnPast(InputAction.CallbackContext context);
+        void OnPresent(InputAction.CallbackContext context);
+        void OnFuture(InputAction.CallbackContext context);
     }
     public interface ICharacterMovementActions
     {
