@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,8 +19,11 @@ namespace RatCharacterController {
       private Vector3 _pushedCubeOffset;
       private bool _pushing;
       private float _characterHalfHeight;
+      private bool _canTimeTravel;
+      public static CharacterInput Instance { get; private set; }
 
       private void Start() {
+         Instance = this;
          Physics.queriesHitTriggers = false;    // ray-/capsule-/sphere-casts don't hit triggers
          _playerInputActions = new PlayerInputActions();
          _playerInputActions.CameraControls.Enable();
@@ -28,6 +32,9 @@ namespace RatCharacterController {
          _playerInputActions.CharacterMovement.Jump.performed += Jump;
          _playerInputActions.Interact.Interact.performed += Interact;
          _playerInputActions.Interact.Interact.canceled += StopInteract;
+         _playerInputActions.Interact.Past.performed += TravelToPast;
+         _playerInputActions.Interact.Present.performed += TravelToPresent;
+         _playerInputActions.Interact.Future.performed += TravelToFuture;
 
          _cameraTransform = FindObjectOfType<Camera>().transform;
          _camController = FindObjectOfType<CameraController>();
@@ -56,6 +63,25 @@ namespace RatCharacterController {
       private bool _jumping;
       public void JumpComplete() {
          _jumping = false;
+      }
+
+      public static void CanTimeTravel(bool timeTravel) {
+         Instance._canTimeTravel = timeTravel;
+      }
+
+      private void TravelToPast(InputAction.CallbackContext context) {
+         if (_canTimeTravel)
+            TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Past);
+      }
+      
+      private void TravelToPresent(InputAction.CallbackContext context) {
+         if (_canTimeTravel)
+            TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
+      }
+      
+      private void TravelToFuture(InputAction.CallbackContext context) {
+         if (_canTimeTravel)
+            TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
       }
       
       private void Jump(InputAction.CallbackContext context) {
