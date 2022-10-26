@@ -7,7 +7,7 @@ public class AllButtonPressed : MonoBehaviour
 
     [SerializeField] private Button[] buttons;
     [SerializeField] private bool allPressed;
-    private Door door;
+    private Device door;
 
 
     // Start is called before the first frame update
