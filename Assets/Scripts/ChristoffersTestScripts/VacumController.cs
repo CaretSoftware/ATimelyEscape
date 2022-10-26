@@ -16,9 +16,9 @@ public class VacumController : MonoBehaviour
     [SerializeField] private float viewAngle = 90f;
     [SerializeField] private LayerMask playerMask;
     [SerializeField] private LayerMask obsticleMask;
-    [SerializeField] private float meshResolution = 1f;
+  /*  [SerializeField] private float meshResolution = 1f;
     [SerializeField] private int edgeIterations = 4;
-    [SerializeField] private float edgeDistance = 0.5f;
+    [SerializeField] private float edgeDistance = 0.5f;*/
 
     [SerializeField] private GameObject eyeBrows;
     [SerializeField] private Transform[] wayPoints;
