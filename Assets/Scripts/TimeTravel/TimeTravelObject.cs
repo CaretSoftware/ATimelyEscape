@@ -80,6 +80,7 @@ public class TimeTravelObject : MonoBehaviour {
         if (errorMessage.Length > 1) {
             errorMessage +=
                 $"] material array(s) do not match the length of the renderer array on {nameof(TimeTravelObjectManager)}: {manager.name}";
+            Debug.LogWarning("CHRISTOFFER THE ERROR IS HERE!", manager.gameObject);
             throw new ArgumentException(errorMessage);
         }
     }
