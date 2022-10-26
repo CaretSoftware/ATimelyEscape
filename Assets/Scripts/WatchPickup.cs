@@ -1,10 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using Update = UnityEngine.PlayerLoop.Update;
 
 [RequireComponent(typeof(SphereCollider))]
 public class WatchPickup : MonoBehaviour {
