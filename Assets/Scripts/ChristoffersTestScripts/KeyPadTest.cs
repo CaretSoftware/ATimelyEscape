@@ -63,7 +63,7 @@ public class KeyPadTest : MonoBehaviour
         //hud.SetActive(true);
         player.SetActive(true);
         keyPadTrigger.enabled = false;
-        Invoke("KeypadDelay", 3.0f);
+        //Invoke("KeypadDelay", 3.0f);
     }
     private void Update()
     {
@@ -78,9 +78,9 @@ public class KeyPadTest : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
-    private void KeyPadDelay()
+/*    private void KeyPadDelay()
     {
         keyPadTrigger.enabled = true;
-    }
+    }*/
 
 }
