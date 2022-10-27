@@ -17,11 +17,15 @@ public class CameraController : MonoBehaviour {
 	private Vector3 _smoothDampCurrentVelocityLateral;
 	private Vector3 _smoothDampCurrentVelocity;
 		
-	[Header("Mouse Sensitivity")]
-	[SerializeField] [Range(0.001f, 10.0f)]
-	private float mouseSensitivityX = 1.0f;
-	[SerializeField, Range(0.001f, 10.0f)]
-	private float mouseSensitivityY = 1.0f;
+	// [Header("Mouse Sensitivity")]
+	// [SerializeField] [Range(0.001f, 10.0f)]
+	private float mouseSensitivity = .7f;
+	public float MouseSensitivity {
+		get => mouseSensitivity;
+		set => mouseSensitivity = Mathf.Max(0.0f, value);
+	}
+	// [SerializeField, Range(0.001f, 10.0f)]
+	// private float mouseSensitivityY = 1.0f;
 	
 	[Header("Camera Settings")]
 	[SerializeField, Range(0.0f, 2.0f)]
@@ -38,12 +42,18 @@ public class CameraController : MonoBehaviour {
 	private float smoothness = 0.05f;
 
 	private Vector2 _thumbstickDelta;
-	
+	public static CameraController Instance { get; private set; }
+
+	private void Awake() {
+		if (Instance == null)
+			Instance = this;
+	}
+
 	private void Start() {
 		_camera = GetComponentInChildren<Camera>().transform;
 		CameraFollow cameraFollow = FindObjectOfType<CameraFollow>();
 		Vector3 initialCameraVector = cameraFollow.Follow.rotation.eulerAngles;
-		Debug.Log($"{initialCameraVector} {_mouseMovement}");
+
 		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
 		//_camera.rotation = Quaternion.Euler(initialCameraVector.y, initialCameraVector.x, 0.0f);
 		
@@ -57,14 +67,27 @@ public class CameraController : MonoBehaviour {
 	}
 
 	private void Update() {
+		
+		if (Time.timeScale <= Mathf.Epsilon) {
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.Confined;
+		} else {
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
+		}
+		
 		MoveCamera();
 	}
+
+	// public void SetMouseLookSensitivity(float value) {
+	// 	MouseSensitivityX = value;
+	// }
 
 	public void MouseInput(Vector2 mouseDelta) {
 		//mouseDelta = context.ReadValue<Vector2>();
 
-		_mouseMovement.x += mouseDelta.x * mouseSensitivityX;
-		_mouseMovement.y -= mouseDelta.y * mouseSensitivityY;
+		_mouseMovement.x += mouseDelta.x * MouseSensitivity;
+		_mouseMovement.y -= mouseDelta.y * MouseSensitivity;
 	}
 
 	public void StickInput(Vector2 stickDelta) {

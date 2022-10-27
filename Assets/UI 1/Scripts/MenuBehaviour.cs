@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MenuBehaviour : MonoBehaviour
@@ -9,12 +10,20 @@ public class MenuBehaviour : MonoBehaviour
 
     [SerializeField] private GameObject pauseMenu;
 
+    private bool paused;
+
+    [SerializeField] private Slider slider;
+
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Escape) && isPauseMenu)
-        {
+        if (Input.GetKeyDown(KeyCode.Escape) && !paused && isPauseMenu) {
+            paused = true;
             PauseGame();
         }
+        else if (Input.GetKeyDown(KeyCode.Escape) && paused && isPauseMenu) {
+            paused = false;
+            UnPauseGame();
+        } 
     }
 
     // Method to load a scene by insert the index of wished scene presented in buildsettings
@@ -33,6 +42,12 @@ public class MenuBehaviour : MonoBehaviour
     public void PauseGame()
     {
         Time.timeScale = 0f;
+        
+        if (slider == null)
+            slider = GetComponentInChildren<Slider>();
+        
+        if (slider != null)
+            slider.value = CameraController.Instance.MouseSensitivity;
 
         Debug.Log("Info: Paused game- TimeScale " + Time.timeScale);
 
