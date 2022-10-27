@@ -87,11 +87,6 @@ public enum TimeTravelPeriod {
 
 namespace StateMachines {
     public class PastState : State {
-        private static Dictionary<TimeTravelPeriod, Type> periodStates = new Dictionary<TimeTravelPeriod, Type>() {
-            {TimeTravelPeriod.Past, typeof(PastState)},
-            {TimeTravelPeriod.Present, typeof(PresentState)},
-            {TimeTravelPeriod.Future, typeof(FutureState)},
-        };
         private TimeTravelPeriod travellingTo;
 
         public override void Run() {
@@ -100,7 +95,6 @@ namespace StateMachines {
                 StateMachine.TransitionTo(nextState);
                 travellingTo = TimeTravelManager.desiredPeriod;
             }
-            
             // if (Input.GetKey(KeyCode.Alpha2)) {
             //     StateMachine.TransitionTo<PresentState>();
             //     travellingTo = TimeTravelPeriod.Present;

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3398390766411166090}
   - component: {fileID: 3398390766411166085}
+  - component: {fileID: 1799121089}
   m_Layer: 5
   m_Name: MouseSlider
   m_TagString: Untagged
@@ -88,10 +89,22 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1799121089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3398390766411166091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e23bc69f03124e2e8f30146a671a629, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3398390766700894471
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPauseMenu: 1
   pauseMenu: {fileID: 3398390766700894471}
+  slider: {fileID: 3398390766411166085}
 --- !u!1 &3398390766739023545
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,7 +952,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70e0e8ebd5e302f4d8cc7d5470ca7f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 3398390767279859481}
   neutral: {fileID: 21300000, guid: 6c413a9e93d028e48a084698d36334b6, type: 3}
   pressed: {fileID: 21300000, guid: ab98d23acc899144bad6186cbf2906ab, type: 3}
   selected: {fileID: 21300000, guid: 4e56937cc2cf1484e807c18cb02d9e32, type: 3}
@@ -1076,7 +1089,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70e0e8ebd5e302f4d8cc7d5470ca7f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 3398390767519823973}
   neutral: {fileID: 21300000, guid: cca262c49178dbc4b8ee0ec95e0418ed, type: 3}
   pressed: {fileID: 21300000, guid: d0009ef519496464d9925ed640346523, type: 3}
   selected: {fileID: 21300000, guid: e06850e100f5c084baac9e5a18b55fa4, type: 3}
@@ -1226,7 +1238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70e0e8ebd5e302f4d8cc7d5470ca7f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 3398390767672401077}
   neutral: {fileID: 21300000, guid: b6936a5adf01cf2408053005ae228285, type: 3}
   pressed: {fileID: 21300000, guid: e2e2d3bd8072dcc408dc042ba19417bf, type: 3}
   selected: {fileID: 21300000, guid: 2c603113c1c718a41836f548c0be643c, type: 3}

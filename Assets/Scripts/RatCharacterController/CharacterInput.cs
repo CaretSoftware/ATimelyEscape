@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,25 +6,27 @@ namespace RatCharacterController {
 
    public class CharacterInput : MonoBehaviour {
       
+      [SerializeField] private LayerMask groundedLayerMask;
+      [SerializeField] private LayerMask cubeLayerMask;
+      private float ledgeDistance = 0.05f;
       private CharacterAnimationController _characterAnimationController;
       private CameraFollow _cameraFollow;
       private Transform _cameraTransform;
       private CameraController _camController;
       private PlayerInputActions _playerInputActions;
       private CapsuleCollider _collider;
-      [SerializeField] private LayerMask groundedLayerMask;
-      [SerializeField] private LayerMask cubeLayerMask;
       private Transform _playerTransform;
       private Rigidbody _rigidBody;
       private Vector3 _pushedCubeOffset;
       private bool _pushing;
       private float _characterHalfHeight;
       private bool _canTimeTravel;
-      public static CharacterInput Instance { get; private set; }
-
+      private static CharacterInput _instance;
+      private bool _jumping;
+      
       private void Start() {
-         Instance = this;
-         Physics.queriesHitTriggers = false;    // ray-/capsule-/sphere-casts don't hit triggers
+         _instance = this;
+         //Physics.queriesHitTriggers = false;    // ray-/capsule-/sphere-casts don't hit triggers
          _playerInputActions = new PlayerInputActions();
          _playerInputActions.CameraControls.Enable();
          _playerInputActions.CharacterMovement.Enable();
@@ -49,6 +51,10 @@ namespace RatCharacterController {
          if (_camController == null)
             Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode", this.gameObject);
       }
+      
+      public static void CanTimeTravel(bool timeTravel) {
+         _instance._canTimeTravel = timeTravel;
+      }
 
       private void Update() {
          CameraInput();
@@ -59,16 +65,17 @@ namespace RatCharacterController {
          else
             PushCubeInput( _playerInputActions.BoxMovement.Movement.ReadValue<Vector2>() );
       }
-
-      private bool _jumping;
+      
       public void JumpComplete() {
+         Invoke(nameof(KinematicOff), .2f);
+         _rigidBody.velocity = Vector3.zero;
          _jumping = false;
       }
 
-      public static void CanTimeTravel(bool timeTravel) {
-         Instance._canTimeTravel = timeTravel;
+      private void KinematicOff() {
+         _rigidBody.isKinematic = false;
       }
-
+      
       private void TravelToPast(InputAction.CallbackContext context) {
          if (_canTimeTravel)
             TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Past);
@@ -100,9 +107,11 @@ namespace RatCharacterController {
          _playerForward = playerTransform.forward;
 
          if (!_jumping && Grounded()) {
-            if (LedgeAhead()) {
+            if (LedgeAhead(out Vector3 hitPosition)) {
                _jumping = true;
                playerTransform.rotation = Quaternion.LookRotation(_playerForward, Vector3.up);
+               hitPosition.y = playerPosition.y;
+               playerTransform.position = hitPosition + ledgeDistance * -playerTransform.forward;
                _characterAnimationController.JumpToFreeHang();
             }
             else {
@@ -110,7 +119,7 @@ namespace RatCharacterController {
             }
          }
 
-         bool LedgeAhead() {
+         bool LedgeAhead(out Vector3 hitPosition) {
             Vector3 ledgeHeight = 2.0f * playerScale * Vector3.up;
          
             _point0 = playerPosition + 
@@ -120,10 +129,12 @@ namespace RatCharacterController {
                       ledgeHeight + 
                       (_collider.height + margin) * playerScale * Vector3.up - 
                       radius * Vector3.up;
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f * playerScale) && 
-                Physics.OverlapCapsule(_point0, _point1, radius, groundedLayerMask).Length < 1) {
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f * playerScale, groundedLayerMask, QueryTriggerInteraction.Ignore) && 
+                Physics.OverlapCapsule(_point0, _point1, radius, groundedLayerMask, QueryTriggerInteraction.Ignore).Length < 1) {
 
                _playerForward = -hitInfo.normal.ProjectOnPlane();
+
+               hitPosition = hitInfo.point;
 
                return !Physics.CapsuleCast(
                   point1: _point0,
@@ -131,9 +142,11 @@ namespace RatCharacterController {
                   radius: radius - margin,
                   direction: _playerForward,
                   maxDistance: 1.0f * playerScale,
-                  groundedLayerMask);
+                  groundedLayerMask,
+                  QueryTriggerInteraction.Ignore);
             }
 
+            hitPosition = _playerTransform.position;
             return false;
          }
       }
@@ -184,7 +197,7 @@ namespace RatCharacterController {
       private void PushCubeInput(Vector2 input) => PushCubeInput(input.ToVector3());
       private void PushCubeInput(Vector3 input) {
          Transform playerTransform = _playerTransform;
-         Ray ray = new Ray(_playerTransform.position + Vector3.up * _characterHalfHeight * _playerTransform.localScale.y, _playerTransform.forward);
+         Ray ray = new Ray(_playerTransform.position + _characterHalfHeight * _playerTransform.localScale.y * Vector3.up, _playerTransform.forward);
 
          Vector3 projectedInput = InputToCameraProjection(input);
 
@@ -203,7 +216,7 @@ namespace RatCharacterController {
          }
          
          void RotatePlayerToSurface() {
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, .1f, cubeLayerMask)) {
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, .1f, cubeLayerMask, QueryTriggerInteraction.Ignore)) {
                Vector3 rotation = (-hitInfo.normal).ProjectOnPlane().normalized;
                if (rotation != Vector3.zero)
                   playerTransform.rotation = Quaternion.LookRotation(rotation, Vector3.up);
@@ -216,7 +229,7 @@ namespace RatCharacterController {
          Transform playerTransform = _playerTransform;
          Ray ray = new Ray(transform.position + Vector3.up * _characterHalfHeight * playerTransform.localScale.y, playerTransform.forward);
 
-         if (Physics.Raycast(ray, out RaycastHit hitInfo, .1f, cubeLayerMask)) {
+         if (Physics.Raycast(ray, out RaycastHit hitInfo, .1f, cubeLayerMask, QueryTriggerInteraction.Ignore)) {
             _pushing = true;
             Transform cube = hitInfo.transform;
             
@@ -269,9 +282,9 @@ namespace RatCharacterController {
          Vector3 origin = playerTransform.position + (radius * Vector3.up) + (margin * Vector3.up);
          Ray ray = new Ray(origin, Vector3.down);
          
-         Debug.DrawRay(origin, Vector3.down * maxDistance);
+         //Debug.DrawRay(origin, Vector3.down * maxDistance);
          
-         return Physics.SphereCast(ray, radius, maxDistance, groundedLayerMask);
+         return Physics.SphereCast(ray, radius, maxDistance, groundedLayerMask, QueryTriggerInteraction.Ignore);
       }
    }
 }
