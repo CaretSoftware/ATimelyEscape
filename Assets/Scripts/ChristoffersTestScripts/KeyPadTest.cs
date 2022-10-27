@@ -9,6 +9,7 @@ public class KeyPadTest : MonoBehaviour
     
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject keyPad;
+    [SerializeField] private GameObject resetKeyPadTrigger;
     //[SerializeField] private GameObject hud;
 
     [SerializeField] private GameObject animateGameObject;
@@ -18,7 +19,6 @@ public class KeyPadTest : MonoBehaviour
     [SerializeField] private string answer = "12345";
 
     [SerializeField] private Collider keyPadTrigger;
-
     /* [SerializeField] private AudioSource button;
      [SerializeField] private AudioSource correct;
      [SerializeField] private AudioSource wrong;*/
@@ -59,11 +59,11 @@ public class KeyPadTest : MonoBehaviour
     }
     public void Exit()
     {
+        resetKeyPadTrigger.SetActive(true);
         keyPad.SetActive(false);
         //hud.SetActive(true);
         player.SetActive(true);
         keyPadTrigger.enabled = false;
-        //Invoke("KeypadDelay", 3.0f);
     }
     private void Update()
     {
@@ -78,9 +78,8 @@ public class KeyPadTest : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
-/*    private void KeyPadDelay()
-    {
-        keyPadTrigger.enabled = true;
-    }*/
+
+
+
 
 }

@@ -6,6 +6,7 @@ public class OpenKeyPadTest : MonoBehaviour
 {
 
     [SerializeField] private GameObject keypad;
+
     //[SerializeField] private GameObject keyPadtext;
 
     //[SerializeField] private bool inReach;
