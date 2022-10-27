@@ -53,10 +53,6 @@ namespace RatCharacterController {
          _instance._canTimeTravel = timeTravel;
       }
 
-      public static void SetMouseLookSensitivity(float value) {
-         
-      }
-
       private void Update() {
          CameraInput();
          _characterAnimationController.SetGrounded(Grounded());

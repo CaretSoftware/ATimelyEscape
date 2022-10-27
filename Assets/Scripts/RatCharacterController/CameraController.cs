@@ -19,7 +19,11 @@ public class CameraController : MonoBehaviour {
 		
 	// [Header("Mouse Sensitivity")]
 	// [SerializeField] [Range(0.001f, 10.0f)]
-	public float MouseSensitivity { get; set; }
+	private float mouseSensitivity = .7f;
+	public float MouseSensitivity {
+		get => mouseSensitivity;
+		set => mouseSensitivity = Mathf.Max(0.0f, value);
+	}
 	// [SerializeField, Range(0.001f, 10.0f)]
 	// private float mouseSensitivityY = 1.0f;
 	
@@ -38,6 +42,12 @@ public class CameraController : MonoBehaviour {
 	private float smoothness = 0.05f;
 
 	private Vector2 _thumbstickDelta;
+	public static CameraController Instance { get; private set; }
+
+	private void Awake() {
+		if (Instance == null)
+			Instance = this;
+	}
 
 	private void Start() {
 		_camera = GetComponentInChildren<Camera>().transform;
