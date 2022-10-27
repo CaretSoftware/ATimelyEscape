@@ -16,9 +16,9 @@ public class VacumController : MonoBehaviour
     [SerializeField] private float viewAngle = 90f;
     [SerializeField] private LayerMask playerMask;
     [SerializeField] private LayerMask obsticleMask;
-  /*  [SerializeField] private float meshResolution = 1f;
-    [SerializeField] private int edgeIterations = 4;
-    [SerializeField] private float edgeDistance = 0.5f;*/
+    /*  [SerializeField] private float meshResolution = 1f;
+      [SerializeField] private int edgeIterations = 4;
+      [SerializeField] private float edgeDistance = 0.5f;*/
 
     [SerializeField] private GameObject eyeBrows;
     [SerializeField] private Transform[] wayPoints;
@@ -37,25 +37,31 @@ public class VacumController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerPosition = Vector3.zero;
-        isPatrol = true;
-        caughtPlayer = false;
-        playerInRange = false;
-        waitTime = startWaitTime;
-        mtimeToRotate = timeToRotate;
-        eyeBrows.SetActive(false);
+        if (navMeshAgent != null)
+        {
 
-        currentWeaponIndex = 0;
-        navMeshAgent = GetComponent<NavMeshAgent>();
+            playerPosition = Vector3.zero;
+            isPatrol = true;
+            caughtPlayer = false;
+            playerInRange = false;
+            waitTime = startWaitTime;
+            mtimeToRotate = timeToRotate;
+            eyeBrows.SetActive(false);
 
-        navMeshAgent.isStopped = false;
-        navMeshAgent.speed = walkSpeed;
-        navMeshAgent.SetDestination(wayPoints[currentWeaponIndex].position);
+            currentWeaponIndex = 0;
+            navMeshAgent = GetComponent<NavMeshAgent>();
+
+            navMeshAgent.isStopped = false;
+            navMeshAgent.speed = walkSpeed;
+            navMeshAgent.SetDestination(wayPoints[currentWeaponIndex].position);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         EnviromentView();
         if (!isPatrol)
         {
@@ -68,34 +74,38 @@ public class VacumController : MonoBehaviour
     }
     private void Chasing()
     {
-        playerNear = false;
-        playersLastPosition = Vector3.zero;
-        if (!caughtPlayer)
+        if (navMeshAgent != null)
         {
-            Move(runSpeed);
-            navMeshAgent.SetDestination(playerPosition);
-            eyeBrows.SetActive(true);
-        }
-        if(navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-        {
-            if(waitTime <= 0 && !caughtPlayer && Vector3.Distance(transform.position, 
-                GameObject.FindGameObjectWithTag("Player").transform.position) >= 6f)
+
+            playerNear = false;
+            playersLastPosition = Vector3.zero;
+            if (!caughtPlayer)
             {
-                isPatrol = true;
-                playerNear = false;
-                Move(walkSpeed);
-                mtimeToRotate = timeToRotate;
-                waitTime = startWaitTime;
-                navMeshAgent.SetDestination(wayPoints[currentWeaponIndex].position);
-                eyeBrows.SetActive(false);
+                Move(runSpeed);
+                navMeshAgent.SetDestination(playerPosition);
+                eyeBrows.SetActive(true);
             }
-            else
+            if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
             {
-                if(Vector3.Distance(transform.position, 
-                    GameObject.FindGameObjectWithTag("Player").transform.position) >= 2.5f)
+                if (waitTime <= 0 && !caughtPlayer && Vector3.Distance(transform.position,
+                    GameObject.FindGameObjectWithTag("Player").transform.position) >= 6f)
                 {
-                    Stop();
-                    waitTime -= Time.deltaTime;
+                    isPatrol = true;
+                    playerNear = false;
+                    Move(walkSpeed);
+                    mtimeToRotate = timeToRotate;
+                    waitTime = startWaitTime;
+                    navMeshAgent.SetDestination(wayPoints[currentWeaponIndex].position);
+                    eyeBrows.SetActive(false);
+                }
+                else
+                {
+                    if (Vector3.Distance(transform.position,
+                        GameObject.FindGameObjectWithTag("Player").transform.position) >= 2.5f)
+                    {
+                        Stop();
+                        waitTime -= Time.deltaTime;
+                    }
                 }
             }
         }
@@ -103,37 +113,41 @@ public class VacumController : MonoBehaviour
 
     private void Patrolling()
     {
-        if (playerNear)
+        if (navMeshAgent != null)
         {
-            if(mtimeToRotate <= 0)
+
+            if (playerNear)
             {
-                Move(walkSpeed);
-                LookingPlayer(playersLastPosition);
-                
-            }
-            else
-            {
-                Stop();
-                mtimeToRotate -= Time.deltaTime;
-            }
-        }
-        else
-        {
-            playerNear = false;
-            playersLastPosition = Vector3.zero;
-            navMeshAgent.SetDestination(wayPoints[currentWeaponIndex].position);
-            if(navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-            {
-                if(waitTime <= 0)
+                if (mtimeToRotate <= 0)
                 {
-                    NextPoint();
                     Move(walkSpeed);
-                    waitTime = startWaitTime;
+                    LookingPlayer(playersLastPosition);
+
                 }
                 else
                 {
                     Stop();
-                    waitTime -= Time.deltaTime;
+                    mtimeToRotate -= Time.deltaTime;
+                }
+            }
+            else
+            {
+                playerNear = false;
+                playersLastPosition = Vector3.zero;
+                navMeshAgent.SetDestination(wayPoints[currentWeaponIndex].position);
+                if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+                {
+                    if (waitTime <= 0)
+                    {
+                        NextPoint();
+                        Move(walkSpeed);
+                        waitTime = startWaitTime;
+                    }
+                    else
+                    {
+                        Stop();
+                        waitTime -= Time.deltaTime;
+                    }
                 }
             }
         }
@@ -141,7 +155,7 @@ public class VacumController : MonoBehaviour
     private void Move(float speed)
     {
         navMeshAgent.isStopped = false;
-        navMeshAgent.speed = speed; 
+        navMeshAgent.speed = speed;
     }
     private void Stop()
     {
@@ -156,15 +170,15 @@ public class VacumController : MonoBehaviour
 
     private void CaughtPlayer()
     {
-        caughtPlayer = true; 
+        caughtPlayer = true;
     }
 
     private void LookingPlayer(Vector3 player)
     {
         navMeshAgent.SetDestination(player);
-        if(Vector3.Distance(transform.position, player)<= 0.3)
+        if (Vector3.Distance(transform.position, player) <= 0.3)
         {
-            if(waitTime <= 0)
+            if (waitTime <= 0)
             {
                 playerNear = false;
                 Move(walkSpeed);
@@ -181,32 +195,36 @@ public class VacumController : MonoBehaviour
     }
     private void EnviromentView()
     {
-        Collider[] playerIsInRange = Physics.OverlapSphere(transform.position, viewRadius, playerMask);
-        for (int i = 0; i < playerIsInRange.Length; i++)
+        if (navMeshAgent != null)
         {
-            Transform player = playerIsInRange[i].transform;
-            Vector3 dirToPlayer = (player.position - transform.position).normalized;
-            if (Vector3.Angle(transform.forward, dirToPlayer) < viewAngle / 2)
-            {
-                float dstToPlayer = Vector3.Distance(transform.position, player.position);
-                if (!Physics.Raycast(transform.position, dirToPlayer, dstToPlayer, obsticleMask))
-                {
-                    playerInRange = true;
-                    isPatrol = false;
 
+            Collider[] playerIsInRange = Physics.OverlapSphere(transform.position, viewRadius, playerMask);
+            for (int i = 0; i < playerIsInRange.Length; i++)
+            {
+                Transform player = playerIsInRange[i].transform;
+                Vector3 dirToPlayer = (player.position - transform.position).normalized;
+                if (Vector3.Angle(transform.forward, dirToPlayer) < viewAngle / 2)
+                {
+                    float dstToPlayer = Vector3.Distance(transform.position, player.position);
+                    if (!Physics.Raycast(transform.position, dirToPlayer, dstToPlayer, obsticleMask))
+                    {
+                        playerInRange = true;
+                        isPatrol = false;
+
+                    }
+                    else
+                    {
+                        playerInRange = false;
+                    }
                 }
-                else
+                if (Vector3.Distance(transform.position, player.position) > viewRadius)
                 {
                     playerInRange = false;
                 }
-            }
-            if (Vector3.Distance(transform.position, player.position) > viewRadius)
-            {
-                playerInRange = false;
-            }
-            if (playerInRange)
-            {
-                playerPosition = player.transform.position;
+                if (playerInRange)
+                {
+                    playerPosition = player.transform.position;
+                }
             }
         }
     }
