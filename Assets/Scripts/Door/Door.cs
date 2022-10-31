@@ -22,10 +22,10 @@ public class Door : Device
     {
         lockPosition = transform.position;
         unlockPosition = lockPosition + (Vector3.up * hightOfOpenDoor);
-        controller.SetDoor(this);
+        controller.SetDevice(this);
     }
-
-    public new void TurnedOn(bool turnedOn)
+    
+    public override void TurnedOn(bool turnedOn)
     {
         if (this.turnedOn != turnedOn)
         {

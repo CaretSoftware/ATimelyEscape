@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeviceController : MonoBehaviour
+public abstract class DeviceController : MonoBehaviour
 {
-    public void SetDoor(Door door)
+    protected Device device;
+    public void SetDevice(Door door)
     {
-        //this.door = door;
+        this.device = door;
     }
 }
