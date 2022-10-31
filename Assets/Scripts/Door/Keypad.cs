@@ -94,12 +94,16 @@ public class Keypad : DeviceController
         }
         if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
         {
+            // To change buttons Appearence to Pressed
+            keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
             KeypadDeleteInput();
         }
         else if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             if (usingKeyboardDigits)
             {
+                // To change buttons Appearence to Pressed
+                keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
                 KeypadEnterInput();
             }
         }
@@ -124,6 +128,9 @@ public class Keypad : DeviceController
         }
         if (currentKeypadKeysIndex != previousKeypadIndex)
         {
+            // To change previousbuttons Appearence to Neutral
+            keypadKeys[previousKeypadIndex].gameObject.GetComponent<ButtonBehaviour>().ToNeutralSprite();
+
             if (usingKeyboardDigits)
             {
                 currentKeypadKeysIndex = previousKeypadIndex;
@@ -133,13 +140,15 @@ public class Keypad : DeviceController
                 previousKeypadIndex = currentKeypadKeysIndex;
             }
             keypadKeys[currentKeypadKeysIndex].Select();
+
+            // To change buttons Appearence to Selected
+            keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToSelectedSprite();
+
             usingKeyboardDigits = false;
         }
         if (usingKeyboardDigits)
         {
             EventSystem.current.SetSelectedGameObject(null);
         }
-        
-
     }
 }
