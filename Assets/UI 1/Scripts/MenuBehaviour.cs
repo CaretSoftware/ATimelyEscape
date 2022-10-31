@@ -77,6 +77,8 @@ public class MenuBehaviour : MonoBehaviour
     {
         Debug.Log("Info: Quit button has been Pressed");
 
+        Time.timeScale = 1;
+
         Application.Quit();
     }
 }
