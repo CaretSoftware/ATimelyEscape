@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 namespace RatCharacterController {
 	[SelectionBase]
 	public class CharacterAnimationController : MonoBehaviour {
