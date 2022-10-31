@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AllButtonPressed : MonoBehaviour
+public class AllButtonPressed : DeviceController
 {
 
     [SerializeField] private Button[] buttons;
     [SerializeField] private bool allPressed;
-    private Device door;
 
 
     // Start is called before the first frame update
@@ -23,21 +22,20 @@ public class AllButtonPressed : MonoBehaviour
     {
         foreach (Button button in buttons)
         {
+            
             allPressed = button.IsPressed();
             if (!allPressed)
             {
                 break;
             }
         }
-        door.TurnedOn(allPressed);
+        Debug.Log(allPressed);
+        device.TurnedOn(allPressed);
     }
 
     public void AllPressedFalse() { allPressed = false; }   
 
-    public void SetDoor(Door door)
-    {
-        this.door = door;   
-    }
+    
 
 
 }

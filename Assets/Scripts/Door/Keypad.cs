@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using System.Text;
 using System;
 
-public class Keypad : MonoBehaviour
+public class Keypad : DeviceController
 {
     [SerializeField] private int maxDigits;
     [SerializeField] private int combination;
@@ -68,6 +68,7 @@ public class Keypad : MonoBehaviour
         if (screen.text.Equals(combination.ToString()))
         {
             sb.Append(" YEAH");
+            device.TurnedOn(true);
         }
         sb.Append("!!!");
         Debug.Log(sb.ToString());
