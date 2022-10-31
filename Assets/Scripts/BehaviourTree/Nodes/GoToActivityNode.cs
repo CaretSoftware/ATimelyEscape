@@ -8,6 +8,7 @@ public class GoToActivityNode : Node
     private static DummyBehaviour Instance;
     private const float DestinationOffset = 0.3f;
 
+    private System.Random random = new System.Random();
     private GameObject GO = new GameObject();
     private Transform[] waypoints;
     private NavMeshAgent agent;
@@ -48,9 +49,7 @@ public class GoToActivityNode : Node
         }
         else
         {
-            targetIndex++;
-            if (targetIndex == waypoints.Length)
-                targetIndex = 0;
+            GenerateRandomTargetIndex(waypoints.Length - 1);
             agent.isStopped = true;
             return NodeState.SUCCESS;
         }
@@ -64,6 +63,16 @@ public class GoToActivityNode : Node
         animator.SetBool("move", true);
         isCoroutineRunning = false;
         isTimerDone = true;
+    }
+
+    private void GenerateRandomTargetIndex(int max)
+    {
+        int value = random.Next(0, max);
+        if (value == targetIndex && value != max)
+            value++;
+        else if (value == targetIndex && value == max)
+            value--;
+        targetIndex = value;
     }
 
     private class DummyBehaviour : MonoBehaviour { }

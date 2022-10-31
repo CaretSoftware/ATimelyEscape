@@ -7,9 +7,11 @@ public class ChaseNode : Node
 {
     private const float triggerDistance = 0.2f;
 
+    private NavMeshAgent agent;
     private Transform target;
     private Transform agentTransform;
-    private NavMeshAgent agent;
+
+    private float destinationDistance;
 
     public ChaseNode(Transform target, NavMeshAgent agent, Transform agentTransform)
     {
@@ -20,9 +22,8 @@ public class ChaseNode : Node
 
     public override NodeState Evaluate()
     {
-        Debug.Log("Chasing");
-        float dist = Vector3.Distance(target.position, agentTransform.position);
-        if(dist > triggerDistance)
+        destinationDistance = Vector3.Distance(target.position, agentTransform.position);
+        if(destinationDistance > triggerDistance)
         {
             agent.isStopped = false;
             agent.SetDestination(target.position);

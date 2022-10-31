@@ -5,10 +5,11 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private float chaseRange;
-    [SerializeField] private float captureRange;
-    [SerializeField] private float idleActivityTimer = 5.0f;
-    [SerializeField] private float movingToIdleMagnitude = 0.5f;
+    private const float MovingToIdleMagnitude = 0.5f;
+
+    [SerializeField][Range(1.0f, 10.0f)] private float chaseRange = 5.0f;
+    [SerializeField][Range(0.5f, 2.0f)] private float captureRange = 1.0f;
+    [SerializeField][Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
 
     [SerializeField] private GameOverScreen gameOverScreen;
     [SerializeField] private Transform[] activityWaypoints;
@@ -43,7 +44,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = FindObjectOfType<CharacterController>().transform;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         agentCenterTransform = 
             Instantiate<GameObject>(
                 new GameObject(), 
@@ -78,7 +79,7 @@ public class EnemyAI : MonoBehaviour
         if(agent.remainingDistance <= agent.stoppingDistance)
             velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
 
-        shouldMove = velocity.magnitude > movingToIdleMagnitude && agent.remainingDistance > agent.radius;
+        shouldMove = velocity.magnitude > MovingToIdleMagnitude && agent.remainingDistance > agent.radius;
 
         animator.SetBool("move", shouldMove);
         animator.SetFloat("velx", velocity.x);

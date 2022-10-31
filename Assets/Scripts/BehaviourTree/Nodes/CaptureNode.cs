@@ -9,11 +9,10 @@ public class CaptureNode : Node
     private NavMeshAgent agent;
     private Transform target;
     private Transform agentTransform;
-    private float captureDistance;
-    private bool endScreenTriggered;
 
-    private float axisOffsetX;
-    private float axisOffsetZ;
+    private float captureDistance;
+    private float destinationDistance;
+    private bool endScreenTriggered;
 
     public CaptureNode(NavMeshAgent agent, Transform target, float captureDistance, GameOverScreen gameOverScreen, Transform agentTransform)
     {
@@ -28,13 +27,8 @@ public class CaptureNode : Node
     public override NodeState Evaluate()
     {
         Debug.Log("Trying to capture");
-
-        //axisOffsetX = Mathf.Abs(target.position.x - agentTransform.position.x);
-        //axisOffsetZ = Mathf.Abs(target.position.z - agentTransform.position.z);
-
-        float dist = Vector3.Distance(target.position, agentTransform.transform.position);
-        //if (axisOffsetX < captureDistance || axisOffsetZ < captureDistance)
-        if(dist < captureDistance)
+        destinationDistance = Vector3.Distance(target.position, agentTransform.transform.position);
+        if (destinationDistance < captureDistance)
         {
             Debug.Log("CAPTURED");
             if (!endScreenTriggered)
