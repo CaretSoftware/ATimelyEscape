@@ -8,10 +8,10 @@ public class MoveObject_IconBehaviour : MonoBehaviour
 
     private CanvasGroup canvasGroup;
 
-    [SerializeField] private Transform player_;
+    private Transform player_;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         maxDistance = gameObject.GetComponent<SphereCollider>().radius;
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
@@ -24,6 +24,10 @@ public class MoveObject_IconBehaviour : MonoBehaviour
         if (player_ != null)
         {
             canvasGroup.alpha = 1 - (Vector3.Distance(player_.position, gameObject.transform.position) / maxDistance);
+        }
+        else
+        {
+            canvasGroup.alpha = 0;
         }
     }
 
@@ -41,8 +45,6 @@ public class MoveObject_IconBehaviour : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             player_ = null;
-            canvasGroup.alpha = 0;
         }
     }
-    
 }
