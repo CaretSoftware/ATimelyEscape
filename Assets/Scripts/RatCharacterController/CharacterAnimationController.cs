@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,6 +28,7 @@ namespace RatCharacterController {
 		private static readonly int Pushing = Animator.StringToHash("Push");
 		private Rigidbody rb;
 		private float _mantleAnimationLength = .833f + .460f;
+		
 
 		private void Awake() {
 			_transform = transform;
@@ -36,6 +38,12 @@ namespace RatCharacterController {
 			// _navMeshAgent = GetComponent<NavMeshAgent>();
 			// _navMeshAgent.updatePosition = false;
 			// _navMeshAgent.updateRotation = false;
+		}
+
+		private void CrossFadeLeft() {
+			float normalizedTransitionDuration = 1.0f;
+			int layer = -1;
+			_animator.CrossFade("Running Turn 180 Left", normalizedTransitionDuration, layer);
 		}
 
 		private void Update() {

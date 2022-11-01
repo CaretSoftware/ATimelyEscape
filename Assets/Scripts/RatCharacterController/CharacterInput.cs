@@ -1,4 +1,6 @@
 //using UnityEditor.PackageManager;
+
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,11 +23,11 @@ namespace RatCharacterController {
       private bool _pushing;
       private float _characterHalfHeight;
       private bool _canTimeTravel;
-      private static CharacterInput _instance;
+      //private static CharacterInput _instance;
       private bool _jumping;
       
       private void Start() {
-         _instance = this;
+         // _instance = this;
          //Physics.queriesHitTriggers = false;    // ray-/capsule-/sphere-casts don't hit triggers
          _playerInputActions = new PlayerInputActions();
          _playerInputActions.CameraControls.Enable();
@@ -51,9 +53,22 @@ namespace RatCharacterController {
          if (_camController == null)
             Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode", this.gameObject);
       }
+
+      private void OnDestroy() {
+         Unsubscribe();
+      }
+
+      private void Unsubscribe() {
+         _playerInputActions.CharacterMovement.Jump.performed -= Jump;
+         _playerInputActions.Interact.Interact.performed -= Interact;
+         _playerInputActions.Interact.Interact.canceled -= StopInteract;
+         _playerInputActions.Interact.Past.performed -= TravelToPast;
+         _playerInputActions.Interact.Present.performed -= TravelToPresent;
+         _playerInputActions.Interact.Future.performed -= TravelToFuture;
+      }
       
-      public static void CanTimeTravel(bool timeTravel) {
-         _instance._canTimeTravel = timeTravel;
+      public void CanTimeTravel(bool timeTravel) {
+         _canTimeTravel = timeTravel;
       }
 
       private void Update() {
