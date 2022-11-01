@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using System.Text;
 using System;
 
-public class Keypad : MonoBehaviour
+public class Keypad : DeviceController
 {
     [SerializeField] private int maxDigits;
     [SerializeField] private int combination;
@@ -68,6 +68,7 @@ public class Keypad : MonoBehaviour
         if (screen.text.Equals(combination.ToString()))
         {
             sb.Append(" YEAH");
+            device.TurnedOn(true);
         }
         sb.Append("!!!");
         Debug.Log(sb.ToString());
@@ -93,12 +94,16 @@ public class Keypad : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
         {
+            // To change buttons Appearence to Pressed
+            keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
             KeypadDeleteInput();
         }
         else if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             if (usingKeyboardDigits)
             {
+                // To change buttons Appearence to Pressed
+                keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
                 KeypadEnterInput();
             }
         }
@@ -123,6 +128,9 @@ public class Keypad : MonoBehaviour
         }
         if (currentKeypadKeysIndex != previousKeypadIndex)
         {
+            // To change previousbuttons Appearence to Neutral
+            keypadKeys[previousKeypadIndex].gameObject.GetComponent<ButtonBehaviour>().ToNeutralSprite();
+
             if (usingKeyboardDigits)
             {
                 currentKeypadKeysIndex = previousKeypadIndex;
@@ -132,13 +140,15 @@ public class Keypad : MonoBehaviour
                 previousKeypadIndex = currentKeypadKeysIndex;
             }
             keypadKeys[currentKeypadKeysIndex].Select();
+
+            // To change buttons Appearence to Selected
+            keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToSelectedSprite();
+
             usingKeyboardDigits = false;
         }
         if (usingKeyboardDigits)
         {
             EventSystem.current.SetSelectedGameObject(null);
         }
-        
-
     }
 }
