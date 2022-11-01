@@ -1,8 +1,6 @@
 using System;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour {
 	private Transform _camera;
