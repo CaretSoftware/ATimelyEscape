@@ -6,15 +6,24 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
+    private const float NavMeshRadiusOffstep = 5f;
 
-    [SerializeField][Range(1.0f, 10.0f)] private float chaseRange = 5.0f;
-    [SerializeField][Range(0.5f, 2.0f)] private float captureRange = 1.0f;
-    [SerializeField][Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
+    [Header("AI Detection Range Variables")]
+    [SerializeField] [Range(1.0f, 10.0f)] private float chaseRange = 5.0f;
+    [SerializeField] [Range(0.5f, 2.0f)] private float captureRange = 1.0f;
 
-    [SerializeField] private GameOverScreen gameOverScreen;
+    [Header("AI Behaviour Input")]
+    [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
+    [SerializeField] private Transform checkpoint;
+    [Tooltip("Assigning the same waypoints to multiple enemies may result in unwanted behaviour.")]
     [SerializeField] private Transform[] activityWaypoints;
-    [SerializeField] private Transform agentCenterTransform;
 
+    [Header("Scene Tools")]
+    [SerializeField] private bool chaseRangeGizmo;
+    [SerializeField] private bool catchRangeGizmo;
+    [SerializeField] private bool waypointsGizmo;
+
+    private Transform agentCenterTransform;
     private Transform playerTransform;
     private NavMeshAgent agent;
     private Animator animator;
@@ -31,8 +40,6 @@ public class EnemyAI : MonoBehaviour
     private float dy;
     private bool shouldMove;
 
-    public Transform CurrentActivityPosition { get; set;}
-
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -45,13 +52,8 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        agentCenterTransform = 
-            Instantiate<GameObject>(
-                new GameObject(), 
-                new Vector3(transform.position.x, transform.position.y + agent.height / 2, transform.position.z), 
-                Quaternion.identity, 
-                gameObject.transform).transform;
-
+        agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
+        print($"parent: {gameObject.name}, AgentCenterTransform: {agentCenterTransform.name}");
         ConstructBehaviourTreePersonnel();
     }
 
@@ -72,11 +74,11 @@ public class EnemyAI : MonoBehaviour
         dy = Vector3.Dot(transform.forward, worldDeltaPosition);
         deltaPosition = new Vector2(dx, dy);
 
-        smooth = Mathf.Min(1, Time.deltaTime / 0.1f);
+        smooth = Mathf.Min(1, Time.deltaTime / 0.5f);
         smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, deltaPosition, smooth);
         velocity = smoothDeltaPosition / Time.deltaTime;
 
-        if(agent.remainingDistance <= agent.stoppingDistance)
+        if (agent.remainingDistance <= agent.stoppingDistance)
             velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
 
         shouldMove = velocity.magnitude > MovingToIdleMagnitude && agent.remainingDistance > agent.radius;
@@ -86,17 +88,17 @@ public class EnemyAI : MonoBehaviour
         animator.SetFloat("vely", velocity.y);
 
         deltaMagnitude = worldDeltaPosition.magnitude;
-        if (deltaMagnitude > agent.radius / 2f)
-            transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);      
+        if (deltaMagnitude > agent.radius / NavMeshRadiusOffstep)
+            transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);
     }
 
     private void ConstructBehaviourTreePersonnel()
     {
-        GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, idleActivityTimer);
+        GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, gameObject, idleActivityTimer);
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform);
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, gameOverScreen, agentCenterTransform);
+        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, checkpoint, agentCenterTransform);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
         Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode });
@@ -111,5 +113,33 @@ public class EnemyAI : MonoBehaviour
         rootPosition.y = agent.nextPosition.y;
         transform.position = rootPosition;
         agent.nextPosition = rootPosition;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (agentCenterTransform != null)
+        {
+            if (catchRangeGizmo)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
+            }
+            if (chaseRangeGizmo)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(agentCenterTransform.position, chaseRange);
+            }
+            if (waypointsGizmo)
+            {
+                Gizmos.color = Color.cyan;
+                for (int i = 0; i < activityWaypoints.Length; i++)
+                {
+                    if (i + 1 < activityWaypoints.Length)
+                        Gizmos.DrawLine(activityWaypoints[i].position, activityWaypoints[i + 1].position);
+                    else Gizmos.DrawLine(activityWaypoints[i].position, activityWaypoints[0].position);
+                }
+            }
+        }
+        else return;
     }
 }

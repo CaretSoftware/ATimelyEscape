@@ -10,6 +10,7 @@ public class GoToActivityNode : Node
 
     private System.Random random = new System.Random();
     private GameObject GO = new GameObject();
+    private GameObject dummyBehaviourParent;
     private Transform[] waypoints;
     private NavMeshAgent agent;
     private Animator animator;
@@ -20,14 +21,17 @@ public class GoToActivityNode : Node
 
     private bool isCoroutineRunning;
     private bool isTimerDone;
+
     
-    public GoToActivityNode(Transform[] waypoints, NavMeshAgent agent, Animator animator, float idleTimer)
+    public GoToActivityNode(Transform[] waypoints, NavMeshAgent agent, Animator animator, GameObject parentObject, float idleTimer)
     {
+        dummyBehaviourParent = parentObject;
         this.waypoints = waypoints;
         this.agent = agent;
         this.animator = animator;
         this.idleTimer = idleTimer;
         Instance = GO.AddComponent<DummyBehaviour>();
+        GO.transform.parent = dummyBehaviourParent.transform;
     }
 
     public override NodeState Evaluate()

@@ -5,7 +5,8 @@ using UnityEngine.AI;
 
 public class CaptureNode : Node
 {
-    private GameOverScreen gameOverScreen;
+    //private GameOverScreen gameOverScreen;
+    private Transform checkpoint;
     private NavMeshAgent agent;
     private Transform target;
     private Transform agentTransform;
@@ -14,12 +15,13 @@ public class CaptureNode : Node
     private float destinationDistance;
     private bool endScreenTriggered;
 
-    public CaptureNode(NavMeshAgent agent, Transform target, float captureDistance, GameOverScreen gameOverScreen, Transform agentTransform)
+    public CaptureNode(NavMeshAgent agent, Transform target, float captureDistance, Transform checkpoint, Transform agentTransform)
     {
         this.agent = agent;
         this.target = target;
         this.captureDistance = captureDistance;
-        this.gameOverScreen = gameOverScreen;
+        this.checkpoint = checkpoint;
+        //this.gameOverScreen = gameOverScreen;
         this.agentTransform = agentTransform;
     }
 
@@ -33,8 +35,9 @@ public class CaptureNode : Node
             Debug.Log("CAPTURED");
             if (!endScreenTriggered)
             {
-                //TODO add universal variable-setup script
-                gameOverScreen.FadeCanvasGroup(2);
+                //TODO update this when new checkpoint system is in place.
+                target.transform.position = checkpoint.position;
+                //gameOverScreen.FadeCanvasGroup(2);
                 endScreenTriggered = true;
             }
             agent.isStopped = true;
