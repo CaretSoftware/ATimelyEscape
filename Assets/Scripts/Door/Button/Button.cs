@@ -23,7 +23,7 @@ public class Button : MonoBehaviour
         if (layerMask == (layerMask | 1 << other.gameObject.layer))
         {
             objectsOnButton++;
-            Debug.Log(objectsOnButton);
+            //Debug.Log(objectsOnButton);
             isPressed = true;
             parent.IsAllPressed();
         }
@@ -34,7 +34,7 @@ public class Button : MonoBehaviour
         if (layerMask == (layerMask | 1 << other.gameObject.layer))
         {
             objectsOnButton--;  
-            Debug.Log(objectsOnButton);
+            //Debug.Log(objectsOnButton);
             isPressed = false;  
             parent.IsAllPressed();  
         }
