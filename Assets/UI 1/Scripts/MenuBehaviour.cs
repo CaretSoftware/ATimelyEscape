@@ -9,6 +9,7 @@ public class MenuBehaviour : MonoBehaviour
     [SerializeField] private bool isPauseMenu = false;
 
     [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject player;
 
     private bool paused;
 
@@ -55,6 +56,7 @@ public class MenuBehaviour : MonoBehaviour
         {
             pauseMenu.SetActive(true);
         }
+        player.SetActive(false);
     }
 
     public void UnPauseGame()
@@ -67,6 +69,7 @@ public class MenuBehaviour : MonoBehaviour
         {
             pauseMenu.SetActive(false);
         }
+        player.SetActive(true);
     }
 
     // Method to quit the application anytime
