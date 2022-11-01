@@ -9,8 +9,8 @@ public class EnemyAI : MonoBehaviour
     private const float NavMeshRadiusOffstep = 5f;
 
     [Header("AI Detection Range Variables")]
-    [SerializeField] [Range(1.0f, 10.0f)] private float chaseRange = 5.0f;
-    [SerializeField] [Range(0.5f, 2.0f)] private float captureRange = 1.0f;
+    [SerializeField] [Range(1.0f, 10.0f)] private float chaseRange = 5.5f;
+    [SerializeField] [Range(0.5f, 3.5f)] private float captureRange = 2.0f;
 
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
@@ -53,7 +53,6 @@ public class EnemyAI : MonoBehaviour
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
-        print($"parent: {gameObject.name}, AgentCenterTransform: {agentCenterTransform.name}");
         ConstructBehaviourTreePersonnel();
     }
 
@@ -106,13 +105,55 @@ public class EnemyAI : MonoBehaviour
         topNode = new Selector(new List<Node> { captureSequence, chaseSequence, goToActivityNode });
     }
 
-    //accounts for small offset between the character- and agent component position that occurs each frame.
+    //accounts for offset between the character- and agent component position that occurs each frame.
     private void OnAnimatorMove()
     {
         Vector3 rootPosition = animator.rootPosition;
         rootPosition.y = agent.nextPosition.y;
         transform.position = rootPosition;
         agent.nextPosition = rootPosition;
+    }
+
+    private float radius;
+    [SerializeField][Range(0, 360)] private float angle;
+    private float corountineDelay = 0.2f;
+    private float distanceToTarget;
+    private bool playerDetected;
+
+    private Transform target;
+    private Vector3 directionToTarget;
+    private Collider[] rangeChecks;
+
+    [SerializeField] private LayerMask targetMask;
+    [SerializeField] private LayerMask obstacleMask;
+
+    private IEnumerator FOVRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(corountineDelay);
+            FOVCheck();
+        }
+    }
+
+    private void FOVCheck()
+    {
+        rangeChecks = Physics.OverlapSphere(transform.position, radius, targetMask);
+        if (rangeChecks.Length != 0)
+        {
+            target = rangeChecks[0].transform;
+            directionToTarget = (target.position - transform.position).normalized;
+            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+            {
+                distanceToTarget = Vector3.Distance(transform.position, target.position);
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
+                    playerDetected = true;         
+            }
+            else
+                playerDetected = false;
+        }
+        else if (playerDetected)
+            playerDetected = false;
     }
 
     private void OnDrawGizmos()
@@ -135,7 +176,7 @@ public class EnemyAI : MonoBehaviour
                 for (int i = 0; i < activityWaypoints.Length; i++)
                 {
                     if (i + 1 < activityWaypoints.Length)
-                        Gizmos.DrawLine(activityWaypoints[i].position, activityWaypoints[i + 1].position);
+                     Gizmos.DrawLine(activityWaypoints[i].position, activityWaypoints[i + 1].position);
                     else Gizmos.DrawLine(activityWaypoints[i].position, activityWaypoints[0].position);
                 }
             }
