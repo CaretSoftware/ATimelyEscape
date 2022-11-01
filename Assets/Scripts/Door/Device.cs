@@ -7,7 +7,7 @@ public abstract class Device : MonoBehaviour
     [Header("Settings")]
     [Tooltip("The AllButonPressed instence responsable for opening the door")]
     [SerializeField] protected DeviceController controller;
-    public void TurnedOn(bool turnedOn)
+    public virtual void TurnedOn(bool turnedOn)
     {
 
     }
