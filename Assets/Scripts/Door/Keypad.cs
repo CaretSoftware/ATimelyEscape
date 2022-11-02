@@ -37,11 +37,22 @@ public class Keypad : DeviceController
         KeyCode.Keypad8,
         KeyCode.Keypad9,
      };
+
     private const int keyAmount = 10;
    
     private int currentKeypadKeysIndex;
     private int previousKeypadIndex;
     private bool usingKeyboardDigits = true;
+
+    [Header("Lock Icons")]
+    [SerializeField] private GameObject lockCloseIcon;
+    [SerializeField] private GameObject lockOpenIcon;
+
+    private void Start()
+    {
+        lockCloseIcon.SetActive(true); // Only have the closed Icon active to indicate it is locked 
+        lockOpenIcon.SetActive(false);
+    }
 
     public void KeypadDigitInput(int number)
     {
@@ -67,6 +78,9 @@ public class Keypad : DeviceController
         sb.Append("FUCK");
         if (screen.text.Equals(combination.ToString()))
         {
+            lockCloseIcon.SetActive(false); // Switch the LockIcon to indicate it is open
+            lockOpenIcon.SetActive(true);
+
             sb.Append(" YEAH");
             device.TurnedOn(true);
         }
