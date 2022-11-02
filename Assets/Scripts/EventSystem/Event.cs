@@ -69,4 +69,19 @@ namespace CallbackSystem {
     //        Keypad = keypad;
     //    }
     //}
+
+    public class CheckpointEvent : Event
+    {
+        public Transform respawnPoint;
+
+        public CheckpointEvent(Transform respawnPoint)
+        {
+            this.respawnPoint = respawnPoint;
+        }
+    }
+
+    public class FailStateEvent : Event
+    {
+
+    }
 }
