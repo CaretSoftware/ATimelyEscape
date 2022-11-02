@@ -15,6 +15,8 @@ public class Keypad : DeviceController
     [SerializeField] private UnityEngine.UI.Button[] keypadKeys;
     [SerializeField] private int keypadColumns = 3;
 
+    
+
     private KeyCode[] keyCodes = {
         KeyCode.Alpha0,
         KeyCode.Alpha1,
@@ -37,30 +39,23 @@ public class Keypad : DeviceController
         KeyCode.Keypad8,
         KeyCode.Keypad9,
      };
-
     private const int keyAmount = 10;
    
     private int currentKeypadKeysIndex;
     private int previousKeypadIndex;
     private bool usingKeyboardDigits = true;
 
-    [Header("Lock Icons")]
-    [SerializeField] private GameObject lockCloseIcon;
-    [SerializeField] private GameObject lockOpenIcon;
-
-    private void Start()
-    {
-        lockCloseIcon.SetActive(true); // Only have the closed Icon active to indicate it is locked 
-        lockOpenIcon.SetActive(false);
-    }
-
     public void KeypadDigitInput(int number)
     {
-        if (screen.text.ToCharArray().Length < maxDigits)
+        if (screen.text.Length < maxDigits)
         {
             StringBuilder sb = new();
             sb.Append(screen.text).Append(number);
             screen.text = sb.ToString();
+            if(screen.text.Length == combination.ToString().Length)
+            {
+                KeypadEnterInput();
+            }
         }
     }
 
@@ -74,18 +69,13 @@ public class Keypad : DeviceController
 
     public void KeypadEnterInput()
     {
-        StringBuilder sb = new();
-        sb.Append("FUCK");
+        
         if (screen.text.Equals(combination.ToString()))
         {
-            lockCloseIcon.SetActive(false); // Switch the LockIcon to indicate it is open
-            lockOpenIcon.SetActive(true);
-
-            sb.Append(" YEAH");
             device.TurnedOn(true);
+            Destroy(gameObject);
         }
-        sb.Append("!!!");
-        Debug.Log(sb.ToString());
+      
     }
 
     private void Update()
