@@ -16,7 +16,7 @@ public class WatchPickup : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Player")) {
-			RatCharacterController.CharacterInput.CanTimeTravel(true);
+			FindObjectOfType<RatCharacterController.CharacterInput>().CanTimeTravel(true);
 			Destroy(this.gameObject);
 		}
 	}

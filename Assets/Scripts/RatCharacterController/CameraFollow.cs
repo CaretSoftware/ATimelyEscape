@@ -3,12 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using RatCharacterController;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class CameraFollow : MonoBehaviour {
-	[FormerlySerializedAs("follow")] [SerializeField]
-	private Transform follow;
+public class CameraFollow : MonoBehaviour { 
 	public Transform Follow { get; private set; }
+	[SerializeField] private Transform follow;
 	private Transform _transform;
 	private Transform _camera;
 	private Vector3 _currentVelocity;
