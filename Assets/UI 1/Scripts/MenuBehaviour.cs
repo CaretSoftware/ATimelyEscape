@@ -11,18 +11,16 @@ public class MenuBehaviour : MonoBehaviour
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject player;
 
-    private bool paused;
+    private bool paused = false;
 
     [SerializeField] private Slider slider;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !paused && isPauseMenu) {
-            paused = true;
             PauseGame();
         }
         else if (Input.GetKeyDown(KeyCode.Escape) && paused && isPauseMenu) {
-            paused = false;
             UnPauseGame();
         } 
     }
@@ -42,13 +40,21 @@ public class MenuBehaviour : MonoBehaviour
 
     public void PauseGame()
     {
+        if (paused)
+        {
+            Debug.Log("Error: Is Already Paused");
+            return;
+        }
+
+        paused = true;
+
         Time.timeScale = 0f;
         
         if (slider == null)
             slider = GetComponentInChildren<Slider>();
         
         if (slider != null)
-            slider.value = CameraController.Instance.MouseSensitivity;
+            //slider.value = CameraController.Instance.MouseSensitivity;
 
         Debug.Log("Info: Paused game- TimeScale " + Time.timeScale);
 
@@ -61,6 +67,8 @@ public class MenuBehaviour : MonoBehaviour
 
     public void UnPauseGame()
     {
+        paused = false;
+
         Time.timeScale = 1f;
 
         Debug.Log("Info: Unpaused game - TimeScale " + Time.timeScale);
