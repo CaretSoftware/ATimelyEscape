@@ -15,6 +15,8 @@ public class Keypad : DeviceController
     [SerializeField] private UnityEngine.UI.Button[] keypadKeys;
     [SerializeField] private int keypadColumns = 3;
 
+    
+
     private KeyCode[] keyCodes = {
         KeyCode.Alpha0,
         KeyCode.Alpha1,
@@ -45,11 +47,15 @@ public class Keypad : DeviceController
 
     public void KeypadDigitInput(int number)
     {
-        if (screen.text.ToCharArray().Length < maxDigits)
+        if (screen.text.Length < maxDigits)
         {
             StringBuilder sb = new();
             sb.Append(screen.text).Append(number);
             screen.text = sb.ToString();
+            if(screen.text.Length == combination.ToString().Length)
+            {
+                KeypadEnterInput();
+            }
         }
     }
 
@@ -63,15 +69,13 @@ public class Keypad : DeviceController
 
     public void KeypadEnterInput()
     {
-        StringBuilder sb = new();
-        sb.Append("FUCK");
+        
         if (screen.text.Equals(combination.ToString()))
         {
-            sb.Append(" YEAH");
             device.TurnedOn(true);
+            Destroy(gameObject);
         }
-        sb.Append("!!!");
-        Debug.Log(sb.ToString());
+      
     }
 
     private void Update()

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5314322220773727019}
   - component: {fileID: 5314322220773727016}
   - component: {fileID: 5314322220773727017}
-  - component: {fileID: 5314322220773727022}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -27,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5314322220773727023}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0.01}
   m_ConstrainProportionsScale: 0
@@ -98,21 +97,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5314322220773727022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5314322220773727023}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea271489789d3b04284b6d206d8ab895, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 6437438321309161490}
-  timeToOpen: 3
-  hightOfOpenDoor: 1
 --- !u!1 &5314322221179290636
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5314322221179290639}
+  - component: {fileID: 2028855506}
   m_Layer: 0
   m_Name: DoorWithKeypad
   m_TagString: Untagged
@@ -148,6 +133,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2028855506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314322221179290636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea271489789d3b04284b6d206d8ab895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 6437438321309161490}
+  direction: 2
+  timeToOpen: 3
+  leangthOfOpening: 1
+  doorOne: {fileID: 5314322220773727018}
+  doorTwo: {fileID: 0}
 --- !u!1 &5314322221250672197
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,8 +175,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5314322221250672197}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -219,7 +222,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5314322221732678531}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0.07638}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -255,7 +258,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   doorProtection: {fileID: 5314322221250672199}
-  door: {fileID: 5314322220773727022}
+  door: {fileID: 0}
 --- !u!1 &6651201912341094500
 GameObject:
   m_ObjectHideFlags: 0

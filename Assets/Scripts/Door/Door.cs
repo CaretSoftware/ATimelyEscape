@@ -1,18 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : Device
 {
-    
+    [SerializeField] private OpeningDirection direction;
     [Tooltip("Time it takes from activation until door is completly open")]
     [SerializeField] private float timeToOpen = 3f;
     [Tooltip("How high the door go.")]
-    [SerializeField] private float hightOfOpenDoor = 1f; 
+    [SerializeField] private float leangthOfOpening = 1f;
+    [SerializeField] private Transform doorOne;
+    [SerializeField] private Transform doorTwo;
 
     private bool turnedOn;
-    private Vector3 lockPosition;
-    private Vector3 unlockPosition;
+    private Vector3 lockPositionOne;
+    private Vector3 unlockPositionOne;
+    private Vector3 lockPositionTwo;
+    private Vector3 unlockPositionTwo;
 
     private float timer;
 
@@ -20,11 +25,23 @@ public class Door : Device
 
     private void Start()
     {
-        lockPosition = transform.position;
-        unlockPosition = lockPosition + (Vector3.up * hightOfOpenDoor);
+        lockPositionOne = doorOne.position;
+        lockPositionTwo = doorTwo.position;
+        if (direction == OpeningDirection.up)
+        {
+            unlockPositionOne = lockPositionOne + (Vector3.up * leangthOfOpening);
+        }
+        else if (direction == OpeningDirection.side )
+        {
+            unlockPositionOne = lockPositionOne + (doorOne.rotation * Vector3.right * leangthOfOpening);
+        }else if(direction == OpeningDirection.twoSide)
+        {
+            unlockPositionOne = lockPositionOne + (doorOne.rotation * Vector3.right * leangthOfOpening);
+            unlockPositionTwo = lockPositionTwo + (doorTwo.rotation * Vector3.left * leangthOfOpening);
+        }
         controller.SetDevice(this);
     }
-    
+
     public override void TurnedOn(bool turnedOn)
     {
         if (this.turnedOn != turnedOn)
@@ -36,7 +53,7 @@ public class Door : Device
                 StartCoroutine(OpenDoor());
             }
         }
-        
+
 
     }
 
@@ -53,11 +70,15 @@ public class Door : Device
             {
                 timer -= Time.deltaTime / timeToOpen;
             }
-            transform.position = Vector3.Lerp(lockPosition, unlockPosition, timer);
+            doorOne.position = Vector3.Lerp(lockPositionOne, unlockPositionOne, timer);
+            if(direction == OpeningDirection.twoSide)
+            {
+                doorTwo.position = Vector3.Lerp(lockPositionTwo, unlockPositionTwo, timer);
+            }
             yield return null;
-        }while (timer > 0 && timer < 1);
+        } while (timer > 0 && timer < 1);
 
-        
+
 
         if (timer >= 1)
         {
@@ -68,5 +89,12 @@ public class Door : Device
             timer = 0;
         }
         OD_running = false;
+    }
+    [Serializable]
+    private enum OpeningDirection
+    {
+        up,
+        side,
+        twoSide
     }
 }
