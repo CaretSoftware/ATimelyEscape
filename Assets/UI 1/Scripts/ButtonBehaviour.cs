@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonBehaviour : MonoBehaviour//, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
+public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Image image;
     private Button button;
@@ -21,7 +21,7 @@ public class ButtonBehaviour : MonoBehaviour//, IPointerDownHandler, IPointerUpH
         image = gameObject.GetComponent<Image>();
         image.sprite = neutral;
     }
-/*
+
     // MouseHandler Methods
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -47,7 +47,7 @@ public class ButtonBehaviour : MonoBehaviour//, IPointerDownHandler, IPointerUpH
     public void OnPointerExit(PointerEventData eventData)
     {
         ToNeutralSprite();
-    }*/
+    }
 
     // Methods for change buttons sprites depending its state
     public void ToNeutralSprite()
