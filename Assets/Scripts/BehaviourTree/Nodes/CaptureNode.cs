@@ -21,7 +21,6 @@ public class CaptureNode : Node
         this.target = target;
         this.captureDistance = captureDistance;
         this.checkpoint = checkpoint;
-        //this.gameOverScreen = gameOverScreen;
         this.agentTransform = agentTransform;
     }
 
@@ -35,13 +34,12 @@ public class CaptureNode : Node
             Debug.Log("CAPTURED");
             if (!endScreenTriggered)
             {
-                //TODO update this when new checkpoint system is in place.
                 target.transform.position = checkpoint.position;
-                //gameOverScreen.FadeCanvasGroup(2);
                 endScreenTriggered = true;
             }
             agent.isStopped = true;
-            return NodeState.SUCCESS;
+            return NodeState.FAILURE;
+            //return NodeState.SUCCESS;
         }
         else
         {

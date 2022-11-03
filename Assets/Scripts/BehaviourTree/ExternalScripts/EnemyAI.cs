@@ -8,33 +8,28 @@ public class EnemyAI : MonoBehaviour
     private const float MovingToIdleMagnitude = 0.5f;
     private const float NavMeshRadiusOffstep = 5f;
 
-    [Header("AI Detection Range Variables")]
-    [SerializeField] [Range(1.0f, 10.0f)] private float chaseRange = 5.5f;
-    [SerializeField] [Range(0.5f, 3.5f)] private float captureRange = 2.0f;
-
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
     [SerializeField] private Transform checkpoint;
     [Tooltip("Assigning the same waypoints to multiple enemies may result in unwanted behaviour.")]
     [SerializeField] private Transform[] activityWaypoints;
 
-    [Header("Scene Tools")]
-    [SerializeField] private bool chaseRangeGizmo;
-    [SerializeField] private bool catchRangeGizmo;
-    [SerializeField] private bool waypointsGizmo;
-
-    private Transform agentCenterTransform;
-    private Transform playerTransform;
     private NavMeshAgent agent;
     private Animator animator;
     private Node topNode;
 
+    private EnemyFOV enemyFOV;
+    private Transform playerTransform;
+    private Transform agentCenterTransform;
     private Vector3 worldDeltaPosition;
     private Vector2 smoothDeltaPosition;
     private Vector2 deltaPosition;
     private Vector2 velocity;
 
     private float deltaMagnitude;
+    private float facingViewRange;
+    private float chaseRange;
+    private float captureRange;
     private float smooth;
     private float dx;
     private float dy;
@@ -44,6 +39,7 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        enemyFOV = GetComponent<EnemyFOV>();
         animator.applyRootMotion = true;
         agent.updatePosition = false;
         agent.updateRotation = true;
@@ -53,6 +49,9 @@ public class EnemyAI : MonoBehaviour
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
+        facingViewRange = enemyFOV.FacingViewRange;
+        chaseRange = enemyFOV.ChaseRadius;
+        captureRange = enemyFOV.CatchRadius;
         ConstructBehaviourTreePersonnel();
     }
 
@@ -94,9 +93,9 @@ public class EnemyAI : MonoBehaviour
     private void ConstructBehaviourTreePersonnel()
     {
         GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, gameObject, idleActivityTimer);
-        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform);
-        RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform);
-        RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform);
+        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
+        RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
+        RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
         CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, checkpoint, agentCenterTransform);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
@@ -114,73 +113,14 @@ public class EnemyAI : MonoBehaviour
         agent.nextPosition = rootPosition;
     }
 
-    private float radius;
-    [SerializeField][Range(0, 360)] private float angle;
-    private float corountineDelay = 0.2f;
-    private float distanceToTarget;
-    private bool playerDetected;
-
-    private Transform target;
-    private Vector3 directionToTarget;
-    private Collider[] rangeChecks;
-
-    [SerializeField] private LayerMask targetMask;
-    [SerializeField] private LayerMask obstacleMask;
-
-    private IEnumerator FOVRoutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(corountineDelay);
-            FOVCheck();
-        }
-    }
-
-    private void FOVCheck()
-    {
-        rangeChecks = Physics.OverlapSphere(transform.position, radius, targetMask);
-        if (rangeChecks.Length != 0)
-        {
-            target = rangeChecks[0].transform;
-            directionToTarget = (target.position - transform.position).normalized;
-            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
-            {
-                distanceToTarget = Vector3.Distance(transform.position, target.position);
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
-                    playerDetected = true;         
-            }
-            else
-                playerDetected = false;
-        }
-        else if (playerDetected)
-            playerDetected = false;
-    }
+    public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
 
     private void OnDrawGizmos()
     {
         if (agentCenterTransform != null)
         {
-            if (catchRangeGizmo)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
-            }
-            if (chaseRangeGizmo)
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(agentCenterTransform.position, chaseRange);
-            }
-            if (waypointsGizmo)
-            {
-                Gizmos.color = Color.cyan;
-                for (int i = 0; i < activityWaypoints.Length; i++)
-                {
-                    if (i + 1 < activityWaypoints.Length)
-                     Gizmos.DrawLine(activityWaypoints[i].position, activityWaypoints[i + 1].position);
-                    else Gizmos.DrawLine(activityWaypoints[i].position, activityWaypoints[0].position);
-                }
-            }
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
         }
-        else return;
     }
 }
