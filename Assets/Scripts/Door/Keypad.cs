@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Text;
 using System;
+using CallbackSystem;
+using EventSystem = UnityEngine.EventSystems.EventSystem;
 
 public class Keypad : DeviceController
 {
@@ -99,11 +100,12 @@ public class Keypad : DeviceController
             keyPadanimator.Play("WrongCode");
             screen.text = "";
         }
-      
+        
     }
 
     public void CloseKeyPad()
     {
+        CallbackSystem.EventSystem.Current.FireEvent(new CloseKeypadEvent(this.gameObject));
         gameObject.SetActive(false);
     }
 
