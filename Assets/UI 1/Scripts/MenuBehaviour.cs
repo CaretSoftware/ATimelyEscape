@@ -54,7 +54,7 @@ public class MenuBehaviour : MonoBehaviour
             Debug.Log("Error: Is Already Paused");
             return;
         }
-        Debug.Log("Info: Paused Game");
+        //Debug.Log("Info: Paused Game");
 
         pauseMenyAnimator.Play("Pause");
 
@@ -102,7 +102,7 @@ public class MenuBehaviour : MonoBehaviour
 
     public void UnPauseGame()
     {
-        Debug.Log("Info: Unpaused Game");
+        //Debug.Log("Info: Unpaused Game");
 
         pauseMenyAnimator.Play("UnPause");
 

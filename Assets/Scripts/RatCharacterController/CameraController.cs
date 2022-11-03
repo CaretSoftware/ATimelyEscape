@@ -66,13 +66,13 @@ public class CameraController : MonoBehaviour {
 
 	private void Update() {
 		
-		if (Time.timeScale <= Mathf.Epsilon) {
-			Cursor.visible = true;
-			Cursor.lockState = CursorLockMode.Confined;
-		} else {
-			Cursor.visible = false;
-			Cursor.lockState = CursorLockMode.Locked;
-		}
+		// if (Time.timeScale <= Mathf.Epsilon) {
+		// 	Cursor.visible = true;
+		// 	Cursor.lockState = CursorLockMode.Confined;
+		// } else {
+		// 	Cursor.visible = false;
+		// 	Cursor.lockState = CursorLockMode.Locked;
+		// }
 		
 		MoveCamera();
 	}
