@@ -43,13 +43,33 @@ public class Keypad : DeviceController
     private int previousKeypadIndex;
     private bool usingKeyboardDigits = true;
 
+    [Header("LockIcons")]
+    [SerializeField] private GameObject lockClosed;
+    [SerializeField] private GameObject lockOpen;
+
+    private Animator keyPadanimator;
+
+    private void Start()
+    {
+        keyPadanimator = gameObject.GetComponent<Animator>();
+
+        lockClosed.SetActive(true);
+        lockOpen.SetActive(false);
+    }
     public void KeypadDigitInput(int number)
     {
-        if (screen.text.ToCharArray().Length < maxDigits)
+        if (screen.text.Length < maxDigits)
         {
             StringBuilder sb = new();
             sb.Append(screen.text).Append(number);
             screen.text = sb.ToString();
+
+            /*
+            if(screen.text.Length == combination.ToString().Length)
+            {
+                KeypadEnterInput();
+            }
+            */
         }
     }
 
@@ -63,15 +83,28 @@ public class Keypad : DeviceController
 
     public void KeypadEnterInput()
     {
-        StringBuilder sb = new();
-        sb.Append("FUCK");
+        
         if (screen.text.Equals(combination.ToString()))
         {
-            sb.Append(" YEAH");
-            device.TurnedOn(true);
+            keyPadanimator.Play("RightCode");
+
+            //lockClosed.SetActive(false);
+            //lockOpen.SetActive(true);
+
+            //device.TurnedOn(true);
+            //Destroy(gameObject);
         }
-        sb.Append("!!!");
-        Debug.Log(sb.ToString());
+        else
+        {
+            keyPadanimator.Play("WrongCode");
+            screen.text = "";
+        }
+      
+    }
+
+    public void DestroyKeyPad()
+    {
+        Destroy(gameObject);
     }
 
     private void Update()
