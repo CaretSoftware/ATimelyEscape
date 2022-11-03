@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Text;
 using System;
+using CallbackSystem;
+using RatCharacterController;
+using EventSystem = UnityEngine.EventSystems.EventSystem;
 
 public class Keypad : DeviceController
 {
@@ -99,7 +101,12 @@ public class Keypad : DeviceController
             keyPadanimator.Play("WrongCode");
             screen.text = "";
         }
-      
+        
+    }
+
+    public void CloseKeyPad() {
+        CharacterInput.keypad = false;
+        gameObject.SetActive(false);
     }
 
     public void DestroyKeyPad()
