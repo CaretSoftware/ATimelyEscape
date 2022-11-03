@@ -11,9 +11,18 @@ public class MenuBehaviour : MonoBehaviour
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject player;
 
+    [SerializeField] private Slider slider;
+
+    private IEnumerator currentCoroutine;
+
     private bool paused = false;
 
-    [SerializeField] private Slider slider;
+    private Animator pauseMenyAnimator;
+
+    private void Start()
+    {
+        pauseMenyAnimator = gameObject.GetComponent<Animator>();
+    }
 
     private void Update()
     {
@@ -45,39 +54,90 @@ public class MenuBehaviour : MonoBehaviour
             Debug.Log("Error: Is Already Paused");
             return;
         }
+        Debug.Log("Info: Paused Game");
+
+        pauseMenyAnimator.Play("Pause");
 
         paused = true;
 
-        Time.timeScale = 0f;
+        if (currentCoroutine != null)
+            StopCoroutine(currentCoroutine);
+            
+        currentCoroutine = PauseTime();
+
+        StartCoroutine(currentCoroutine);
         
         if (slider == null)
             slider = GetComponentInChildren<Slider>();
-        
-        if (slider != null)
+
+        //if (slider != null)
             //slider.value = CameraController.Instance.MouseSensitivity;
 
-        Debug.Log("Info: Paused game- TimeScale " + Time.timeScale);
-
+        /*
         if (pauseMenu != null)
         {
             pauseMenu.SetActive(true);
         }
-        player.SetActive(false);
+        */
+        //player.SetActive(false);
+    }
+
+    private float pauseDelay = 1f;
+
+    // To Slow down gamepspeed with unscaledDeltaTime
+    private IEnumerator PauseTime()
+    {
+        float time = 0;
+        float startScale = Time.timeScale;
+
+        while(time < pauseDelay)
+        {
+            time += Time.unscaledDeltaTime;
+
+            Time.timeScale = Mathf.Lerp(startScale, 0, time /pauseDelay);
+
+            yield return null;
+        }
     }
 
     public void UnPauseGame()
     {
+        Debug.Log("Info: Unpaused Game");
+
+        pauseMenyAnimator.Play("UnPause");
+
         paused = false;
 
-        Time.timeScale = 1f;
+        if (currentCoroutine != null)
+            StopCoroutine(currentCoroutine);
 
-        Debug.Log("Info: Unpaused game - TimeScale " + Time.timeScale);
+        currentCoroutine = UnPauseTime();
 
+        StartCoroutine(currentCoroutine);
+
+        /*
         if (pauseMenu != null)
         {
             pauseMenu.SetActive(false);
         }
-        player.SetActive(true);
+        */
+        //player.SetActive(true);
+    }
+
+    // To speed up gamepspeed with unscaledDeltaTime 
+    private IEnumerator UnPauseTime()
+    {
+        float time = 0;
+        float startScale = Time.timeScale;
+
+        while (time < pauseDelay)
+        {
+            time += Time.unscaledDeltaTime;
+
+            Time.timeScale = Mathf.Lerp(startScale, 1, time / pauseDelay);
+
+            yield return null;
+        }
     }
 
     // Method to quit the application anytime
