@@ -102,6 +102,11 @@ public class Keypad : DeviceController
       
     }
 
+    public void CloseKeyPad()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void DestroyKeyPad()
     {
         Destroy(gameObject);
