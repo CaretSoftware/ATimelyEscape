@@ -53,11 +53,12 @@ public class Keypad : DeviceController
 
     private void Start()
     {
-        keyPadanimator = gameObject.GetComponent<Animator>();
+        keyPadanimator = GetComponent<Animator>();
 
         lockClosed.SetActive(true);
         lockOpen.SetActive(false);
     }
+    
     public void KeypadDigitInput(int number)
     {
         if (screen.text.Length < maxDigits)
@@ -83,12 +84,17 @@ public class Keypad : DeviceController
         }
     }
 
+    [SerializeField] private Door2 door;
+    [SerializeField] private Collider trigger;
     public void KeypadEnterInput()
     {
         
         if (screen.text.Equals(combination.ToString()))
         {
             keyPadanimator.Play("RightCode");
+
+            if(door != null) door.SetDoor(true);
+            if (trigger != null) trigger.enabled = false;
 
             //lockClosed.SetActive(false);
             //lockOpen.SetActive(true);
@@ -105,13 +111,15 @@ public class Keypad : DeviceController
     }
 
     public void CloseKeyPad() {
-        CharacterInput.keypad = false;
+        CharacterInput.KeypadInteraction(false);
         gameObject.SetActive(false);
     }
 
     public void DestroyKeyPad()
     {
-        Destroy(gameObject);
+        CharacterInput.KeypadInteraction(false);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -134,7 +142,7 @@ public class Keypad : DeviceController
         }
         if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
         {
-            // To change buttons Appearence to Pressed
+            // To change buttons Appearance to Pressed
             keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
             KeypadDeleteInput();
         }
@@ -142,7 +150,7 @@ public class Keypad : DeviceController
         {
             if (usingKeyboardDigits)
             {
-                // To change buttons Appearence to Pressed
+                // To change buttons Appearance to Pressed
                 keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
                 KeypadEnterInput();
             }

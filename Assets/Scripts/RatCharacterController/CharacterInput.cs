@@ -28,7 +28,7 @@ namespace RatCharacterController {
 
       //private static CharacterInput _instance;
       private bool _jumping;
-      public static bool keypad;
+      private static bool keypad;
 
       private void Start() {
          // _instance = this;
@@ -76,8 +76,16 @@ namespace RatCharacterController {
          _canTimeTravel = timeTravel;
       }
 
+      public static void KeypadInteraction(bool keypad) {
+         Debug.Log($"KeypadInteraction {keypad}");
+         CharacterInput.keypad = keypad;
+      }
+
       private void Update() {
-         if (keypad) return; // interacting with keypad
+         if (keypad) {
+            _characterAnimationController.InputVector(Vector2.zero);
+            return; // interacting with keypad
+         } 
          
          CameraInput();
          _characterAnimationController.SetGrounded(Grounded());
