@@ -60,15 +60,15 @@ namespace CallbackSystem {
         }
     }
 
-    //public class CloseKeypadEvent : Event
-    //{
-    //    public GameObject Keypad;
+    public class CloseKeypadEvent : Event
+    {
+        public GameObject Keypad;
 
-    //    public CloseKeypadEvent(GameObject keypad)
-    //    {
-    //        Keypad = keypad;
-    //    }
-    //}
+        public CloseKeypadEvent(GameObject keypad)
+        {
+            Keypad = keypad;
+        }
+    }
 
     public class CheckpointEvent : Event
     {
