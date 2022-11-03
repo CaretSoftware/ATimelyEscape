@@ -283,7 +283,7 @@ namespace RatCharacterController {
             if (keypad != null)
                keypad.Open();
 
-            this.keypad = true;
+            CharacterInput.keypad = true;
          }
       }
 
