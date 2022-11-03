@@ -28,7 +28,7 @@ namespace RatCharacterController {
 
       //private static CharacterInput _instance;
       private bool _jumping;
-      private bool keypad;
+      public static bool keypad;
 
       private void Start() {
          // _instance = this;
@@ -284,13 +284,7 @@ namespace RatCharacterController {
                keypad.Open();
 
             this.keypad = true;
-            CloseKeypadEvent.AddListener<CloseKeypadEvent>(ClosedKeypad);
          }
-      }
-
-      private void ClosedKeypad(CloseKeypadEvent closedKeypadEvent) {
-         CloseKeypadEvent.RemoveListener<CloseKeypadEvent>(ClosedKeypad);
-         keypad = false;
       }
 
       private void StopInteract(InputAction.CallbackContext context) {

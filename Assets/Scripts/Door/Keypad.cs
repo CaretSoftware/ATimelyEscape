@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System.Text;
 using System;
 using CallbackSystem;
+using RatCharacterController;
 using EventSystem = UnityEngine.EventSystems.EventSystem;
 
 public class Keypad : DeviceController
@@ -103,9 +104,8 @@ public class Keypad : DeviceController
         
     }
 
-    public void CloseKeyPad()
-    {
-        CallbackSystem.EventSystem.Current.FireEvent(new CloseKeypadEvent(this.gameObject));
+    public void CloseKeyPad() {
+        CharacterInput.keypad = false;
         gameObject.SetActive(false);
     }
 
