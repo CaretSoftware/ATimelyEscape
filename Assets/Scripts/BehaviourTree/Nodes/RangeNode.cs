@@ -19,7 +19,7 @@ public class RangeNode : Node
     public override NodeState Evaluate()
     {
         distance = Vector3.Distance(origin.position, target.position);
-        Debug.Log($"distance <= range: {distance <= range}, player detected: {fov.playerDetected}");
+        //Debug.Log($"distance <= range: {distance <= range}, player detected: {fov.playerDetected}");
         _nodeState = distance <= range || fov.playerDetected ? NodeState.SUCCESS : NodeState.FAILURE;
         return _nodeState;
     }
