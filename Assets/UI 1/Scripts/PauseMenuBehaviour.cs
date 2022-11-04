@@ -4,46 +4,38 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class MenuBehaviour : MonoBehaviour
+public class PauseMenuBehaviour : MonoBehaviour
 {
-    [SerializeField] private bool isPauseMenu = false;
-
-    [SerializeField] private GameObject pauseMenu;
-    [SerializeField] private GameObject player;
-
-    [SerializeField] private Slider slider;
 
     private IEnumerator currentCoroutine;
 
-    private bool paused = false;
+    private bool paused;
 
     private Animator pauseMenyAnimator;
+
+    private CameraController cameraController;
+
+    [SerializeField] private Slider slider;
 
     private void Start()
     {
         pauseMenyAnimator = gameObject.GetComponent<Animator>();
+
+        cameraController = CameraController.Instance;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !paused && isPauseMenu) {
+        if (Input.GetKeyDown(KeyCode.Escape) && !paused)
+        {
             PauseGame();
         }
-        else if (Input.GetKeyDown(KeyCode.Escape) && paused && isPauseMenu) {
+        else if (Input.GetKeyDown(KeyCode.Escape) && paused)
+        {
             UnPauseGame();
-        } 
-    }
-
-    // Method to load a scene by insert the index of wished scene presented in buildsettings
-    public void SelectScene(int sceneIndex)
-    {
-        if(sceneIndex < 0 || sceneIndex > SceneManager.sceneCount)
-        {
-            Debug.Log("Error: Not valid SceneIndex: " + sceneIndex);
-        }
-        else
-        {
-            SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
         }
     }
 
@@ -54,7 +46,9 @@ public class MenuBehaviour : MonoBehaviour
             Debug.Log("Error: Is Already Paused");
             return;
         }
-        //Debug.Log("Info: Paused Game");
+
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
 
         pauseMenyAnimator.Play("Pause");
 
@@ -62,16 +56,16 @@ public class MenuBehaviour : MonoBehaviour
 
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
-            
+
         currentCoroutine = PauseTime();
 
         StartCoroutine(currentCoroutine);
-        
+
         if (slider == null)
             slider = GetComponentInChildren<Slider>();
 
         //if (slider != null)
-            //slider.value = CameraController.Instance.MouseSensitivity;
+        //slider.value = CameraController.Instance.MouseSensitivity;
 
         /*
         if (pauseMenu != null)
@@ -90,11 +84,11 @@ public class MenuBehaviour : MonoBehaviour
         float time = 0;
         float startScale = Time.timeScale;
 
-        while(time < pauseDelay)
+        while (time < pauseDelay)
         {
             time += Time.unscaledDeltaTime;
 
-            Time.timeScale = Mathf.Lerp(startScale, 0, time /pauseDelay);
+            Time.timeScale = Mathf.Lerp(startScale, 0, time / pauseDelay);
 
             yield return null;
         }
@@ -107,6 +101,9 @@ public class MenuBehaviour : MonoBehaviour
         pauseMenyAnimator.Play("UnPause");
 
         paused = false;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
@@ -140,6 +137,19 @@ public class MenuBehaviour : MonoBehaviour
         }
     }
 
+    // Method to load a scene by insert the index of wished scene presented in buildsettings
+    public void SelectScene(int sceneIndex)
+    {
+        if (sceneIndex < 0 || sceneIndex > SceneManager.sceneCount)
+        {
+            Debug.Log("Error: Not valid SceneIndex: " + sceneIndex);
+        }
+        else
+        {
+            SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
+        }
+    }
+
     // Method to quit the application anytime
     public void QuitGame()
     {
@@ -148,5 +158,10 @@ public class MenuBehaviour : MonoBehaviour
         Time.timeScale = 1;
 
         Application.Quit();
+    }
+
+    public bool isPaused()
+    {
+        return paused;
     }
 }
