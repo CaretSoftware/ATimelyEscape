@@ -6,49 +6,54 @@ using UnityEngine.AI;
 public class GoToActivityNode : Node
 {
     private static DummyBehaviour Instance;
-    private const float DestinationOffset = 0.05f;
+    private const float DestinationOffset = 0.3f;
 
+    private System.Random random = new System.Random();
     private GameObject GO = new GameObject();
+    private GameObject dummyBehaviourParent;
     private Transform[] waypoints;
     private NavMeshAgent agent;
+    private Animator animator;
 
-    private bool coroutineRunning;
-    private bool timerDone;
+    private float idleTimer;
+    private float destinationDistance;
     private int targetIndex = 0;
-    private float idleTime;
 
+    private bool isCoroutineRunning;
+    private bool isTimerDone;
 
-    public GoToActivityNode(Transform[] waypoints, NavMeshAgent agent, Animator animator, float idleTime)
+    
+    public GoToActivityNode(Transform[] waypoints, NavMeshAgent agent, Animator animator, GameObject parentObject, float idleTimer)
     {
+        dummyBehaviourParent = parentObject;
         this.waypoints = waypoints;
         this.agent = agent;
-        this.idleTime = idleTime;
+        this.animator = animator;
+        this.idleTimer = idleTimer;
         Instance = GO.AddComponent<DummyBehaviour>();
+        GO.transform.parent = dummyBehaviourParent.transform;
     }
 
     public override NodeState Evaluate()
     {
-        float dist = Vector3.Distance(waypoints[targetIndex].position, agent.transform.position);
+        destinationDistance = Vector3.Distance(waypoints[targetIndex].position, agent.transform.position);
 
-        if (dist > DestinationOffset)
+        if (destinationDistance > DestinationOffset)
         {
-            timerDone = false;
+            isTimerDone = false;
             agent.isStopped = false;
             agent.SetDestination(waypoints[targetIndex].position);
             return NodeState.RUNNING;
         }
-        else if (dist < DestinationOffset && !timerDone)
+        else if (destinationDistance < DestinationOffset && !isTimerDone)
         {
-            if(!coroutineRunning)
+            if (!isCoroutineRunning)
                 Instance.StartCoroutine(Timer());
             return NodeState.RUNNING;
         }
         else
         {
-            targetIndex++;
-            if (targetIndex == waypoints.Length)
-                targetIndex = 0;
-
+            GenerateRandomTargetIndex(waypoints.Length - 1);
             agent.isStopped = true;
             return NodeState.SUCCESS;
         }
@@ -56,10 +61,22 @@ public class GoToActivityNode : Node
 
     private IEnumerator Timer()
     {
-        coroutineRunning = true;
-        yield return new WaitForSeconds(idleTime);
-        coroutineRunning = false;
-        timerDone = true;
+        isCoroutineRunning = true;
+        animator.SetBool("move", false);
+        yield return new WaitForSeconds(idleTimer);
+        animator.SetBool("move", true);
+        isCoroutineRunning = false;
+        isTimerDone = true;
+    }
+
+    private void GenerateRandomTargetIndex(int max)
+    {
+        int value = random.Next(0, max);
+        if (value == targetIndex && value != max)
+            value++;
+        else if (value == targetIndex && value == max)
+            value--;
+        targetIndex = value;
     }
 
     private class DummyBehaviour : MonoBehaviour { }
