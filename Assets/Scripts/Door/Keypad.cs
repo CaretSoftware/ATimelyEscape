@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Text;
 using System;
+using CallbackSystem;
+using RatCharacterController;
+using EventSystem = UnityEngine.EventSystems.EventSystem;
 
 public class Keypad : DeviceController
 {
@@ -43,13 +45,34 @@ public class Keypad : DeviceController
     private int previousKeypadIndex;
     private bool usingKeyboardDigits = true;
 
+    [Header("LockIcons")]
+    [SerializeField] private GameObject lockClosed;
+    [SerializeField] private GameObject lockOpen;
+
+    private Animator keyPadanimator;
+
+    private void Start()
+    {
+        keyPadanimator = GetComponent<Animator>();
+
+        lockClosed.SetActive(true);
+        lockOpen.SetActive(false);
+    }
+    
     public void KeypadDigitInput(int number)
     {
-        if (screen.text.ToCharArray().Length < maxDigits)
+        if (screen.text.Length < maxDigits)
         {
             StringBuilder sb = new();
             sb.Append(screen.text).Append(number);
             screen.text = sb.ToString();
+
+            /*
+            if(screen.text.Length == combination.ToString().Length)
+            {
+                KeypadEnterInput();
+            }
+            */
         }
     }
 
@@ -61,17 +84,42 @@ public class Keypad : DeviceController
         }
     }
 
+    [SerializeField] private Door2 door;
+    [SerializeField] private Collider trigger;
     public void KeypadEnterInput()
     {
-        StringBuilder sb = new();
-        sb.Append("FUCK");
+        
         if (screen.text.Equals(combination.ToString()))
         {
-            sb.Append(" YEAH");
-            device.TurnedOn(true);
+            keyPadanimator.Play("RightCode");
+
+            if(door != null) door.SetDoor(true);
+            if (trigger != null) trigger.enabled = false;
+
+            //lockClosed.SetActive(false);
+            //lockOpen.SetActive(true);
+
+            //device.TurnedOn(true);
+            //Destroy(gameObject);
         }
-        sb.Append("!!!");
-        Debug.Log(sb.ToString());
+        else
+        {
+            keyPadanimator.Play("WrongCode");
+            screen.text = "";
+        }
+        
+    }
+
+    public void CloseKeyPad() {
+        CharacterInput.KeypadInteraction(false);
+        gameObject.SetActive(false);
+    }
+
+    public void DestroyKeyPad()
+    {
+        CharacterInput.KeypadInteraction(false);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -94,12 +142,16 @@ public class Keypad : DeviceController
         }
         if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
         {
+            // To change buttons Appearance to Pressed
+            keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
             KeypadDeleteInput();
         }
         else if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
             if (usingKeyboardDigits)
             {
+                // To change buttons Appearance to Pressed
+                keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
                 KeypadEnterInput();
             }
         }
@@ -124,6 +176,9 @@ public class Keypad : DeviceController
         }
         if (currentKeypadKeysIndex != previousKeypadIndex)
         {
+            // To change previousbuttons Appearence to Neutral
+            keypadKeys[previousKeypadIndex].gameObject.GetComponent<ButtonBehaviour>().ToNeutralSprite();
+
             if (usingKeyboardDigits)
             {
                 currentKeypadKeysIndex = previousKeypadIndex;
@@ -133,13 +188,15 @@ public class Keypad : DeviceController
                 previousKeypadIndex = currentKeypadKeysIndex;
             }
             keypadKeys[currentKeypadKeysIndex].Select();
+
+            // To change buttons Appearence to Selected
+            keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToSelectedSprite();
+
             usingKeyboardDigits = false;
         }
         if (usingKeyboardDigits)
         {
             EventSystem.current.SetSelectedGameObject(null);
         }
-        
-
     }
 }

@@ -1,8 +1,6 @@
 using System;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour {
 	private Transform _camera;
@@ -68,13 +66,13 @@ public class CameraController : MonoBehaviour {
 
 	private void Update() {
 		
-		if (Time.timeScale <= Mathf.Epsilon) {
-			Cursor.visible = true;
-			Cursor.lockState = CursorLockMode.Confined;
-		} else {
-			Cursor.visible = false;
-			Cursor.lockState = CursorLockMode.Locked;
-		}
+		// if (Time.timeScale <= Mathf.Epsilon) {
+		// 	Cursor.visible = true;
+		// 	Cursor.lockState = CursorLockMode.Confined;
+		// } else {
+		// 	Cursor.visible = false;
+		// 	Cursor.lockState = CursorLockMode.Locked;
+		// }
 		
 		MoveCamera();
 	}

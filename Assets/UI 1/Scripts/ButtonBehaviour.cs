@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Image image;
+    private Button button;
 
     [SerializeField] private Sprite neutral, pressed, selected;
     // [SerializeField] private AudioClip compressClip, unCompressClip;
@@ -16,19 +17,21 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     private void Start()
     {
+        button = gameObject.GetComponent<Button>();
         image = gameObject.GetComponent<Image>();
         image.sprite = neutral;
     }
 
+    // MouseHandler Methods
     public void OnPointerDown(PointerEventData eventData)
     {
-        image.sprite = pressed;
+        ToPressedSprite();
     }
 
     // Method when user has released the mousebutton
     public void OnPointerUp(PointerEventData eventData)
     {
-        image.sprite = neutral;
+        ToSelectedSprite();
     }
 
     public void OnClicked()
@@ -38,11 +41,27 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        image.sprite = selected;
+        ToSelectedSprite();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        ToNeutralSprite();
+    }
+
+    // Methods for change buttons sprites depending its state
+    public void ToNeutralSprite()
+    {
         image.sprite = neutral;
+    }
+
+    public void ToSelectedSprite()
+    {
+        image.sprite = selected;
+    }
+
+    public void ToPressedSprite()
+    {
+        image.sprite = pressed;
     }
 }
