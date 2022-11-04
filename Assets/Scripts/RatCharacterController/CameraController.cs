@@ -42,6 +42,8 @@ public class CameraController : MonoBehaviour {
 	private Vector2 _thumbstickDelta;
 	public static CameraController Instance { get; private set; }
 
+	private PauseMenuBehaviour pauseMenuBehaviour;
+
 	private void Awake() {
 		if (Instance == null)
 			Instance = this;
@@ -59,7 +61,7 @@ public class CameraController : MonoBehaviour {
 		_lerpOffset = cameraOffset;
 		_cameraPos = transform.position;
 		_camera.position = _cameraPos + cameraOffset;
-		
+
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
 	}

@@ -21,7 +21,7 @@ namespace CallbackSystem
             Cursor.visible = open;
             Cursor.lockState = open ? CursorLockMode.Confined : CursorLockMode.Locked;
             keypad.SetActive(open); 
-            RatCharacterController.CharacterInput.KeypadInteraction(open);
+            RatCharacterController.CharacterInput.IsPaused(open);
         }
 
         public void Close() { Open(false); }
