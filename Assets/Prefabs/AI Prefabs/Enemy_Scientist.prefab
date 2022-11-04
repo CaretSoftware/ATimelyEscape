@@ -2357,6 +2357,7 @@ GameObject:
   - component: {fileID: 8397902287378911421}
   - component: {fileID: 8397902287378911423}
   - component: {fileID: 8397902287378911420}
+  - component: {fileID: 8397902286524401276}
   m_Layer: 0
   m_Name: Enemy_Scientist
   m_TagString: Enemy
@@ -2479,12 +2480,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f921e18b7ec48e40b91ac8d626f7b33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chaseRange: 5
-  captureRange: 1.5
-  idleActivityTimer: 5
+  idleActivityTimer: 2
   checkpoint: {fileID: 0}
-  activityWaypoints: []
-  drawGizmos: 0
+  activityWaypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &8397902286524401276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8667809098569639256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110c276f6aa4f104b80ea8ab42829b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 2147483648
+  searchDelay: 0.2
+  Angle: 90
+  FacingViewRange: 10
+  ChaseRadius: 3
+  CatchRadius: 2
+  player: {fileID: 0}
 --- !u!1 &8855547306159731068
 GameObject:
   m_ObjectHideFlags: 0
