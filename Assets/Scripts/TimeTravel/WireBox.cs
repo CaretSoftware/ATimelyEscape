@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class WireBox : MonoBehaviour {
     private LineRenderer lRenderer;
+    private float scale = 1f;
 
     private Vector3[] linePositions = new[] {
         new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(-0.5f, 0.5f, -0.5f), new Vector3(-0.5f, 0.5f, 0.5f),
@@ -25,8 +26,31 @@ public class WireBox : MonoBehaviour {
         }
     }
 
-    public void SetLinePositions() {
+    public void SetLinePositions(float scale = 1f) {
         if (lRenderer == null) lRenderer = GetComponent<LineRenderer>();
+
+        if (scale != this.scale) {
+            linePositions = new[] {
+                new Vector3(-0.5f * scale, -0.5f * scale, -0.5f * scale),
+                new Vector3(-0.5f * scale, 0.5f * scale, -0.5f * scale),
+                new Vector3(-0.5f * scale, 0.5f * scale, 0.5f * scale),
+                new Vector3(-0.5f * scale, -0.5f * scale, 0.5f * scale),
+                new Vector3(0.5f * scale, -0.5f * scale, 0.5f * scale),
+                new Vector3(0.5f * scale, 0.5f * scale, 0.5f * scale),
+                new Vector3(0.5f * scale, 0.5f * scale, -0.5f * scale),
+                new Vector3(0.5f * scale, -0.5f * scale, -0.5f * scale),
+                new Vector3(-0.5f * scale, -0.5f * scale, -0.5f * scale),
+                new Vector3(-0.5f * scale, -0.5f * scale, 0.5f * scale),
+                new Vector3(-0.5f * scale, 0.5f * scale, 0.5f * scale),
+                new Vector3(0.5f * scale, 0.5f * scale, 0.5f * scale),
+                new Vector3(0.5f * scale, -0.5f * scale, 0.5f * scale),
+                new Vector3(0.5f * scale, -0.5f * scale, -0.5f * scale),
+                new Vector3(0.5f * scale, 0.5f * scale, -0.5f * scale),
+                new Vector3(-0.5f * scale, 0.5f * scale, -0.5f * scale)
+            };
+            this.scale = scale;
+        }
+
         lRenderer.positionCount = 16;
         lRenderer.SetPositions(linePositions);
         lRenderer.endWidth = 0.1f;
