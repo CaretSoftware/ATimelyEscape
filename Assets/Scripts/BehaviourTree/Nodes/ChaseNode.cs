@@ -5,25 +5,28 @@ using UnityEngine.AI;
 
 public class ChaseNode : Node
 {
-    private const float triggerDistance = 0.2f;
 
+    private NavMeshAgent agent;
     private Transform target;
     private Transform agentTransform;
-    private NavMeshAgent agent;
 
-    public ChaseNode(Transform target, NavMeshAgent agent, Transform agentTransform)
+    private float destinationDistance;
+    private float triggerDistance;
+
+    public ChaseNode(Transform target, NavMeshAgent agent, Transform agentTransform, float triggerDistance)
     {
         this.target = target;
         this.agent = agent;
         this.agentTransform = agentTransform;
+        this.triggerDistance = triggerDistance;
     }
 
     public override NodeState Evaluate()
     {
-        Debug.Log("Chasing");
-        float dist = Vector3.Distance(target.position, agentTransform.position);
-        if(dist > triggerDistance)
+        destinationDistance = Vector3.Distance(target.position, agentTransform.position);
+        if(destinationDistance > triggerDistance)
         {
+            Debug.Log("Chasing");
             agent.isStopped = false;
             agent.SetDestination(target.position);
             return NodeState.RUNNING;
