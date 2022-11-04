@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using RatCharacterController;
 
 public class PauseMenuBehaviour : MonoBehaviour
 {
@@ -46,6 +47,8 @@ public class PauseMenuBehaviour : MonoBehaviour
             Debug.Log("Error: Is Already Paused");
             return;
         }
+
+        CharacterInput.IsPaused(true);
 
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
@@ -101,6 +104,8 @@ public class PauseMenuBehaviour : MonoBehaviour
         pauseMenyAnimator.Play("UnPause");
 
         paused = false;
+
+        CharacterInput.IsPaused(false);
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
