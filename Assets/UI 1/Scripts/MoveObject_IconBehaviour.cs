@@ -13,8 +13,8 @@ public class MoveObject_IconBehaviour : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        maxDistance = gameObject.GetComponent<SphereCollider>().radius;
-        canvasGroup = gameObject.GetComponent<CanvasGroup>();
+        maxDistance = GetComponent<SphereCollider>().radius * transform.parent.localScale.x;
+        canvasGroup = GetComponent<CanvasGroup>();
 
         canvasGroup.alpha = 0;
     }
@@ -23,7 +23,7 @@ public class MoveObject_IconBehaviour : MonoBehaviour
     {
         if (player_ != null)
         {
-            canvasGroup.alpha = 1 - (Vector3.Distance(player_.position, gameObject.transform.position) / maxDistance);
+            canvasGroup.alpha = 1 - (Vector3.Distance(player_.position, transform.position) / maxDistance);
         }
         else
         {
