@@ -49,14 +49,13 @@ public class CubeSideActivator : MonoBehaviour {
 			}
 
 			for (int obj = 0; obj < objects.Length; obj++) {
-				objects[obj].SetActive(obj == closestSide);	// set active if it’s the closest side
+				//objects[obj].SetActive(obj == closestSide);	// set active if it’s the closest side
+
+				if (obj == closestSide)
+					objects[obj].GetComponent<FadeScript>().FadeIn();
+				else
+					objects[obj].GetComponent<FadeScript>().FadeOut();
 			}
-			/*
-			if (obj == closestSide)
-				objects[obj].GetComponent<FadeScript>().FadeIn();
-			else
-				objects[obj].GetComponent<FadeScript>().FadeOut();
-			*/
 		}
 	}
 

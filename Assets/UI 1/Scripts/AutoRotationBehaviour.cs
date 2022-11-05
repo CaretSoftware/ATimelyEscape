@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotateKugghjul : MonoBehaviour
+public class AutoRotationBehaviour : MonoBehaviour
 {
 
     [SerializeField] private float maxSpeed = 0.5f;
