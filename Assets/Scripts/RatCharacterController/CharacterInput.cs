@@ -28,7 +28,7 @@ namespace RatCharacterController {
 
       //private static CharacterInput _instance;
       private bool _jumping;
-      private static bool keypad;
+      private static bool paused;
 
       private void Start() {
          // _instance = this;
@@ -76,13 +76,13 @@ namespace RatCharacterController {
          _canTimeTravel = timeTravel;
       }
 
-      public static void KeypadInteraction(bool keypad) {
-         Debug.Log($"KeypadInteraction {keypad}");
-         CharacterInput.keypad = keypad;
+      public static void IsPaused(bool paused) {
+         Debug.Log($"KeypadInteraction {paused}");
+         CharacterInput.paused = paused;
       }
 
       private void Update() {
-         if (keypad) {
+         if (paused) {
             _characterAnimationController.InputVector(Vector2.zero);
             return; // interacting with keypad
          } 
@@ -291,7 +291,7 @@ namespace RatCharacterController {
             if (keypad != null)
                keypad.Open();
 
-            CharacterInput.keypad = true;
+            CharacterInput.paused = true;
          }
       }
 

@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 3398390766729623961}
   - component: {fileID: 3398390766729623966}
   - component: {fileID: 3398390766729623967}
-  - component: {fileID: 3398390766729623963}
+  - component: {fileID: 3059687622606319849}
   - component: {fileID: 6185123423192628997}
   m_Layer: 5
   m_Name: CanvasPauseMenu
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &3398390766729623963
+--- !u!114 &3059687622606319849
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -402,12 +402,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3398390766729623964}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 962e4c89f5ca2d1408b8c754ac46aba9, type: 3}
+  m_Script: {fileID: 11500000, guid: 159b31be1d2a48b4bac0326c8ca285a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPauseMenu: 1
-  pauseMenu: {fileID: 3398390766700894471}
-  player: {fileID: 0}
   slider: {fileID: 3398390766411166085}
 --- !u!95 &6185123423192628997
 Animator:
@@ -1098,7 +1095,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 3398390766729623963}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuBehaviour, Assembly-CSharp
         m_MethodName: UnPauseGame
         m_Mode: 1
@@ -1384,7 +1381,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3398390766729623963}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuBehaviour, Assembly-CSharp
         m_MethodName: SelectScene
         m_Mode: 3
@@ -1657,7 +1654,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 3398390766729623963}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MenuBehaviour, Assembly-CSharp
         m_MethodName: PauseGame
         m_Mode: 1
