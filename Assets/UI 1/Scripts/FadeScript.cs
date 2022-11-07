@@ -6,9 +6,8 @@ using UnityEngine.UI;
 public class FadeScript : MonoBehaviour
 {
     [SerializeField] private float delay = 0.5f;
-    [SerializeField] private float alpha;
 
-    private bool faded = false;
+    private bool faded;
 
     private CanvasGroup canvasGroup;
 
@@ -17,12 +16,15 @@ public class FadeScript : MonoBehaviour
     private void Start()
     {
         canvasGroup = gameObject.GetComponent<CanvasGroup>();
-        canvasGroup.alpha = 1;
-    }
-
-    private void Update()
-    {
-        alpha = canvasGroup.alpha;
+        
+        if(canvasGroup.alpha > 0)
+        {
+            faded = false;
+        }
+        else
+        {
+            faded = true;
+        }
     }
 
     public void FadeIn()

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveObject_IconBehaviour : MonoBehaviour
+public class IconBehaviour : MonoBehaviour
 {
     private float maxDistance = 0;
 

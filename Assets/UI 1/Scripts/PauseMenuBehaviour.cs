@@ -7,7 +7,6 @@ using RatCharacterController;
 
 public class PauseMenuBehaviour : MonoBehaviour
 {
-
     private IEnumerator currentCoroutine;
 
     private bool paused;
@@ -67,16 +66,8 @@ public class PauseMenuBehaviour : MonoBehaviour
         if (slider == null)
             slider = GetComponentInChildren<Slider>();
 
-        //if (slider != null)
-        //slider.value = CameraController.Instance.MouseSensitivity;
-
-        /*
-        if (pauseMenu != null)
-        {
-            pauseMenu.SetActive(true);
-        }
-        */
-        //player.SetActive(false);
+        if (slider != null)
+            slider.value = CameraController.Instance.MouseSensitivity;
     }
 
     private float pauseDelay = 1f;
@@ -116,14 +107,6 @@ public class PauseMenuBehaviour : MonoBehaviour
         currentCoroutine = UnPauseTime();
 
         StartCoroutine(currentCoroutine);
-
-        /*
-        if (pauseMenu != null)
-        {
-            pauseMenu.SetActive(false);
-        }
-        */
-        //player.SetActive(true);
     }
 
     // To speed up gamepspeed with unscaledDeltaTime 
