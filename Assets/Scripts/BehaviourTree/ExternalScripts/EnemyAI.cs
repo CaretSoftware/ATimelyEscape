@@ -7,6 +7,7 @@ public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
     private const float NavMeshRadiusOffstep = 10f;
+    private const float scareFrequency = 0.3f;
 
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
@@ -29,6 +30,7 @@ public class EnemyAI : MonoBehaviour
     private float deltaMagnitude;
     private float chaseRange;
     private float captureRange;
+    private float scareTimer = 0;
     private float smooth;
     private float dx;
     private float dy;
@@ -131,6 +133,7 @@ public class EnemyAI : MonoBehaviour
                 agent.transform.position = hit.position;
         }
     }
+
     private void OnDrawGizmos()
     {
         if (agentCenterTransform != null)
@@ -139,4 +142,18 @@ public class EnemyAI : MonoBehaviour
             Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
         }
     }
+
+    /*
+private void InfrequentUpdate()
+{
+    if(scareTimer > scareFrequency)
+    {
+        CheckOutOfBounds();
+        scareTimer = 0;
+    }
+    else
+        scareTimer += Time.deltaTime; 
+}
+*/
+
 }
