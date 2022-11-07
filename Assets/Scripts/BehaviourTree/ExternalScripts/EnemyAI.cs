@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
-    private const float NavMeshRadiusOffstep = 5f;
+    private const float NavMeshRadiusOffstep = 10f;
 
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
@@ -27,7 +27,6 @@ public class EnemyAI : MonoBehaviour
     private Vector2 velocity;
 
     private float deltaMagnitude;
-    private float facingViewRange;
     private float chaseRange;
     private float captureRange;
     private float smooth;
@@ -49,7 +48,6 @@ public class EnemyAI : MonoBehaviour
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
-        facingViewRange = enemyFOV.FacingViewRange;
         chaseRange = enemyFOV.ChaseRadius;
         captureRange = enemyFOV.CatchRadius;
         ConstructBehaviourTreePersonnel();
@@ -61,6 +59,7 @@ public class EnemyAI : MonoBehaviour
         topNode.Evaluate();
         if (topNode.nodeState == NodeState.FAILURE)
             agent.isStopped = true;
+        CheckOutOfBounds();
     }
 
     private void SynchronizeAnimatorAndAgent()
@@ -86,8 +85,10 @@ public class EnemyAI : MonoBehaviour
         animator.SetFloat("vely", velocity.y);
 
         deltaMagnitude = worldDeltaPosition.magnitude;
+        
         if (deltaMagnitude > agent.radius / NavMeshRadiusOffstep)
             transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);
+        
     }
 
     private void ConstructBehaviourTreePersonnel()
@@ -115,6 +116,21 @@ public class EnemyAI : MonoBehaviour
 
     public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
 
+    float onMeshThreshold = 3;
+    NavMeshHit hit;
+
+    //if false, agent is out of bounds of the NavMesh.
+    private void CheckOutOfBounds()
+    {
+        if (NavMesh.SamplePosition(agent.transform.position, out hit, onMeshThreshold, NavMesh.AllAreas))
+        {
+            if (Mathf.Approximately(agent.transform.position.x, hit.position.x) &&
+                Mathf.Approximately(agent.transform.position.z, hit.position.z))
+                return;
+            else
+                agent.transform.position = hit.position;
+        }
+    }
     private void OnDrawGizmos()
     {
         if (agentCenterTransform != null)

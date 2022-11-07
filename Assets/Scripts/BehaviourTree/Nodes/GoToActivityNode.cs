@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class GoToActivityNode : Node
 {
     private static DummyBehaviour Instance;
-    private const float DestinationOffset = 0.3f;
+    private const float DestinationOffset = 0.5f;
 
     private System.Random random = new System.Random();
     private GameObject GO = new GameObject();
@@ -18,6 +18,7 @@ public class GoToActivityNode : Node
     private float idleTimer;
     private float destinationDistance;
     private int targetIndex = 0;
+    private int prevIndex;
 
     private bool isCoroutineRunning;
     private bool isTimerDone;
@@ -41,22 +42,33 @@ public class GoToActivityNode : Node
         if (destinationDistance > DestinationOffset)
         {
             isTimerDone = false;
+            facingTarget = false;
             agent.isStopped = false;
             agent.SetDestination(waypoints[targetIndex].position);
             return NodeState.RUNNING;
         }
         else if (destinationDistance < DestinationOffset && !isTimerDone)
         {
-            if (!isCoroutineRunning)
-                Instance.StartCoroutine(Timer());
+                if (!isCoroutineRunning)
+                    Instance.StartCoroutine(Timer());              
             return NodeState.RUNNING;
         }
         else
         {
-            GenerateRandomTargetIndex(waypoints.Length - 1);
+            GenerateRandomTargetIndex(waypoints.Length);
+            prevIndex = targetIndex;
             agent.isStopped = true;
             return NodeState.SUCCESS;
         }
+    }
+
+    private void GenerateRandomTargetIndex(int max)
+    {
+        int value = random.Next(0, max);
+        if (value == prevIndex)
+            GenerateRandomTargetIndex(max);
+        else
+            targetIndex = value;
     }
 
     private IEnumerator Timer()
@@ -69,15 +81,28 @@ public class GoToActivityNode : Node
         isTimerDone = true;
     }
 
-    private void GenerateRandomTargetIndex(int max)
+    private Vector3 targetRotation;
+    private float faceActivityTimer;
+    private float elapsedTime;
+    private bool facingTarget;
+
+    /*
+    private IEnumerator FaceTarget()
     {
-        int value = random.Next(0, max);
-        if (value == targetIndex && value != max)
-            value++;
-        else if (value == targetIndex && value == max)
-            value--;
-        targetIndex = value;
+        elapsedTime = 0;
+        targetRotation = waypoints[targetIndex].forward;
+        Quaternion rotation = Quaternion.LookRotation(targetRotation);
+
+        while (elapsedTime < faceActivityTimer)
+        {
+            agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, rotation, (elapsedTime / faceActivityTimer));
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        yield return 0;
+        facingTarget = true;
     }
+    */
 
     private class DummyBehaviour : MonoBehaviour { }
 }
