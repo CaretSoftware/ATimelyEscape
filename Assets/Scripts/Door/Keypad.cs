@@ -96,11 +96,7 @@ public class Keypad : DeviceController
             if(door != null) door.SetDoor(true);
             if (trigger != null) trigger.enabled = false;
 
-            //lockClosed.SetActive(false);
-            //lockOpen.SetActive(true);
-
             //device.TurnedOn(true);
-            //Destroy(gameObject);
         }
         else
         {
@@ -111,14 +107,13 @@ public class Keypad : DeviceController
     }
 
     public void CloseKeyPad() {
-        CharacterInput.KeypadInteraction(false);
+        CharacterInput.IsPaused(false);
         gameObject.SetActive(false);
     }
 
     public void DestroyKeyPad()
     {
-        CharacterInput.KeypadInteraction(false);
-        //Destroy(gameObject);
+        CharacterInput.IsPaused(false);
         gameObject.SetActive(false);
     }
 

@@ -5,6 +5,7 @@ using System.Linq;
 using CallbackSystem;
 using UnityEngine;
 using StateMachines;
+using UnityEngine.AI;
 
 public class TimeTravelObject : MonoBehaviour {
     private TimeTravelObject pastSelf;
@@ -12,22 +13,29 @@ public class TimeTravelObject : MonoBehaviour {
     private TimeTravelObjectManager manager;
     public Rigidbody Rigidbody { get; private set; }
     private StateMachine stateMachine;
-    public State CurrentState => stateMachine.CurrentState;
-    private Renderer mRenderer;
-    private Renderer[] renderers;
+    private List<Renderer> renderers;
+
+    private int numColliders = 0;
     public GameObject previewBoxObject { get; set; }
     public WireBox wireBox { get; set; }
+    public bool IsActive { get; private set; }
+
+    private List<Component> allComponents;
+
+    private List<GameObject> nonMovableColliderObjects = new List<GameObject>();
+    private GameObject nonMovableCollidersParent;
 
 
     public void SetUpTimeTravelObject(TimeTravelObjectManager manager, TimeTravelObject pastSelf = null) {
         this.manager = manager;
+        allComponents = GetComponents<Component>().ToList();
+        allComponents.AddRange(GetComponentsInChildren<Component>());
+
 
         switch (manager.ObjectState) {
-            case TimeTravelObjectState.MeshChanging: break;
-            case TimeTravelObjectState.MeshChangingMoving: break;
-            case TimeTravelObjectState.DecalMoving: break;
-
-            case TimeTravelObjectState.MeshChangingPlayerMove:
+            case TimeTravelObjectState.PrefabChanging:
+                break;
+            case TimeTravelObjectState.PrefabChangingPlayerMove:
                 this.pastSelf = pastSelf;
                 Rigidbody = GetComponent<Rigidbody>();
                 stateMachine = new StateMachine(this,
@@ -49,10 +57,8 @@ public class TimeTravelObject : MonoBehaviour {
                 DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
                 break;
 
-            case TimeTravelObjectState.Decal:
-            case TimeTravelObjectState.DecalSwitchingMaterial:
-            case TimeTravelObjectState.MeshSwitchingMaterial:
-                renderers = manager.Renderers;
+            case TimeTravelObjectState.SwitchingMaterial:
+                renderers = manager.Renderers.ToList();
                 CheckRenderersAndMaterialsMatch();
                 break;
 
@@ -63,14 +69,14 @@ public class TimeTravelObject : MonoBehaviour {
 
     private void CheckRenderersAndMaterialsMatch() {
         string errorMessage = "";
-        if (manager.PastMaterials.Length != renderers.Length) errorMessage += $"[{nameof(manager.PastMaterials)}";
-        if (manager.PresentMaterials.Length != renderers.Length) {
+        if (manager.PastMaterials.Length != renderers.Count) errorMessage += $"[{nameof(manager.PastMaterials)}";
+        if (manager.PresentMaterials.Length != renderers.Count) {
             if (!errorMessage.Contains(nameof(manager.PastMaterials)))
                 errorMessage += $"[{nameof(manager.PresentMaterials)}";
             else errorMessage += $", {nameof(manager.PresentMaterials)}";
         }
 
-        if (manager.FutureMaterials.Length != renderers.Length) {
+        if (manager.FutureMaterials.Length != renderers.Count) {
             if (!errorMessage.Contains(nameof(manager.PastMaterials)) &&
                 !errorMessage.Contains(nameof(manager.PresentMaterials)))
                 errorMessage = $"[{nameof(manager.FutureMaterials)}";
@@ -80,7 +86,7 @@ public class TimeTravelObject : MonoBehaviour {
         if (errorMessage.Length > 1) {
             errorMessage +=
                 $"] material array(s) do not match the length of the renderer array on {nameof(TimeTravelObjectManager)}: {manager.name}";
-            Debug.LogWarning("CHRISTOFFER THE ERROR IS HERE!", manager.gameObject);
+            /*Debug.LogWarning("CHRISTOFFER THE ERROR IS HERE!", manager.gameObject);*/
             throw new ArgumentException(errorMessage);
         }
     }
@@ -88,21 +94,47 @@ public class TimeTravelObject : MonoBehaviour {
     public void UpdateMaterials(TimeTravelPeriod period) {
         switch (period) {
             case TimeTravelPeriod.Past:
-                for (int i = 0; i < renderers.Length; i++) renderers[i].materials = manager.PastMaterials[i].materials;
+                for (int i = 0; i < renderers.Count; i++) renderers[i].materials = manager.PastMaterials[i].materials;
                 break;
             case TimeTravelPeriod.Present:
-                for (int i = 0; i < renderers.Length; i++)
+                for (int i = 0; i < renderers.Count; i++)
                     renderers[i].materials = manager.PresentMaterials[i].materials;
                 break;
             case TimeTravelPeriod.Future:
-                for (int i = 0; i < renderers.Length; i++)
+                for (int i = 0; i < renderers.Count; i++)
                     renderers[i].materials = manager.FutureMaterials[i].materials;
                 break;
         }
     }
 
+    public void SetActive(bool active) {
+        if (manager.CanCollideOnTimeTravel) {
+            if (!gameObject.activeSelf) gameObject.SetActive(true);
+            foreach (var c in allComponents) {
+                if (c != null) {
+                    if (!c.gameObject.activeSelf) c.gameObject.SetActive(true);
+                    Type t = c.GetType();
+                    if (t.IsSubclassOf(typeof(Behaviour)) && t != typeof(TimeTravelObject))
+                        ((Behaviour)c).enabled = active;
+                    else if (t.IsSubclassOf(typeof(Renderer))) ((Renderer)c).enabled = active;
+                }
+            }
+
+            gameObject.layer = LayerMask.NameToLayer(active
+                ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
+                : "OtherTimePeriod");
+            for (int i = 0; i < transform.childCount; i++) {
+                transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer(active
+                    ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
+                    : "OtherTimePeriod");
+            }
+        } else gameObject.SetActive(active);
+
+        IsActive = active;
+    }
+
     private void Update() {
-        if (manager.ObjectState == TimeTravelObjectState.MeshChangingPlayerMove) {
+        if (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove && IsActive) {
             stateMachine.Run();
             if (Input.GetKey(KeyCode.A)) Rigidbody.AddForce(Vector3.left * 10f, ForceMode.Force);
             if (Input.GetKey(KeyCode.D)) Rigidbody.AddForce(Vector3.right * 10f, ForceMode.Force);
@@ -123,39 +155,18 @@ public class TimeTravelObject : MonoBehaviour {
             transform.rotation = destiny.rotation;
         }
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos() {
-        if (pastSelf != null) {
-            Gizmos.DrawWireCube(destiny.position, Vector3.one);
-        }
-    }
-#endif
 }
 
 namespace StateMachines {
     public class TimeTravelMovingState : State {
         private TimeTravelObject TravelObject => (TimeTravelObject)Owner;
-        private bool listenerAdded;
 
         public override void Run() {
-            if (!listenerAdded) {
-                //DebugEvent.AddListener<DebugEvent>(OnTimeTravel);
-                listenerAdded = true;
-            }
-
             if (TravelObject.Rigidbody != null && TravelObject.Rigidbody.velocity.magnitude < 0.1f)
                 StateMachine.TransitionTo<TimeTravelIdleState>();
         }
 
         public override void Exit() {
-            var destinyChangedEvent =
-                new DestinyChanged() { changedObject = TravelObject, gameObject = TravelObject.gameObject };
-            destinyChangedEvent.Invoke();
-        }
-
-        private void OnTimeTravel(DebugEvent e) {
-            if (e.DebugText == null || !e.DebugText.Contains("Simulation")) return;
             var destinyChangedEvent =
                 new DestinyChanged() { changedObject = TravelObject, gameObject = TravelObject.gameObject };
             destinyChangedEvent.Invoke();
