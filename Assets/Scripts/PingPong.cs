@@ -1,13 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using Ping = System.Net.NetworkInformation.Ping;
 
 public class PingPong : MonoBehaviour {
    private static readonly int VoronoiAngleOffset = Shader.PropertyToID("_VoronoiAngleOffset");
-   [SerializeField] private Material mat;
    private MaterialPropertyBlock mpb;
    private MeshRenderer mr;
    private float _t;
