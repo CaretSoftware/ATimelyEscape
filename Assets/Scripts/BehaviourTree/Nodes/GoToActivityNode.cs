@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class GoToActivityNode : Node
 {
     private static DummyBehaviour Instance;
-    private const float DestinationOffset = 0.5f;
+    private const float DestinationOffset = 0.7f;
 
     private System.Random random = new System.Random();
     private GameObject GO = new GameObject();
@@ -42,7 +42,6 @@ public class GoToActivityNode : Node
         if (destinationDistance > DestinationOffset)
         {
             isTimerDone = false;
-            facingTarget = false;
             agent.isStopped = false;
             agent.SetDestination(waypoints[targetIndex].position);
             return NodeState.RUNNING;
@@ -75,7 +74,9 @@ public class GoToActivityNode : Node
     {
         isCoroutineRunning = true;
         animator.SetBool("move", false);
+        Debug.Log("Timer started");
         yield return new WaitForSeconds(idleTimer);
+        Debug.Log("Done");
         animator.SetBool("move", true);
         isCoroutineRunning = false;
         isTimerDone = true;
@@ -84,14 +85,14 @@ public class GoToActivityNode : Node
     private Vector3 targetRotation;
     private float faceActivityTimer;
     private float elapsedTime;
-    private bool facingTarget;
-
+    private Quaternion rotation;
     /*
     private IEnumerator FaceTarget()
     {
         elapsedTime = 0;
-        targetRotation = waypoints[targetIndex].forward;
-        Quaternion rotation = Quaternion.LookRotation(targetRotation);
+        isCoroutineRunning = true;
+        targetRotation = waypoints[targetIndex].forward * 5f ;
+        rotation = Quaternion.LookRotation(targetRotation);
 
         while (elapsedTime < faceActivityTimer)
         {
@@ -100,7 +101,7 @@ public class GoToActivityNode : Node
             yield return new WaitForEndOfFrame();
         }
         yield return 0;
-        facingTarget = true;
+        Instance.StartCoroutine(Timer());
     }
     */
 

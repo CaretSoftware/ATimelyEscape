@@ -1,6 +1,9 @@
 using CallbackSystem;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 
 namespace CallbackSystem
@@ -33,10 +36,14 @@ namespace CallbackSystem
         private float timer = 0f;
         private DieEvent fail;
 
+        private Vignette vignette;
+        
+
         private void Start()
         {
             fail = new();
             StartLightDetection();
+            SetVignetteModifierEvent.AddListener<SetVignetteModifierEvent>(SetVignetteModifier);
         }
 
         private void Update()
@@ -58,6 +65,9 @@ namespace CallbackSystem
                 }
 
             }
+
+            vignette.intensity.value = timer;
+
         }
 
 
@@ -106,6 +116,11 @@ namespace CallbackSystem
         public float GetFailTimer()
         {
             return timer;
+        }
+
+        public void SetVignetteModifier(SetVignetteModifierEvent setVignetteModifierEvent)
+        {
+            vignette = setVignetteModifierEvent.VignetteModifier.vignette;
         }
     }
 }

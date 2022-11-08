@@ -4,15 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/*
 [RequireComponent(typeof(CubeCharge))]
-[RequireComponent(typeof(TimeTravelObject))]
+[RequireComponent(typeof(TimeTravelObject))]*/
 public class CubePush : MonoBehaviour {
 
 	private Rigidbody rb;
 	[SerializeField] private float pushSpeed = 1.5f;
 	public static CubePush closestCube;
-	private bool pushable;
+	[SerializeField] private bool pushable;
 	private Transform _camera;
 	private Vector3 desiredVelocity;
 

@@ -133,8 +133,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25df0f4544077b846bf89f955e31230e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeUntilBored: 1
-  numberOfBoredAnimations: 5
+  timeBetweenAnimations: 2
+  numberOfBoredAnimations: 6
 --- !u!1102 &-1142393486074180865
 AnimatorState:
   serializedVersion: 6
@@ -352,10 +352,26 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: velx
     m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: c2e0a5a67c681ed42b305f4ad3fc79cb, type: 3}
+    m_Threshold: 10
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: velx
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: 156eb0313f850cb4b8ce0a3d6a23e0bd, type: 3}
+    m_Threshold: 11
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: velx
+    m_Mirror: 0
   m_BlendParameter: boredAnimation
   m_BlendParameterY: velx
   m_MinThreshold: 0
-  m_MaxThreshold: 9
+  m_MaxThreshold: 11
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
