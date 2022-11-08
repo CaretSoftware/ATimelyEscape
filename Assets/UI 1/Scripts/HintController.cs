@@ -3,50 +3,73 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using RatCharacterController;
 
 public class HintController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
+
+    [SerializeField] private CharacterInput characterInput;
+
+    private FadeScript fadeScript;
 
     private Animator animator;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        fadeScript = GetComponent<FadeScript>();
     }
 
-    public void ShowLeftMouseClick()
+    private void FixedUpdate()
     {
-        text.text = "Interact";
+        if (characterInput.LedgeAhead(out Vector3 hitPosition) && characterInput.Grounded())
+        {
+            fadeScript.FadeIn();
+
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("SpaceJump"))
+                return;
+
+            ShowSpaceJump();
+        }
+        else
+        {
+            BeNeutral();
+        }
+    }
+
+    private void ShowLeftMouseClick(string context)
+    {
+        text.text = "Interact " + context;
         animator.Play("LeftClick");
     }
 
-    public void ShowRightMouseClick()
+    private void ShowRightMouseClick(string context)
     {
-        text.text = "Interact";
+        text.text = "Interact " + context;
         animator.Play("RightClick");
     }
 
-    public void ShowSpaceJump()
+    private void ShowSpaceJump()
     {
-        text.text = "To Jump";
+        text.text = "Jump Up";
         animator.Play("SpaceJump");
     }
 
-    public void ShowCameraMovement()
+    private void ShowCameraMovement()
     {
         text.text = "Look Around";
         animator.Play("MoveCamera");
     }
 
-    public void ShowKeyMovment()
+    private void ShowKeyMovment()
     {
         text.text = "To Move";
         animator.Play("MoveAround");
     }
 
-    public void BeNeutral()
+    private void BeNeutral()
     {
-        animator.Play("Neutral");
+        fadeScript.FadeOut();
     }
 }
