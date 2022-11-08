@@ -22,7 +22,7 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         image.sprite = neutral;
     }
 
-    // MouseHandler Methods
+    // MouseHandler Methods /Clicking
     public void OnPointerDown(PointerEventData eventData)
     {
         ToPressedSprite();
@@ -38,6 +38,8 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         Debug.Log("Clicked!");
     }
+
+    // Hover sound
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -59,6 +61,8 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         image.sprite = selected;
     }
+
+    // Audio clips när man har selected
 
     public void ToPressedSprite()
     {
