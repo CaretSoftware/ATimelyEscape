@@ -6,11 +6,12 @@ using CallbackSystem;
 public class NavMeshAgentHandler : MonoBehaviour
 {
     private EnemyAI ai;
-    public bool active = true;
+    [SerializeField] private bool active;
     void Start()
     {
         ai = GetComponent<EnemyAI>();
         TimePeriodChanged.AddListener<TimePeriodChanged>(TimeTravel);
+        active = true;
         ai.activeAI = active;
     }
     private void OnDestroy()
@@ -35,6 +36,7 @@ public class NavMeshAgentHandler : MonoBehaviour
         }
     }
 
+    /*
     private void Update()
     {
         if (active)
@@ -50,4 +52,5 @@ public class NavMeshAgentHandler : MonoBehaviour
             ai.agent.isStopped = true;
         }
     }
+    */
 }
