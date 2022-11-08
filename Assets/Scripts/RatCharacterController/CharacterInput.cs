@@ -292,6 +292,7 @@ namespace RatCharacterController {
          void OffsetPlayerPosition() {
             CubePush cube = CubePush.closestCube;
             if (cube != null) {
+               OnboardingHandler.CubeDiscovered = true;
                cube.Push(projectedInput);
                playerTransform.position = cube.transform.position + _pushedCubeOffset;
             }
