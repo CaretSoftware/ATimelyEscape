@@ -15,14 +15,25 @@ public class HintController : MonoBehaviour
 
     private Animator animator;
 
+    private bool hintsActive = true;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         fadeScript = GetComponent<FadeScript>();
     }
 
+    private void Awake()
+    {
+        fadeScript.FadeIn();
+        animator.Play("MoveCamera");
+    }
+
     private void FixedUpdate()
     {
+        if (!hintsActive)
+            return;
+
         if (characterInput.LedgeAhead(out Vector3 hitPosition) && characterInput.Grounded())
         {
             fadeScript.FadeIn();
