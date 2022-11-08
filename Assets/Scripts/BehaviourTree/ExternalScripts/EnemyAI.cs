@@ -17,12 +17,16 @@ public class EnemyAI : MonoBehaviour
 
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
+    [HideInInspector] public bool activeAI;
+
     private EnemyFOV enemyFOV;
+    private NavMeshHit hit;
     private Node topNode;
 
     private Transform playerTransform;
     private Transform agentCenterTransform;
     private Vector3 worldDeltaPosition;
+    private Vector3 rootPosition;
     private Vector2 smoothDeltaPosition;
     private Vector2 deltaPosition;
     private Vector2 velocity;
@@ -31,12 +35,14 @@ public class EnemyAI : MonoBehaviour
     private float chaseRange;
     private float captureRange;
     private float infrequentTimer = 0;
+    private float onMeshThreshold = 3;
     private float smooth;
     private float dx;
     private float dy;
 
     private bool shouldMove;
-    [HideInInspector] public bool activeAI;
+
+    public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
 
     private void Awake()
     {
@@ -115,16 +121,11 @@ public class EnemyAI : MonoBehaviour
     //accounts for offset between the character- and agent component position that occurs each frame.
     private void OnAnimatorMove()
     {
-        Vector3 rootPosition = animator.rootPosition;
+        rootPosition = animator.rootPosition;
         rootPosition.y = agent.nextPosition.y;
         transform.position = rootPosition;
         agent.nextPosition = rootPosition;
     }
-
-    public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
-
-    float onMeshThreshold = 3;
-    NavMeshHit hit;
 
     //if false, agent is out of bounds of the NavMesh.
     private void CheckOutOfBounds()

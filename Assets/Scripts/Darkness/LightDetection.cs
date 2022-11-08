@@ -33,6 +33,8 @@ namespace CallbackSystem
         private float timer = 0f;
         private DieEvent fail;
 
+        private VignetteModifier modifier;
+
         private void Start()
         {
             fail = new();
@@ -106,6 +108,11 @@ namespace CallbackSystem
         public float GetFailTimer()
         {
             return timer;
+        }
+
+        public void SetVignetteModifier(SetVignetteModifierEvent setVignetteModifierEvent)
+        {
+            modifier = setVignetteModifierEvent.VignetteModifier;
         }
     }
 }

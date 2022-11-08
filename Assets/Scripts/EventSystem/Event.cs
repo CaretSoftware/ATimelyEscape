@@ -95,4 +95,14 @@ namespace CallbackSystem {
             this.changedObject = changedObject;
         }
     }
+
+    public class SetVignetteModifierEvent : Event
+    {
+        public VignetteModifier VignetteModifier;
+
+        public SetVignetteModifierEvent(VignetteModifier vignetteModifier)
+        {
+            VignetteModifier = vignetteModifier;
+        }
+    }
 }
