@@ -8,7 +8,7 @@ using UnityEngine;
 namespace CallbackSystem {
     [RequireComponent(typeof(CubePush))]
     [RequireComponent(typeof(TimeTravelObject))]
-    [RequireComponent (typeof(MeshRenderer))]
+    [RequireComponent(typeof(MeshRenderer))]
     public class CubeCharge : MonoBehaviour
     {
         private static readonly int chargeReductionAfterTimeJump = 1;
@@ -30,7 +30,6 @@ namespace CallbackSystem {
         {
             cubePush = GetComponent<CubePush>();
             timeTravelObject = GetComponent<TimeTravelObject>();
-            pastCubeCharge = timeTravelObject.pastSelf.GetComponent<CubeCharge>();
             meshRenderer = GetComponent<MeshRenderer>();
             if (charge > 0)
             {
@@ -54,7 +53,10 @@ namespace CallbackSystem {
         private void PastChargeChange(ChargeChangedEvent chargeChangedEvent)
         {
             if (chargeChangedEvent.changedObject.Equals(timeTravelObject)){
-
+                if (pastCubeCharge == null)
+                {
+                    pastCubeCharge = timeTravelObject.pastSelf.GetComponent<CubeCharge>();
+                }
                 if (pastCubeCharge.pastCubeCharge != null && charge < pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump))
                 {
                     charge = pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump);
