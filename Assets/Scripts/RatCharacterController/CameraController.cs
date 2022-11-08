@@ -56,11 +56,13 @@ public class CameraController : MonoBehaviour {
 
 		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
 		//_camera.rotation = Quaternion.Euler(initialCameraVector.y, initialCameraVector.x, 0.0f);
-		
+
 		// init smoothDamp variables and set camera position
 		_lerpOffset = cameraOffset;
 		_cameraPos = transform.position;
 		_camera.position = _cameraPos + cameraOffset;
+
+		pauseMenuBehaviour = FindObjectOfType<PauseMenuBehaviour>();
 
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
@@ -76,7 +78,8 @@ public class CameraController : MonoBehaviour {
 		// 	Cursor.lockState = CursorLockMode.Locked;
 		// }
 		
-		MoveCamera();
+		if(!pauseMenuBehaviour.isPaused())
+			MoveCamera();
 	}
 
 	// public void SetMouseLookSensitivity(float value) {
@@ -88,6 +91,7 @@ public class CameraController : MonoBehaviour {
 
 		_mouseMovement.x += mouseDelta.x * MouseSensitivity;
 		_mouseMovement.y -= mouseDelta.y * MouseSensitivity;
+
 	}
 
 	public void StickInput(Vector2 stickDelta) {
@@ -102,6 +106,7 @@ public class CameraController : MonoBehaviour {
 	}
 
 	private Vector3 _lerpOffset;
+
 	private void MoveCamera() {
 		const float lookOffset = 90;
 
