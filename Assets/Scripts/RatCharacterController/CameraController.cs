@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 	[SerializeField] private Transform _camera;
+	public static Transform Cam { get; private set; }
 	private Vector2 _mouseMovement;
 	private Vector3 _cameraPos;
 	
@@ -45,25 +46,26 @@ public class CameraController : MonoBehaviour {
 	private PauseMenuBehaviour pauseMenuBehaviour;
 
 	private void Awake() {
-		if (Instance == null)
-			Instance = this;
-	}
-
-	private void Start() {
+		// if (Instance == null) 
+		Instance ??= this;
+		
 		if (_camera == null)
 			_camera = Camera.main.transform;
+
+		Cam = _camera;
+	}
+	
+	private void Start() {
 		pauseMenuBehaviour = FindObjectOfType<PauseMenuBehaviour>();
-		
 		CameraFollow cameraFollow = FindObjectOfType<CameraFollow>();
+		
 		Vector3 initialCameraVector = cameraFollow.Follow.rotation.eulerAngles;
 
 		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
-
-		// init smoothDamp variables and set camera position
+		
 		_lerpOffset = cameraOffset;
 		_cameraPos = transform.position;
 		_camera.position = _cameraPos + cameraOffset;
-
 
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
