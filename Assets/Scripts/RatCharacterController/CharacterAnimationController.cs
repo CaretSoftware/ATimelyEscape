@@ -11,7 +11,7 @@ namespace RatCharacterController {
 		private static readonly int VelocityX = Animator.StringToHash("VelocityX");
 		private static readonly int Jump = Animator.StringToHash("Jump");
 		private static readonly int Leap = Animator.StringToHash("Leap");
-		private Transform _camera;
+		// private Transform _camera;
 		private Animator _animator;
 		private Transform _transform;
 		private float _velX;
@@ -29,7 +29,7 @@ namespace RatCharacterController {
 		private void Awake() {
 			_transform = transform;
 			_animator = GetComponent<Animator>();
-			_camera = FindObjectOfType<Camera>().transform;
+			// _camera = FindObjectOfType<Camera>().transform;
 			rb = GetComponent<Rigidbody>();
 			// _navMeshAgent = GetComponent<NavMeshAgent>();
 			// _navMeshAgent.updatePosition = false;
