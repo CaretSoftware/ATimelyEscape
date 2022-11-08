@@ -409,7 +409,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866887835425138350}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.85, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2358,6 +2358,7 @@ GameObject:
   - component: {fileID: 8397902287378911423}
   - component: {fileID: 8397902287378911420}
   - component: {fileID: 8397902286524401276}
+  - component: {fileID: 706277124}
   m_Layer: 0
   m_Name: Enemy_Scientist
   m_TagString: Enemy
@@ -2393,7 +2394,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8667809098569639256}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 150a545dd2c78ad4ea71bccb10bada43, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 52d65fff423f48442a83b3649080fdbf, type: 3}
   m_Controller: {fileID: 9100000, guid: 0b5df6245c6486b41b2df9d46776dc3e, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -2457,14 +2458,14 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.33
   m_Speed: 1
-  m_Acceleration: 8
+  m_Acceleration: 7
   avoidancePriority: 50
   m_AngularSpeed: 360
   m_StoppingDistance: 0.33
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 1.8
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -2485,6 +2486,11 @@ MonoBehaviour:
   activityWaypoints:
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  agent: {fileID: 0}
+  animator: {fileID: 0}
+  activeAI: 0
 --- !u!114 &8397902286524401276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2504,11 +2510,24 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2147483648
   searchDelay: 0.2
-  Angle: 90
+  Angle: 75
   FacingViewRange: 10
-  ChaseRadius: 3
+  ChaseRadius: 4
   CatchRadius: 2
   player: {fileID: 0}
+--- !u!114 &706277124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8667809098569639256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c2ea0b5c7b0e54409d45be4a07abc73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
 --- !u!1 &8855547306159731068
 GameObject:
   m_ObjectHideFlags: 0
