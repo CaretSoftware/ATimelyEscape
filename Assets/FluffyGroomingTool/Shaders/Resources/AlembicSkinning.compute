@@ -1,0 +1,71 @@
+#pragma kernel SkinningKernel
+#define SIZEOF_INT 4
+#include "VerletSimulationInclude.hlsl"
+#include "HairRendererInclude.hlsl"
+#include "../NormalHelperInclude.cginc"
+
+RWStructuredBuffer<HairStrandPoint> hairStrandPoints;
+StructuredBuffer<float3> curvePoints;
+StructuredBuffer<float2> uvBuffer;
+StructuredBuffer<MeshProperties> sourceMesh;
+RWByteAddressBuffer meshIndexBuffer;
+uint maxX;
+uint maxY;
+
+bool isInsideTriangle(float3 bc)
+{
+    return bc.x >= 0 && bc.y >= 0 && bc.x + bc.y <= 1;
+}
+
+float4x4 worldToLocalMatrix;
+float4x4 inverseScaleMatrix;
+
+[numthreads(16,16,1)]
+void SkinningKernel(uint3 id : SV_DispatchThreadID)
+{
+    const uint pointRootIndex = id.x * strandPointsCount;
+    const uint triInd = id.y * 3;
+    if (pointRootIndex >= maxX || triInd >= maxY) return;
+
+    uint triIndex1 = meshIndexBuffer.Load(triInd * SIZEOF_INT);
+    uint triIndex2 = meshIndexBuffer.Load((triInd + 1) * SIZEOF_INT);
+    uint triIndex3 = meshIndexBuffer.Load((triInd + 2) * SIZEOF_INT);
+
+    const MeshProperties sm1 = sourceMesh[triIndex1];
+    const MeshProperties sm2 = sourceMesh[triIndex2];
+    const MeshProperties sm3 = sourceMesh[triIndex3];
+
+    const float3 vert1 = mul(localToWorldMatrix, float4(sm1.sourceVertex, 1)).xyz;
+    const float3 vert2 = mul(localToWorldMatrix, float4(sm2.sourceVertex, 1)).xyz;
+    const float3 vert3 = mul(localToWorldMatrix, float4(sm3.sourceVertex, 1)).xyz;
+
+    const float3 curvePoint = curvePoints[pointRootIndex];
+    const float3 barycentricCoordinate = Barycentric(vert1, vert2, vert3, curvePoint);
+
+    const float3 baryCentricPosition = Interpolate3(vert1, vert2, vert3, barycentricCoordinate);
+
+    if (isInsideTriangle(barycentricCoordinate) && distance(baryCentricPosition, curvePoint) < 0.02f)
+    {
+        const float3 normal1 = mul(objectRotationMatrix, float4(sm1.sourceNormal, 1)).xyz;
+        const float3 normal2 = mul(objectRotationMatrix, float4(sm2.sourceNormal, 1)).xyz;
+        const float3 normal3 = mul(objectRotationMatrix, float4(sm3.sourceNormal, 1)).xyz;
+
+        const float3 barycentricNormal = Interpolate3(normal1, normal2, normal3, barycentricCoordinate);
+        const float2 uv = Interpolate2(uvBuffer[triIndex1], uvBuffer[triIndex2], uvBuffer[triIndex3], barycentricCoordinate);
+        for (uint j = pointRootIndex; j < pointRootIndex + strandPointsCount; j++)
+        {
+            const float3 localStrandPoint = curvePoints[j];
+            const float3 myRotVec = normalize(localStrandPoint - baryCentricPosition);
+            float originalDistance = distance(baryCentricPosition, localStrandPoint);
+            float4 inverseScaledDistance = float4(originalDistance, originalDistance, originalDistance, 1);
+            inverseScaledDistance = mul(inverseScaleMatrix, inverseScaledDistance); 
+            HairStrandPoint p;
+            p.barycentricCoordinate = barycentricCoordinate;
+            p.triangleIndices = float3(triIndex1, triIndex2, triIndex3);
+            p.rotationDiffFromNormal = barycentricNormal - myRotVec;
+            p.distanceToRoot = distance(float3(0, 0, 0), inverseScaledDistance.xyz)*0.667;//OK this works whyyyy?!
+            p.uv = uv;
+            hairStrandPoints[j] = p;
+        }
+    }
+}
