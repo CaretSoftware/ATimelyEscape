@@ -9,6 +9,12 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     private Image image;
     private Button button;
 
+    public AudioClip newgame;
+    public AudioClip click;
+    public AudioClip hover;
+    private AudioSource source;
+    
+
     [SerializeField] private Sprite neutral, pressed, selected;
     // [SerializeField] private AudioClip compressClip, unCompressClip;
     // [SerializeField] private AudioSource audioSource; 
@@ -20,12 +26,14 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         button = gameObject.GetComponent<Button>();
         image = gameObject.GetComponent<Image>();
         image.sprite = neutral;
+        source = GetComponent<AudioSource>();
     }
 
     // MouseHandler Methods /Clicking
     public void OnPointerDown(PointerEventData eventData)
     {
         ToPressedSprite();
+        source.PlayOneShot(click);
     }
 
     // Method when user has released the mousebutton
@@ -44,6 +52,8 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void OnPointerEnter(PointerEventData eventData)
     {
         ToSelectedSprite();
+        source.PlayOneShot(hover);
+        source.PlayOneShot(newgame);
     }
 
     public void OnPointerExit(PointerEventData eventData)
