@@ -9,6 +9,9 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     private Image image;
     private Button button;
 
+    public AudioClip exitgame;
+    public AudioClip credits;
+    public AudioClip settings;
     public AudioClip newgame;
     public AudioClip click;
     public AudioClip hover;
