@@ -30,7 +30,7 @@ namespace CallbackSystem {
         {
             cubePush = GetComponent<CubePush>();
             timeTravelObject = GetComponent<TimeTravelObject>();
-            pastCubeCharge = timeTravelObject.GetComponent<CubeCharge>();
+            pastCubeCharge = timeTravelObject.pastSelf.GetComponent<CubeCharge>();
             meshRenderer = GetComponent<MeshRenderer>();
             if (charge > 0)
             {
