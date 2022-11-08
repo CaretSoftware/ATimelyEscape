@@ -89,7 +89,7 @@ namespace RatCharacterController {
          
          CameraInput();
          _characterAnimationController.SetGrounded(Grounded());
-
+            
          if (!_pushing)
             MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
          else
@@ -148,7 +148,7 @@ namespace RatCharacterController {
                _characterAnimationController.LeapJump();
             }
          }
-
+         /*
          bool LedgeAhead(out Vector3 hitPosition) {
             Vector3 ledgeHeight = 2.0f * playerScale * Vector3.up;
 
@@ -181,7 +181,52 @@ namespace RatCharacterController {
             hitPosition = _playerTransform.position;
             return false;
          }
+         */
       }
+
+        public bool LedgeAhead(out Vector3 hitPosition)
+        {
+            Transform playerTransform = _playerTransform;
+            Vector3 playerPosition = playerTransform.position;
+            float playerScale = playerTransform.localScale.y;
+            float margin = .1f * playerScale;
+            Ray ray = RayAtHalfHeight(playerTransform);
+            CapsuleCollider capsuleCollider = _collider;
+            float radius = capsuleCollider.radius * playerScale;
+            _playerForward = playerTransform.forward;
+
+            Vector3 ledgeHeight = 2.0f * playerScale * Vector3.up;
+
+            _point0 = playerPosition +
+                      ledgeHeight +
+                      (radius + margin) * Vector3.up;
+            _point1 = playerPosition +
+                      ledgeHeight +
+                      (_collider.height + margin) * playerScale * Vector3.up -
+                      radius * Vector3.up;
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f * playerScale, groundedLayerMask,
+                   QueryTriggerInteraction.Ignore) &&
+                Physics.OverlapCapsule(_point0, _point1, radius, groundedLayerMask, QueryTriggerInteraction.Ignore)
+                   .Length < 1)
+            {
+
+                _playerForward = -hitInfo.normal.ProjectOnPlane();
+
+                hitPosition = hitInfo.point;
+
+                return !Physics.CapsuleCast(
+                   point1: _point0,
+                   point2: _point1,
+                   radius: radius - margin,
+                   direction: _playerForward,
+                   maxDistance: 1.0f * playerScale,
+                   groundedLayerMask,
+                   QueryTriggerInteraction.Ignore);
+            }
+
+            hitPosition = _playerTransform.position;
+            return false;
+        }
 
       private Vector3 _point0;
       private Vector3 _point1;
@@ -323,7 +368,7 @@ namespace RatCharacterController {
          return Vector3.ProjectOnPlane(input, Vector3.up).normalized * magnitude;
       }
 
-      private bool Grounded() {
+      public bool Grounded() {
          Transform playerTransform = _playerTransform;
          float radius = _collider.radius * playerTransform.localScale.y;
          float margin = 0.01f;
@@ -335,5 +380,6 @@ namespace RatCharacterController {
          
          return Physics.SphereCast(ray, radius, maxDistance, groundedLayerMask, QueryTriggerInteraction.Ignore);
       }
-   }
+
+    }
 }

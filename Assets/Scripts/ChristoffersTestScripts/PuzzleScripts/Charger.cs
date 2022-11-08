@@ -1,21 +1,17 @@
+using CallbackSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Charger : MonoBehaviour
 {
-    [SerializeField] private Material chargedMaterial;
+    [SerializeField] private int charge = 1;
     
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Cube")
         {
-            other.gameObject.GetComponent<CubePush>().enabled = true;
-            other.gameObject.GetComponent<MeshRenderer>().material = chargedMaterial;
-            Transform uI = other.gameObject.transform.GetChild(0);
-            uI.transform.gameObject.SetActive(true);
-
-
+            other.gameObject.GetComponent<CubeCharge>().Charging(charge);
         }
     }
 }
