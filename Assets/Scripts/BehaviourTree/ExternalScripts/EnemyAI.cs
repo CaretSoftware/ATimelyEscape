@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
-    private const float NavMeshRadiusOffstep = 10f;
+    private const float NavMeshRadiusOffstep = 20f;
     private const float scareFrequency = 0.3f;
 
     [Header("AI Behaviour Input")]
