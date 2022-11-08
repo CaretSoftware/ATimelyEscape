@@ -7,11 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WornDownTransparent
-  m_Shader: {fileID: -6465566751694194690, guid: 5a02de55f6377bd4482312abb573060b, type: 3}
+  m_Name: Shader Graphs_ScrollingText
+  m_Shader: {fileID: -6465566751694194690, guid: d08e5db285463b644aa97d30c21faf5c, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -20,12 +20,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Base_Map:
-        m_Texture: {fileID: 2800000, guid: 4600e48cbe3e97c4490a3f1ed40003b8, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Dirt_Map:
-        m_Texture: {fileID: 2800000, guid: 09ddbd82184210b4598dc6802bfa21f7, type: 3}
+    - _Texture:
+        m_Texture: {fileID: 2800000, guid: a8213dce9a6cdb64386aaff960daf460, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -42,18 +38,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Dirt_Strength: 0.05
-    - _Gradient_Noise_Scale: 20.58
-    - _Noise_Scale: 204.8
-    - _Noise_Strength: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Transparency: 0.5
-    - _Voronoi_Scale: 6.16
+    - _Scrolling_Time: 0.05
     m_Colors:
-    - _Color: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 0}
+    - _Color: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &5933642647223850186
+--- !u!114 &6407202484655195761
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
