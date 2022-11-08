@@ -8,6 +8,7 @@ public class TimeTravelDisplacement : MonoBehaviour {
 	
 	private static readonly int DisplacementPropertyID = Shader.PropertyToID("_Displacement");
 	private static readonly int RotationPropertyID = Shader.PropertyToID("_EulerRotation");
+	private static readonly int MyRotationPropertyID = Shader.PropertyToID("_MyRotation");
 	private static readonly int PositionPropertyID = Shader.PropertyToID("_Direction");
 	private static readonly int MatrixPropertyID = Shader.PropertyToID("__Matrix4x4");
 	[SerializeField] private Transform other;
@@ -30,20 +31,23 @@ public class TimeTravelDisplacement : MonoBehaviour {
 
 	private void Displace(float t) {
 		Vector3 position = _transform.position;
-		Vector3 eulerRotation = _transform.InverseTransformDirection((_transform.rotation * Quaternion.Inverse(_transform.rotation )).eulerAngles); 
-			// (other.rotation * Quaternion.Inverse(_transform.rotation)).eulerAngles;
+		Vector3 eulerRotation =
+			// _transform.InverseTransformDirection((_transform.rotation * Quaternion.Inverse(_transform.rotation )).eulerAngles); 
+			(other.rotation * Quaternion.Inverse(_transform.rotation)).eulerAngles;
+			// other.rotation.eulerAngles;
+		Vector3 myRotation = _transform.rotation.eulerAngles;
 		
 		eulerRotation.x = eulerRotation.x > 180 ? eulerRotation.x - 360 : eulerRotation.x;
 		eulerRotation.y = eulerRotation.y > 180 ? eulerRotation.y - 360 : eulerRotation.y;
 		eulerRotation.z = eulerRotation.z > 180 ? eulerRotation.z - 360 : eulerRotation.z;
 		
 		Vector3 offset = _transform.InverseTransformDirection(other.position - position);
-		// offset = _transform.InverseTransformDirection(offset);
-		
+
 		mpb.SetFloat(DisplacementPropertyID, t);
 		mpb.SetVector(PositionPropertyID, offset);
 		mpb.SetVector(RotationPropertyID, eulerRotation);
-		mpb.SetMatrix(MatrixPropertyID, Matrix4x4.TRS(position, _transform.rotation, Vector3.one));
+		mpb.SetVector(MyRotationPropertyID, myRotation);
+		mpb.SetMatrix(MatrixPropertyID, _transform.worldToLocalMatrix);
 		
 		
 		mr.SetPropertyBlock(mpb);
