@@ -380,5 +380,6 @@ namespace RatCharacterController {
          
          return Physics.SphereCast(ray, radius, maxDistance, groundedLayerMask, QueryTriggerInteraction.Ignore);
       }
-   }
+
+    }
 }
