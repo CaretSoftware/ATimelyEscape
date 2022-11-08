@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Text;
 using System;
+using CallbackSystem;
+using RatCharacterController;
+using EventSystem = UnityEngine.EventSystems.EventSystem;
 
 public class Keypad : DeviceController
 {
@@ -51,11 +53,12 @@ public class Keypad : DeviceController
 
     private void Start()
     {
-        keyPadanimator = gameObject.GetComponent<Animator>();
+        keyPadanimator = GetComponent<Animator>();
 
         lockClosed.SetActive(true);
         lockOpen.SetActive(false);
     }
+    
     public void KeypadDigitInput(int number)
     {
         if (screen.text.Length < maxDigits)
@@ -81,6 +84,8 @@ public class Keypad : DeviceController
         }
     }
 
+    [SerializeField] private Door2 door;
+    [SerializeField] private Collider trigger;
     public void KeypadEnterInput()
     {
         
@@ -88,23 +93,28 @@ public class Keypad : DeviceController
         {
             keyPadanimator.Play("RightCode");
 
-            //lockClosed.SetActive(false);
-            //lockOpen.SetActive(true);
+            if(door != null) door.SetDoor(true);
+            if (trigger != null) trigger.enabled = false;
 
             //device.TurnedOn(true);
-            //Destroy(gameObject);
         }
         else
         {
             keyPadanimator.Play("WrongCode");
             screen.text = "";
         }
-      
+        
+    }
+
+    public void CloseKeyPad() {
+        CharacterInput.IsPaused(false);
+        gameObject.SetActive(false);
     }
 
     public void DestroyKeyPad()
     {
-        Destroy(gameObject);
+        CharacterInput.IsPaused(false);
+        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -127,7 +137,7 @@ public class Keypad : DeviceController
         }
         if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
         {
-            // To change buttons Appearence to Pressed
+            // To change buttons Appearance to Pressed
             keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
             KeypadDeleteInput();
         }
@@ -135,7 +145,7 @@ public class Keypad : DeviceController
         {
             if (usingKeyboardDigits)
             {
-                // To change buttons Appearence to Pressed
+                // To change buttons Appearance to Pressed
                 keypadKeys[currentKeypadKeysIndex].gameObject.GetComponent<ButtonBehaviour>().ToPressedSprite();
                 KeypadEnterInput();
             }

@@ -1,49 +1,53 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using CallbackSystem;
 using NaughtyAttributes;
 
 public class TimeTravelObjectManager : MonoBehaviour {
-    [Tooltip("Whether the time travelling object uses different meshes in different time periods")]
-    [DisableIf(EConditionOperator.Or, nameof(isDecal), nameof(changesMaterials))]
+    [Tooltip(
+        "Whether the time travelling object uses different prefabs in different time periods, this goes for meshes AND decals")]
+    [DisableIf(nameof(changesMaterials))]
     [OnValueChanged(nameof(OnCheckChangesMesh))]
     [SerializeField]
-    private bool changesMesh;
+    private bool changesPrefab;
 
     [Tooltip("Whether the object changes materials upon travelling between different time periods. " +
              "ATTENTION: It's very important that the renderers are added in the arrays in the SAME ORDER as the materials otherwise it will not work properly." +
              " NOTE: Materials specific for each period have to be already applied to the meshes in question")]
-    [DisableIf(EConditionOperator.Or, nameof(canBeMovedByPlayer), nameof(changesPosition), nameof(changesMesh))]
+    [DisableIf(EConditionOperator.Or, nameof(canBeMovedByPlayer), nameof(changesPrefab))]
     [OnValueChanged(nameof(OnCheckMaterialsChange))]
     [SerializeField]
     private bool changesMaterials;
 
-    [Tooltip(
-        "If the object changes position between time periods, ATTENTION: not the same as \"can be moved by player.\" " +
-        "Objects with this checked cannot be moved by the player, but can have different positions set in the unity editor for the different time periods")]
-    [DisableIf(EConditionOperator.Or, nameof(canBeMovedByPlayer), nameof(changesMaterials),
-        nameof(IsNotChangingMeshDecal))]
-    [OnValueChanged(nameof(OnCheckChangesPosition))]
-    [SerializeField]
-    private bool changesPosition;
+    private bool IsNotChangingPrefab => !changesPrefab;
 
-    private bool IsNotChangingMeshDecal => !changesMesh && !isDecal;
-    private bool IsNotChangingMesh => !changesMesh;
 
     [Tooltip(
         "Objects that can be moved by player must have different meshes/instances for each time period it exists in. Any time period it does not exist in can be left as null")]
-    [DisableIf(EConditionOperator.Or, nameof(changesPosition), nameof(isDecal), nameof(IsNotChangingMesh))]
+    [DisableIf(nameof(IsNotChangingPrefab))]
     [OnValueChanged(nameof(OnCheckPlayerCanMove))]
     [SerializeField]
     private bool canBeMovedByPlayer;
 
-    [Tooltip("Whether the time travelling object is a decal")]
-    [DisableIf(EConditionOperator.Or, nameof(canBeMovedByPlayer), nameof(changesMesh))]
-    [OnValueChanged(nameof(OnCheckIsDecal))]
+    [Tooltip("Whether or not to show a preview box outline where the other objects are in different time periods")]
+    [ShowIf(nameof(canBeMovedByPlayer))]
     [SerializeField]
-    private bool isDecal;
+    private bool showPreviewBox;
+
+    [Tooltip("How large the preview box should be")]
+    [ShowIf(nameof(showPreviewBox))]
+    [SerializeField]
+    private float previewBoxScale = 1f;
+
+    [Tooltip(
+        "The minimum distance objects need to be from each other in different time periods for the preview box to show")]
+    [ShowIf(nameof(showPreviewBox))]
+    [SerializeField]
+    private float previewBoxMinShowDistance = 1f;
+
+    [OnValueChanged(nameof(OnCheckCanCollide))]
+    [SerializeField]
+    private bool canCollideOnTimeTravel;
 
     [ShowIf(nameof(changesMaterials))]
     [AllowNesting]
@@ -67,31 +71,39 @@ public class TimeTravelObjectManager : MonoBehaviour {
     private Renderer[] renderers;
 
 
-    [ShowIf(EConditionOperator.Or, nameof(changesMesh), nameof(canBeMovedByPlayer), nameof(changesPosition))]
+    [ShowIf(EConditionOperator.Or, nameof(changesPrefab), nameof(canBeMovedByPlayer))]
     [SerializeField]
     private TimeTravelObject past, present, future;
 
-    [HideIf(EConditionOperator.Or, nameof(changesMesh), nameof(canBeMovedByPlayer), nameof(changesPosition))]
+    [HideIf(EConditionOperator.Or, nameof(changesPrefab), nameof(canBeMovedByPlayer))]
     [SerializeField]
     private TimeTravelObject timeTravelObject;
 
     public TimeTravelObjectState ObjectState { get; private set; }
 
     public bool CanBeMovedByPlayer => canBeMovedByPlayer;
+    public bool CanCollideOnTimeTravel => canCollideOnTimeTravel;
     public MaterialInfo[] PastMaterials => pastMaterials;
     public MaterialInfo[] PresentMaterials => presentMaterials;
     public MaterialInfo[] FutureMaterials => futureMaterials;
     public Renderer[] Renderers => renderers;
 
 
+    private Vector3 activePosition;
+
+    private bool TObjectOrWBoxNull =>
+        (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
+         future.wireBox == null);
+
+
     private void Awake() {
         CheckForMissingComponents();
         DetermineTimeTravelObjectState();
 
-        if (changesMesh || changesPosition || canBeMovedByPlayer) {
-            past.SetUpTimeTravelObject(this);
-            present.SetUpTimeTravelObject(this, past);
-            future.SetUpTimeTravelObject(this, present);
+        if (changesPrefab || canBeMovedByPlayer) {
+            past?.SetUpTimeTravelObject(this);
+            present?.SetUpTimeTravelObject(this, past);
+            future?.SetUpTimeTravelObject(this, present);
         } else timeTravelObject.SetUpTimeTravelObject(this);
 
         TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
@@ -116,50 +128,36 @@ public class TimeTravelObjectManager : MonoBehaviour {
     }
 
     private void DetermineTimeTravelObjectState() {
-        /*ObjectState = changesMesh switch {
-            true when !canBeMovedByPlayer && !changesPosition => TimeTravelObjectState.MeshChanging,
-            true when !canBeMovedByPlayer && changesPosition => TimeTravelObjectState.MeshChangingMoving,
-            true when canBeMovedByPlayer && !changesPosition => TimeTravelObjectState.MeshChangingPlayerMove,
-            _ => changesMaterials switch {
-                true when !isDecal => TimeTravelObjectState.MeshSwitchingMaterial,
-                true when isDecal => TimeTravelObjectState.DecalSwitchingMaterial,
-                _ => isDecal switch {
-                    true when !changesMaterials && !changesPosition => TimeTravelObjectState.Decal,
-                    true when changesPosition && !changesMaterials => TimeTravelObjectState.DecalMoving,
-                    _ => ObjectState
-                }
-            }
-        };*/
-
-        switch (changesMesh) {
-            case true when !canBeMovedByPlayer && !changesPosition:
-                ObjectState = TimeTravelObjectState.MeshChanging;
-                return;
-            case true when canBeMovedByPlayer && !changesPosition:
-                ObjectState = TimeTravelObjectState.MeshChangingPlayerMove;
-                return;
-            case true when !canBeMovedByPlayer && changesPosition:
-                ObjectState = TimeTravelObjectState.MeshChangingMoving;
-                return;
-        }
-
-        switch (isDecal) {
-            case false when changesMaterials:
-                ObjectState = TimeTravelObjectState.MeshSwitchingMaterial;
-                return;
-            case true when changesMaterials && !changesPosition:
-                ObjectState = TimeTravelObjectState.DecalSwitchingMaterial;
-                return;
-            case true when !changesMaterials && changesPosition:
-                ObjectState = TimeTravelObjectState.DecalMoving;
-                return;
-            case true when !changesMaterials && !changesPosition:
-                ObjectState = TimeTravelObjectState.Decal;
+        switch (changesPrefab) {
+            case true when !canBeMovedByPlayer:
+                ObjectState = TimeTravelObjectState.PrefabChanging;
                 break;
+            case true when canBeMovedByPlayer:
+                ObjectState = TimeTravelObjectState.PrefabChangingPlayerMove;
+                break;
+            default: {
+                if (changesMaterials && !canBeMovedByPlayer && !changesPrefab)
+                    ObjectState = TimeTravelObjectState.SwitchingMaterial;
+                break;
+            }
         }
     }
 
-    private void SetUpPreviewBox(TimeTravelObject travelObject, Color color) {
+    private void Update() {
+        if (TObjectOrWBoxNull) return;
+        UpdateActivePosition();
+        UpdateWireBox(past, Color.white);
+        UpdateWireBox(present, Color.grey);
+        UpdateWireBox(future, Color.blue);
+    }
+
+    private void UpdateActivePosition() {
+        if (past.IsActive) activePosition = past.transform.position;
+        else if (present.IsActive) activePosition = present.transform.position;
+        else activePosition = future.transform.position;
+    }
+
+    private void SetUpWireBox(TimeTravelObject travelObject, Color color) {
         GameObject wireObj = new GameObject(travelObject.name + " preview");
         wireObj.transform.parent = transform;
         travelObject.previewBoxObject = wireObj;
@@ -167,104 +165,69 @@ public class TimeTravelObjectManager : MonoBehaviour {
         travelObject.wireBox.Color = color;
     }
 
-    private void Update() { UpdateWireBoxes(); }
-
-    private void UpdateWireBoxes() {
-        if (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
-            future.wireBox == null) return;
-
-        var activePos = Vector3.zero;
-        if (past.gameObject.activeSelf) activePos = past.transform.position;
-        else if (present.gameObject.activeSelf) activePos = present.transform.position;
-        else activePos = future.transform.position;
-
-        if (!past.gameObject.activeSelf && Vector3.Distance(past.transform.position, activePos) > 1f &&
-            ObjectState == TimeTravelObjectState.MeshChangingPlayerMove) {
-            past.wireBox.SetLinePositions();
-            past.previewBoxObject.SetActive(true);
-            past.previewBoxObject.transform.position = past.transform.position;
-            past.wireBox.Color = Color.white;
-        } else past.previewBoxObject?.SetActive(false);
-
-        if (!present.gameObject.activeSelf && Vector3.Distance(present.transform.position, activePos) > 1f &&
-            ObjectState == TimeTravelObjectState.MeshChangingPlayerMove) {
-            present.wireBox?.SetLinePositions();
-            present.previewBoxObject.SetActive(true);
-            present.previewBoxObject.transform.position = present.transform.position;
-            present.wireBox.Color = Color.gray;
-        } else present.previewBoxObject?.SetActive(false);
-
-        if (!future.gameObject.activeSelf && Vector3.Distance(future.transform.position, activePos) > 1f &&
-            ObjectState == TimeTravelObjectState.MeshChangingPlayerMove) {
-            future.wireBox.SetLinePositions();
-            future.previewBoxObject.SetActive(true);
-            future.previewBoxObject.transform.position = future.transform.position;
-            future.wireBox.Color = Color.blue;
-        } else future.previewBoxObject?.SetActive(false);
+    private void UpdateWireBox(TimeTravelObject timeTravelObject, Color color) {
+        if (showPreviewBox && !timeTravelObject.IsActive &&
+            Vector3.Distance(timeTravelObject.transform.position, activePosition) > previewBoxMinShowDistance &&
+            ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove) {
+            timeTravelObject.wireBox.SetLinePositions(previewBoxScale);
+            timeTravelObject.previewBoxObject.SetActive(true);
+            timeTravelObject.previewBoxObject.transform.position = timeTravelObject.transform.position;
+            timeTravelObject.wireBox.Color = color;
+        } else timeTravelObject.previewBoxObject?.SetActive(false);
     }
 
     // callbacks
     private void OnTimePeriodChanged(TimePeriodChanged e) {
         switch (ObjectState) {
-            case TimeTravelObjectState.Decal: break;
-            case TimeTravelObjectState.DecalMoving:
-            case TimeTravelObjectState.MeshChanging:
-            case TimeTravelObjectState.MeshChangingMoving:
-            case TimeTravelObjectState.MeshChangingPlayerMove:
-                if (past.wireBox == null && ObjectState == TimeTravelObjectState.MeshChangingPlayerMove)
-                    SetUpPreviewBox(past, Color.white);
-                if (present.wireBox == null && ObjectState == TimeTravelObjectState.MeshChangingPlayerMove)
-                    SetUpPreviewBox(present, Color.gray);
-                if (future.wireBox == null && ObjectState == TimeTravelObjectState.MeshChangingPlayerMove)
-                    SetUpPreviewBox(future, Color.blue);
+            case TimeTravelObjectState.PrefabChanging:
+            case TimeTravelObjectState.PrefabChangingPlayerMove:
+                if (past != null && past.wireBox == null &&
+                    ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
+                    SetUpWireBox(past, Color.white);
+                if (present != null && present.wireBox == null &&
+                    ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
+                    SetUpWireBox(present, Color.gray);
+                if (future != null && future.wireBox == null &&
+                    ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
+                    SetUpWireBox(future, Color.blue);
 
-                past.gameObject.SetActive(e.to == TimeTravelPeriod.Past ? true : false);
-                present.gameObject.SetActive(e.to == TimeTravelPeriod.Present ? true : false);
-                future.gameObject.SetActive(e.to == TimeTravelPeriod.Future ? true : false);
-
+                past?.SetActive(e.to == TimeTravelPeriod.Past ? true : false);
+                present?.SetActive(e.to == TimeTravelPeriod.Present ? true : false);
+                future?.SetActive(e.to == TimeTravelPeriod.Future ? true : false);
 
                 break;
-            case TimeTravelObjectState.DecalSwitchingMaterial:
-            case TimeTravelObjectState.MeshSwitchingMaterial:
+            case TimeTravelObjectState.SwitchingMaterial:
                 timeTravelObject.UpdateMaterials(e.to);
                 break;
             case TimeTravelObjectState.Dummy: break;
         }
     }
 
-    private void OnPhysicsSimulationComplete(PhysicsSimulationComplete e) {
-        if (ObjectState == TimeTravelObjectState.MeshChangingPlayerMove) {
-            if (past.Rigidbody != null) {
-                past.Rigidbody.isKinematic = e.to is not TimeTravelPeriod.Past;
-            }
 
-            if (present.Rigidbody != null)
+    private void OnPhysicsSimulationComplete(PhysicsSimulationComplete e) {
+        if (ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove) {
+            if (past?.Rigidbody != null) past.Rigidbody.isKinematic = e.to is not TimeTravelPeriod.Past;
+            if (present?.Rigidbody != null)
                 present.Rigidbody.isKinematic = e.from is TimeTravelPeriod.Future && e.to is TimeTravelPeriod.Present;
         }
     }
 
     private void OnCheckPlayerCanMove() {
         if (!canBeMovedByPlayer) return;
-        isDecal = false;
-        changesPosition = false;
+        if (canBeMovedByPlayer) canCollideOnTimeTravel = true;
         changesMaterials = false;
     }
 
-    private void OnCheckChangesPosition() {
-        if (changesPosition) canBeMovedByPlayer = false;
-    }
-
-    private void OnCheckIsDecal() {
-        if (isDecal) canBeMovedByPlayer = false;
+    private void OnCheckCanCollide() {
+        if (canBeMovedByPlayer && !canCollideOnTimeTravel) canBeMovedByPlayer = false;
     }
 
     private void OnCheckMaterialsChange() {
-        if (changesMaterials) changesMesh = false;
+        if (changesMaterials) changesPrefab = false;
     }
 
     private void OnCheckChangesMesh() {
-        if (changesMesh) return;
-        changesPosition = false;
+        if (changesPrefab) return;
         canBeMovedByPlayer = false;
     }
 
@@ -275,14 +238,8 @@ public class TimeTravelObjectManager : MonoBehaviour {
 }
 
 public enum TimeTravelObjectState {
-    Decal = 0,
-    DecalMoving = 1,
-    DecalSwitchingMaterial = 2,
-
-    MeshChanging = 3,
-    MeshChangingMoving = 4,
-    MeshChangingPlayerMove = 5,
-
-    MeshSwitchingMaterial = 6,
-    Dummy = 7
+    PrefabChanging = 0,
+    PrefabChangingPlayerMove = 1,
+    SwitchingMaterial = 2,
+    Dummy = 3
 }

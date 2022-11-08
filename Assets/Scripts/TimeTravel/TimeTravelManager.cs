@@ -1,16 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using CallbackSystem;
-using Mono.CompilerServices.SymbolWriter;
+using RatCharacterController;
 using UnityEngine;
 using StateMachines;
 using TMPro;
-using UnityEditor;
-using Debug = UnityEngine.Debug;
-using Object = System.Object;
 
 public class TimeTravelManager : MonoBehaviour {
     private StateMachine stateMachine;
@@ -18,26 +13,38 @@ public class TimeTravelManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI timeText;
     public static TimeTravelPeriod currentPeriod;
     public static TimeTravelPeriod desiredPeriod;
-    public static List<Rigidbody> MovableObjects = new List<Rigidbody>();
+    public static HashSet<Rigidbody> MovableObjects = new HashSet<Rigidbody>();
+    public static Transform playerTransform;
+
     public static readonly Dictionary<TimeTravelPeriod, Type> PeriodStates = new Dictionary<TimeTravelPeriod, Type>() {
-        {TimeTravelPeriod.Past, typeof(PastState)},
-        {TimeTravelPeriod.Present, typeof(PresentState)},
-        {TimeTravelPeriod.Future, typeof(FutureState)},
+        { TimeTravelPeriod.Past, typeof(PastState) },
+        { TimeTravelPeriod.Present, typeof(PresentState) },
+        { TimeTravelPeriod.Future, typeof(FutureState) },
     };
+
     // Start is called before the first frame update
     void Awake() {
-        stateMachine = new StateMachine(this, new State[] { new PastState(), new PresentState(), new FutureState() });
+        MovableObjects.Clear();
+        playerTransform = FindObjectOfType<CharacterAnimationController>().transform;
+        stateMachine = new StateMachine(this,
+            new State[] {
+                new PastState() { thisPeriod = TimeTravelPeriod.Past },
+                new PresentState() { thisPeriod = TimeTravelPeriod.Present },
+                new FutureState() { thisPeriod = TimeTravelPeriod.Future }
+            });
+        currentPeriod = TimeTravelPeriod.Dummy;
+        desiredPeriod = startPeriod;
         TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimeTravel);
     }
 
     // Update is called once per frame
     void Update() { stateMachine.Run(); }
-    
+
     public static bool DesiredTimePeriod(TimeTravelPeriod desired) {
         if (desired == currentPeriod) return false;
 
         desiredPeriod = desired;
-        
+
         return true;
     }
 
@@ -53,14 +60,11 @@ public class TimeTravelManager : MonoBehaviour {
     }
 
     private void OnTimeTravel(TimePeriodChanged e) {
-        var beforeSim = new DebugEvent();
-        beforeSim.DebugText = "BeforeSimulation";
+        var beforeSim = new DebugEvent { DebugText = "BeforeSimulation" };
         beforeSim.Invoke();
 
         SimulateMovableObjectPhysics(1000);
-        var simulationComplete = new PhysicsSimulationComplete();
-        simulationComplete.from = e.from;
-        simulationComplete.to = e.to;
+        var simulationComplete = new PhysicsSimulationComplete { from = e.from, to = e.to };
         simulationComplete.Invoke();
 
         switch (e.to) {
@@ -86,87 +90,45 @@ public enum TimeTravelPeriod {
 
 
 namespace StateMachines {
-    public class PastState : State {
+    public class TimePeriodState : State {
         private TimeTravelPeriod travellingTo;
+        public TimeTravelPeriod thisPeriod;
 
         public override void Run() {
             if (TimeTravelManager.currentPeriod != TimeTravelManager.desiredPeriod) {
-                State nextState = StateMachine.stateDict[ TimeTravelManager.PeriodStates[TimeTravelManager.desiredPeriod] ];
-                StateMachine.TransitionTo(nextState);
-                travellingTo = TimeTravelManager.desiredPeriod;
+                var cols = Physics.OverlapCapsule(
+                    new Vector3(TimeTravelManager.playerTransform.position.x,
+                        TimeTravelManager.playerTransform.position.y + 0.1f,
+                        TimeTravelManager.playerTransform.position.z),
+                    new Vector3(TimeTravelManager.playerTransform.position.x,
+                        TimeTravelManager.playerTransform.position.y - 0.1f,
+                        TimeTravelManager.playerTransform.position.z), 0.05f, LayerMask.GetMask("OtherTimePeriod"));
+
+                if (cols.Length == 0 || cols.All(c => c.isTrigger)) {
+                    State nextState = StateMachine.stateDict[
+                        TimeTravelManager.PeriodStates[TimeTravelManager.desiredPeriod]];
+                    StateMachine.TransitionTo(nextState);
+                    travellingTo = TimeTravelManager.desiredPeriod;
+                    if (TimeTravelManager.currentPeriod == TimeTravelPeriod.Dummy) Exit();
+                } else {
+                    TimeTravelManager.desiredPeriod = TimeTravelManager.currentPeriod;
+                    Debug.LogError("You tried Time Travelling into another object!");
+                }
             }
-            // if (Input.GetKey(KeyCode.Alpha2)) {
-            //     StateMachine.TransitionTo<PresentState>();
-            //     travellingTo = TimeTravelPeriod.Present;
-            // }
-            //
-            // if (Input.GetKey(KeyCode.Alpha3)) {
-            //     StateMachine.TransitionTo<FutureState>();
-            //     travellingTo = TimeTravelPeriod.Future;
-            // }
         }
 
         public override void Exit() {
-            var travelEvent = new TimePeriodChanged() { from = TimeTravelPeriod.Past, to = travellingTo };
+            var travelEvent = new TimePeriodChanged() { from = thisPeriod, to = travellingTo };
             travelEvent.Invoke();
-            Debug.Log("Travelled to: " + travellingTo.ToString());
+            Debug.Log("Travelled to: " + travellingTo);
             TimeTravelManager.currentPeriod = travellingTo;
         }
     }
 
-    public class PresentState : State {
-        private TimeTravelPeriod travellingTo;
+    // would rather do without these, but state machine needs a rewrite for that to work
+    public class PastState : TimePeriodState { }
 
-        public override void Run() {
-            if (TimeTravelManager.currentPeriod != TimeTravelManager.desiredPeriod) {
-                State nextState = StateMachine.stateDict[ TimeTravelManager.PeriodStates[TimeTravelManager.desiredPeriod] ];
-                StateMachine.TransitionTo(nextState);
-                travellingTo = TimeTravelManager.desiredPeriod;
-            }
-            // if (Input.GetKey(KeyCode.Alpha1)) {
-            //     StateMachine.TransitionTo<PastState>();
-            //     travellingTo = TimeTravelPeriod.Past;
-            // }
-            //
-            // if (Input.GetKey(KeyCode.Alpha3)) {
-            //     StateMachine.TransitionTo<FutureState>();
-            //     travellingTo = TimeTravelPeriod.Future;
-            // }
-        }
+    public class PresentState : TimePeriodState { }
 
-        public override void Exit() {
-            var travelEvent = new TimePeriodChanged() { from = TimeTravelPeriod.Present, to = travellingTo };
-            travelEvent.Invoke();
-            Debug.Log("Travelled to: " + travellingTo.ToString());
-            TimeTravelManager.currentPeriod = travellingTo;
-        }
-    }
-
-    public class FutureState : State {
-        private TimeTravelPeriod travellingTo;
-
-        public override void Run() {
-            if (TimeTravelManager.currentPeriod != TimeTravelManager.desiredPeriod) {
-                State nextState = StateMachine.stateDict[ TimeTravelManager.PeriodStates[TimeTravelManager.desiredPeriod] ];
-                StateMachine.TransitionTo(nextState);
-                travellingTo = TimeTravelManager.desiredPeriod;
-            }
-            // if (Input.GetKey(KeyCode.Alpha1)) {
-            //     StateMachine.TransitionTo<PastState>();
-            //     travellingTo = TimeTravelPeriod.Past;
-            // }
-            //
-            // if (Input.GetKey(KeyCode.Alpha2)) {
-            //     StateMachine.TransitionTo<PresentState>();
-            //     travellingTo = TimeTravelPeriod.Present;
-            // }
-        }
-
-        public override void Exit() {
-            var travelEvent = new TimePeriodChanged() { from = TimeTravelPeriod.Future, to = travellingTo };
-            travelEvent.Invoke();
-            Debug.Log("Travelled to: " + travellingTo.ToString());
-            TimeTravelManager.currentPeriod = travellingTo;
-        }
-    }
+    public class FutureState : TimePeriodState { }
 }

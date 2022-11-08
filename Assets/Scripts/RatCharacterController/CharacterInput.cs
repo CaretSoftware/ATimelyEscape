@@ -1,13 +1,14 @@
 //using UnityEditor.PackageManager;
 
 using System;
+using CallbackSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace RatCharacterController {
 
    public class CharacterInput : MonoBehaviour {
-      
+
       [SerializeField] private LayerMask groundedLayerMask;
       [SerializeField] private LayerMask cubeLayerMask;
       private float ledgeDistance = 0.05f;
@@ -22,10 +23,13 @@ namespace RatCharacterController {
       private Vector3 _pushedCubeOffset;
       private bool _pushing;
       private float _characterHalfHeight;
+
       private bool _canTimeTravel;
+
       //private static CharacterInput _instance;
       private bool _jumping;
-      
+      private static bool paused;
+
       private void Start() {
          // _instance = this;
          //Physics.queriesHitTriggers = false;    // ray-/capsule-/sphere-casts don't hit triggers
@@ -43,7 +47,7 @@ namespace RatCharacterController {
          _cameraTransform = FindObjectOfType<Camera>().transform;
          _camController = FindObjectOfType<CameraController>();
          _cameraFollow = FindObjectOfType<CameraFollow>();
-         
+
          _playerTransform = transform;
          _rigidBody = _playerTransform.GetComponent<Rigidbody>();
          _characterAnimationController = GetComponent<CharacterAnimationController>();
@@ -51,7 +55,8 @@ namespace RatCharacterController {
          _characterHalfHeight = _collider.height * .5f;
 
          if (_camController == null)
-            Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode", this.gameObject);
+            Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode",
+               this.gameObject);
       }
 
       private void OnDestroy() {
@@ -66,21 +71,31 @@ namespace RatCharacterController {
          _playerInputActions.Interact.Present.performed -= TravelToPresent;
          _playerInputActions.Interact.Future.performed -= TravelToFuture;
       }
-      
+
       public void CanTimeTravel(bool timeTravel) {
          _canTimeTravel = timeTravel;
       }
 
+      public static void IsPaused(bool paused) {
+         Debug.Log($"KeypadInteraction {paused}");
+         CharacterInput.paused = paused;
+      }
+
       private void Update() {
+         if (paused) {
+            _characterAnimationController.InputVector(Vector2.zero);
+            return; // interacting with keypad
+         } 
+         
          CameraInput();
          _characterAnimationController.SetGrounded(Grounded());
 
          if (!_pushing)
-            MovementInput( _playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>() );
+            MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
          else
-            PushCubeInput( _playerInputActions.BoxMovement.Movement.ReadValue<Vector2>() );
+            PushCubeInput(_playerInputActions.BoxMovement.Movement.ReadValue<Vector2>());
       }
-      
+
       public void JumpComplete() {
          Invoke(nameof(KinematicOff), .2f);
          _rigidBody.velocity = Vector3.zero;
@@ -90,22 +105,22 @@ namespace RatCharacterController {
       private void KinematicOff() {
          _rigidBody.isKinematic = false;
       }
-      
+
       private void TravelToPast(InputAction.CallbackContext context) {
          if (_canTimeTravel)
             TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Past);
       }
-      
+
       private void TravelToPresent(InputAction.CallbackContext context) {
          if (_canTimeTravel)
             TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
       }
-      
+
       private void TravelToFuture(InputAction.CallbackContext context) {
          if (_canTimeTravel)
             TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
       }
-      
+
       private void Jump(InputAction.CallbackContext context) {
          // TODO
          // check if Grounded() && in front of box && fits on top of box
@@ -136,16 +151,18 @@ namespace RatCharacterController {
 
          bool LedgeAhead(out Vector3 hitPosition) {
             Vector3 ledgeHeight = 2.0f * playerScale * Vector3.up;
-         
-            _point0 = playerPosition + 
-                      ledgeHeight + 
+
+            _point0 = playerPosition +
+                      ledgeHeight +
                       (radius + margin) * Vector3.up;
-            _point1 = playerPosition + 
-                      ledgeHeight + 
-                      (_collider.height + margin) * playerScale * Vector3.up - 
+            _point1 = playerPosition +
+                      ledgeHeight +
+                      (_collider.height + margin) * playerScale * Vector3.up -
                       radius * Vector3.up;
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f * playerScale, groundedLayerMask, QueryTriggerInteraction.Ignore) && 
-                Physics.OverlapCapsule(_point0, _point1, radius, groundedLayerMask, QueryTriggerInteraction.Ignore).Length < 1) {
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f * playerScale, groundedLayerMask,
+                   QueryTriggerInteraction.Ignore) &&
+                Physics.OverlapCapsule(_point0, _point1, radius, groundedLayerMask, QueryTriggerInteraction.Ignore)
+                   .Length < 1) {
 
                _playerForward = -hitInfo.normal.ProjectOnPlane();
 
@@ -184,22 +201,24 @@ namespace RatCharacterController {
          Gizmos.DrawLine(point1 + radius * Vector3.right, point2 + radius * Vector3.right);
       }
 #endif
-      
+
       private Ray RayAtHalfHeight(Transform playerTransform) {
          return new Ray(
-               transform.position + Vector3.up * _characterHalfHeight * playerTransform.localScale.y, 
-               playerTransform.forward);
+            transform.position + Vector3.up * _characterHalfHeight * playerTransform.localScale.y,
+            playerTransform.forward);
       }
+
       private void CameraInput() {
 
          Vector2 cameraStickInput = _playerInputActions.CameraControls.CameraThumbstick.ReadValue<Vector2>();
          Vector2 cameraMouseInput = _playerInputActions.CameraControls.CameraMouseInput.ReadValue<Vector2>();
-         
+
          _camController.StickInput(cameraStickInput);
          _camController.MouseInput(cameraMouseInput);
       }
 
       private void MovementInput(Vector2 input) => MovementInput(input.ToVector3());
+
       private void MovementInput(Vector3 input) {
 
          Vector3 projectedInput = InputToCameraProjection(input);
@@ -210,9 +229,12 @@ namespace RatCharacterController {
       }
 
       private void PushCubeInput(Vector2 input) => PushCubeInput(input.ToVector3());
+
       private void PushCubeInput(Vector3 input) {
          Transform playerTransform = _playerTransform;
-         Ray ray = new Ray(_playerTransform.position + _characterHalfHeight * _playerTransform.localScale.y * Vector3.up, _playerTransform.forward);
+         Ray ray = new Ray(
+            _playerTransform.position + _characterHalfHeight * _playerTransform.localScale.y * Vector3.up,
+            _playerTransform.forward);
 
          Vector3 projectedInput = InputToCameraProjection(input);
 
@@ -229,7 +251,7 @@ namespace RatCharacterController {
                playerTransform.position = cube.transform.position + _pushedCubeOffset;
             }
          }
-         
+
          void RotatePlayerToSurface() {
             if (Physics.Raycast(ray, out RaycastHit hitInfo, .1f, cubeLayerMask, QueryTriggerInteraction.Ignore)) {
                Vector3 rotation = (-hitInfo.normal).ProjectOnPlane().normalized;
@@ -239,25 +261,37 @@ namespace RatCharacterController {
          }
       }
 
+      private string keypadTag = "Keypad";
+      
       private void Interact(InputAction.CallbackContext context) {
-         
+
          Transform playerTransform = _playerTransform;
-         Ray ray = new Ray(transform.position + Vector3.up * _characterHalfHeight * playerTransform.localScale.y, playerTransform.forward);
+         Ray ray = new Ray(transform.position + Vector3.up * _characterHalfHeight * playerTransform.localScale.y,
+            playerTransform.forward);
+
+         Ray cameraRay = new Ray(_cameraTransform.position, _cameraTransform.forward);
 
          if (Physics.Raycast(ray, out RaycastHit hitInfo, .1f, cubeLayerMask, QueryTriggerInteraction.Ignore)) {
             _pushing = true;
             Transform cube = hitInfo.transform;
-            
+
             cube.GetComponent<CubePush>().Closest();
 
             _pushedCubeOffset = playerTransform.position - cube.position;
 
             _characterAnimationController.Push(true);
-            
+
             _cameraFollow.SetFollowTransform(cube);
-            
+
             _playerInputActions.BoxMovement.Enable();
             _playerInputActions.CharacterMovement.Disable();
+         } else if (Physics.Raycast(ray, out RaycastHit hit, .3f) && hit.transform.CompareTag(keypadTag)) {
+            
+            OpenKeypad keypad = hit.transform.GetComponent<OpenKeypad>();
+            if (keypad != null)
+               keypad.Open();
+
+            CharacterInput.paused = true;
          }
       }
 
