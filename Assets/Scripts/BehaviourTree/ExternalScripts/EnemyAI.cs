@@ -6,8 +6,8 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
-    private const float NavMeshRadiusOffstep = 10f;
-    private const float scareFrequency = 0.3f;
+    private const float NavMeshRadiusOffstep = 20f;
+    private const float Infrequency = 0.1f;
 
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
@@ -15,11 +15,11 @@ public class EnemyAI : MonoBehaviour
     [Tooltip("Assigning the same waypoints to multiple enemies may result in unwanted behaviour.")]
     [SerializeField] private Transform[] activityWaypoints;
 
-    private NavMeshAgent agent;
-    private Animator animator;
+    [HideInInspector] public NavMeshAgent agent;
+    [HideInInspector] public Animator animator;
+    private EnemyFOV enemyFOV;
     private Node topNode;
 
-    private EnemyFOV enemyFOV;
     private Transform playerTransform;
     private Transform agentCenterTransform;
     private Vector3 worldDeltaPosition;
@@ -30,11 +30,13 @@ public class EnemyAI : MonoBehaviour
     private float deltaMagnitude;
     private float chaseRange;
     private float captureRange;
-    private float scareTimer = 0;
+    private float infrequentTimer = 0;
     private float smooth;
     private float dx;
     private float dy;
+
     private bool shouldMove;
+    [HideInInspector] public bool activeAI;
 
     private void Awake()
     {
@@ -57,11 +59,14 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        SynchronizeAnimatorAndAgent();
-        topNode.Evaluate();
-        if (topNode.nodeState == NodeState.FAILURE)
-            agent.isStopped = true;
-        CheckOutOfBounds();
+        if (activeAI)
+        {
+            SynchronizeAnimatorAndAgent();
+            topNode.Evaluate();
+            if (topNode.nodeState == NodeState.FAILURE)
+                agent.isStopped = true;
+            CheckOutOfBounds();
+        }
     }
 
     private void SynchronizeAnimatorAndAgent()

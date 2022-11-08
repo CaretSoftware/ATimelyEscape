@@ -27,11 +27,11 @@ public class CaptureNode : Node
 
     public override NodeState Evaluate()
     {
-        Debug.Log("Trying to capture");
+        //Debug.Log("Trying to capture");
         destinationDistance = Vector3.Distance(target.position, agentTransform.transform.position);
         if (destinationDistance < captureDistance)
         {
-            Debug.Log("CAPTURED");
+            //Debug.Log("CAPTURED");
             if (!endScreenTriggered)
             {
                 target.transform.position = checkpoint.position;
