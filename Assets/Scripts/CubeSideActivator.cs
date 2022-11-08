@@ -1,12 +1,11 @@
 using System;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 
 public class CubeSideActivator : MonoBehaviour {
 	private Vector3 debug;
-	private Vector3[] sides = {Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.back, Vector3.forward};
+	private Vector3[] sides = {Vector3.left, Vector3.right, Vector3.back, Vector3.forward};
 	[Tooltip("Left, Right, Back Forward — objects local transform directions in that order!"), SerializeField] 
 	private GameObject[] objects;
 	
@@ -15,6 +14,8 @@ public class CubeSideActivator : MonoBehaviour {
 	private CanvasGroup canvasGroup;
 
 	private Transform player;
+
+	private int activeUI;
 
 	// Start is called before the first frame update
 	void Start()
@@ -29,7 +30,6 @@ public class CubeSideActivator : MonoBehaviour {
 	{
 		if (player != null) {
 			ActivateOnlyClosestSide();
-			//canvasGroup.alpha = 1 - (Vector3.Distance(player.position, gameObject.transform.position) / maxDistance);
 		}
 
 		void ActivateOnlyClosestSide() {
@@ -48,15 +48,14 @@ public class CubeSideActivator : MonoBehaviour {
 				}
 			}
 
-			for (int obj = 0; obj < objects.Length; obj++)
-				objects[obj].SetActive(obj == closestSide);    // set active if it’s the closest side
-			/*
-			if (obj == closestSide)
-				objects[obj].GetComponent<FadeScript>().FadeIn();
-			else
-				objects[obj].GetComponent<FadeScript>().FadeOut();
-			*/
+			for (int obj = 0; obj < objects.Length; obj++) {
+				//objects[obj].SetActive(obj == closestSide);	// set active if it’s the closest side
 
+				if (obj == closestSide)
+					objects[obj].GetComponent<FadeScript>().FadeIn();
+				else
+					objects[obj].GetComponent<FadeScript>().FadeOut();
+			}
 		}
 	}
 

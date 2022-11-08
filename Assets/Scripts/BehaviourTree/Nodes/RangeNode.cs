@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class RangeNode : Node
 {
-    private float range;
+    private float range, distance;
     private Transform origin, target;
+    private EnemyFOV fov;
 
-    public RangeNode (float range, Transform origin, Transform target)
+    public RangeNode (float range, Transform origin, Transform target, EnemyFOV fov)
     {
         this.range = range;
         this.origin = origin;
         this.target = target;
+        this.fov = fov;
     }
 
     public override NodeState Evaluate()
     {
-        float dist = Vector3.Distance(origin.position, target.position);
-        _nodeState = dist <= range ? NodeState.SUCCESS : NodeState.FAILURE;
+        distance = Vector3.Distance(origin.position, target.position);
+        _nodeState = distance <= range || fov.playerDetected ? NodeState.SUCCESS : NodeState.FAILURE;
         return _nodeState;
-
     }
 }
