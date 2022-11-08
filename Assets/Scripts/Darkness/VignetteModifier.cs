@@ -9,7 +9,7 @@ public class VignetteModifier : MonoBehaviour
 {
     [SerializeField] private float modifyAmount = 0.002f;
     private Volume postProcesingVolume;
-    private Vignette vignette;
+    [HideInInspector] public Vignette vignette;
 
     // Start is called before the first frame update
     void Start()
