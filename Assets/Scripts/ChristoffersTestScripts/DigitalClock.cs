@@ -15,10 +15,10 @@ public class DigitalClock : MonoBehaviour
     public bool futureDone; 
     void Start()
     {
+        textMeshPro.text = TimeToString.TimeAsString(secondsLeft);
         futureDone = false;
         isOn = false; 
         textMeshPro = textDisplay.GetComponent<TextMeshProUGUI>();
-        textMeshPro.text = "" + secondsLeft;
     }
     private void Update()
     {
@@ -33,7 +33,7 @@ public class DigitalClock : MonoBehaviour
         takingAway = true;
         yield return new WaitForSeconds(1);
         secondsLeft -= 1;
-        textMeshPro.text = "" + secondsLeft;
+        textMeshPro.text = TimeToString.TimeAsString(secondsLeft);
         takingAway = false;
         if(secondsLeft <= 0 && isFutureTimer)
         {
