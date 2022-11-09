@@ -12,21 +12,15 @@ public class HintController : MonoBehaviour
     [Header("Player")]
     [SerializeField] private CharacterInput characterInput;
 
-    private CameraController cameraController;
-
     private FadeScript fadeScript;
 
     private Animator animator;
-
-    private bool shownBasics;
-    private bool hintsActive = true;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         fadeScript = GetComponent<FadeScript>();
 
-        cameraController = CameraController.Instance;
     }
 
     private void Update()
@@ -38,10 +32,10 @@ public class HintController : MonoBehaviour
     {
         if (characterInput.LedgeAhead(out Vector3 hitPosition) && characterInput.Grounded())
         {
+            fadeScript.FadeIn();
+
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("SpaceJump"))
                 return;
-
-            fadeScript.FadeIn();
 
             ShowSpaceJump();
         }
