@@ -50,6 +50,12 @@ public class HintController : MonoBehaviour
         
     }
 
+    private void ShowWarningTimeTravel()
+    {
+        context.text = "Malfunction";
+        animator.Play("TimeWarning");
+    }
+
     private void ShowLeftMouseClick(string info)
     {
         context.text = "Interact " + info;
