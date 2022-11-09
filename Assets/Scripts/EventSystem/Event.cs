@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using Object = System.Object;
 
 namespace CallbackSystem {
@@ -98,11 +99,12 @@ namespace CallbackSystem {
 
     public class SetVignetteModifierEvent : Event
     {
-        public VignetteModifier VignetteModifier;
+        public Vignette vignette;
 
-        public SetVignetteModifierEvent(VignetteModifier vignetteModifier)
+        public SetVignetteModifierEvent(Vignette vignette)
         {
-            VignetteModifier = vignetteModifier;
+            this.vignette = vignette;
+            Debug.Log(vignette);
         }
     }
 }
