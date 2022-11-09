@@ -16,6 +16,8 @@ namespace CallbackSystem
         public Camera lightScan;
         [Tooltip("Show the light value in the log.")]
         public bool lightValueLog = false;
+        [Tooltip("This starts the detection when the game starts, rather then waiting for when the player travals to the futer")]
+        [SerializeField] private bool onAtStart = false;
         [Tooltip("Time between light value updates")]
         public float updateTime = 0.1f;
         [Tooltip("Less light than this and Darkness starts coming")]
@@ -48,8 +50,11 @@ namespace CallbackSystem
             SetVignetteModifierEvent.AddListener<SetVignetteModifierEvent>(SetVignetteModifier);
             TimePeriodChanged.AddListener<TimePeriodChanged>(ActivateLightDetection);
             fail = new();
-            StartCoroutine(LightDetectionUpdate(updateTime));
-            StartCoroutine(Darkness(updateTime));
+            if (onAtStart)
+            {
+                StartCoroutine(LightDetectionUpdate(updateTime));
+                StartCoroutine(Darkness(updateTime));
+            }
         }
 
         private void ActivateLightDetection(TimePeriodChanged obj)
