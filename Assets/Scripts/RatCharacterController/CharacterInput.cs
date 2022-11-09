@@ -85,7 +85,7 @@ namespace RatCharacterController {
          if (paused) {
             _characterAnimationController.InputVector(Vector2.zero);
             return; // interacting with keypad
-         } 
+         }
          
          CameraInput();
          _characterAnimationController.SetGrounded(Grounded());
@@ -127,13 +127,14 @@ namespace RatCharacterController {
          // lerp player in front of box
          // slerp players rotation to inverse raycast.normalDirection
          // Jump To freeHang
+
          Transform playerTransform = _playerTransform;
          Vector3 playerPosition = playerTransform.position;
-         float playerScale = playerTransform.localScale.y;
-         float margin = .1f * playerScale;
+         // float playerScale = playerTransform.localScale.y;
+         float margin = 0.01f;//.1f * playerScale;
          Ray ray = RayAtHalfHeight(playerTransform);
          CapsuleCollider capsuleCollider = _collider;
-         float radius = capsuleCollider.radius * playerScale;
+         float radius = 0.03f;// capsuleCollider.radius * playerScale;
          _playerForward = playerTransform.forward;
 
          if (!_jumping && Grounded()) {
@@ -189,11 +190,12 @@ namespace RatCharacterController {
             Transform playerTransform = _playerTransform;
             Vector3 playerPosition = playerTransform.position;
             float playerScale = playerTransform.localScale.y;
-            float margin = .1f * playerScale;
+            float margin = .1f;// * playerScale;
             Ray ray = RayAtHalfHeight(playerTransform);
             CapsuleCollider capsuleCollider = _collider;
-            float radius = capsuleCollider.radius * playerScale;
+            float radius = capsuleCollider.radius;// * playerScale;
             _playerForward = playerTransform.forward;
+            float maxDistance = .1f;
 
             Vector3 ledgeHeight = 2.0f * playerScale * Vector3.up;
 
@@ -204,7 +206,7 @@ namespace RatCharacterController {
                       ledgeHeight +
                       (_collider.height + margin) * playerScale * Vector3.up -
                       radius * Vector3.up;
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f * playerScale, groundedLayerMask,
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance, groundedLayerMask,
                    QueryTriggerInteraction.Ignore) &&
                 Physics.OverlapCapsule(_point0, _point1, radius, groundedLayerMask, QueryTriggerInteraction.Ignore)
                    .Length < 1)
@@ -249,7 +251,7 @@ namespace RatCharacterController {
 
       private Ray RayAtHalfHeight(Transform playerTransform) {
          return new Ray(
-            transform.position + Vector3.up * _characterHalfHeight * playerTransform.localScale.y,
+            transform.position + Vector3.up * _characterHalfHeight, // * playerTransform.localScale.y,
             playerTransform.forward);
       }
 
@@ -278,7 +280,7 @@ namespace RatCharacterController {
       private void PushCubeInput(Vector3 input) {
          Transform playerTransform = _playerTransform;
          Ray ray = new Ray(
-            _playerTransform.position + _characterHalfHeight * _playerTransform.localScale.y * Vector3.up,
+            _playerTransform.position + _characterHalfHeight * /*_playerTransform.localScale.y * */ Vector3.up,
             _playerTransform.forward);
 
          Vector3 projectedInput = InputToCameraProjection(input);
@@ -368,7 +370,7 @@ namespace RatCharacterController {
 
       public bool Grounded() {
          Transform playerTransform = _playerTransform;
-         float radius = _collider.radius * playerTransform.localScale.y;
+         float radius = _collider.radius;// * playerTransform.localScale.y;
          float margin = 0.01f;
          float maxDistance = .02f + margin;
          Vector3 origin = playerTransform.position + (radius * Vector3.up) + (margin * Vector3.up);
