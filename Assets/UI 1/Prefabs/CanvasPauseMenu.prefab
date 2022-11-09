@@ -1083,20 +1083,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5217577538499816101}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuBehaviour, Assembly-CSharp
+      - m_Target: {fileID: 3059687622606319849}
+        m_TargetAssemblyTypeName: PauseMenuBehaviour, Assembly-CSharp
         m_MethodName: UnPauseGame
         m_Mode: 1
         m_Arguments:
@@ -1119,6 +1107,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70e0e8ebd5e302f4d8cc7d5470ca7f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitgame: {fileID: 0}
+  credits: {fileID: 0}
+  settings: {fileID: 0}
+  newgame: {fileID: 0}
+  click: {fileID: 0}
+  hover: {fileID: 0}
   neutral: {fileID: 21300000, guid: 6c413a9e93d028e48a084698d36334b6, type: 3}
   pressed: {fileID: 21300000, guid: ab98d23acc899144bad6186cbf2906ab, type: 3}
   selected: {fileID: 21300000, guid: 4e56937cc2cf1484e807c18cb02d9e32, type: 3}
@@ -1256,6 +1250,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70e0e8ebd5e302f4d8cc7d5470ca7f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitgame: {fileID: 0}
+  credits: {fileID: 0}
+  settings: {fileID: 0}
+  newgame: {fileID: 0}
+  click: {fileID: 0}
+  hover: {fileID: 0}
   neutral: {fileID: 21300000, guid: cca262c49178dbc4b8ee0ec95e0418ed, type: 3}
   pressed: {fileID: 21300000, guid: d0009ef519496464d9925ed640346523, type: 3}
   selected: {fileID: 21300000, guid: e06850e100f5c084baac9e5a18b55fa4, type: 3}
@@ -1381,8 +1381,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuBehaviour, Assembly-CSharp
+      - m_Target: {fileID: 3059687622606319849}
+        m_TargetAssemblyTypeName: PauseMenuBehaviour, Assembly-CSharp
         m_MethodName: SelectScene
         m_Mode: 3
         m_Arguments:
@@ -1405,6 +1405,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70e0e8ebd5e302f4d8cc7d5470ca7f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exitgame: {fileID: 0}
+  credits: {fileID: 0}
+  settings: {fileID: 0}
+  newgame: {fileID: 0}
+  click: {fileID: 0}
+  hover: {fileID: 0}
   neutral: {fileID: 21300000, guid: b6936a5adf01cf2408053005ae228285, type: 3}
   pressed: {fileID: 21300000, guid: e2e2d3bd8072dcc408dc042ba19417bf, type: 3}
   selected: {fileID: 21300000, guid: 2c603113c1c718a41836f548c0be643c, type: 3}
@@ -1654,10 +1660,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuBehaviour, Assembly-CSharp
-        m_MethodName: PauseGame
-        m_Mode: 1
+      - m_Target: {fileID: 3059687622606319849}
+        m_TargetAssemblyTypeName: PauseMenuBehaviour, Assembly-CSharp
+        m_MethodName: SelectScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
