@@ -37,9 +37,11 @@ namespace CallbackSystem
         private float timer = 0f;
         private DieEvent fail;
 
-        [SerializeField]private Vignette vignette;
 
-       
+        [SerializeField] private Volume postProcesingVolume;
+        private Vignette vignette;
+
+
         private void Start()
         {
             texLight = new Texture2D(textureSize, textureSize, TextureFormat.RGB24, false);
@@ -47,6 +49,8 @@ namespace CallbackSystem
             rectLight = new Rect(0f, 0f, textureSize, textureSize);
             SetVignetteModifierEvent.AddListener<SetVignetteModifierEvent>(SetVignetteModifier);
             TimePeriodChanged.AddListener<TimePeriodChanged>(ActivateLightDetection);
+
+            postProcesingVolume.profile.TryGet(out vignette);
             fail = new();
         }
 
@@ -68,13 +72,13 @@ namespace CallbackSystem
 
         private IEnumerator Darkness(float updateTime)
         {
-            while (true)
+            while (true || vignette.intensity.value < 1)
             {
                 yield return new WaitForSeconds(updateTime);
                 if (lightValue < minumumLight)
                 {
                     //timer += (Time.deltaTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, lightValue * (1 / minumumLight)));
-                    timer += (updateTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, lightValue * (1 / minumumLight)));
+                    timer += (updateTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, (lightValue * (1 / minumumLight)) / Time.deltaTime));
                 }
                 else
                     timer = 0f;
@@ -91,8 +95,6 @@ namespace CallbackSystem
 
                 }
                 vignette.intensity.value = timer;
-                //Debug.Log(vignette.intensity.value);
-                
             }
         }
 
