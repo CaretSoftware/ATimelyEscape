@@ -37,7 +37,7 @@ namespace CallbackSystem
         private float timer = 0f;
         private DieEvent fail;
 
-        [SerializeField]private Vignette vignette;
+        private Vignette vignette;
 
        
         private void Start()
