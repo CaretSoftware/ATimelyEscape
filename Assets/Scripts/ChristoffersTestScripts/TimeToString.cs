@@ -38,7 +38,7 @@ public class TimeToString
 		time %= Minute;
 		int seconds = (int)time;
 
-		sb.AppendFormat("YEARS: {0} MONTHS: {1} WEEKS: {2} DAYS: {3} HOURS: {4} MIN: {5} SEC: {6}",
+		sb.AppendFormat("TIME UNTIL DONE \n YEARS: {0} \n MONTHS: {1} \n WEEKS: {2} \n DAYS: {3} \n HOURS: {4} \n MIN: {5} \n SEC: {6}",
 			years, months, weeks, days, hours, minutes, seconds);
 		// Debug.Log(sb.ToString());
 		return sb.ToString();
