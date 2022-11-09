@@ -26,7 +26,7 @@ public class ChaseNode : Node
         destinationDistance = Vector3.Distance(target.position, agentTransform.position);
         if(destinationDistance > triggerDistance)
         {
-            Debug.Log("Chasing");
+            //Debug.Log("Chasing");
             agent.isStopped = false;
             agent.SetDestination(target.position);
             return NodeState.RUNNING;

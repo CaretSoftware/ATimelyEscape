@@ -8,7 +8,7 @@ using StateMachines;
 using UnityEngine.AI;
 
 public class TimeTravelObject : MonoBehaviour {
-    private TimeTravelObject pastSelf;
+    public TimeTravelObject pastSelf;
     private Transform destiny;
     private TimeTravelObjectManager manager;
     public Rigidbody Rigidbody { get; private set; }

@@ -6,8 +6,8 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
-    private const float NavMeshRadiusOffstep = 10f;
-    private const float scareFrequency = 0.3f;
+    private const float NavMeshRadiusOffstep = 20f;
+    private const float Infrequency = 0.1f;
 
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
@@ -15,14 +15,18 @@ public class EnemyAI : MonoBehaviour
     [Tooltip("Assigning the same waypoints to multiple enemies may result in unwanted behaviour.")]
     [SerializeField] private Transform[] activityWaypoints;
 
-    private NavMeshAgent agent;
-    private Animator animator;
-    private Node topNode;
+    [HideInInspector] public NavMeshAgent agent;
+    [HideInInspector] public Animator animator;
+    [HideInInspector] public bool activeAI;
 
     private EnemyFOV enemyFOV;
+    private NavMeshHit hit;
+    private Node topNode;
+
     private Transform playerTransform;
     private Transform agentCenterTransform;
     private Vector3 worldDeltaPosition;
+    private Vector3 rootPosition;
     private Vector2 smoothDeltaPosition;
     private Vector2 deltaPosition;
     private Vector2 velocity;
@@ -30,11 +34,15 @@ public class EnemyAI : MonoBehaviour
     private float deltaMagnitude;
     private float chaseRange;
     private float captureRange;
-    private float scareTimer = 0;
+    private float infrequentTimer = 0;
+    private float onMeshThreshold = 3;
     private float smooth;
     private float dx;
     private float dy;
+
     private bool shouldMove;
+
+    public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
 
     private void Awake()
     {
@@ -57,11 +65,14 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        SynchronizeAnimatorAndAgent();
-        topNode.Evaluate();
-        if (topNode.nodeState == NodeState.FAILURE)
-            agent.isStopped = true;
-        CheckOutOfBounds();
+        if (activeAI)
+        {
+            SynchronizeAnimatorAndAgent();
+            topNode.Evaluate();
+            if (topNode.nodeState == NodeState.FAILURE)
+                agent.isStopped = true;
+            CheckOutOfBounds();
+        }
     }
 
     private void SynchronizeAnimatorAndAgent()
@@ -110,16 +121,11 @@ public class EnemyAI : MonoBehaviour
     //accounts for offset between the character- and agent component position that occurs each frame.
     private void OnAnimatorMove()
     {
-        Vector3 rootPosition = animator.rootPosition;
+        rootPosition = animator.rootPosition;
         rootPosition.y = agent.nextPosition.y;
         transform.position = rootPosition;
         agent.nextPosition = rootPosition;
     }
-
-    public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
-
-    float onMeshThreshold = 3;
-    NavMeshHit hit;
 
     //if false, agent is out of bounds of the NavMesh.
     private void CheckOutOfBounds()

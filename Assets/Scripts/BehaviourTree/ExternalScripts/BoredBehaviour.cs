@@ -8,12 +8,13 @@ public class BoredBehaviour : StateMachineBehaviour
     private const float StartOfAnimationValue = 0.02f;
     private const float TransitionTime = 0.2f;
 
-    [SerializeField] private float timeUntilBored;
+    [SerializeField] private float timeBetweenAnimations;
     [SerializeField] private int numberOfBoredAnimations;
 
-    private bool isBored;
     private float idleTime;
     private int boredAnimation;
+    private bool isBored;
+
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -28,7 +29,7 @@ public class BoredBehaviour : StateMachineBehaviour
         {
             idleTime += Time.deltaTime;
             //Check to make sure we're not in the middle of an animation.
-            if (idleTime > timeUntilBored && stateInfo.normalizedTime % 1 < StartOfAnimationValue)
+            if (idleTime > timeBetweenAnimations && stateInfo.normalizedTime % 1 < StartOfAnimationValue)
             {
                 isBored = true;
                 boredAnimation = Random.Range(1, numberOfBoredAnimations + 1);
@@ -38,9 +39,8 @@ public class BoredBehaviour : StateMachineBehaviour
             }
         }
         else if(stateInfo.normalizedTime % 1 > EndOfAnimationValue)
-        {
             ResetIdle();
-        }
+        
         animator.SetFloat("boredAnimation", boredAnimation, TransitionTime, Time.deltaTime);
 
     }

@@ -1,6 +1,10 @@
 using CallbackSystem;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 
 namespace CallbackSystem
@@ -33,30 +37,62 @@ namespace CallbackSystem
         private float timer = 0f;
         private DieEvent fail;
 
+        [SerializeField]private Vignette vignette;
+
+       
         private void Start()
         {
+            texLight = new Texture2D(textureSize, textureSize, TextureFormat.RGB24, false);
+            texTemp = new RenderTexture(textureSize, textureSize, 24);
+            rectLight = new Rect(0f, 0f, textureSize, textureSize);
+            SetVignetteModifierEvent.AddListener<SetVignetteModifierEvent>(SetVignetteModifier);
+            TimePeriodChanged.AddListener<TimePeriodChanged>(ActivateLightDetection);
             fail = new();
-            StartLightDetection();
         }
 
-        private void Update()
+        private void ActivateLightDetection(TimePeriodChanged obj)
         {
-            if (lightValue < minumumLight)
+            if(obj.to == TimeTravelPeriod.Future)
             {
-                timer += (Time.deltaTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, lightValue * (1/minumumLight))); 
-                //Debug.Log(timer);
+                StartCoroutine(LightDetectionUpdate(updateTime));
+                StartCoroutine(Darkness(updateTime));
             }
             else
-                timer = 0f;
-            if (timer >= 1)
             {
-                LightDetectior();
+                StopAllCoroutines();
+                timer = 0f;
+                if(vignette != null)
+                    vignette.intensity.value = timer;
+            }
+        }
+
+        private IEnumerator Darkness(float updateTime)
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(updateTime);
                 if (lightValue < minumumLight)
                 {
-                    //Debug.Log(1);
-                    fail.Invoke();
+                    //timer += (Time.deltaTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, lightValue * (1 / minumumLight)));
+                    timer += (updateTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, lightValue * (1 / minumumLight)));
                 }
+                else
+                    timer = 0f;
+                if (timer >= 1)
+                {
+                    LightDetectior();
+                    if (lightValue < minumumLight)
+                    {
+                       
+                        fail.Invoke();
+                    }
+                    else
+                        timer = 0f;
 
+                }
+                vignette.intensity.value = timer;
+                //Debug.Log(vignette.intensity.value);
+                
             }
         }
 
@@ -106,6 +142,11 @@ namespace CallbackSystem
         public float GetFailTimer()
         {
             return timer;
+        }
+
+        public void SetVignetteModifier(SetVignetteModifierEvent setVignetteModifierEvent)
+        {
+            vignette = setVignetteModifierEvent.vignette;
         }
     }
 }

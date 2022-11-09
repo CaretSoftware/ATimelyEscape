@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using Object = System.Object;
 
 namespace CallbackSystem {
@@ -40,6 +41,7 @@ namespace CallbackSystem {
         public TimeTravelPeriod from;
         public TimeTravelPeriod to;
     }
+
 
     // this looks feels very redundant, looking into alternative solutions.
     public class PhysicsSimulationComplete : DebugEvent
@@ -83,5 +85,26 @@ namespace CallbackSystem {
     public class FailStateEvent : Event
     {
 
+    }
+
+    public class ChargeChangedEvent : Event
+    {
+        public TimeTravelObject changedObject;
+
+        public ChargeChangedEvent(TimeTravelObject changedObject)
+        {
+            this.changedObject = changedObject;
+        }
+    }
+
+    public class SetVignetteModifierEvent : Event
+    {
+        public Vignette vignette;
+
+        public SetVignetteModifierEvent(Vignette vignette)
+        {
+            this.vignette = vignette;
+            Debug.Log(vignette);
+        }
     }
 }
