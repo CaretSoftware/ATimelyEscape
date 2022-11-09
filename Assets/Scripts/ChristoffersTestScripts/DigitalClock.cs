@@ -5,6 +5,14 @@ using TMPro;
 
 public class DigitalClock : MonoBehaviour
 {
+    [Header("Time Settings")]
+    [SerializeField] private int seconds = 60;
+    [SerializeField]private int Minutes = 60;
+    [SerializeField]private int Hours = 60;
+    [SerializeField]private int Days = 24;
+    [SerializeField]private int Weeks = 7;
+    [SerializeField]private int Months = 30;
+    [SerializeField]private int Years = 365;
     [SerializeField] GameObject textDisplay;
     [SerializeField] bool isFutureTimer;
     private bool takingAway = false;
@@ -15,10 +23,10 @@ public class DigitalClock : MonoBehaviour
     public bool futureDone; 
     void Start()
     {
-        textMeshPro.text = TimeToString.TimeAsString(secondsLeft);
         futureDone = false;
         isOn = false; 
         textMeshPro = textDisplay.GetComponent<TextMeshProUGUI>();
+        textMeshPro.text = TimeToString.TimeAsString(secondsLeft);
     }
     private void Update()
     {
