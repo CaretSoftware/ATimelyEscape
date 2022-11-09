@@ -41,6 +41,7 @@ namespace CallbackSystem {
         public TimeTravelPeriod to;
     }
 
+
     // this looks feels very redundant, looking into alternative solutions.
     public class PhysicsSimulationComplete : DebugEvent
     {
@@ -83,5 +84,25 @@ namespace CallbackSystem {
     public class FailStateEvent : Event
     {
 
+    }
+
+    public class ChargeChangedEvent : Event
+    {
+        public TimeTravelObject changedObject;
+
+        public ChargeChangedEvent(TimeTravelObject changedObject)
+        {
+            this.changedObject = changedObject;
+        }
+    }
+
+    public class SetVignetteModifierEvent : Event
+    {
+        public VignetteModifier VignetteModifier;
+
+        public SetVignetteModifierEvent(VignetteModifier vignetteModifier)
+        {
+            VignetteModifier = vignetteModifier;
+        }
     }
 }

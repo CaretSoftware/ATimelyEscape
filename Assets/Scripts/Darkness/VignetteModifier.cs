@@ -1,3 +1,4 @@
+using CallbackSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,12 +9,14 @@ public class VignetteModifier : MonoBehaviour
 {
     [SerializeField] private float modifyAmount = 0.002f;
     private Volume postProcesingVolume;
-    private Vignette vignette;
+    [HideInInspector] public Vignette vignette;
+
     // Start is called before the first frame update
     void Start()
     {
         postProcesingVolume = GetComponent<Volume>();
         postProcesingVolume.profile.TryGet(out vignette);
+        new SetVignetteModifierEvent(this).Invoke();
     }
 
     private void Update()

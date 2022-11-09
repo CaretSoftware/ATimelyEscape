@@ -8,12 +8,14 @@ public class StartMenuBehaviour : MonoBehaviour
 {
     private Animator startMenyAnimator;
 
+
     private void Start()
     {
         startMenyAnimator = gameObject.GetComponent<Animator>();
 
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
+
     }
 
     // Method to load a scene by insert the index of wished scene presented in buildsettings
