@@ -6,7 +6,7 @@ public class IconBehaviour : MonoBehaviour
 {
     private float maxDistance = 0;
 
-    private CanvasGroup canvasGroup;
+    [SerializeField] private CanvasGroup canvasGroup;
 
     private Transform player_;
 
@@ -14,7 +14,9 @@ public class IconBehaviour : MonoBehaviour
     private void Start()
     {
         maxDistance = GetComponent<SphereCollider>().radius * transform.parent.localScale.x;
-        canvasGroup = GetComponent<CanvasGroup>();
+
+        if(canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
 
         canvasGroup.alpha = 0;
     }
