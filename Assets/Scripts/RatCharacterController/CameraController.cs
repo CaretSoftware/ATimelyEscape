@@ -3,7 +3,8 @@ using UnityEditor;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
-	private Transform _camera;
+	[SerializeField] private Transform _camera;
+	public static Transform Cam { get; private set; }
 	private Vector2 _mouseMovement;
 	private Vector3 _cameraPos;
 	
@@ -45,19 +46,23 @@ public class CameraController : MonoBehaviour {
 	private PauseMenuBehaviour pauseMenuBehaviour;
 
 	private void Awake() {
-		if (Instance == null)
-			Instance = this;
-	}
+		// if (Instance == null) 
+		Instance ??= this;
+		
+		if (_camera == null)
+			_camera = Camera.main.transform;
 
+		Cam = _camera;
+	}
+	
 	private void Start() {
-		_camera = GetComponentInChildren<Camera>().transform;
+		pauseMenuBehaviour = FindObjectOfType<PauseMenuBehaviour>();
 		CameraFollow cameraFollow = FindObjectOfType<CameraFollow>();
+		
 		Vector3 initialCameraVector = cameraFollow.Follow.rotation.eulerAngles;
 
 		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
-		//_camera.rotation = Quaternion.Euler(initialCameraVector.y, initialCameraVector.x, 0.0f);
 		
-		// init smoothDamp variables and set camera position
 		_lerpOffset = cameraOffset;
 		_cameraPos = transform.position;
 		_camera.position = _cameraPos + cameraOffset;
@@ -68,6 +73,10 @@ public class CameraController : MonoBehaviour {
 
 	private void Update() {
 		
+		if (pauseMenuBehaviour != null && pauseMenuBehaviour.isPaused()) return;
+		
+		MoveCamera();
+		
 		// if (Time.timeScale <= Mathf.Epsilon) {
 		// 	Cursor.visible = true;
 		// 	Cursor.lockState = CursorLockMode.Confined;
@@ -75,8 +84,6 @@ public class CameraController : MonoBehaviour {
 		// 	Cursor.visible = false;
 		// 	Cursor.lockState = CursorLockMode.Locked;
 		// }
-		
-		MoveCamera();
 	}
 
 	// public void SetMouseLookSensitivity(float value) {
@@ -88,6 +95,7 @@ public class CameraController : MonoBehaviour {
 
 		_mouseMovement.x += mouseDelta.x * MouseSensitivity;
 		_mouseMovement.y -= mouseDelta.y * MouseSensitivity;
+
 	}
 
 	public void StickInput(Vector2 stickDelta) {
@@ -102,6 +110,7 @@ public class CameraController : MonoBehaviour {
 	}
 
 	private Vector3 _lerpOffset;
+
 	private void MoveCamera() {
 		const float lookOffset = 90;
 

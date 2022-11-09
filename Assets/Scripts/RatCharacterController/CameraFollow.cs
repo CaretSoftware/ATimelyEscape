@@ -6,27 +6,27 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour { 
 	public Transform Follow { get; private set; }
-	[SerializeField] private Transform follow;
+	//[SerializeField] private Transform follow;
 	private Transform _transform;
 	private Transform _camera;
 	private Vector3 _currentVelocity;
 	[SerializeField] private float smoothness = 0.2f;
 	[SerializeField] private float maxVelocity = 1.0f;
 	[SerializeField] private float largestMagnitude = .07f;
+	[SerializeField] private float superSonic = 5.0f;
+	[SerializeField] private float superSmooth = 0.01f;
 
-	public float maxSpeed;
-	public float smoothTime;
+	private float maxSpeed;
+	private float smoothTime;
+	
 	private void Awake() {
 		if (Follow == null)
 			Follow = FindObjectOfType<CharacterAnimationController>().transform;
 		
 		_transform = transform;
-		_camera = GetComponentInChildren<Camera>().transform; 
+		_camera = GetComponentInChildren<Camera>().transform;
 		_transform.position = Follow.position;
 	}
-
-	public float superSonic = 5.0f;
-	public float superSmooth = 0.01f;
 
 	private void LateUpdate() {
 		Transform thisTransform = _transform;
