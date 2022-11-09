@@ -91,7 +91,7 @@ namespace CallbackSystem
 
                 }
                 vignette.intensity.value = timer;
-                //Debug.Log(vignette.intensity.value);
+                Debug.Log(vignette.intensity.value);
                 
             }
         }
