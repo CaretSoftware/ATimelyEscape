@@ -48,8 +48,6 @@ namespace CallbackSystem
             SetVignetteModifierEvent.AddListener<SetVignetteModifierEvent>(SetVignetteModifier);
             TimePeriodChanged.AddListener<TimePeriodChanged>(ActivateLightDetection);
             fail = new();
-            StartCoroutine(LightDetectionUpdate(updateTime));
-            StartCoroutine(Darkness(updateTime));
         }
 
         private void ActivateLightDetection(TimePeriodChanged obj)
@@ -63,7 +61,8 @@ namespace CallbackSystem
             {
                 StopAllCoroutines();
                 timer = 0f;
-                vignette.intensity.value = timer;
+                if(vignette != null)
+                    vignette.intensity.value = timer;
             }
         }
 
