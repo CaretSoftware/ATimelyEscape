@@ -11,7 +11,8 @@ public class Charger : MonoBehaviour
     {
         if(other.gameObject.tag == "Cube")
         {
-            other.gameObject.GetComponent<CubeCharge>().Charging(charge);
+            Debug.Log(1);
+            other.gameObject.GetComponent<CubeCharge>().Charging(charge, this);
         }
     }
 }

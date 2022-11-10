@@ -10,11 +10,18 @@ public class ActivateBridge : MonoBehaviour
     {
         bridge.SetActive(false);
     }
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Cube")
         {
             bridge.SetActive(true);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Cube")
+        {
+            bridge.SetActive(false);
         }
     }
 }

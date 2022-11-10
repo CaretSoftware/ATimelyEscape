@@ -2,51 +2,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
 
 public class DigitalClock : MonoBehaviour
 {
-
-    [SerializeField] private TextMeshProUGUI clockText;
-
-    [Header("Timer Values")]
-    [Range(0,60)]
+    [Header("Time Settings")]
     [SerializeField] private int seconds;
-    [Range(0, 60)]
-    [SerializeField] private int minutes;
-    [Range(0, 50)]
-    [SerializeField] private int hours;
-/*    [Range(0, 365)]
-    [SerializeField] private int days;
-    [Range(0, 50)]
-    [SerializeField] private int years;*/
-    [SerializeField] private Color fontColor;
+    [SerializeField]private int minutes;
+    [SerializeField]private int hours;
+    [SerializeField]private int days;
+    [SerializeField]private int weeks;
+    [SerializeField]private int months;
+    [SerializeField] private int years;
 
-    private float currentSeconds;
-    private int clockDefault;
+    [Header("Text Settings")]
+    [SerializeField] GameObject textDisplay;
+    [SerializeField] bool isFutureTimer;
+    private bool takingAway = false;
+    private TextMeshProUGUI textMeshPro;
 
+    public int time;
+    public bool isOn;
+    public bool futureDone; 
     void Start()
     {
-        clockText.color = fontColor;
-        clockDefault = 0;
-        clockDefault += (seconds + (minutes * 60) + (hours * 60 * 60));
-                        //(days * 60 * 60 * 24) + (years * 60 * 60 * 24 * 365));
-        currentSeconds = clockDefault;
+        time = years * TimeToString.Year + months * TimeToString.Month + weeks * TimeToString.Week
+                + days * TimeToString.Day + hours * TimeToString.Hour + minutes * TimeToString.Minute + seconds;
+        futureDone = false;
+        isOn = false; 
+        textMeshPro = textDisplay.GetComponent<TextMeshProUGUI>();
+        textMeshPro.text = TimeToString.TimeAsString(time);
+    }
+    private void Update()
+    {
+        if(!takingAway && time > 0 && isOn)
+        {
+            StartCoroutine(TimerTake());
+        }
     }
 
-    void Update()
+    IEnumerator TimerTake()
     {
-        if((currentSeconds -= Time.deltaTime) <= 0)
+        takingAway = true;
+        yield return new WaitForSeconds(1);
+        time -= 1;
+        textMeshPro.text = TimeToString.TimeAsString(time);
+        takingAway = false;
+        if(time <= 0 && isFutureTimer)
         {
-            TimeUp();
+            futureDone = true;
         }
-        else
-        {
-            clockText.text = TimeSpan.FromSeconds(currentSeconds).ToString(@"hh\:mm\:ss");
-        }
+
     }
-    private void TimeUp()
-    {
-        clockText.text = "00:00:00";
-    }
+
+    
 }

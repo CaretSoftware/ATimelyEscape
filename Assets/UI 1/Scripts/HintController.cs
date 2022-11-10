@@ -12,21 +12,15 @@ public class HintController : MonoBehaviour
     [Header("Player")]
     [SerializeField] private CharacterInput characterInput;
 
-    private CameraController cameraController;
-
     private FadeScript fadeScript;
 
     private Animator animator;
-
-    private bool shownBasics;
-    private bool hintsActive = true;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         fadeScript = GetComponent<FadeScript>();
 
-        cameraController = CameraController.Instance;
     }
 
     private void Update()
@@ -38,10 +32,10 @@ public class HintController : MonoBehaviour
     {
         if (characterInput.LedgeAhead(out Vector3 hitPosition) && characterInput.Grounded())
         {
+            fadeScript.FadeIn();
+
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("SpaceJump"))
                 return;
-
-            fadeScript.FadeIn();
 
             ShowSpaceJump();
         }
@@ -49,6 +43,12 @@ public class HintController : MonoBehaviour
         {
             fadeScript.FadeOut();
         }
+    }
+
+    public void ShowWarningTimeTravel()
+    {
+        context.text = "Object Blocks the Timetravel";
+        animator.Play("TimeWarning");
     }
 
     private void ShowLeftMouseClick(string info)
@@ -61,6 +61,7 @@ public class HintController : MonoBehaviour
     {
         context.text = "Interact " + info;
         animator.Play("RightClick");
+        
     }
 
     private void ShowSpaceJump()
@@ -81,7 +82,7 @@ public class HintController : MonoBehaviour
         animator.Play("MoveAround");
     }
 
-    private void BeNeutral()
+    public void BeNeutral()
     {
         fadeScript.FadeOut();
     }
