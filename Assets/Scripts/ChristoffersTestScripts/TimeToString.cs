@@ -9,8 +9,8 @@ public class TimeToString
     public static readonly int Day = 24 * Hour;
     public static readonly int Week = 7 * Day;
     public static readonly int Month = 30 * Day;
-    public static readonly int Year = 365 * Day;
-
+    public static readonly int Year;
+    
     public static bool isPresent;
     //private const float StartTime = Year + Month + Week + Day + Hour + Minute + 59;
     //private float time;
@@ -27,8 +27,9 @@ public class TimeToString
 
         StringBuilder sb = new StringBuilder();
 
-        int years = (int)(time / Year);
-        time %= Year;
+        /* int years = (int)(time / Year);
+         time %= Year;*/
+        int years = Year; 
         int months = (int)(time / Month);
         time %= Month;
         int weeks = (int)(time / Week);
@@ -41,7 +42,7 @@ public class TimeToString
         time %= Minute;
         int seconds = (int)time;
 
-        sb.AppendFormat("TIME UNTIL DONE \n YEARS: {0} \n MONTHS: {1} \n WEEKS: {2} \n DAYS: {3} \n HOURS: {4} \n MIN: {5} \n SEC: {6}",
+        sb.AppendFormat("YEARS: {0} \n MONTHS: {1} \n WEEKS: {2} \n DAYS: {3} \n HOURS: {4} \n MINUTES: {5} \n SECONDS: {6}",
             years, months, weeks, days, hours, minutes, seconds);
         return sb.ToString();
 
