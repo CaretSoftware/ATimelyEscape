@@ -25,7 +25,7 @@ namespace RatCharacterController {
       private bool _pushing;
       private float _characterHalfHeight;
 
-      private bool _canTimeTravel;
+      [SerializeField] private bool _canTimeTravel;
 
       //private static CharacterInput _instance;
       private bool _jumping;
@@ -82,6 +82,13 @@ namespace RatCharacterController {
       }
 
       private void Update() {
+#if UNITY_EDITOR
+         if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand)))) {
+            CanTimeTravel(true);
+            Debug.Log($"CanTimeTravel {_canTimeTravel}");
+         }
+#endif
+         
          if (paused) {
             _characterAnimationController.InputVector(Vector2.zero);
             return; // interacting with keypad
@@ -144,67 +151,32 @@ namespace RatCharacterController {
                hitPosition.y = playerPosition.y;
                playerTransform.position = hitPosition + ledgeDistance * -playerTransform.forward;
                _characterAnimationController.JumpToFreeHang();
-            }
-            else {
+            } else {
                _characterAnimationController.LeapJump();
             }
          }
-         /*
-         bool LedgeAhead(out Vector3 hitPosition) {
-            Vector3 ledgeHeight = 2.0f * playerScale * Vector3.up;
-
-            _point0 = playerPosition +
-                      ledgeHeight +
-                      (radius + margin) * Vector3.up;
-            _point1 = playerPosition +
-                      ledgeHeight +
-                      (_collider.height + margin) * playerScale * Vector3.up -
-                      radius * Vector3.up;
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 1.0f * playerScale, groundedLayerMask,
-                   QueryTriggerInteraction.Ignore) &&
-                Physics.OverlapCapsule(_point0, _point1, radius, groundedLayerMask, QueryTriggerInteraction.Ignore)
-                   .Length < 1) {
-
-               _playerForward = -hitInfo.normal.ProjectOnPlane();
-
-               hitPosition = hitInfo.point;
-
-               return !Physics.CapsuleCast(
-                  point1: _point0,
-                  point2: _point1,
-                  radius: radius - margin,
-                  direction: _playerForward,
-                  maxDistance: 1.0f * playerScale,
-                  groundedLayerMask,
-                  QueryTriggerInteraction.Ignore);
-            }
-
-            hitPosition = _playerTransform.position;
-            return false;
-         }
-         */
       }
 
-        public bool LedgeAhead(out Vector3 hitPosition)
+        public bool LedgeAhead(out Vector3 hitPosition) 
         {
             Transform playerTransform = _playerTransform;
             Vector3 playerPosition = playerTransform.position;
-            float playerScale = playerTransform.localScale.y;
-            float margin = .1f;// * playerScale;
+            // float playerScale = playerTransform.localScale.y;
+            float margin = .01f;// * playerScale;
             Ray ray = RayAtHalfHeight(playerTransform);
             CapsuleCollider capsuleCollider = _collider;
             float radius = capsuleCollider.radius;// * playerScale;
             _playerForward = playerTransform.forward;
             float maxDistance = .1f;
 
-            Vector3 ledgeHeight = 2.0f * playerScale * Vector3.up;
+            Vector3 ledgeHeight = .2f * Vector3.up;
 
             _point0 = playerPosition +
                       ledgeHeight +
                       (radius + margin) * Vector3.up;
             _point1 = playerPosition +
                       ledgeHeight +
-                      (_collider.height + margin) * playerScale * Vector3.up -
+                      (_collider.height + margin) * Vector3.up -
                       radius * Vector3.up;
             if (Physics.Raycast(ray, out RaycastHit hitInfo, maxDistance, groundedLayerMask,
                    QueryTriggerInteraction.Ignore) &&
@@ -221,7 +193,7 @@ namespace RatCharacterController {
                    point2: _point1,
                    radius: radius - margin,
                    direction: _playerForward,
-                   maxDistance: 1.0f * playerScale,
+                   maxDistance: maxDistance,
                    groundedLayerMask,
                    QueryTriggerInteraction.Ignore);
             }
@@ -230,26 +202,7 @@ namespace RatCharacterController {
             return false;
         }
 
-      private Vector3 _point0;
-      private Vector3 _point1;
-      private Vector3 _playerForward;
-#if UNITY_EDITOR
-      private void OnDrawGizmos() {
-         if (!Application.isPlaying) return;
-         float localScale = _playerTransform.localScale.z;
-         float radius = _collider.radius * localScale;
-         Vector3 point1 = _point0 + localScale * _playerForward;
-         Vector3 point2 = _point1 + localScale * _playerForward;
-         Gizmos.DrawWireSphere(point1, radius);
-         Gizmos.DrawWireSphere(point2, radius);
-         Gizmos.DrawLine(point1 + radius * Vector3.forward, point2 + radius * Vector3.forward);
-         Gizmos.DrawLine(point1 + radius * Vector3.back, point2 + radius * Vector3.back);
-         Gizmos.DrawLine(point1 + radius * Vector3.left, point2 + radius * Vector3.left);
-         Gizmos.DrawLine(point1 + radius * Vector3.right, point2 + radius * Vector3.right);
-      }
-#endif
-
-      private Ray RayAtHalfHeight(Transform playerTransform) {
+        private Ray RayAtHalfHeight(Transform playerTransform) {
          return new Ray(
             transform.position + Vector3.up * _characterHalfHeight, // * playerTransform.localScale.y,
             playerTransform.forward);
@@ -380,6 +333,24 @@ namespace RatCharacterController {
          
          return Physics.SphereCast(ray, radius, maxDistance, groundedLayerMask, QueryTriggerInteraction.Ignore);
       }
-
-    }
+      
+      private Vector3 _point0;
+      private Vector3 _point1;
+      private Vector3 _playerForward;
+#if UNITY_EDITOR
+      private void OnDrawGizmos() {
+         if (!Application.isPlaying) return;
+         // float localScale = _playerTransform.localScale.z;
+         float radius = _collider.radius;
+         Vector3 point1 = _point0 + .1f * _playerForward;
+         Vector3 point2 = _point1 + .1f * _playerForward;
+         Gizmos.DrawWireSphere(point1, radius);
+         Gizmos.DrawWireSphere(point2, radius);
+         Gizmos.DrawLine(point1 + radius * Vector3.forward, point2 + radius * Vector3.forward);
+         Gizmos.DrawLine(point1 + radius * Vector3.back, point2 + radius * Vector3.back);
+         Gizmos.DrawLine(point1 + radius * Vector3.left, point2 + radius * Vector3.left);
+         Gizmos.DrawLine(point1 + radius * Vector3.right, point2 + radius * Vector3.right);
+      }
+#endif
+   }
 }
