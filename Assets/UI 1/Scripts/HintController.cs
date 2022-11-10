@@ -45,6 +45,17 @@ public class HintController : MonoBehaviour
         }
     }
 
+    private void StopAnimation()
+    {
+        
+    }
+
+    private void ShowWarningTimeTravel()
+    {
+        context.text = "Malfunction";
+        animator.Play("TimeWarning");
+    }
+
     private void ShowLeftMouseClick(string info)
     {
         context.text = "Interact " + info;
@@ -55,6 +66,13 @@ public class HintController : MonoBehaviour
     {
         context.text = "Interact " + info;
         animator.Play("RightClick");
+        
+    }
+
+    public void ShowTimeTravelWarning()
+    {
+        context.text = "Can´t Travel";
+        animator.Play("");
     }
 
     private void ShowSpaceJump()
