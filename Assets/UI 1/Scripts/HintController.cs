@@ -50,7 +50,7 @@ public class HintController : MonoBehaviour
         
     }
 
-    private void ShowWarningTimeTravel()
+    public void ShowWarningTimeTravel()
     {
         context.text = "Malfunction";
         animator.Play("TimeWarning");
