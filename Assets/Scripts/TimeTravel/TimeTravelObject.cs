@@ -9,7 +9,7 @@ using UnityEngine.AI;
 
 public class TimeTravelObject : MonoBehaviour
 {
-    public TimeTravelObject pastSelf;
+    [HideInInspector] public TimeTravelObject pastSelf;
     private Transform destiny;
     private TimeTravelObjectManager manager;
     public Rigidbody Rigidbody { get; private set; }
@@ -131,7 +131,7 @@ public class TimeTravelObject : MonoBehaviour
                 {
                     if (!c.gameObject.activeSelf) c.gameObject.SetActive(true);
                     Type t = c.GetType();
-                    if (t.IsSubclassOf(typeof(Behaviour)) && t != typeof(TimeTravelObject))
+                    if (t.IsSubclassOf(typeof(Behaviour)) && t != typeof(TimeTravelObject) && t != typeof(NavMeshAgent) && t != typeof(NavMeshAgentHandler))
                         ((Behaviour)c).enabled = active;
                     else if (t.IsSubclassOf(typeof(Renderer))) ((Renderer)c).enabled = active;
                 }
