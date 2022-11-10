@@ -9,8 +9,9 @@ public class HintController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI context;
 
-    [Header("Player")]
-    [SerializeField] private CharacterInput characterInput;
+    // [Header("Player")]
+    // [SerializeField] 
+    private CharacterInput characterInput;
 
     private FadeScript fadeScript;
 
@@ -20,7 +21,7 @@ public class HintController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         fadeScript = GetComponent<FadeScript>();
-
+        characterInput = FindObjectOfType<CharacterInput>();
     }
 
     private void Update()
