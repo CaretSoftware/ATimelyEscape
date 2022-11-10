@@ -6,6 +6,8 @@ public class ButtonCharger : MonoBehaviour
 {
     [SerializeField] private GameObject chargerON;
     [SerializeField] private GameObject chargerOFF;
+    [SerializeField] private LayerMask layerMask;
+    private int objectsOnButton;
 
     // Start is called before the first frame update
     void Start()
@@ -15,16 +17,26 @@ public class ButtonCharger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Cube")
+        if (layerMask == (layerMask | 1 << other.gameObject.layer))
         {
+            objectsOnButton++;
             chargerON.SetActive(true);
             chargerOFF.SetActive(false);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit(Collider other)
     {
-        
+        if (layerMask == (layerMask | 1 << other.gameObject.layer))
+        {
+            objectsOnButton--;
+            if (objectsOnButton == 0)
+            {
+                chargerON.SetActive(false);
+                chargerOFF.SetActive(true);
+            }
+        }
     }
 }
+
+   
