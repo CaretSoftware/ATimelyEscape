@@ -9,23 +9,31 @@ public class VignetteModifier : MonoBehaviour
 {
     [SerializeField] private float modifyAmount = 0.002f;
     private Volume postProcesingVolume;
-    private Vignette vignette;
+    [HideInInspector] public Vignette vignette;
 
     // Start is called before the first frame update
+   
+
     void Start()
     {
         postProcesingVolume = GetComponent<Volume>();
         postProcesingVolume.profile.TryGet(out vignette);
-        new SetVignetteModifierEvent(this).Invoke();
+        StartCoroutine(SendReference());
     }
 
-    private void Update()
+    private IEnumerator SendReference()
     {
-        /*if (vignette.intensity.value < 1f)
-        {
-            vignette.intensity.value += modifyAmount * Time.deltaTime;
-        }
-        */
+        yield return null;
+        new SetVignetteModifierEvent(vignette).Invoke();
     }
+
+    //private void Update()
+    //{
+    //    /*if (vignette.intensity.value < 1f)
+    //    {
+    //        vignette.intensity.value += modifyAmount * Time.deltaTime;
+    //    }
+    //    */
+    //}
 
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -33,10 +34,13 @@ public class Button : MonoBehaviour
     {
         if (layerMask == (layerMask | 1 << other.gameObject.layer))
         {
-            objectsOnButton--;  
+            objectsOnButton--;
             //Debug.Log(objectsOnButton);
-            isPressed = false;  
-            parent.IsAllPressed();  
+            if (objectsOnButton == 0)
+            {
+                isPressed = false;
+                parent.IsAllPressed();
+            }
         }
     }
 }

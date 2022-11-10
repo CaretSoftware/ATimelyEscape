@@ -8,7 +8,8 @@ using UnityEngine.InputSystem;
 namespace RatCharacterController {
 
    public class CharacterInput : MonoBehaviour {
-
+      
+      private string keypadTag = "Keypad";
       [SerializeField] private LayerMask groundedLayerMask;
       [SerializeField] private LayerMask cubeLayerMask;
       private float ledgeDistance = 0.05f;
@@ -44,7 +45,7 @@ namespace RatCharacterController {
          _playerInputActions.Interact.Present.performed += TravelToPresent;
          _playerInputActions.Interact.Future.performed += TravelToFuture;
 
-         _cameraTransform = FindObjectOfType<Camera>().transform;
+         _cameraTransform = CameraController.Cam;// FindObjectOfType<Camera>().transform;
          _camController = FindObjectOfType<CameraController>();
          _cameraFollow = FindObjectOfType<CameraFollow>();
 
@@ -77,7 +78,6 @@ namespace RatCharacterController {
       }
 
       public static void IsPaused(bool paused) {
-         Debug.Log($"KeypadInteraction {paused}");
          CharacterInput.paused = paused;
       }
 
@@ -306,8 +306,6 @@ namespace RatCharacterController {
             }
          }
       }
-
-      private string keypadTag = "Keypad";
       
       private void Interact(InputAction.CallbackContext context) {
 

@@ -7,33 +7,29 @@ using RatCharacterController;
 
 public class HintController : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private TextMeshProUGUI context;
 
+    [Header("Player")]
     [SerializeField] private CharacterInput characterInput;
 
     private FadeScript fadeScript;
 
     private Animator animator;
 
-    private bool hintsActive = true;
-
     private void Start()
     {
         animator = GetComponent<Animator>();
         fadeScript = GetComponent<FadeScript>();
+
     }
 
-    private void Awake()
+    private void Update()
     {
-        fadeScript.FadeIn();
-        animator.Play("MoveCamera");
+        CheckToShowJump();
     }
 
-    private void FixedUpdate()
+    private void CheckToShowJump()
     {
-        if (!hintsActive)
-            return;
-
         if (characterInput.LedgeAhead(out Vector3 hitPosition) && characterInput.Grounded())
         {
             fadeScript.FadeIn();
@@ -45,41 +41,48 @@ public class HintController : MonoBehaviour
         }
         else
         {
-            BeNeutral();
+            fadeScript.FadeOut();
         }
     }
 
-    private void ShowLeftMouseClick(string context)
+    public void ShowWarningTimeTravel()
     {
-        text.text = "Interact " + context;
+        context.text = "Object Blocks the Timetravel";
+        animator.Play("TimeWarning");
+    }
+
+    private void ShowLeftMouseClick(string info)
+    {
+        context.text = "Interact " + info;
         animator.Play("LeftClick");
     }
 
-    private void ShowRightMouseClick(string context)
+    private void ShowRightMouseClick(string info)
     {
-        text.text = "Interact " + context;
+        context.text = "Interact " + info;
         animator.Play("RightClick");
+        
     }
 
     private void ShowSpaceJump()
     {
-        text.text = "Jump Up";
+        context.text = "Jump Up";
         animator.Play("SpaceJump");
     }
 
     private void ShowCameraMovement()
     {
-        text.text = "Look Around";
+        context.text = "Look Around";
         animator.Play("MoveCamera");
     }
 
-    private void ShowKeyMovment()
+    private void ShowKeyMovement()
     {
-        text.text = "To Move";
+        context.text = "To Move";
         animator.Play("MoveAround");
     }
 
-    private void BeNeutral()
+    public void BeNeutral()
     {
         fadeScript.FadeOut();
     }
