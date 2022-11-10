@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    private Image image;
+    private UnityEngine.UI.Image image;
     private UnityEngine.UI.Button button;
 
     [Header("Text To Speach Clips")]
@@ -33,7 +34,7 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     private void Start()
     {
-        image = gameObject.GetComponent<Image>();
+        image = gameObject.GetComponent<UnityEngine.UI.Image>();
         image.sprite = neutral;
         source = GetComponent<AudioSource>();
         button = GetComponent<UnityEngine.UI.Button>();
@@ -46,7 +47,6 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             if(Input.GetAxis("Submit") == 1 || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
                 ToPressedSprite();
-                button.Select();
             }
             else
             {
@@ -59,17 +59,25 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         }
     }
 
+    public void KeyDownEvent(KeyDownEvent ev)
+    {
+        if(ev.keyCode == KeyCode.KeypadEnter)
+        {
+            button.Select();
+        }
+    }
+
     private void ActiveMouse(bool active)
     {
         if (active) 
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            UnityEngine.Cursor.lockState = CursorLockMode.Confined;
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         }
-        Cursor.visible = active;
+        UnityEngine.Cursor.visible = active;
     }
 
     // MouseHandler Methods /Clicking
