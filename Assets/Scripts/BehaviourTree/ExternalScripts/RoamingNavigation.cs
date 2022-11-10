@@ -16,7 +16,7 @@ public class RoamingNavigation : MonoBehaviour
     private List<Collider> detectedColliders;
     private MeshCollider col;
     private RaycastHit hitInfo;
-    private Mesh mesh;
+    private Bounds bounds;
 
     private Vector3 movementVector;
     private Vector3 direction;
@@ -40,10 +40,12 @@ public class RoamingNavigation : MonoBehaviour
     private void Start()
     {
         col = GetComponent<MeshCollider>();
-        mesh = GetComponent<MeshFilter>().mesh;
+        bounds = transform.Find("Low").GetComponent<MeshFilter>().mesh.bounds;
 
-        radius = Vector3.Distance(transform.position, mesh.vertices[0]);
-        offset = mesh.bounds.size.y * 0.5f * Vector3.up;
+        radius = bounds.size.z / 2;
+        offset = bounds.size.y * 0.5f * Vector3.up;
+
+        print($"bounds: {transform.Find("Low").GetComponent<MeshFilter>().mesh.name}, radius: {radius}, offset: {offset}");
     }
 
     public void CalculateMovementVector()
