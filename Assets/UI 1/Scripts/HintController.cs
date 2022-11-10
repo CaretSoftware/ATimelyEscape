@@ -45,11 +45,6 @@ public class HintController : MonoBehaviour
         }
     }
 
-    private void StopAnimation()
-    {
-        
-    }
-
     public void ShowWarningTimeTravel()
     {
         context.text = "Object Blocks the Timetravel";
@@ -87,7 +82,7 @@ public class HintController : MonoBehaviour
         animator.Play("MoveAround");
     }
 
-    private void BeNeutral()
+    public void BeNeutral()
     {
         fadeScript.FadeOut();
     }
