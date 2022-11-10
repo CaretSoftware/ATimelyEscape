@@ -35,7 +35,7 @@ namespace CallbackSystem
         private Rect rectLight;
         private Color lightPixel;
         private float timer = 0f;
-        private DieEvent fail;
+        private FailStateEvent fail;
 
 
         [SerializeField] private Volume postProcesingVolume;
