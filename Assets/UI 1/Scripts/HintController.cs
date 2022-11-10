@@ -52,7 +52,7 @@ public class HintController : MonoBehaviour
 
     public void ShowWarningTimeTravel()
     {
-        context.text = "Malfunction";
+        context.text = "Object Blocks the Timetravel";
         animator.Play("TimeWarning");
     }
 
@@ -67,12 +67,6 @@ public class HintController : MonoBehaviour
         context.text = "Interact " + info;
         animator.Play("RightClick");
         
-    }
-
-    public void ShowTimeTravelWarning()
-    {
-        context.text = "Can´t Travel";
-        animator.Play("");
     }
 
     private void ShowSpaceJump()
