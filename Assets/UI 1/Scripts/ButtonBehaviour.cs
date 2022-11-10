@@ -42,7 +42,7 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     // Method when user has released the mousebutton
     public void OnPointerUp(PointerEventData eventData)
     {
-        ToSelectedSprite();
+        ToNeutralSprite();
     }
 
     public void OnClicked()

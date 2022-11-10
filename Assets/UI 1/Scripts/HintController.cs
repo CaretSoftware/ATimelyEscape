@@ -45,14 +45,9 @@ public class HintController : MonoBehaviour
         }
     }
 
-    private void StopAnimation()
+    public void ShowWarningTimeTravel()
     {
-        
-    }
-
-    private void ShowWarningTimeTravel()
-    {
-        context.text = "Malfunction";
+        context.text = "Object Blocks the Timetravel";
         animator.Play("TimeWarning");
     }
 
@@ -67,12 +62,6 @@ public class HintController : MonoBehaviour
         context.text = "Interact " + info;
         animator.Play("RightClick");
         
-    }
-
-    public void ShowTimeTravelWarning()
-    {
-        context.text = "Can´t Travel";
-        animator.Play("");
     }
 
     private void ShowSpaceJump()
@@ -93,7 +82,7 @@ public class HintController : MonoBehaviour
         animator.Play("MoveAround");
     }
 
-    private void BeNeutral()
+    public void BeNeutral()
     {
         fadeScript.FadeOut();
     }
