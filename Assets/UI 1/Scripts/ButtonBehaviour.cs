@@ -7,29 +7,69 @@ using UnityEngine.EventSystems;
 public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Image image;
-    private Button button;
+    private UnityEngine.UI.Button button;
 
-    public AudioClip exitgame;
-    public AudioClip credits;
-    public AudioClip settings;
-    public AudioClip newgame;
-    public AudioClip click;
-    public AudioClip hover;
+    [Header("Text To Speach Clips")]
+    [SerializeField] private AudioClip speach;
+    
+    [Header("Button Clips")]
+    [SerializeField] private AudioClip click;
+    [SerializeField] private AudioClip hover;
+
     private AudioSource source;
     
-
-    [SerializeField] private Sprite neutral, pressed, selected;
+    [Header("Button State Sprites")]
+    [SerializeField] private Sprite neutral;
+    [SerializeField] private Sprite pressed;
+    [SerializeField] private Sprite selected;
     // [SerializeField] private AudioClip compressClip, unCompressClip;
     // [SerializeField] private AudioSource audioSource; 
 
     // Method when user has pressed the mousebutton
 
+    [Header("Overhaul")]
+    [SerializeField] private int thisIndex;
+    [SerializeField] private MenuButtonController menuButtonController;
+
     private void Start()
     {
-        button = gameObject.GetComponent<Button>();
         image = gameObject.GetComponent<Image>();
         image.sprite = neutral;
         source = GetComponent<AudioSource>();
+        button = GetComponent<UnityEngine.UI.Button>();
+    }
+
+    private void Update()
+    {
+        if(menuButtonController.index == thisIndex)
+        {
+            if(Input.GetAxis("Submit") == 1 || Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                ToPressedSprite();
+                button.Select();
+            }
+            else
+            {
+                ToSelectedSprite();
+            }
+        }
+        else
+        {
+            ToNeutralSprite();
+        }
+    }
+
+    private void ActiveMouse(bool active)
+    {
+        if (active) 
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        Cursor.visible = active;
     }
 
     // MouseHandler Methods /Clicking
@@ -45,18 +85,15 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         ToNeutralSprite();
     }
 
-    public void OnClicked()
-    {
-        Debug.Log("Clicked!");
-    }
-
     // Hover sound
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         ToSelectedSprite();
         source.PlayOneShot(hover);
-        source.PlayOneShot(newgame);
+
+        if(speach != null)
+            source.PlayOneShot(speach);
     }
 
     public void OnPointerExit(PointerEventData eventData)

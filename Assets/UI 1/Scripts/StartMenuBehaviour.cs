@@ -8,7 +8,6 @@ public class StartMenuBehaviour : MonoBehaviour
 {
     private Animator startMenyAnimator;
 
-
     private void Start()
     {
         startMenyAnimator = gameObject.GetComponent<Animator>();
