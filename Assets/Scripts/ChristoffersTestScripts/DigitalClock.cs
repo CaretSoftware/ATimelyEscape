@@ -22,7 +22,7 @@ public class DigitalClock : MonoBehaviour
 
     public int time;
     public bool isOn;
-    public bool futureDone; 
+    public bool futureDone;
     void Start()
     {
         time = years * TimeToString.Year + months * TimeToString.Month + weeks * TimeToString.Week
