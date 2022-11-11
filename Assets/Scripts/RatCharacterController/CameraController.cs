@@ -93,8 +93,8 @@ public class CameraController : MonoBehaviour {
 	public void MouseInput(Vector2 mouseDelta) {
 		//mouseDelta = context.ReadValue<Vector2>();
 
-		_mouseMovement.x += mouseDelta.x * MouseSensitivity;
-		_mouseMovement.y -= mouseDelta.y * MouseSensitivity;
+		_mouseMovement.x += mouseDelta.x * MouseSensitivity * Time.deltaTime * 25f;
+		_mouseMovement.y -= mouseDelta.y * MouseSensitivity * Time.deltaTime * 25f;
 
 	}
 
@@ -103,7 +103,7 @@ public class CameraController : MonoBehaviour {
 		
 		// Vector2 stickDelta = context.ReadValue<Vector2>();
 		
-		_thumbstickDelta = new Vector2(stickDelta.x, -stickDelta.y) * stickSensitivity;
+		_thumbstickDelta = new Vector2(stickDelta.x, -stickDelta.y) * stickSensitivity * Time.deltaTime * 150f;
 		
 		// _mouseMovement.x += stickDelta.x * stickSensitivity;
 		// _mouseMovement.y -= stickDelta.y * stickSensitivity;
