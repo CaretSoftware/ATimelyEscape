@@ -38,9 +38,9 @@ public class StartMenuBehaviour : MonoBehaviour
 
     private IEnumerator LoadSceneAsync(int sceneIndex)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
-
         loadingScreen.SetActive(true);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
 
         while (!operation.isDone)
         {
@@ -53,7 +53,7 @@ public class StartMenuBehaviour : MonoBehaviour
     }
 
     // Method to quit the application anytime
-    public void QuitGame()
+    private void QuitGame()
     {
         Debug.Log("Info: Quit button has been Pressed");
 

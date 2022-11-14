@@ -12,10 +12,22 @@ public class MenuButtonController : MonoBehaviour
     //public AudioSource audioSource;
 
     // Update is called once per frame
+
+    private Vector3 lastMousePosition;
+    public bool mouseInUse;
+
     void Update()
     {
-        if(Input.GetAxis("Vertical") != 0)
+        if (Input.mousePosition != lastMousePosition)
         {
+            lastMousePosition = Input.mousePosition;
+            mouseInUse = true;
+        }
+
+        if (Input.GetAxis("Vertical") != 0)
+        {
+            mouseInUse = false;
+
             if (!keyDown)
             {
                 if(Input.GetAxis ("Vertical") < 0)

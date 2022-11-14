@@ -12,13 +12,13 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     [Header("Text To Speach Clips")]
     [SerializeField] private AudioClip speach;
-    
+
     [Header("Button Clips")]
     [SerializeField] private AudioClip click;
     [SerializeField] private AudioClip hover;
 
     private AudioSource source;
-    
+
     [Header("Button State Sprites")]
     [SerializeField] private Sprite neutral;
     [SerializeField] private Sprite pressed;
@@ -40,49 +40,52 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         button = GetComponent<UnityEngine.UI.Button>();
     }
 
+    private bool beenResetedAfterMouseMoving = false;
+
     private void Update()
     {
-        if(menuButtonController.index == thisIndex)
+        if (menuButtonController.mouseInUse && !beenResetedAfterMouseMoving)
         {
-            if(Input.GetAxis("Submit") == 1 || Input.GetKeyDown(KeyCode.KeypadEnter))
+            beenResetedAfterMouseMoving = true;
+            ToNeutralSprite();
+        }
+
+        if (!menuButtonController.mouseInUse)
+        {
+            beenResetedAfterMouseMoving = false;
+
+            if (menuButtonController.index == thisIndex)
             {
-                ToPressedSprite();
+                if (Input.GetAxis("Submit") == 1 || Input.GetKeyDown(KeyCode.KeypadEnter))
+                {
+                    ToPressedSprite();
+                }
+                else
+                {
+                    ToSelectedSprite();
+                }
             }
             else
             {
-                ToSelectedSprite();
+                ToNeutralSprite();
             }
-        }
-        else
-        {
-            ToNeutralSprite();
         }
     }
 
     public void KeyDownEvent(KeyDownEvent ev)
     {
-        if(ev.keyCode == KeyCode.KeypadEnter)
+        if (ev.keyCode == KeyCode.KeypadEnter)
         {
             button.Select();
         }
     }
 
-    private void ActiveMouse(bool active)
-    {
-        if (active) 
-        {
-            UnityEngine.Cursor.lockState = CursorLockMode.Confined;
-        }
-        else
-        {
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        }
-        UnityEngine.Cursor.visible = active;
-    }
-
     // MouseHandler Methods /Clicking
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!button.IsInteractable())
+            return;
+
         ToPressedSprite();
         source.PlayOneShot(click);
     }
@@ -97,10 +100,13 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (!button.IsInteractable())
+            return;
+
         ToSelectedSprite();
         source.PlayOneShot(hover);
 
-        if(speach != null)
+        if (speach != null)
             source.PlayOneShot(speach);
     }
 
