@@ -8,8 +8,13 @@ public class StartMenuBehaviour : MonoBehaviour
 {
     private Animator startMenyAnimator;
 
+    [Header("Loading Components")]
+    [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private Image loadingBarFill;
+
     private void Start()
     {
+        Time.timeScale = 1;
         startMenyAnimator = gameObject.GetComponent<Animator>();
 
         Cursor.lockState = CursorLockMode.Confined;
@@ -26,7 +31,24 @@ public class StartMenuBehaviour : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
+            startMenyAnimator.Play("Outro");
+            //StartCoroutine(LoadSceneAsync(sceneIndex)); It is activated in Animation StartMenuOutro
+        }
+    }
+
+    private IEnumerator LoadSceneAsync(int sceneIndex)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
+
+        loadingScreen.SetActive(true);
+
+        while (!operation.isDone)
+        {
+            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
+
+            loadingBarFill.fillAmount = progressValue;
+
+            yield return null;
         }
     }
 
@@ -34,8 +56,6 @@ public class StartMenuBehaviour : MonoBehaviour
     public void QuitGame()
     {
         Debug.Log("Info: Quit button has been Pressed");
-
-        Time.timeScale = 1;
 
         Application.Quit();
     }
