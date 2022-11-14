@@ -19,6 +19,8 @@ public class PauseMenuBehaviour : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1;
+
         pauseMenyAnimator = gameObject.GetComponent<Animator>();
 
         cameraController = CameraController.Instance;
