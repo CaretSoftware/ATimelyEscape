@@ -31,9 +31,13 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     [Header("Overhaul")]
     [SerializeField] private int thisIndex;
     [SerializeField] private MenuButtonController menuButtonController;
+    [SerializeField] private GameObject selectionHint;
 
     private void Start()
     {
+        if(selectionHint != null)
+            selectionHint.SetActive(false);
+
         image = gameObject.GetComponent<UnityEngine.UI.Image>();
         image.sprite = neutral;
         source = GetComponent<AudioSource>();
@@ -44,6 +48,11 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     private void Update()
     {
+        if (!button.interactable)
+        {
+            return;
+        }
+
         if (menuButtonController.mouseInUse && !beenResetedAfterMouseMoving)
         {
             beenResetedAfterMouseMoving = true;
@@ -56,9 +65,10 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
             if (menuButtonController.index == thisIndex)
             {
-                if (Input.GetAxis("Submit") == 1 || Input.GetKeyDown(KeyCode.KeypadEnter))
+                if (Input.GetAxis("Submit") == 1 )
                 {
                     ToPressedSprite();
+                    button.onClick.Invoke();
                 }
                 else
                 {
@@ -72,22 +82,14 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         }
     }
 
-    public void KeyDownEvent(KeyDownEvent ev)
-    {
-        if (ev.keyCode == KeyCode.KeypadEnter)
-        {
-            button.Select();
-        }
-    }
-
     // MouseHandler Methods /Clicking
     public void OnPointerDown(PointerEventData eventData)
     {
         if (!button.IsInteractable())
             return;
 
-        ToPressedSprite();
         source.PlayOneShot(click);
+        ToPressedSprite();
     }
 
     // Method when user has released the mousebutton
@@ -119,11 +121,15 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void ToNeutralSprite()
     {
         image.sprite = neutral;
+        if(selectionHint != null)
+            selectionHint.SetActive(false);
     }
 
     public void ToSelectedSprite()
     {
         image.sprite = selected;
+        if (selectionHint != null)
+            selectionHint.SetActive(true);
     }
 
     // Audio clips när man har selected
