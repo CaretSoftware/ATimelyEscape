@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class StartMenuBehaviour : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class StartMenuBehaviour : MonoBehaviour
     [Header("Loading Components")]
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Image loadingBarFill;
+    [SerializeField] private TextMeshProUGUI loadingText;
 
     private void Start()
     {
@@ -47,7 +49,7 @@ public class StartMenuBehaviour : MonoBehaviour
             float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
 
             loadingBarFill.fillAmount = progressValue;
-
+            loadingText.text = (int) (progressValue * 100) + "%";
             yield return null;
         }
     }
