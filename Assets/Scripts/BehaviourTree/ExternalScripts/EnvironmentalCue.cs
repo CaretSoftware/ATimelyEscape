@@ -6,23 +6,26 @@ using UnityEngine.AI;
 [RequireComponent(typeof(LineRenderer))]
 public class EnvironmentalCue : MonoBehaviour
 {
-    private NavMeshAgent agent;
+    //reassign after entering new room.
+    [SerializeField] private ObjectiveHolder objectiveHolder;
     private LineRenderer lr;
     private NavMeshPath path;
+
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
         lr = GetComponent<LineRenderer>();
+        path = new NavMeshPath();
     }
 
     private void Update()
     {
-        if (agent == null || agent.path == null)
-            return;
-
-        path = agent.path;
-        lr.positionCount = path.corners.Length;
-        for (int i = 0; i < path.corners.Length; i++)
-            lr.SetPosition(i, path.corners[i]);
+        if ((Input.GetKeyDown("space") && objectiveHolder.currentObjective != Vector3.zero))
+        {
+            print($"Current objective: {objectiveHolder.currentObjective}");
+                NavMesh.CalculatePath(transform.position, objectiveHolder.currentObjective, NavMesh.AllAreas, path);
+                lr.positionCount = path.corners.Length;
+                for (int i = 0; i < path.corners.Length; i++)
+                    lr.SetPosition(i, path.corners[i]);
+        }
     }
 }
