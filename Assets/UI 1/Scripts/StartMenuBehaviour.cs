@@ -48,8 +48,12 @@ public class StartMenuBehaviour : MonoBehaviour
         {
             float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
 
-            loadingBarFill.fillAmount = progressValue;
-            loadingText.text = (int) (progressValue * 100) + "%";
+            if(loadingBarFill != null)
+                loadingBarFill.fillAmount = progressValue;
+
+            if(loadingText != null)
+                loadingText.text = (int) (progressValue * 100) + "%";
+
             yield return null;
         }
     }
