@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class CrosshairScript : MonoBehaviour
 {
+    RGBSlider rgbSlider;
     [SerializeField] private Image crosshair;
     [SerializeField] private LayerMask layerMask;
     private void Start()
