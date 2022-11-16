@@ -65,6 +65,6 @@ public class Objective : MonoBehaviour
     public void ClearObjective()
     {
         Destroy(objectiveText);
-        Destroy(this);
+        Destroy(gameObject);
     }
 }

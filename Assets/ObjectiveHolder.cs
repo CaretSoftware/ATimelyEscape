@@ -6,8 +6,7 @@ using UnityEngine;
 public class ObjectiveHolder : MonoBehaviour
 {
     //all objectives for this room.
-    [SerializeField] private List<Objective> objectives;
-
+    private List<Objective> objectives;
     private BoxCollider collider;
 
     //the objective with the lowest index on the list.
