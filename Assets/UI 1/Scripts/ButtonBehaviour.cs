@@ -35,7 +35,7 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     private void Start()
     {
-        if(selectionHint != null)
+        if (selectionHint != null)
             selectionHint.SetActive(false);
 
         image = gameObject.GetComponent<UnityEngine.UI.Image>();
@@ -45,6 +45,7 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     }
 
     private bool beenResetedAfterMouseMoving = false;
+    private bool playedHoverClip = false;
 
     private void Update()
     {
@@ -56,6 +57,7 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         if (menuButtonController.mouseInUse && !beenResetedAfterMouseMoving)
         {
             beenResetedAfterMouseMoving = true;
+            playedHoverClip = false;
             ToNeutralSprite();
         }
 
@@ -65,9 +67,12 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
             if (menuButtonController.index == thisIndex)
             {
-                if (Input.GetAxis("Submit") == 1 )
+                playedHoverClip = false;
+
+                if (Input.GetAxis("Submit") == 1)
                 {
                     ToPressedSprite();
+                    PlayClickClip();
                     button.onClick.Invoke();
                 }
                 else
@@ -77,6 +82,13 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             }
             else
             {
+                if (!playedHoverClip)
+                {
+                    PlayHoverClip();
+                    PlaySpeachClip();
+                    playedHoverClip = true;
+                }
+
                 ToNeutralSprite();
             }
         }
@@ -88,7 +100,7 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         if (!button.IsInteractable())
             return;
 
-        source.PlayOneShot(click);
+        PlayClickClip();
         ToPressedSprite();
     }
 
@@ -106,10 +118,8 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             return;
 
         ToSelectedSprite();
-        source.PlayOneShot(hover);
-
-        if (speach != null)
-            source.PlayOneShot(speach);
+        PlayHoverClip();
+        PlaySpeachClip();
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -121,7 +131,7 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void ToNeutralSprite()
     {
         image.sprite = neutral;
-        if(selectionHint != null)
+        if (selectionHint != null)
             selectionHint.SetActive(false);
     }
 
@@ -137,5 +147,41 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void ToPressedSprite()
     {
         image.sprite = pressed;
+    }
+
+    private void PlayHoverClip()
+    {
+        if (hover != null)
+        {
+            source.PlayOneShot(hover);
+        }
+        else
+        {
+            Debug.Log("Error: Missing hover sound");
+        }
+    }
+
+    private void PlayClickClip()
+    {
+        if (click != null)
+        {
+            source.PlayOneShot(click);
+        }
+        else
+        {
+            Debug.Log("Error: Missing click sound");
+        }
+    }
+
+    private void PlaySpeachClip()
+    {
+        if (speach != null)
+        {
+            source.PlayOneShot(speach);
+        }
+        else
+        {
+            Debug.Log("Error: Missing speach sound");
+        }
     }
 }

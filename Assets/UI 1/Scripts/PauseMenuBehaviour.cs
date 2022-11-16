@@ -13,20 +13,16 @@ public class PauseMenuBehaviour : MonoBehaviour
 
     private Animator pauseMenyAnimator;
 
-    private CameraController cameraController;
-
     [SerializeField] private Slider slider;
 
     private void Start()
     {
         Time.timeScale = 1;
 
-        pauseMenyAnimator = gameObject.GetComponent<Animator>();
-
-        cameraController = CameraController.Instance;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        pauseMenyAnimator = gameObject.GetComponent<Animator>();
     }
 
     private void Update()
@@ -68,7 +64,7 @@ public class PauseMenuBehaviour : MonoBehaviour
         if (slider == null)
             slider = GetComponentInChildren<Slider>();
 
-        if (slider != null)
+        if (slider != null && CameraController.Instance != null)
             slider.value = CameraController.Instance.MouseSensitivity;
     }
 
@@ -144,8 +140,6 @@ public class PauseMenuBehaviour : MonoBehaviour
     public void QuitGame()
     {
         Debug.Log("Info: Quit button has been Pressed");
-
-        Time.timeScale = 1;
 
         Application.Quit();
     }
