@@ -61,6 +61,7 @@ public class Plate : MonoBehaviour
             presentText = presentClock.GetComponentInChildren<TextMeshProUGUI>();
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (isPast)
