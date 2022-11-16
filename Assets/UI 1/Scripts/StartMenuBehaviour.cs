@@ -17,6 +17,7 @@ public class StartMenuBehaviour : MonoBehaviour
     private void Start()
     {
         Time.timeScale = 1;
+        Debug.Log("" + Time.timeScale);
         startMenyAnimator = gameObject.GetComponent<Animator>();
 
         Cursor.lockState = CursorLockMode.Confined;
