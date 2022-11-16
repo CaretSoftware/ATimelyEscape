@@ -15,6 +15,8 @@ public class Objective : MonoBehaviour
     private BoxCollider collider;
     private TextMeshProUGUI objectiveText;
     private MeshRenderer mr;
+    private RectTransform rt;
+    private Vector2 objectiveSizeUI = new Vector2(200, 20);
     [HideInInspector] public bool isComplete { get; private set; }
     
     private void Start()
@@ -27,20 +29,23 @@ public class Objective : MonoBehaviour
         collider.isTrigger = true;
         isComplete = false;
         gameObject.SetActive(false);
+        
     }
     
     private void UpdateTextObject()
     {
-        objectiveText.fontSize = 18;
+        objectiveText.fontSize = 14;
         objectiveText.fontStyle = FontStyles.Bold;
-        objectiveText.alignment = TextAlignmentOptions.Center;   
+        objectiveText.alignment = TextAlignmentOptions.Center;
+        rt = objectiveText.GetComponent<RectTransform>();
+        rt.sizeDelta = objectiveSizeUI;
         objectiveText.text = Description;
     }
     
     public void AddObjective()
     {
         objectiveText = new GameObject($"{name} textObject").AddComponent<TextMeshProUGUI>();
-        objectiveText.transform.parent = questlog;
+        objectiveText.transform.SetParent(questlog);
         UpdateTextObject();
         gameObject.SetActive(true);
     }
@@ -57,7 +62,7 @@ public class Objective : MonoBehaviour
         }
     }
 
-    public void Remove()
+    public void ClearObjective()
     {
         Destroy(objectiveText);
         Destroy(this);
