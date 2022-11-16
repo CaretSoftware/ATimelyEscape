@@ -17,14 +17,20 @@ public class ObjectiveHolder : MonoBehaviour
     {
         collider = GetComponent<BoxCollider>();
         collider.isTrigger = true;
+        GetChildren();
     }
-    /*
+    
     private void GetChildren()
     {
+        GameObject child;
         for (int i = 0; i < transform.childCount; i++)
-            objectives[i] = transform.GetChild(i);
+        {
+            child = transform.GetChild(i).gameObject;
+            objectives.Add(child.GetComponent<Objective>());
+            print(objectives[i]);
+        }
     }
-    */
+    
 
     //when triggered, update the questlog.
     private void OnTriggerEnter(Collider other)
@@ -51,7 +57,9 @@ public class ObjectiveHolder : MonoBehaviour
             }   
         }
         print("Clear list");
-        //objectives.Clear();
-        //destroy objective;
+        foreach(Objective obj in objectives)
+        {
+            Destroy(obj);
+        }
     }
 }

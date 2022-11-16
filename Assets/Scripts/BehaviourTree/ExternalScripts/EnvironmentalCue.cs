@@ -19,13 +19,15 @@ public class EnvironmentalCue : MonoBehaviour
 
     private void Update()
     {
-        if ((Input.GetKeyDown("space") && objectiveHolder.currentObjective != Vector3.zero))
+        if ((Input.GetKey("space") && objectiveHolder.currentObjective != Vector3.zero))
         {
-            print($"Current objective: {objectiveHolder.currentObjective}");
-                NavMesh.CalculatePath(transform.position, objectiveHolder.currentObjective, NavMesh.AllAreas, path);
-                lr.positionCount = path.corners.Length;
-                for (int i = 0; i < path.corners.Length; i++)
-                    lr.SetPosition(i, path.corners[i]);
+            lr.enabled = true;
+            NavMesh.CalculatePath(transform.position, objectiveHolder.currentObjective, NavMesh.AllAreas, path);
+            lr.positionCount = path.corners.Length;
+            for (int i = 0; i < path.corners.Length; i++)
+                lr.SetPosition(i, path.corners[i]);
         }
+        else
+            lr.enabled = false;
     }
 }

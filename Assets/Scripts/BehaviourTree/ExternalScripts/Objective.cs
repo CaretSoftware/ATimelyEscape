@@ -13,7 +13,6 @@ public class Objective : MonoBehaviour
     private ObjectiveHolder parent;
     private Transform questlog;
     private BoxCollider collider;
-    private GameObject textObject;
     private TextMeshProUGUI objectiveText;
     private MeshRenderer mr;
     [HideInInspector] public bool isComplete { get; private set; }
@@ -23,27 +22,29 @@ public class Objective : MonoBehaviour
         questlog = GameObject.Find("QuestLog").transform;
         parent = GetComponentInParent<ObjectiveHolder>();
         collider = GetComponent<BoxCollider>();
-        objectiveText = new TextMeshProUGUI();
-        textObject = new GameObject();
-        textObject.AddComponent<TextMeshProUGUI>(objectiveText);
         mr = GetComponent<MeshRenderer>();
         mr.material = idleMaterial;
         collider.isTrigger = true;
         isComplete = false;
-        UpdateText();
+        gameObject.SetActive(false);
     }
-
-    private void UpdateText()
+    
+    private void UpdateTextObject()
     {
-        objectiveText.text = Description.ToString();
+        objectiveText.fontSize = 18;
         objectiveText.fontStyle = FontStyles.Bold;
+        objectiveText.alignment = TextAlignmentOptions.Center;   
+        objectiveText.text = Description;
     }
-
+    
     public void AddObjective()
     {
-        Instantiate<GameObject>(textObject, questlog);
-        enabled = true;
+        objectiveText = new GameObject($"{name} textObject").AddComponent<TextMeshProUGUI>();
+        objectiveText.transform.parent = questlog;
+        UpdateTextObject();
+        gameObject.SetActive(true);
     }
+
     //if player collide with this transform, mission is complete & objective list is updated.
     private void OnTriggerEnter(Collider other)
     {
@@ -54,5 +55,11 @@ public class Objective : MonoBehaviour
             mr.material = completeMaterial;
             parent.UpdateObjectiveList();
         }
+    }
+
+    public void Remove()
+    {
+        Destroy(objectiveText);
+        Destroy(this);
     }
 }
