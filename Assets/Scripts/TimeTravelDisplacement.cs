@@ -16,18 +16,20 @@ public class TimeTravelDisplacement : MonoBehaviour {
 	private MaterialPropertyBlock mpb;
 	private MeshRenderer mr;
 
+	[SerializeField, Range(0.0f, 1.0f)] private float t;
+
 	private void Awake() {
 		_transform = transform;
 		mpb = new MaterialPropertyBlock();
 		mr = GetComponent<MeshRenderer>();
 	}
 
-	// private void Update() {
-		// t = Mathf.Sin(Time.time * Mathf.PI) * .5f + .5f;
-		//  Displace(t);
-		// if (Input.GetKeyDown(KeyCode.Q))
-		// 	MoveAndRotateMesh();
-	// }
+	private void Update() {
+		// float t = Mathf.Sin(Time.time * Mathf.PI) * .5f + .5f;
+		Displace(t);
+		if (Input.GetKeyDown(KeyCode.Q))
+			MoveAndRotateMesh();
+	}
 
 	public void MoveAndRotateMesh() {
 		if (other == null || mr == null) return;
@@ -37,7 +39,7 @@ public class TimeTravelDisplacement : MonoBehaviour {
 
 	private IEnumerator Displace() {
 		float t = 1.0f;
-		float velocity = 1 / time;
+		float velocity = 1.0f / time;
 		while (t > 0.0f) {
 			Displace(Ease.EaseInOutCubic(t));
 			t -= velocity * Time.deltaTime;
