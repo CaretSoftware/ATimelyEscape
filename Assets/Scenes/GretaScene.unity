@@ -41666,6 +41666,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dummy Controller
       objectReference: {fileID: 0}
+    - target: {fileID: 3461821365117264172, guid: e680922f86ca241e89ec04c64e981fa2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3461821365117264175, guid: e680922f86ca241e89ec04c64e981fa2, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -64236,6 +64240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifyAmount: 0.1
+  vignette: {fileID: 0}
 --- !u!1 &2716712766634410409
 GameObject:
   m_ObjectHideFlags: 0
@@ -65051,6 +65056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 588f7624ea5142d8ba265ad199a11ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _camera: {fileID: 0}
   smoothDampMinVal: 0.1
   smoothDampMaxVal: 0.22
   _cameraCollisionRadius: 0.39
@@ -65107,12 +65113,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9724adba8fad84d5f870307ae8b8aac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  follow: {fileID: 0}
   smoothness: 0.2
   maxVelocity: 1
   largestMagnitude: 0.07
-  maxSpeed: 0
-  smoothTime: 0
   superSonic: 5
   superSmooth: 0.01
 --- !u!114 &3461821365632918416
@@ -65133,6 +65136,7 @@ MonoBehaviour:
   cubeLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  _canTimeTravel: 0
 --- !u!114 &3461821365632918417
 MonoBehaviour:
   m_ObjectHideFlags: 0
