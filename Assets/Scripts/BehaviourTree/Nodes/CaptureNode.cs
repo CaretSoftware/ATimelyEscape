@@ -5,41 +5,40 @@ using UnityEngine.AI;
 
 public class CaptureNode : Node
 {
-    //private GameOverScreen gameOverScreen;
-    private Transform checkpoint;
     private NavMeshAgent agent;
-    private Transform target;
+    private Animator animator;
+
     private Transform agentTransform;
+    private Transform handIKTarget;
+    private Transform checkpoint;
+    private Transform target;
 
     private float captureDistance;
     private float destinationDistance;
-    private bool endScreenTriggered;
 
-    public CaptureNode(NavMeshAgent agent, Transform target, float captureDistance, Transform checkpoint, Transform agentTransform)
+    public CaptureNode(NavMeshAgent agent, Transform target, float captureDistance, Transform checkpoint, 
+        Transform agentTransform, Transform handIKTarget, Animator animator)
     {
         this.agent = agent;
         this.target = target;
         this.captureDistance = captureDistance;
         this.checkpoint = checkpoint;
         this.agentTransform = agentTransform;
+        this.handIKTarget = handIKTarget;
+        this.animator = animator;
     }
-
 
     public override NodeState Evaluate()
     {
-        //Debug.Log("Trying to capture");
         destinationDistance = Vector3.Distance(target.position, agentTransform.transform.position);
         if (destinationDistance < captureDistance)
         {
-            //Debug.Log("CAPTURED");
-            if (!endScreenTriggered)
-            {
-                target.transform.position = checkpoint.position;
-                endScreenTriggered = true;
-            }
+                handIKTarget.position = target.position;
+                animator.SetTrigger("GrabItem");
+                if(animator.GetIKPositionWeight(AvatarIKGoal.RightHand) > 0.8f)
+                    target.transform.position = checkpoint.position;
             agent.isStopped = true;
             return NodeState.FAILURE;
-            //return NodeState.SUCCESS;
         }
         else
         {
@@ -47,5 +46,15 @@ public class CaptureNode : Node
             agent.SetDestination(target.position);
             return NodeState.RUNNING;
         }
+    }
+
+    private void OnAnimationGrabbedItem()
+    {
+
+    }
+
+    private void OnAnimationStoredItem()
+    {
+
     }
 }

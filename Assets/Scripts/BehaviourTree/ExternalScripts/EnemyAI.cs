@@ -7,13 +7,15 @@ public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
     private const float NavMeshRadiusOffstep = 20f;
-    private const float Infrequency = 0.1f;
 
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
     [SerializeField] private Transform checkpoint;
     [Tooltip("Assigning the same waypoints to multiple enemies may result in unwanted behaviour.")]
     [SerializeField] private Transform[] activityWaypoints;
+
+    [Header("Rig Setup")]
+    [SerializeField] private Transform handIKTarget;
 
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
@@ -100,8 +102,7 @@ public class EnemyAI : MonoBehaviour
         deltaMagnitude = worldDeltaPosition.magnitude;
         
         if (deltaMagnitude > agent.radius / NavMeshRadiusOffstep)
-            transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);
-        
+            transform.position = Vector3.Lerp(animator.rootPosition, agent.nextPosition, smooth);     
     }
 
     private void ConstructBehaviourTreePersonnel()
@@ -110,7 +111,7 @@ public class EnemyAI : MonoBehaviour
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, checkpoint, agentCenterTransform);
+        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, checkpoint, agentCenterTransform, handIKTarget, animator);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
         Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode });
@@ -148,18 +149,4 @@ public class EnemyAI : MonoBehaviour
             Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
         }
     }
-
-    /*
-private void InfrequentUpdate()
-{
-    if(scareTimer > scareFrequency)
-    {
-        CheckOutOfBounds();
-        scareTimer = 0;
-    }
-    else
-        scareTimer += Time.deltaTime; 
-}
-*/
-
 }
