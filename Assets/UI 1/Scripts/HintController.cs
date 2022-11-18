@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using RatCharacterController;
+using CallbackSystem;
 
 public class HintController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class HintController : MonoBehaviour
 
     private void Start()
     {
+        CallHintAnimation.AddListener<CallHintAnimation>(HintAnimationListener);
+
         animator = GetComponent<Animator>();
         fadeScript = GetComponent<FadeScript>();
         characterInput = FindObjectOfType<CharacterInput>();
@@ -26,10 +29,12 @@ public class HintController : MonoBehaviour
 
     private void Update()
     {
-        CheckToShowJump();
+        //CallMamma mamy = new CallMamma() { animationName = "jump", context = "Jump Up", waitForTime = 3f};
+        //mamy.Invoke();
+        //CheckToShowJump();
     }
 
-    private void CheckToShowJump()
+    private void CheckToShowJump() // Remove to fire off in relevent Classes-method like in CharacterInput
     {
         if (characterInput.LedgeAhead(out Vector3 hitPosition) && characterInput.Grounded())
         {
@@ -41,10 +46,49 @@ public class HintController : MonoBehaviour
         }
     }
 
+    private IEnumerator coroutine;
+
+    private void HintAnimationListener(CallHintAnimation c)
+    {
+        BeVisible();
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName(c.animationName))
+            return;
+
+        context.text = c.context;
+        animator.Play(c.animationName);
+
+        if(coroutine != null)
+        {
+            StopCoroutine(coroutine);
+        }
+
+        coroutine = WaitFor(c.waitForTime);
+        StartCoroutine(coroutine);
+    }
+
+    private IEnumerator WaitFor(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        BeNeutral();
+    }
+
+    private void BeVisible()
+    {
+        fadeScript.FadeIn();
+    }
+
+    public void BeNeutral()
+    {
+        fadeScript.FadeOut();
+    }
+
     private void ShowSpaceJump()
     {
         BeVisible();
 
+        
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("SpaceJump"))
             return;
 
@@ -105,15 +149,5 @@ public class HintController : MonoBehaviour
 
         context.text = "To Move";
         animator.Play("MoveAround");
-    }
-
-    private void BeVisible()
-    {
-        fadeScript.FadeIn();
-    }
-
-    public void BeNeutral()
-    {
-        fadeScript.FadeOut();
     }
 }
