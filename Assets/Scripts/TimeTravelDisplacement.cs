@@ -6,6 +6,8 @@ using UnityEngine;
 public class TimeTravelDisplacement : MonoBehaviour {
 	
 	private static readonly int DisplacementPropertyID = Shader.PropertyToID("_Displacement");
+	private static readonly int OutlinePropertyID = Shader.PropertyToID("_Outline");
+	private static readonly int AlphaPropertyID = Shader.PropertyToID("_Alpha");
 	private static readonly int RotationPropertyID = Shader.PropertyToID("_EulerRotation");
 	private static readonly int PositionPropertyID = Shader.PropertyToID("_Direction");
 	
@@ -25,10 +27,10 @@ public class TimeTravelDisplacement : MonoBehaviour {
 	}
 
 	private void Update() {
-		// float t = Mathf.Sin(Time.time * Mathf.PI) * .5f + .5f;
+		t = Mathf.Sin(Time.time * Mathf.PI) * .5f + .5f;
 		Displace(t);
-		if (Input.GetKeyDown(KeyCode.Q))
-			MoveAndRotateMesh();
+		// if (Input.GetKeyDown(KeyCode.Q))
+		// 	MoveAndRotateMesh();
 	}
 
 	public void MoveAndRotateMesh() {
@@ -38,14 +40,19 @@ public class TimeTravelDisplacement : MonoBehaviour {
 	}
 
 	private IEnumerator Displace() {
-		float t = 1.0f;
+		float t = 0.0f;
 		float velocity = 1.0f / time;
-		while (t > 0.0f) {
+		
+		OutlineStrength(0f);
+		
+		while (t < 1.0f) {
+			t += velocity * Time.deltaTime;
 			Displace(Ease.EaseInOutCubic(t));
-			t -= velocity * Time.deltaTime;
+			OutlineStrength(1.0f - t);
 			yield return null;
 		}
 		Displace(0.0f);
+		StartCoroutine(FadeInOutline());
 	}
 	
 	private void Displace(float t) {
@@ -59,4 +66,20 @@ public class TimeTravelDisplacement : MonoBehaviour {
 
 		mr.SetPropertyBlock(mpb);
 	}
+	
+	private IEnumerator FadeInOutline() {
+		float t = 0.0f;
+		while (t < 1.0f) {
+			t += Time.deltaTime;
+			OutlineStrength(t);
+			yield return null;
+		}
+		OutlineStrength(1.0f);
+	}
+
+	private void OutlineStrength(float t) {
+		mpb.SetFloat(OutlinePropertyID, t);
+		mr.SetPropertyBlock(mpb);
+	}
+
 }
