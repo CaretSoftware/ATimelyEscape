@@ -10,7 +10,6 @@ namespace CallbackSystem
     public class CallHintAnimation : UIEvent
     {
         public string animationName;
-        public string context;
         public float waitForTime;
     }
 
