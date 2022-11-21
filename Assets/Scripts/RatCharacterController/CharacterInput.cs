@@ -58,7 +58,10 @@ namespace RatCharacterController {
          if (_camController == null)
             Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode",
                this.gameObject);
-      }
+
+            CallHintAnimation callHint = new CallHintAnimation() { animationName = "TutorialControl",  waitForTime = 15f };
+            callHint.Invoke();
+        }
 
       private void OnDestroy() {
          Unsubscribe();
@@ -104,7 +107,7 @@ namespace RatCharacterController {
 
          if (LedgeAhead(out Vector3 hitPosition))
          {
-             CallHintAnimation callHint = new CallHintAnimation() { animationName = "JumpHint", context = "Jump Up", waitForTime = 1f };
+             CallHintAnimation callHint = new CallHintAnimation() { animationName = "JumpHint", waitForTime = 1f };
              callHint.Invoke();
          }
       }
