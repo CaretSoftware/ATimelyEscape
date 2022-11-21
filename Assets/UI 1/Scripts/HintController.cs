@@ -42,7 +42,7 @@ public class HintController : MonoBehaviour
         }
         else
         {
-            BeNeutral();
+            BeInvisible();
         }
     }
 
@@ -63,15 +63,15 @@ public class HintController : MonoBehaviour
             StopCoroutine(coroutine);
         }
 
-        coroutine = WaitFor(c.waitForTime);
+        coroutine = ShowFor(c.waitForTime);
         StartCoroutine(coroutine);
     }
 
-    private IEnumerator WaitFor(float time)
+    private IEnumerator ShowFor(float time)
     {
         yield return new WaitForSeconds(time);
 
-        BeNeutral();
+        BeInvisible();
     }
 
     private void BeVisible()
@@ -79,7 +79,7 @@ public class HintController : MonoBehaviour
         fadeScript.FadeIn();
     }
 
-    public void BeNeutral()
+    public void BeInvisible()
     {
         fadeScript.FadeOut();
     }
