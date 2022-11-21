@@ -12,7 +12,7 @@ public class HintController : MonoBehaviour
 
     // [Header("Player")]
     // [SerializeField] 
-    private CharacterInput characterInput;
+    //private CharacterInput characterInput;
 
     private FadeScript fadeScript;
 
@@ -20,58 +20,41 @@ public class HintController : MonoBehaviour
 
     private void Start()
     {
-        CallHintAnimation.AddListener<CallHintAnimation>(HintAnimationListener);
+        CallHintAnimation.AddListener<CallHintAnimation>(UIHintListener);
 
         animator = GetComponent<Animator>();
         fadeScript = GetComponent<FadeScript>();
-        characterInput = FindObjectOfType<CharacterInput>();
+        //characterInput = FindObjectOfType<CharacterInput>();
     }
 
-    private void Update()
-    {
-        //CallMamma mamy = new CallMamma() { animationName = "jump", context = "Jump Up", waitForTime = 3f};
-        //mamy.Invoke();
-        //CheckToShowJump();
-    }
+    // Nden 
+    //CallMamma mamy = new CallMamma() { animationName = "jump", context = "Jump Up", waitForTime = 3f};
+    //mamy.Invoke();
 
-    private void CheckToShowJump() // Remove to fire off in relevent Classes-method like in CharacterInput
-    {
-        if (characterInput.LedgeAhead(out Vector3 hitPosition) && characterInput.Grounded())
-        {
-            ShowSpaceJump();
-        }
-        else
-        {
-            BeNeutral();
-        }
-    }
 
     private IEnumerator coroutine;
 
-    private void HintAnimationListener(CallHintAnimation c)
+    private void UIHintListener(CallHintAnimation c)
     {
         BeVisible();
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName(c.animationName))
-            return;
 
         context.text = c.context;
         animator.Play(c.animationName);
 
-        if(coroutine != null)
+        if (coroutine != null)
         {
             StopCoroutine(coroutine);
         }
 
-        coroutine = WaitFor(c.waitForTime);
+        coroutine = ShowFor(c.waitForTime);
         StartCoroutine(coroutine);
     }
 
-    private IEnumerator WaitFor(float time)
+    private IEnumerator ShowFor(float time)
     {
         yield return new WaitForSeconds(time);
 
-        BeNeutral();
+        BeInvisible();
     }
 
     private void BeVisible()
@@ -79,7 +62,7 @@ public class HintController : MonoBehaviour
         fadeScript.FadeIn();
     }
 
-    public void BeNeutral()
+    public void BeInvisible()
     {
         fadeScript.FadeOut();
     }

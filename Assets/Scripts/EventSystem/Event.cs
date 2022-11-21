@@ -50,28 +50,6 @@ namespace CallbackSystem {
         public TimeTravelPeriod to;
     }
 
-    public class OpenKeypadEvent : Event
-    {
-        public GameObject Keypad;
-        public bool open;
-
-        public OpenKeypadEvent(GameObject keypad, bool open)
-        {
-            Keypad = keypad;
-            this.open = open;
-        }
-    }
-
-    public class CloseKeypadEvent : Event
-    {
-        public GameObject Keypad;
-
-        public CloseKeypadEvent(GameObject keypad)
-        {
-            Keypad = keypad;
-        }
-    }
-
     public class CheckpointEvent : Event
     {
         public Transform respawnPoint;
