@@ -130,7 +130,11 @@ namespace StateMachines
                 {
                     TimeTravelManager.desiredPeriod = TimeTravelManager.currentPeriod;
                     Debug.LogError("You tried Time Travelling into another object!");
-                    TimeTravelManager.collisionWarning.ShowWarning();
+
+                    CallHintAnimation callHint = new CallHintAnimation() { animationName = "TravelWarning",  waitForTime = 0.5f};
+                    callHint.Invoke();
+
+                    //TimeTravelManager.collisionWarning.ShowWarning();
                 }
             }
         }

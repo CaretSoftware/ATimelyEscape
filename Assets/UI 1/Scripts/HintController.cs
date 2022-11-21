@@ -28,7 +28,7 @@ public class HintController : MonoBehaviour
     }
 
     // Nden 
-    //CallMamma mamy = new CallMamma() { animationName = "jump", context = "Jump Up", waitForTime = 3f};
+    //CallMamma mamy = new CallMamma() { animationName = "jump",  waitForTime = 3f};
     //mamy.Invoke();
 
 
@@ -38,7 +38,6 @@ public class HintController : MonoBehaviour
     {
         BeVisible();
 
-        context.text = c.context;
         animator.Play(c.animationName);
 
         if (coroutine != null)
@@ -57,6 +56,11 @@ public class HintController : MonoBehaviour
         BeInvisible();
     }
 
+    private void ChangeContext(string text)
+    {
+        context.text = text;
+    }
+
     private void BeVisible()
     {
         fadeScript.FadeIn();
@@ -65,72 +69,5 @@ public class HintController : MonoBehaviour
     public void BeInvisible()
     {
         fadeScript.FadeOut();
-    }
-
-    private void ShowSpaceJump()
-    {
-        BeVisible();
-
-        
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("SpaceJump"))
-            return;
-
-        context.text = "Jump Up";
-        animator.Play("SpaceJump");
-    }
-
-    public void ShowWarningTimeTravel()
-    {
-        BeVisible();
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("TimeWarning"))
-            return;
-
-        context.text = "Object Blocks the Timetravel";
-        animator.Play("TimeWarning");
-    }
-
-    private void ShowLeftMouseClick(string info)
-    {
-        BeVisible();
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("LeftClick"))
-            return;
-
-        context.text = "Interact " + info;
-        animator.Play("LeftClick");
-    }
-
-    private void ShowRightMouseClick(string info)
-    {
-        BeVisible();
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("RightClick"))
-            return;
-
-        context.text = "Interact " + info;
-        animator.Play("RightClick");   
-    }
-
-    private void ShowCameraMovement()
-    {
-        BeVisible();
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("MoveCamera"))
-            return;
-
-        context.text = "Look Around";
-        animator.Play("MoveCamera");
-    }
-
-    private void ShowKeyMovement()
-    {
-        BeVisible();
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("MoveAround"))
-            return;
-
-        context.text = "To Move";
-        animator.Play("MoveAround");
     }
 }
