@@ -3,8 +3,16 @@ using UnityEditor;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
-	[SerializeField] private Transform _camera;
+	public static CameraController Instance { get; private set; }
 	public static Transform Cam { get; private set; }
+	public float MouseSensitivity {
+		get => mouseSensitivity;
+		set => mouseSensitivity = Mathf.Max(0.0f, value);
+	}
+
+	[SerializeField] private Transform _camera;
+	private float mouseSensitivity = .7f;
+	
 	private Vector2 _mouseMovement;
 	private Vector3 _cameraPos;
 	
@@ -16,21 +24,10 @@ public class CameraController : MonoBehaviour {
 	private Vector3 _smoothDampCurrentVelocityLateral;
 	private Vector3 _smoothDampCurrentVelocity;
 		
-	// [Header("Mouse Sensitivity")]
-	// [SerializeField] [Range(0.001f, 10.0f)]
-	private float mouseSensitivity = .7f;
-	public float MouseSensitivity {
-		get => mouseSensitivity;
-		set => mouseSensitivity = Mathf.Max(0.0f, value);
-	}
-	// [SerializeField, Range(0.001f, 10.0f)]
-	// private float mouseSensitivityY = 1.0f;
 	
 	[Header("Camera Settings")]
 	[SerializeField, Range(0.0f, 2.0f)]
-	private float _cameraCollisionRadius = .4f;
-	[SerializeField, Range(0.0f, 2.0f)]
-	private float _headHeight = 1.6f;
+	private float _headHeight = .16f;
 	[SerializeField]
 	private bool firstPerson;
 	[SerializeField] 
@@ -39,9 +36,9 @@ public class CameraController : MonoBehaviour {
 	private Vector3 cameraOffset;
 	[SerializeField] [Range(0.0f, 1.0f)] 
 	private float smoothness = 0.05f;
+	private float _cameraCollisionRadius = .029f;
 
 	private Vector2 _thumbstickDelta;
-	public static CameraController Instance { get; private set; }
 
 	private PauseMenuBehaviour pauseMenuBehaviour;
 
@@ -75,8 +72,8 @@ public class CameraController : MonoBehaviour {
 		
 		if (pauseMenuBehaviour != null && pauseMenuBehaviour.isPaused()) return;
 		
+		DragCameraBehind();
 		MoveCamera();
-		
 		// if (Time.timeScale <= Mathf.Epsilon) {
 		// 	Cursor.visible = true;
 		// 	Cursor.lockState = CursorLockMode.Confined;
@@ -115,6 +112,7 @@ public class CameraController : MonoBehaviour {
 		const float lookOffset = 90;
 
 		_mouseMovement += _thumbstickDelta;
+		//_mouseMovement += new Vector2(_directionDrag.x, -_directionDrag.y);
 		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, _clampLookupMax - lookOffset, _clampLookupMin - lookOffset);
 		
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
@@ -147,6 +145,14 @@ public class CameraController : MonoBehaviour {
 		_lerpOffset = Vector3.SmoothDamp(_lerpOffset, offset, ref _smoothDampCurrentVelocity, smoothDollyTime);
 		
 		_camera.position = abovePlayer + _camera.rotation * _lerpOffset;
+	}
+
+	private Quaternion _directionDrag;
+	private Vector2 _dragVelocity;
+	[SerializeField] private Transform rat;
+	
+	private void DragCameraBehind() {
+		
 	}
 }
 	
