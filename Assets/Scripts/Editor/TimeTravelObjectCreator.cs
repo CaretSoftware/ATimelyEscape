@@ -6,7 +6,7 @@ using UnityEditor;
 public class TimeTravelObjectCreator : EditorWindow
 {
     //public GameObject[] timeTravelObjects;'
-    public GameObject prefab;
+    public GameObject defaultPrefab;
     public GameObject pastPrefab;
     public GameObject futurePrefab;
     public string objectName;
@@ -43,12 +43,13 @@ public class TimeTravelObjectCreator : EditorWindow
     private void OnEnable()
     {
         SetPropsToSerialized();
+        LoadPreviousSettings();
         SceneView.duringSceneGui += DuringSceneGUI;
     }
 
     private void OnDisable()
     {
-        //timeTravelObjects = null;
+        SaveSettings();
         SceneView.duringSceneGui -= DuringSceneGUI;
     }
 
@@ -57,7 +58,7 @@ public class TimeTravelObjectCreator : EditorWindow
         so = new SerializedObject(this);
 
         //propTimeTravelObjects = so.FindProperty("timeTravelObjects");
-        propPrefab = so.FindProperty("prefab");
+        propPrefab = so.FindProperty("defaultPrefab");
         propPastPrefab = so.FindProperty("pastPrefab");
         propFuturePrefab = so.FindProperty("futurePrefab");
         propObjectName = so.FindProperty("objectName");
@@ -66,6 +67,43 @@ public class TimeTravelObjectCreator : EditorWindow
         propChangesMaterials = so.FindProperty("changesMaterials");
         propCanBeMovedByPlayer = so.FindProperty("canBeMovedByPlayer");
         propCanCollideOnTimeTravel = so.FindProperty("canCollideOnTimeTravel");
+    }
+
+    private void LoadPreviousSettings()
+    {
+        objectName = EditorPrefs.GetString("TTO_CREATOR_objectName", "");
+        createPrefab = EditorPrefs.GetBool("TTO_CREATOR_createPrefab", false);
+        changesPrefab = EditorPrefs.GetBool("TTO_CREATOR_changesPrefab", false);
+        canBeMovedByPlayer = EditorPrefs.GetBool("TTO_CREATOR_canBeMovedByPlayer", false);
+        canCollideOnTimeTravel = EditorPrefs.GetBool("TTO_CREATOR_canCollideOnTimeTravel", false);
+        showSettings = EditorPrefs.GetBool("TTO_CREATOR_showSettings", false);
+
+        pastPrefab = LoadByPath("TTO_pastPrefab");
+        defaultPrefab = LoadByPath("TTO_defaultPrefab");
+        futurePrefab = LoadByPath("TTO_futurePrefab");
+    }
+
+    private void SaveSettings()
+    {
+        EditorPrefs.SetString("TTO_CREATOR_objectName", objectName);
+        EditorPrefs.SetBool("TTO_CREATOR_createPrefab", createPrefab);
+        EditorPrefs.SetBool("TTO_CREATOR_changesPrefab", changesPrefab);
+        EditorPrefs.SetBool("TTO_CREATOR_canBeMovedByPlayer", canBeMovedByPlayer);
+        EditorPrefs.SetBool("TTO_CREATOR_canCollideOnTimeTravel", canCollideOnTimeTravel);
+        EditorPrefs.SetBool("TTO_CREATOR_showSettings", showSettings);
+        EditorPrefs.SetString("TTO_pastPrefab", AssetDatabase.GetAssetPath(pastPrefab));
+        EditorPrefs.SetString("TTO_defaultPrefab", AssetDatabase.GetAssetPath(defaultPrefab));
+        EditorPrefs.SetString("TTO_futurePrefab", AssetDatabase.GetAssetPath(futurePrefab));
+    }
+
+    private GameObject LoadByPath(string editorPrefsKey)
+    {
+        string prefabName = EditorPrefs.GetString(editorPrefsKey, "");
+        if (prefabName != "")
+        {
+            return (GameObject)AssetDatabase.LoadAssetAtPath(prefabName, typeof(GameObject));
+        }
+        return null;
     }
 
     void DuringSceneGUI(SceneView sceneView)
@@ -163,18 +201,37 @@ public class TimeTravelObjectCreator : EditorWindow
 
     private void CreateTTObjects(GameObject ttoManager)
     {
-        int iterations = changesPrefab ? 3 : 1;
-        for (var i = 0; i < iterations; ++i)
+        //int iterations = changesPrefab ? 3 : 1;
+        //for (var i = 0; i < iterations; ++i)
+        //{
+        if (changesPrefab)
         {
-            string name = GetTimePeriodByIndex(i) + "_" + objectName;
-            GameObject tto = new GameObject(name);
+            InstantiateTTOPrefab(ttoManager, pastPrefab, "Past");
+            InstantiateTTOPrefab(ttoManager, defaultPrefab, "Present");
+            InstantiateTTOPrefab(ttoManager, futurePrefab, "Future");
+        }
+        else
+        {
+            InstantiateTTOPrefab(ttoManager, defaultPrefab, "");
+        }
+
+        //}
+    }
+
+    private void InstantiateTTOPrefab(GameObject ttoManager, GameObject go, string name)
+    {
+        if (go != null)
+        {
+            name += "_" + objectName;
+            GameObject tto = (GameObject)PrefabUtility.InstantiatePrefab(go);
+            tto.name = name;
+            Undo.RegisterCreatedObjectUndo(tto, "Create object");
             tto.AddComponent<TimeTravelObject>();
             tto.transform.parent = ttoManager.transform;
-            Undo.RegisterCreatedObjectUndo(tto, "Create object");
         }
     }
 
-    private string GetTimePeriodByIndex(int index)
+    /*private string GetTimePeriodByIndex(int index)
     {
         switch (index)
         {
@@ -186,6 +243,6 @@ public class TimeTravelObjectCreator : EditorWindow
                 return "Future";
         }
         return null;
-    }
+    }*/
 }
 
