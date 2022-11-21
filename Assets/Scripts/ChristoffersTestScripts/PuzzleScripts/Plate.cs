@@ -72,7 +72,7 @@ public class Plate : MonoBehaviour
                 pastDigitalClock.enabled = false;
                 pastText.text = "0";
                 pastOn = true;
-
+                digitalClock.takingAway = false;
             }
         }
         if (isPresent)
@@ -85,6 +85,7 @@ public class Plate : MonoBehaviour
                 pastText.text = "0";
                 presentText.text = "0";
                 presentOn = true;
+                digitalClock.takingAway = false;
 
             }
         }
@@ -94,6 +95,7 @@ public class Plate : MonoBehaviour
             {
                 ButtonOn();
                 futureOn = true;
+                digitalClock.takingAway = false;
             }
         }
     }
