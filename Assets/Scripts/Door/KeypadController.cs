@@ -9,13 +9,28 @@ using CallbackSystem;
 using RatCharacterController;
 using EventSystem = UnityEngine.EventSystems.EventSystem;
 
-public class Keypad : DeviceController
+public class KeypadController : DeviceController
 {
+    [Header("Values")]
     [SerializeField] private int maxDigits;
     [SerializeField] private int combination;
+
+    [Header("UI Components")]
     [SerializeField] private TextMeshProUGUI screen;
     [SerializeField] private UnityEngine.UI.Button[] keypadKeys;
     [SerializeField] private int keypadColumns = 3;
+
+    [Header("LockIcons")]
+    [SerializeField] private GameObject lockClosed;
+    [SerializeField] private GameObject lockOpen;
+
+    [SerializeField] private GameObject stateOpen;
+    [SerializeField] private GameObject stateClosed;
+
+    [Header("Door to Open")]
+    [SerializeField] private Door2 door;
+
+    private Collider trigger;
 
     private KeyCode[] keyCodes = {
         KeyCode.Alpha0,
@@ -45,20 +60,18 @@ public class Keypad : DeviceController
     private int previousKeypadIndex;
     private bool usingKeyboardDigits = true;
 
-    [Header("LockIcons")]
-    [SerializeField] private GameObject lockClosed;
-    [SerializeField] private GameObject lockOpen;
-
-    private Animator keyPadanimator;
+    private Animator keyPadAnimator;
 
     private void Start()
     {
-        keyPadanimator = GetComponent<Animator>();
+        keyPadAnimator = GetComponent<Animator>();
+
+        trigger = gameObject.transform.GetComponentInParent<BoxCollider>();
 
         lockClosed.SetActive(true);
         lockOpen.SetActive(false);
     }
-    
+
     public void KeypadDigitInput(int number)
     {
         if (screen.text.Length < maxDigits)
@@ -84,37 +97,44 @@ public class Keypad : DeviceController
         }
     }
 
-    [SerializeField] private Door2 door;
-    [SerializeField] private Collider trigger;
     public void KeypadEnterInput()
-    {
-        
+    {  
         if (screen.text.Equals(combination.ToString()))
         {
-            keyPadanimator.Play("RightCode");
+            keyPadAnimator.Play("RightCode");
 
-            if(door != null) door.SetDoor(true);
-            if (trigger != null) trigger.enabled = false;
+            if(door != null) 
+                door.SetDoor(true);
 
-            //device.TurnedOn(true);
+            if (trigger != null) 
+                trigger.enabled = false;
+
+            SwitchState();
+
+            if(device != null)
+                device.TurnedOn(true);
+            else
+                Debug.Log("Error: Missing device component");
+
         }
         else
         {
-            keyPadanimator.Play("WrongCode");
+            keyPadAnimator.Play("WrongCode");
             screen.text = "";
-        }
-        
+        }     
     }
-
-    public void CloseKeyPad() {
-        CharacterInput.IsPaused(false);
-        gameObject.SetActive(false);
-    }
-
-    public void DestroyKeyPad()
+    private void DisableKeypad()
     {
         CharacterInput.IsPaused(false);
-        gameObject.SetActive(false);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void SwitchState()
+    {
+        stateOpen.SetActive(!stateOpen.activeInHierarchy);
+        stateClosed.SetActive(!stateClosed.activeInHierarchy);
     }
 
     private void Update()

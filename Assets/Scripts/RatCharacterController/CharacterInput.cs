@@ -273,6 +273,9 @@ namespace RatCharacterController {
       
       private void Interact(InputAction.CallbackContext context) {
 
+         if (paused)
+             return; 
+
          Transform playerTransform = _playerTransform;
          Ray ray = new Ray(transform.position + Vector3.up * _characterHalfHeight * playerTransform.localScale.y,
             playerTransform.forward);
@@ -294,12 +297,14 @@ namespace RatCharacterController {
             _playerInputActions.BoxMovement.Enable();
             _playerInputActions.CharacterMovement.Disable();
          } else if (Physics.Raycast(ray, out RaycastHit hit, .3f) && hit.transform.CompareTag(keypadTag)) {
-            
-            OpenKeypad keypad = hit.transform.GetComponent<OpenKeypad>();
-            if (keypad != null)
-               keypad.Open();
 
-            CharacterInput.paused = true;
+                //OpenKeypad keypad = hit.transform.GetComponent<OpenKeypad>();
+            KeypadHandler keypad = hit.transform.GetComponent<KeypadHandler>();
+
+            if (keypad != null)
+               keypad.OpenKeypad();
+
+            paused = true;
          }
       }
 
