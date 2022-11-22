@@ -26,12 +26,17 @@ public class TimeTravelObject : MonoBehaviour {
     private List<GameObject> nonMovableColliderObjects = new List<GameObject>();
     private GameObject nonMovableCollidersParent;
 
+    public List<Renderer> OrderedRenderers { get => renderers2; private set => renderers2 = value; }
+
 
     public void SetUpTimeTravelObject(TimeTravelObjectManager manager, TimeTravelObject pastSelf = null) {
         this.manager = manager;
         allComponents = GetComponents<Component>().ToList();
         allComponents.AddRange(GetComponentsInChildren<Component>());
-        /*GatherRenderers(transform);*/
+        GatherRenderers(transform);
+        foreach (var r in renderers2) {
+            print(gameObject.name + " " + r.gameObject.name);
+        }
 
         switch (manager.ObjectState) {
             case TimeTravelObjectState.PrefabChanging:
@@ -71,7 +76,7 @@ public class TimeTravelObject : MonoBehaviour {
     public void GatherRenderers(Transform currentTransform) {
         Renderer temp;
         for (int i = 0; i < currentTransform.childCount; i++) {
-            temp = GetComponent<Renderer>();
+            temp = currentTransform.GetChild(i).GetComponent<Renderer>();
             if (temp != null) {
                 renderers2.Add(temp);
                 GatherRenderers(temp.transform);
