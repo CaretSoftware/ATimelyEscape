@@ -11,23 +11,24 @@ namespace RatCharacterController {
 		private static readonly int VelocityX = Animator.StringToHash("VelocityX");
 		private static readonly int Jump = Animator.StringToHash("Jump");
 		private static readonly int Leap = Animator.StringToHash("Leap");
+		private static readonly int Grounded = Animator.StringToHash("Grounded");
+		private static readonly int Pushing = Animator.StringToHash("Push");
 		// private Transform _camera;
 		private Animator _animator;
-		private Transform _transform;
+		public static Transform _transform;
 		private float _velX;
 		private float _velZ;
 		[SerializeField] private float smoothTime = .1f;
 		private float _currentVelX;
 		private float _currentVelZ;
 		private Vector3 _inputVector;
-		private static readonly int Grounded = Animator.StringToHash("Grounded");
-		private static readonly int Pushing = Animator.StringToHash("Push");
 		private Rigidbody rb;
 		private float _mantleAnimationLength = .833f + .460f;
 
 		private void Awake() {
 			_transform = transform;
 			_animator = GetComponent<Animator>();
+			
 			// _camera = FindObjectOfType<Camera>().transform;
 			rb = GetComponent<Rigidbody>();
 			// _navMeshAgent = GetComponent<NavMeshAgent>();

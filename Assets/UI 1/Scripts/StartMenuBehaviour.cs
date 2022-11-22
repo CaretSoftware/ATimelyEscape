@@ -3,19 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class StartMenuBehaviour : MonoBehaviour
 {
     private Animator startMenyAnimator;
+    private bool hasStartUp = false;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+
+    [Header("Camera")]
+    [SerializeField] private Animator cameraAnimator;
+
+    [Header("Loading Components")]
+    [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private Image loadingBarFill;
+    [SerializeField] private TextMeshProUGUI loadingText;
 
     private void Start()
     {
+        Time.timeScale = 1;
+        Debug.Log("" + Time.timeScale);
         startMenyAnimator = gameObject.GetComponent<Animator>();
 
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
+    }
 
+    private void Update()
+    {
+        if (Input.anyKey && !hasStartUp)
+        {
+            startMenyAnimator.SetTrigger("ToIntro");
+            hasStartUp = true;
+        }
     }
 
     // Method to load a scene by insert the index of wished scene presented in buildsettings
@@ -27,7 +49,30 @@ public class StartMenuBehaviour : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
+            startMenyAnimator.Play("Outro");
+            //StartCoroutine(LoadSceneAsync(sceneIndex)); It is activated in Animation StartMenuOutro
+        }
+    }
+
+    private IEnumerator LoadSceneAsync(int sceneIndex)
+    {
+        yield return new WaitForSeconds(2.0f);
+
+        loadingScreen.SetActive(true);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
+
+        while (!operation.isDone)
+        {
+            float progressValue = Mathf.Clamp01(operation.progress / 0.9f);
+
+            if(loadingBarFill != null)
+                loadingBarFill.fillAmount = progressValue;
+
+            if(loadingText != null)
+                loadingText.text = (int) (progressValue * 100) + "%";
+
+            yield return null;
         }
     }
 
@@ -36,8 +81,16 @@ public class StartMenuBehaviour : MonoBehaviour
     {
         Debug.Log("Info: Quit button has been Pressed");
 
-        Time.timeScale = 1;
-
         Application.Quit();
+    }
+
+    private void PlayCameraTrigg(string trigger)
+    {
+        cameraAnimator.Play(trigger);
+    }
+
+    private void PlayClip(AudioClip audioClip)
+    {
+        audioSource.PlayOneShot(audioClip);
     }
 }
