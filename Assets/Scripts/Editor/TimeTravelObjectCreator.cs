@@ -156,7 +156,7 @@ public class TimeTravelObjectCreator : EditorWindow
         }
 
 
-      
+
         GUILayout.Space(20);
         GUILayout.BeginHorizontal();
         GUILayout.Space(40);
@@ -181,7 +181,8 @@ public class TimeTravelObjectCreator : EditorWindow
         GameObject ttoManager = CreateTTOManager();
         //if (timeTravelObjects != null && timeTravelObjects.Length > 0)
         //{
-            CreateTTObjects(ttoManager);
+        CreateTTObjects(ttoManager);
+        ApplySettingsToManager(ttoManager);
         //}
 
         if (createPrefab)
@@ -197,6 +198,12 @@ public class TimeTravelObjectCreator : EditorWindow
         ttoManager.AddComponent<TimeTravelObjectManager>();
         Undo.RegisterCreatedObjectUndo(ttoManager, "Create object");
         return ttoManager;
+    }
+
+    private void ApplySettingsToManager(GameObject ttoManager)
+    {
+        TimeTravelObjectManager managerComponent = ttoManager.GetComponent<TimeTravelObjectManager>();
+        
     }
 
     private void CreateTTObjects(GameObject ttoManager)
