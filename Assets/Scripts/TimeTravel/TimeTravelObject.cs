@@ -31,7 +31,7 @@ public class TimeTravelObject : MonoBehaviour {
         this.manager = manager;
         allComponents = GetComponents<Component>().ToList();
         allComponents.AddRange(GetComponentsInChildren<Component>());
-        GatherRenderers(transform);
+        /*GatherRenderers(transform);*/
 
         switch (manager.ObjectState) {
             case TimeTravelObjectState.PrefabChanging:
