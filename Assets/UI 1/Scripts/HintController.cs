@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using RatCharacterController;
+using CallbackSystem;
 
 public class HintController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI context;
 
-    [Header("Player")]
-    [SerializeField] private CharacterInput characterInput;
+    // [Header("Player")]
+    // [SerializeField] 
+    //private CharacterInput characterInput;
 
     private FadeScript fadeScript;
 
@@ -18,82 +20,53 @@ public class HintController : MonoBehaviour
 
     private void Start()
     {
+        CallHintAnimation.AddListener<CallHintAnimation>(UIHintListener);
+
         animator = GetComponent<Animator>();
         fadeScript = GetComponent<FadeScript>();
-
+        //characterInput = FindObjectOfType<CharacterInput>();
     }
 
-    private void Update()
-    {
-        CheckToShowJump();
-    }
+    // Nden 
+    //CallMamma mamy = new CallMamma() { animationName = "jump",  waitForTime = 3f};
+    //mamy.Invoke();
 
-    private void CheckToShowJump()
+
+    private IEnumerator coroutine;
+
+    private void UIHintListener(CallHintAnimation c)
     {
-        if (characterInput.LedgeAhead(out Vector3 hitPosition) && characterInput.Grounded())
+        BeVisible();
+
+        animator.Play(c.animationName);
+
+        if (coroutine != null)
         {
-            fadeScript.FadeIn();
-
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("SpaceJump"))
-                return;
-
-            ShowSpaceJump();
+            StopCoroutine(coroutine);
         }
-        else
-        {
-            fadeScript.FadeOut();
-        }
+
+        coroutine = ShowFor(c.waitForTime);
+        StartCoroutine(coroutine);
     }
 
-    private void StopAnimation()
+    private IEnumerator ShowFor(float time)
     {
-        
+        yield return new WaitForSeconds(time);
+
+        BeInvisible();
     }
 
-    private void ShowWarningTimeTravel()
+    private void ChangeContext(string text)
     {
-        context.text = "Malfunction";
-        animator.Play("TimeWarning");
+        context.text = text;
     }
 
-    private void ShowLeftMouseClick(string info)
+    private void BeVisible()
     {
-        context.text = "Interact " + info;
-        animator.Play("LeftClick");
+        fadeScript.FadeIn();
     }
 
-    private void ShowRightMouseClick(string info)
-    {
-        context.text = "Interact " + info;
-        animator.Play("RightClick");
-        
-    }
-
-    public void ShowTimeTravelWarning()
-    {
-        context.text = "Can´t Travel";
-        animator.Play("");
-    }
-
-    private void ShowSpaceJump()
-    {
-        context.text = "Jump Up";
-        animator.Play("SpaceJump");
-    }
-
-    private void ShowCameraMovement()
-    {
-        context.text = "Look Around";
-        animator.Play("MoveCamera");
-    }
-
-    private void ShowKeyMovement()
-    {
-        context.text = "To Move";
-        animator.Play("MoveAround");
-    }
-
-    private void BeNeutral()
+    public void BeInvisible()
     {
         fadeScript.FadeOut();
     }

@@ -1,9 +1,11 @@
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(SphereCollider))]
 public class WatchPickup : MonoBehaviour {
 	
 	[SerializeField] private float rotationSpeed = 25.0f;
+	[SerializeField] private TextMeshProUGUI instructions;
 
 	private void Awake() {
 		GetComponent<SphereCollider>().isTrigger = true;
@@ -16,6 +18,7 @@ public class WatchPickup : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Player")) {
+			instructions.text = "NOW USE \"1\"-KEY TO TIMETRAVEL ONE YEAR BACK";
 			FindObjectOfType<RatCharacterController.CharacterInput>().CanTimeTravel(true);
 			Destroy(this.gameObject);
 		}

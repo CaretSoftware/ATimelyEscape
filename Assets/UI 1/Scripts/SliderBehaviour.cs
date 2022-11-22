@@ -13,15 +13,15 @@ public class SliderBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        slider.onValueChanged.AddListener((v) =>
+        slider.onValueChanged.AddListener((currentValue) =>
         {
-            sliderText.text = v.ToString("0%");
-        });
-    }
+            float newValue = (1 - (currentValue / slider.minValue)) * 100;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            sliderText.text = (int) newValue + " %";
+        });
+
+        float startValue = (1 - (slider.value / slider.minValue)) * 100;
+
+        sliderText.text = (int) startValue + " %";
     }
 }
