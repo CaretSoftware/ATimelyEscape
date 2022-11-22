@@ -26,6 +26,8 @@ public class TimeTravelObject : MonoBehaviour {
     private List<GameObject> nonMovableColliderObjects = new List<GameObject>();
     private GameObject nonMovableCollidersParent;
 
+    public List<Renderer> OrderedRenderers { get => renderers2; private set => renderers2 = value; }
+
 
     public void SetUpTimeTravelObject(TimeTravelObjectManager manager, TimeTravelObject pastSelf = null) {
         this.manager = manager;
