@@ -31,12 +31,12 @@ public class CaptureNode : Node
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(target.position, agentTransform.transform.position);
-        if (destinationDistance < captureDistance)
+        if (destinationDistance < captureDistance - 0.1f)
         {
                 handIKTarget.position = target.position;
+                if(animator.GetIKPositionWeight(AvatarIKGoal.RightHand) > captureDistance)
                 animator.SetTrigger("GrabItem");
-                if(animator.GetIKPositionWeight(AvatarIKGoal.RightHand) > 0.8f)
-                    target.transform.position = checkpoint.position;
+                    //target.transform.position = checkpoint.position;
             agent.isStopped = true;
             return NodeState.FAILURE;
         }
@@ -46,15 +46,5 @@ public class CaptureNode : Node
             agent.SetDestination(target.position);
             return NodeState.RUNNING;
         }
-    }
-
-    private void OnAnimationGrabbedItem()
-    {
-
-    }
-
-    private void OnAnimationStoredItem()
-    {
-
     }
 }

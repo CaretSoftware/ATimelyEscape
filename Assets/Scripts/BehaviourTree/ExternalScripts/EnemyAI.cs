@@ -16,6 +16,7 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Rig Setup")]
     [SerializeField] private Transform handIKTarget;
+    [SerializeField] private Transform handBone;
 
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
@@ -148,5 +149,15 @@ public class EnemyAI : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
         }
+    }
+
+    public void OnAnimationGrabbedItem()
+    {
+        playerTransform.SetParent(handBone, true);
+    }
+
+    public void OnAnimationStoredItem()
+    {
+        playerTransform.position = checkpoint.position;
     }
 }
