@@ -16,9 +16,6 @@ public class StartMenuBehaviour : MonoBehaviour
     [Header("Camera")]
     [SerializeField] private Animator cameraAnimator;
 
-    [Header("Fading")]
-    [SerializeField] private GameObject fadingScreen;
-
     [Header("Loading Components")]
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Image loadingBarFill;
@@ -32,8 +29,6 @@ public class StartMenuBehaviour : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
-
-        fadingScreen.GetComponent<FadeScript>().FadeOut();
     }
 
     private void Update()
@@ -91,7 +86,6 @@ public class StartMenuBehaviour : MonoBehaviour
 
     private void PlayCameraTrigg(string trigger)
     {
-        fadingScreen.GetComponent<FadeScript>().FadeIn();
         cameraAnimator.Play(trigger);
     }
 
