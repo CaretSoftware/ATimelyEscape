@@ -8,6 +8,13 @@ using TMPro;
 public class StartMenuBehaviour : MonoBehaviour
 {
     private Animator startMenyAnimator;
+    private bool hasStartUp = false;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+
+    [Header("Camera")]
+    [SerializeField] private Animator cameraAnimator;
 
     [Header("Loading Components")]
     [SerializeField] private GameObject loadingScreen;
@@ -22,7 +29,15 @@ public class StartMenuBehaviour : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
+    }
 
+    private void Update()
+    {
+        if (Input.anyKey && !hasStartUp)
+        {
+            startMenyAnimator.SetTrigger("ToIntro");
+            hasStartUp = true;
+        }
     }
 
     // Method to load a scene by insert the index of wished scene presented in buildsettings
@@ -41,6 +56,8 @@ public class StartMenuBehaviour : MonoBehaviour
 
     private IEnumerator LoadSceneAsync(int sceneIndex)
     {
+        yield return new WaitForSeconds(2.0f);
+
         loadingScreen.SetActive(true);
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
@@ -60,10 +77,20 @@ public class StartMenuBehaviour : MonoBehaviour
     }
 
     // Method to quit the application anytime
-    private void QuitGame()
+    public void QuitGame()
     {
         Debug.Log("Info: Quit button has been Pressed");
 
         Application.Quit();
+    }
+
+    private void PlayCameraTrigg(string trigger)
+    {
+        cameraAnimator.Play(trigger);
+    }
+
+    private void PlayClip(AudioClip audioClip)
+    {
+        audioSource.PlayOneShot(audioClip);
     }
 }
