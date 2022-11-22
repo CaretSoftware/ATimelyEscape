@@ -16,7 +16,7 @@ public class CaptureNode : Node
     private float captureDistance;
     private float destinationDistance;
 
-    public CaptureNode(NavMeshAgent agent, Transform target, float captureDistance, Transform checkpoint, 
+    public CaptureNode(NavMeshAgent agent, Transform target, float captureDistance, Transform checkpoint,
         Transform agentTransform, Transform handIKTarget, Animator animator)
     {
         this.agent = agent;
@@ -33,11 +33,11 @@ public class CaptureNode : Node
         destinationDistance = Vector3.Distance(target.position, agentTransform.transform.position);
         if (destinationDistance < captureDistance - 0.1f)
         {
-                handIKTarget.position = target.position;
-                if(animator.GetIKPositionWeight(AvatarIKGoal.RightHand) > captureDistance)
-                animator.SetTrigger("GrabItem");
-                    //target.transform.position = checkpoint.position;
-            agent.isStopped = true;
+            handIKTarget.position = target.position;
+            animator.SetTrigger("GrabItem");
+            //if (animator.GetIKPositionWeight(AvatarIKGoal.RightHand))
+                //target.transform.position = checkpoint.position;
+                agent.isStopped = true;
             return NodeState.FAILURE;
         }
         else

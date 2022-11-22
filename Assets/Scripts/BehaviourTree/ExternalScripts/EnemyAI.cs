@@ -8,6 +8,9 @@ public class EnemyAI : MonoBehaviour
     private const float MovingToIdleMagnitude = 0.5f;
     private const float NavMeshRadiusOffstep = 20f;
 
+    [HideInInspector] public static int IDCounter;
+    [HideInInspector] public int ID;
+
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
     [SerializeField] private Transform checkpoint;
@@ -49,6 +52,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Awake()
     {
+        if(ID == null) ID = IDCounter++;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         enemyFOV = GetComponent<EnemyFOV>();
@@ -154,10 +158,14 @@ public class EnemyAI : MonoBehaviour
     public void OnAnimationGrabbedItem()
     {
         playerTransform.SetParent(handBone, true);
+        playerTransform.position = handBone.position;
     }
 
     public void OnAnimationStoredItem()
     {
+        playerTransform.SetParent(null, true);
         playerTransform.position = checkpoint.position;
+        playerTransform.rotation = checkpoint.rotation; 
+        animator.SetBool("GrabItem", false);
     }
 }
