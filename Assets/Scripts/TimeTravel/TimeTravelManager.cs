@@ -7,8 +7,7 @@ using UnityEngine;
 using StateMachines;
 using TMPro;
 
-public class TimeTravelManager : MonoBehaviour
-{
+public class TimeTravelManager : MonoBehaviour {
     private StateMachine stateMachine;
     [SerializeField] private TimeTravelPeriod startPeriod;
     [SerializeField] private TextMeshProUGUI timeText;
@@ -25,8 +24,7 @@ public class TimeTravelManager : MonoBehaviour
     };
 
     // Start is called before the first frame update
-    void Awake()
-    {
+    void Awake() {
         collisionWarning = GetComponent<TimeTravelCollisionWarning>();
         MovableObjects.Clear();
         playerTransform = FindObjectOfType<CharacterAnimationController>().transform;
@@ -44,8 +42,7 @@ public class TimeTravelManager : MonoBehaviour
     // Update is called once per frame
     void Update() { stateMachine.Run(); }
 
-    public static bool DesiredTimePeriod(TimeTravelPeriod desired)
-    {
+    public static bool DesiredTimePeriod(TimeTravelPeriod desired) {
         if (desired == currentPeriod) return false;
 
         desiredPeriod = desired;
@@ -53,12 +50,10 @@ public class TimeTravelManager : MonoBehaviour
         return true;
     }
 
-    public static void SimulateMovableObjectPhysics(int maxIterations)
-    {
+    public static void SimulateMovableObjectPhysics(int maxIterations) {
         Physics.autoSimulation = false;
 
-        for (int i = 0; i < maxIterations; i++)
-        {
+        for (int i = 0; i < maxIterations; i++) {
             Physics.Simulate(Time.fixedDeltaTime);
             if (MovableObjects.All(rb => rb.IsSleeping())) break;
         }
@@ -66,8 +61,7 @@ public class TimeTravelManager : MonoBehaviour
         Physics.autoSimulation = true;
     }
 
-    private void OnTimeTravel(TimePeriodChanged e)
-    {
+    private void OnTimeTravel(TimePeriodChanged e) {
         var beforeSim = new DebugEvent { DebugText = "BeforeSimulation" };
         beforeSim.Invoke();
 
@@ -75,8 +69,7 @@ public class TimeTravelManager : MonoBehaviour
         var simulationComplete = new PhysicsSimulationComplete { from = e.from, to = e.to };
         simulationComplete.Invoke();
 
-        switch (e.to)
-        {
+        switch (e.to) {
             case TimeTravelPeriod.Past:
                 timeText.text = "Current Time Period: Past";
                 break;
@@ -90,8 +83,7 @@ public class TimeTravelManager : MonoBehaviour
     }
 }
 
-public enum TimeTravelPeriod
-{
+public enum TimeTravelPeriod {
     Past = 0,
     Present = 1,
     Future = 2,
@@ -99,17 +91,13 @@ public enum TimeTravelPeriod
 }
 
 
-namespace StateMachines
-{
-    public class TimePeriodState : State
-    {
+namespace StateMachines {
+    public class TimePeriodState : State {
         private TimeTravelPeriod travellingTo;
         public TimeTravelPeriod thisPeriod;
 
-        public override void Run()
-        {
-            if (TimeTravelManager.currentPeriod != TimeTravelManager.desiredPeriod)
-            {
+        public override void Run() {
+            if (TimeTravelManager.currentPeriod != TimeTravelManager.desiredPeriod) {
                 var cols = Physics.OverlapCapsule(
                     new Vector3(TimeTravelManager.playerTransform.position.x,
                         TimeTravelManager.playerTransform.position.y + 0.1f,
@@ -118,16 +106,13 @@ namespace StateMachines
                         TimeTravelManager.playerTransform.position.y - 0.1f,
                         TimeTravelManager.playerTransform.position.z), 0.05f, LayerMask.GetMask("OtherTimePeriod"));
 
-                if (cols.Length == 0 || cols.All(c => c.isTrigger))
-                {
+                if (cols.Length == 0 || cols.All(c => c.isTrigger)) {
                     State nextState = StateMachine.stateDict[
                         TimeTravelManager.PeriodStates[TimeTravelManager.desiredPeriod]];
                     StateMachine.TransitionTo(nextState);
                     travellingTo = TimeTravelManager.desiredPeriod;
                     if (TimeTravelManager.currentPeriod == TimeTravelPeriod.Dummy) Exit();
-                }
-                else
-                {
+                } else {
                     TimeTravelManager.desiredPeriod = TimeTravelManager.currentPeriod;
                     Debug.LogError("You tried Time Travelling into another object!");
                     TimeTravelManager.collisionWarning.ShowWarning();
@@ -135,15 +120,12 @@ namespace StateMachines
             }
         }
 
-        public override void Exit()
-        {
+        public override void Exit() {
             var travelEvent = new TimePeriodChanged() { from = thisPeriod, to = travellingTo };
             travelEvent.Invoke();
             Debug.Log("Travelled to: " + travellingTo);
             TimeTravelManager.currentPeriod = travellingTo;
         }
-
-
     }
 
     // would rather do without these, but state machine needs a rewrite for that to work

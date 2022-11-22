@@ -81,15 +81,20 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
     public TimeTravelObjectState ObjectState { get; private set; }
 
-    public bool CanBeMovedByPlayer => canBeMovedByPlayer;
-    public bool CanCollideOnTimeTravel => canCollideOnTimeTravel;
     public MaterialInfo[] PastMaterials => pastMaterials;
     public MaterialInfo[] PresentMaterials => presentMaterials;
     public MaterialInfo[] FutureMaterials => futureMaterials;
     public Renderer[] Renderers => renderers;
 
-
     private Vector3 activePosition;
+
+    public bool CanBeMovedByPlayer => canBeMovedByPlayer;
+    public bool ChangesMaterials => changesMaterials;
+    public bool ChangesPrefab => changesPrefab;
+    public bool ShowPreviewBox => showPreviewBox;
+    public float PreviewBoxScale => previewBoxScale;
+    public float PreviewBoxMinDistance => previewBoxMinShowDistance;
+    public bool CanCollideOnTimeTravel => canCollideOnTimeTravel;
 
     private bool TObjectOrWBoxNull =>
         (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
