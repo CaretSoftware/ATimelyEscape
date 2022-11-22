@@ -35,7 +35,7 @@ public class TimeTravelObjectCreator : EditorWindow
 
 
     [MenuItem("Tools/TTOCreator")]
-    public static void OpneTTOCreator()
+    public static void OpenTTOCreator()
     {
         GetWindow<TimeTravelObjectCreator>();
     }
