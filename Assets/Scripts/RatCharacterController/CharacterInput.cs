@@ -58,7 +58,10 @@ namespace RatCharacterController {
          if (_camController == null)
             Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode",
                this.gameObject);
-      }
+
+            CallHintAnimation callHint = new CallHintAnimation() { animationName = "TutorialControl",  waitForTime = 15f };
+            callHint.Invoke();
+        }
 
       private void OnDestroy() {
          Unsubscribe();
@@ -101,6 +104,12 @@ namespace RatCharacterController {
             MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
          else
             PushCubeInput(_playerInputActions.BoxMovement.Movement.ReadValue<Vector2>());
+
+         if (LedgeAhead(out Vector3 hitPosition))
+         {
+             CallHintAnimation callHint = new CallHintAnimation() { animationName = "JumpHint", waitForTime = 1f };
+             callHint.Invoke();
+         }
       }
 
       public void JumpComplete() {
@@ -189,16 +198,17 @@ namespace RatCharacterController {
                 hitPosition = hitInfo.point;
 
                 return !Physics.CapsuleCast(
-                   point1: _point0,
-                   point2: _point1,
-                   radius: radius - margin,
-                   direction: _playerForward,
-                   maxDistance: maxDistance,
-                   groundedLayerMask,
-                   QueryTriggerInteraction.Ignore);
+               point1: _point0,
+               point2: _point1,
+               radius: radius - margin,
+               direction: _playerForward,
+               maxDistance: maxDistance,
+               groundedLayerMask,
+               QueryTriggerInteraction.Ignore);
+
             }
 
-            hitPosition = _playerTransform.position;
+                hitPosition = _playerTransform.position;
             return false;
         }
 
