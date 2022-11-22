@@ -28,16 +28,8 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     // Method when user has pressed the mousebutton
 
-    [Header("Overhaul")]
-    [SerializeField] private int thisIndex;
-    [SerializeField] private MenuButtonController menuButtonController;
-    [SerializeField] private GameObject selectionHint;
-
     private void Start()
     {
-        if (selectionHint != null)
-            selectionHint.SetActive(false);
-
         image = gameObject.GetComponent<UnityEngine.UI.Image>();
         image.sprite = neutral;
         source = GetComponent<AudioSource>();
@@ -49,49 +41,7 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     private void Update()
     {
-        if (!button.interactable)
-        {
-            return;
-        }
-
-        if (menuButtonController.mouseInUse && !beenResetedAfterMouseMoving)
-        {
-            beenResetedAfterMouseMoving = true;
-            playedHoverClip = false;
-            ToNeutralSprite();
-        }
-
-        if (!menuButtonController.mouseInUse)
-        {
-            beenResetedAfterMouseMoving = false;
-
-            if (menuButtonController.index == thisIndex)
-            {
-                playedHoverClip = false;
-
-                if (Input.GetAxis("Submit") == 1)
-                {
-                    ToPressedSprite();
-                    PlayClickClip();
-                    button.onClick.Invoke();
-                }
-                else
-                {
-                    ToSelectedSprite();
-                }
-            }
-            else
-            {
-                if (!playedHoverClip)
-                {
-                    PlayHoverClip();
-                    PlaySpeachClip();
-                    playedHoverClip = true;
-                }
-
-                ToNeutralSprite();
-            }
-        }
+        
     }
 
     // MouseHandler Methods /Clicking
@@ -131,15 +81,11 @@ public class ButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void ToNeutralSprite()
     {
         image.sprite = neutral;
-        if (selectionHint != null)
-            selectionHint.SetActive(false);
     }
 
     public void ToSelectedSprite()
     {
         image.sprite = selected;
-        if (selectionHint != null)
-            selectionHint.SetActive(true);
     }
 
     // Audio clips när man har selected
