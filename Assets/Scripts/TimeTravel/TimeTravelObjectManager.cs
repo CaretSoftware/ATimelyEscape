@@ -101,7 +101,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
          future.wireBox == null);
 
 
-    private void Awake() {
+    public void Awake() {
         CheckForMissingComponents();
         DetermineTimeTravelObjectState();
 
@@ -111,8 +111,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
             future?.SetUpTimeTravelObject(this, present);
         } else timeTravelObject.SetUpTimeTravelObject(this);
 
-        TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
-        PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
+        if (!Application.isPlaying) {
+            TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
+            PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
+        }
     }
 
     private void CheckForMissingComponents() {
