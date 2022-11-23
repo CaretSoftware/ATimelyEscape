@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,6 +43,8 @@ public class CameraController : MonoBehaviour {
 
 	private PauseMenuBehaviour pauseMenuBehaviour;
 
+	private Transform dragTransform;
+	
 	private void Awake() {
 		// if (Instance == null) 
 		Instance ??= this;
@@ -57,64 +60,55 @@ public class CameraController : MonoBehaviour {
 		CameraFollow cameraFollow = FindObjectOfType<CameraFollow>();
 		
 		Vector3 initialCameraVector = cameraFollow.Follow.rotation.eulerAngles;
-
 		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
 		
 		_lerpOffset = cameraOffset;
 		_cameraPos = transform.position;
 		_camera.position = _cameraPos + cameraOffset;
 
+		dragTransform = new GameObject("DragTransform").transform;
+		dragTransform.position = _camera.position;
+		// dragTransform = Instantiate(new GameObject("Drag Transform"), _camera.position, _camera.rotation).transform;
+
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
 	}
 
-	private void Update() {
+	private void LateUpdate() {
 		
 		if (pauseMenuBehaviour != null && pauseMenuBehaviour.isPaused()) return;
 		
 		DragCameraBehind();
-		MoveCamera();
-		// if (Time.timeScale <= Mathf.Epsilon) {
-		// 	Cursor.visible = true;
-		// 	Cursor.lockState = CursorLockMode.Confined;
-		// } else {
-		// 	Cursor.visible = false;
-		// 	Cursor.lockState = CursorLockMode.Locked;
-		// }
+		// MoveCamera();
 	}
 
-	// public void SetMouseLookSensitivity(float value) {
-	// 	MouseSensitivityX = value;
-	// }
-
+	
 	public void MouseInput(Vector2 mouseDelta) {
-		//mouseDelta = context.ReadValue<Vector2>();
-
-		_mouseMovement.x += mouseDelta.x * MouseSensitivity * Time.deltaTime * 25f;
-		_mouseMovement.y -= mouseDelta.y * MouseSensitivity * Time.deltaTime * 25f;
-
+		const float mouseSensitivity = 25f;
+		_mouseMovement.x += mouseDelta.x * MouseSensitivity * Time.deltaTime * mouseSensitivity;
+		_mouseMovement.y -= mouseDelta.y * MouseSensitivity * Time.deltaTime * mouseSensitivity;
+		
+		// TODO testing to see if we can use mouseDelta instead
+		_mouseDelta.x = mouseDelta.x * MouseSensitivity * Time.deltaTime * mouseSensitivity;
+		_mouseDelta.y = mouseDelta.y * MouseSensitivity * Time.deltaTime * mouseSensitivity;
 	}
 
 	public void StickInput(Vector2 stickDelta) {
-		const float stickSensitivity = 1.0f;
+		const float stickSensitivity = 150f;
 		
-		// Vector2 stickDelta = context.ReadValue<Vector2>();
-		
-		_thumbstickDelta = new Vector2(stickDelta.x, -stickDelta.y) * stickSensitivity * Time.deltaTime * 150f;
-		
-		// _mouseMovement.x += stickDelta.x * stickSensitivity;
-		// _mouseMovement.y -= stickDelta.y * stickSensitivity;
+		_thumbstickDelta = stickSensitivity * Time.deltaTime * new Vector2(stickDelta.x, -stickDelta.y);
 	}
 
 	private Vector3 _lerpOffset;
+	private Vector2 prevInput;
 
 	private void MoveCamera() {
 		const float lookOffset = 90;
 
 		_mouseMovement += _thumbstickDelta;
-		//_mouseMovement += new Vector2(_directionDrag.x, -_directionDrag.y);
-		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, _clampLookupMax - lookOffset, _clampLookupMin - lookOffset);
 		
+		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, _clampLookupMax - lookOffset, _clampLookupMin - lookOffset);
+
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 	
 		if (firstPerson) {
@@ -147,12 +141,51 @@ public class CameraController : MonoBehaviour {
 		_camera.position = abovePlayer + _camera.rotation * _lerpOffset;
 	}
 
-	private Quaternion _directionDrag;
-	private Vector2 _dragVelocity;
-	[SerializeField] private Transform rat;
-	
+	[SerializeField] private Transform _followTransform;
+	private Vector3 _cameraDirection;
+	private Vector3 _cameraHeight;
+	private Vector2 _mouseDelta;
 	private void DragCameraBehind() {
+		float distance = .3f;
+		Vector3 headHeight = Vector3.up * _headHeight;
+
+		DragCameraPosition();
 		
+		void DragCameraPosition() {
+			
+			_cameraDirection = (dragTransform.position - _followTransform.position);
+			_cameraDirection = _cameraDirection.ProjectOnPlane();
+			_cameraDirection.Normalize();
+		}
+
+		RotateCameraPosition();
+		
+		void RotateCameraPosition() {
+			const float lookOffset = 90;
+
+			_cameraDirection = Quaternion.Euler(0, _mouseDelta.x, 0.0f) * _cameraDirection;
+			// _cameraHeight = Quaternion.Euler(_mouseDelta.y, 0.0f, 0.0f) * _cameraHeight;
+			// Debug.Log(_cameraHeight);
+			// Quaternion.Euler(_mouseDelta.y, 0.0f, 0.0f).eulerAngles;
+			//
+			// _cameraHeight.y = Mathf.Clamp(_cameraHeight.y, _clampLookupMax - lookOffset, _clampLookupMin - lookOffset);
+
+			// Reset mouse delta
+			_mouseDelta = Vector2.zero;
+		}
+
+		dragTransform.position = _followTransform.position + headHeight + _cameraDirection * distance;
+		
+		
+		_camera.position = dragTransform.position;
+		_camera.LookAt(_followTransform);
+
+
+		// Vector3 initialCameraVector = (_camera.position - transform.position).normalized;
+		// cameraFollow.Follow.rotation.eulerAngles;
+
+		// _mouseMovement = new Vector2(cameraDirection.y, cameraDirection.x);
+
 	}
 }
 	

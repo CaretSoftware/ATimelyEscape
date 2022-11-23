@@ -1,5 +1,3 @@
-//using UnityEditor.PackageManager;
-
 using System;
 using CallbackSystem;
 using UnityEngine;
@@ -25,11 +23,11 @@ namespace RatCharacterController {
       private bool _pushing;
       private float _characterHalfHeight;
 
-      [SerializeField] private bool _canTimeTravel;
+      public bool CanTimeTravel { get; set; }
 
       //private static CharacterInput _instance;
       private bool _jumping;
-      private static bool paused;
+      private static bool _paused;
 
       private void Start() {
          // _instance = this;
@@ -59,9 +57,9 @@ namespace RatCharacterController {
             Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode",
                this.gameObject);
 
-            CallHintAnimation callHint = new CallHintAnimation() { animationName = "TutorialControl",  waitForTime = 15f };
-            callHint.Invoke();
-        }
+         CallHintAnimation callHint = new CallHintAnimation() { animationName = "TutorialControl",  waitForTime = 15f };
+         callHint.Invoke();
+      }
 
       private void OnDestroy() {
          Unsubscribe();
@@ -76,23 +74,23 @@ namespace RatCharacterController {
          _playerInputActions.Interact.Future.performed -= TravelToFuture;
       }
 
-      public void CanTimeTravel(bool timeTravel) {
-         _canTimeTravel = timeTravel;
-      }
+      // public void SetTimeTravel(bool timeTravel) {
+      //    CanTimeTravel = timeTravel;
+      // }
 
       public static void IsPaused(bool paused) {
-         CharacterInput.paused = paused;
+         CharacterInput._paused = paused;
       }
 
       private void Update() {
 #if UNITY_EDITOR
          if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand)))) {
-            CanTimeTravel(true);
-            Debug.Log($"CanTimeTravel {_canTimeTravel}");
+            CanTimeTravel = true;
+            Debug.Log($"CanTimeTravel {CanTimeTravel}");
          }
 #endif
          
-         if (paused) {
+         if (_paused) {
             _characterAnimationController.InputVector(Vector2.zero);
             return; // interacting with keypad
          }
@@ -123,17 +121,17 @@ namespace RatCharacterController {
       }
 
       private void TravelToPast(InputAction.CallbackContext context) {
-         if (_canTimeTravel)
+         if (CanTimeTravel)
             TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Past);
       }
 
       private void TravelToPresent(InputAction.CallbackContext context) {
-         if (_canTimeTravel)
+         if (CanTimeTravel)
             TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
       }
 
       private void TravelToFuture(InputAction.CallbackContext context) {
-         if (_canTimeTravel)
+         if (CanTimeTravel)
             TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
       }
 
@@ -208,7 +206,7 @@ namespace RatCharacterController {
 
             }
 
-                hitPosition = _playerTransform.position;
+            hitPosition = _playerTransform.position;
             return false;
         }
 
@@ -299,7 +297,7 @@ namespace RatCharacterController {
             if (keypad != null)
                keypad.Open();
 
-            CharacterInput.paused = true;
+            _paused = true;
          }
       }
 
