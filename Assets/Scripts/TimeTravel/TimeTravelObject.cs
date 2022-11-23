@@ -34,9 +34,6 @@ public class TimeTravelObject : MonoBehaviour {
         allComponents = GetComponents<Component>().ToList();
         allComponents.AddRange(GetComponentsInChildren<Component>());
         GatherRenderers(transform);
-        foreach (var r in renderers2) {
-            print(gameObject.name + " " + r.gameObject.name);
-        }
 
         switch (manager.ObjectState) {
             case TimeTravelObjectState.PrefabChanging:
