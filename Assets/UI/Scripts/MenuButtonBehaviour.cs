@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ButtonMenuBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
+public class MenuButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private UnityEngine.UI.Image image;
     private UnityEngine.UI.Button button;
