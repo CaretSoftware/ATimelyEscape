@@ -88,13 +88,13 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
     private Vector3 activePosition;
 
-    public bool CanBeMovedByPlayer => canBeMovedByPlayer;
-    public bool ChangesMaterials => changesMaterials;
-    public bool ChangesPrefab => changesPrefab;
-    public bool ShowPreviewBox => showPreviewBox;
-    public float PreviewBoxScale => previewBoxScale;
-    public float PreviewBoxMinDistance => previewBoxMinShowDistance;
-    public bool CanCollideOnTimeTravel => canCollideOnTimeTravel;
+    public bool CanBeMovedByPlayer { get => canBeMovedByPlayer; set => canBeMovedByPlayer = value; }
+    public bool ChangesMaterials { get => changesMaterials; set => changesMaterials = value; }
+    public bool ChangesPrefab { get => changesPrefab; set => changesPrefab = value; }
+    public bool ShowPreviewBox { get => showPreviewBox; set => showPreviewBox = value; }
+    public float PreviewBoxScale { get => previewBoxScale; set => previewBoxScale = value; }
+    public float PreviewBoxMinDistance { get => previewBoxMinShowDistance; set => previewBoxMinShowDistance = value; }
+    public bool CanCollideOnTimeTravel { get => canCollideOnTimeTravel; set => canCollideOnTimeTravel = value; }
 
     private bool TObjectOrWBoxNull =>
         (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
