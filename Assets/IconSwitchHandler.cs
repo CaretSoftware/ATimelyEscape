@@ -12,13 +12,8 @@ public class IconSwitchHandler : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void PlayMovable()
+    public void SetAnimatorBool(bool isCharged)
     {
-        animator.Play("Move");
-    }
-
-    public void PlayBattery()
-    {
-        animator.Play("Battery");
+        animator.SetBool("IsCharged", isCharged);
     }
 }
