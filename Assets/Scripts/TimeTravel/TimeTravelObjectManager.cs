@@ -111,7 +111,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
             future?.SetUpTimeTravelObject(this, present);
         } else timeTravelObject.SetUpTimeTravelObject(this);
 
-        if (!Application.isPlaying) {
+        if (Application.isPlaying) {
             TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
             PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
         }
