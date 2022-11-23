@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(LineRenderer))]
 public class EnvironmentalCue : MonoBehaviour
 {
     //reassign after entering new room.
@@ -13,7 +12,7 @@ public class EnvironmentalCue : MonoBehaviour
 
     void Start()
     {
-        lr = GetComponent<LineRenderer>();
+        lr = GetComponentInChildren<LineRenderer>();
         path = new NavMeshPath();
     }
 
