@@ -60,7 +60,7 @@ namespace RatCharacterController {
                this.gameObject);
 
             CallHintAnimation callHint = new CallHintAnimation() { animationName = "TutorialControl",  waitForTime = 15f };
-            callHint.Invoke();
+            //callHint.Invoke();
         }
 
       private void OnDestroy() {
@@ -84,6 +84,16 @@ namespace RatCharacterController {
          CharacterInput.paused = paused;
       }
 
+      public bool IsPushing()
+      {
+         return _pushing;
+      }
+
+      public static bool Paused()
+      {
+         return CharacterInput.paused;
+      }
+
       private void Update() {
 #if UNITY_EDITOR
          if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftCommand)))) {
@@ -104,12 +114,6 @@ namespace RatCharacterController {
             MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
          else
             PushCubeInput(_playerInputActions.BoxMovement.Movement.ReadValue<Vector2>());
-
-         if (LedgeAhead(out Vector3 hitPosition))
-         {
-             CallHintAnimation callHint = new CallHintAnimation() { animationName = "JumpHint", waitForTime = 1f };
-             callHint.Invoke();
-         }
       }
 
       public void JumpComplete() {
@@ -296,6 +300,7 @@ namespace RatCharacterController {
 
             _playerInputActions.BoxMovement.Enable();
             _playerInputActions.CharacterMovement.Disable();
+
          } else if (Physics.Raycast(ray, out RaycastHit hit, .3f) && hit.transform.CompareTag(keypadTag)) {
 
                 //OpenKeypad keypad = hit.transform.GetComponent<OpenKeypad>();
@@ -320,6 +325,7 @@ namespace RatCharacterController {
          
          _playerInputActions.BoxMovement.Disable();
          _playerInputActions.CharacterMovement.Enable();
+
       }
 
       private Vector3 InputToCameraProjection(Vector3 input) {
