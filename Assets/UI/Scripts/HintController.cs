@@ -66,7 +66,7 @@ public class HintController : MonoBehaviour
         fadeScript.FadeIn();
     }
 
-    public void BeInvisible()
+    private void BeInvisible()
     {
         fadeScript.FadeOut();
     }
