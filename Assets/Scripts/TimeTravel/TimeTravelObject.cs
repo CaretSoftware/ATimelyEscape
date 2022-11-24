@@ -20,6 +20,8 @@ public class TimeTravelObject : MonoBehaviour {
     public GameObject previewBoxObject { get; set; }
     public WireBox wireBox { get; set; }
     public bool IsActive { get; private set; }
+    public TimeTravelPeriod timeTravelPeriod { get; set; }
+
 
     private List<Component> allComponents;
 
@@ -57,8 +59,11 @@ public class TimeTravelObject : MonoBehaviour {
                 }
 
                 TimeTravelManager.MovableObjects.Add(Rigidbody);
-                DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
-                break;
+                if (Application.isPlaying)
+                {
+                    DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
+                }
+                    break;
 
             case TimeTravelObjectState.SwitchingMaterial:
                 renderers = manager.Renderers.ToList();
