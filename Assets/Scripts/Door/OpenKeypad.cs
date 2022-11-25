@@ -6,21 +6,19 @@ namespace CallbackSystem
 {
     public class OpenKeypad : MonoBehaviour
     {
-        [SerializeField] GameObject keypad;
-
-        
+        [SerializeField] private GameObject keypad;
 
         private void Start()
         {
             if (keypad == null)
                 keypad = gameObject.transform.GetChild(0).gameObject;
-            //OpenKeypadEvent.AddListener<OpenKeypadEvent>(Open);
+           
         }
 
         public void Open(bool open = true) {
             Cursor.visible = open;
             Cursor.lockState = open ? CursorLockMode.Confined : CursorLockMode.Locked;
-            keypad.SetActive(open); 
+            keypad.SetActive(open);
             RatCharacterController.CharacterInput.IsPaused(open);
         }
 
