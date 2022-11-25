@@ -32,16 +32,18 @@ public class CubePush : MonoBehaviour {
 	
 
 	public void Push(Vector2 direction) => Push(direction.ToVector3()); 
-	public void Push(Vector3 direction) {
-		if (pushable)
-		{
-			Vector3 velocity = direction * pushSpeed;
-			desiredVelocity = velocity;
-			//RotateCube(velocity);
-		}
+	public void Push(Vector3 direction)
+	{
+		if (!pushable) return;
+		direction.y = rb.velocity.y;
+		Vector3 velocity = direction * pushSpeed;
+		desiredVelocity = velocity;
+		//RotateCube(velocity);
 	}
 
-	private void FixedUpdate() {
+	private void FixedUpdate()
+	{
+		desiredVelocity.y = rb.velocity.y;
 		rb.velocity = desiredVelocity;
 		desiredVelocity = Vector3.zero;
 	}
@@ -61,10 +63,7 @@ public class CubePush : MonoBehaviour {
 		// cube.rotation = Quaternion.Slerp(current, desired, Time.deltaTime);
 	}
 
-	public void SetPushable(bool pushable)
-	{
-		this.pushable = pushable;
-	}
+	public void SetPushable(bool pushable) => this.pushable = pushable;
 
-
+	public bool Pushable() => pushable;
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace RatCharacterController {
 	[SelectionBase]
@@ -11,38 +12,33 @@ namespace RatCharacterController {
 		private static readonly int VelocityX = Animator.StringToHash("VelocityX");
 		private static readonly int Jump = Animator.StringToHash("Jump");
 		private static readonly int Leap = Animator.StringToHash("Leap");
-		// private Transform _camera;
+		private static readonly int Grounded = Animator.StringToHash("Grounded");
+		private static readonly int Pushing = Animator.StringToHash("Push");
+		private static readonly int Forward = Animator.StringToHash("Forward");
+		
 		private Animator _animator;
-		private Transform _transform;
+		public static Transform _transform;
 		private float _velX;
 		private float _velZ;
-		[SerializeField] private float smoothTime = .1f;
+		[FormerlySerializedAs("smoothTime")] [SerializeField] private float smoothTimeX = .3f;
+		[FormerlySerializedAs("smoothTimeY")] [SerializeField] private float smoothTimeZ = .1f;
 		private float _currentVelX;
 		private float _currentVelZ;
 		private Vector3 _inputVector;
-		private static readonly int Grounded = Animator.StringToHash("Grounded");
-		private static readonly int Pushing = Animator.StringToHash("Push");
 		private Rigidbody rb;
 		private float _mantleAnimationLength = .833f + .460f;
 
 		private void Awake() {
 			_transform = transform;
 			_animator = GetComponent<Animator>();
-			// _camera = FindObjectOfType<Camera>().transform;
 			rb = GetComponent<Rigidbody>();
-			// _navMeshAgent = GetComponent<NavMeshAgent>();
-			// _navMeshAgent.updatePosition = false;
-			// _navMeshAgent.updateRotation = false;
 		}
 
 		private void Update() {
-
-			_velX = Mathf.SmoothDamp(_velX, _inputVector.x, ref _currentVelX, smoothTime);
-			_velZ = Mathf.SmoothDamp(_velZ, _inputVector.z, ref _currentVelZ, smoothTime);
+			_velX = Mathf.SmoothDamp(_velX, _inputVector.x, ref _currentVelX, smoothTimeX);
+			_velZ = Mathf.SmoothDamp(_velZ, _inputVector.z, ref _currentVelZ, smoothTimeZ);
 			_animator.SetFloat(VelocityZ, _velZ);
 			_animator.SetFloat(VelocityX, _velX);
-
-			// _navMeshAgent.nextPosition = transform.position;
 		}
 
 		public void InputVector(Vector2 inputVector) => InputVector(inputVector.ToVector3());

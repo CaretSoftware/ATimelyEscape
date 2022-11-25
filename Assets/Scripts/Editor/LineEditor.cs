@@ -16,7 +16,7 @@ public class LineEditor : EditorWindow
     SerializedProperty propVertexCount;
 
     [MenuItem("Tools/LineEditor")]
-    public static void OpenLevelGenerator()
+    public static void OpenLineEditor()
     {
         GetWindow<LineEditor>();
     }

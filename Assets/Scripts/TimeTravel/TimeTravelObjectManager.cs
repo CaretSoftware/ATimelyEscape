@@ -81,22 +81,27 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
     public TimeTravelObjectState ObjectState { get; private set; }
 
-    public bool CanBeMovedByPlayer => canBeMovedByPlayer;
-    public bool CanCollideOnTimeTravel => canCollideOnTimeTravel;
     public MaterialInfo[] PastMaterials => pastMaterials;
     public MaterialInfo[] PresentMaterials => presentMaterials;
     public MaterialInfo[] FutureMaterials => futureMaterials;
     public Renderer[] Renderers => renderers;
 
-
     private Vector3 activePosition;
+
+    public bool CanBeMovedByPlayer { get => canBeMovedByPlayer; set => canBeMovedByPlayer = value; }
+    public bool ChangesMaterials { get => changesMaterials; set => changesMaterials = value; }
+    public bool ChangesPrefab { get => changesPrefab; set => changesPrefab = value; }
+    public bool ShowPreviewBox { get => showPreviewBox; set => showPreviewBox = value; }
+    public float PreviewBoxScale { get => previewBoxScale; set => previewBoxScale = value; }
+    public float PreviewBoxMinDistance { get => previewBoxMinShowDistance; set => previewBoxMinShowDistance = value; }
+    public bool CanCollideOnTimeTravel { get => canCollideOnTimeTravel; set => canCollideOnTimeTravel = value; }
 
     private bool TObjectOrWBoxNull =>
         (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
          future.wireBox == null);
 
 
-    private void Awake() {
+    public void Awake() {
         CheckForMissingComponents();
         DetermineTimeTravelObjectState();
 
@@ -106,8 +111,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
             future?.SetUpTimeTravelObject(this, present);
         } else timeTravelObject.SetUpTimeTravelObject(this);
 
-        TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
-        PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
+        if (Application.isPlaying) {
+            TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
+            PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
+        }
     }
 
     private void CheckForMissingComponents() {
