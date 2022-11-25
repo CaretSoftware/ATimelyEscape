@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class TeleportPad : MonoBehaviour
 {
+    private TravelPathScript cable;
     private TeleportPad linkedPad;
     private TeleportPad[] pads;
     private MeshRenderer mr;
@@ -44,7 +45,7 @@ public class TeleportPad : MonoBehaviour
         OnCooldown = true;
         synchronizeLinkedPad();
         target.gameObject.SetActive(false);
-
+        cable.TravelPath(pads[0] == this ? 0 : 1);
         //Alternatively if NavMesh is not used:
         //target.transform.position = linkedPad.transform.position;
         NavMesh.SamplePosition(linkedPad.transform.position, out hit, 1, NavMesh.AllAreas);
