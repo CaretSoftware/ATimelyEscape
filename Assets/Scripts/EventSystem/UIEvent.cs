@@ -13,6 +13,11 @@ namespace CallbackSystem
         public float waitForTime;
     }
 
+    public class CubeIconStateEvent : UIEvent
+    {
+        public bool objectCharged;
+    }
+
     public class OpenKeypadEvent : UIEvent
     {
         public GameObject Keypad;
