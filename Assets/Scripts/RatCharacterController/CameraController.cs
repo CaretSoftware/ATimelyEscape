@@ -107,25 +107,21 @@ public class CameraController : MonoBehaviour {
 	}
 
 	private Rigidbody _ratRigidBody;
-	private float autoRotationSpeed = 300f;
-	private Vector3 _ratLeft;
 	private Vector3 _ratDampVelocity;
+	private Vector3 _ratLeft;
 	private Vector3 _offset;
+	private float _autoRotationSpeed = 300f;
 	private float _lastMouseMovementX;
 	private void DragCameraBehind() {
 		_ratLeft = 
 				Vector3.SmoothDamp(
-					_ratLeft, 
-					-_rat.right, 
-					ref _ratDampVelocity,
-					.5f, 
-					float.MaxValue);
+					_ratLeft, -_rat.right, ref _ratDampVelocity, .5f, float.MaxValue);
 		
 		if (NoMouseMovement()) {
 			float dot = Vector3.Dot(_camera.forward, _ratLeft);
 			Vector3 velocity = _ratRigidBody.velocity;
 			velocity.y = 0;
-			_mouseMovement.x += dot * velocity.magnitude * autoRotationSpeed * Time.deltaTime;
+			_mouseMovement.x += dot * velocity.magnitude * _autoRotationSpeed * Time.deltaTime;
 		}
 
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
@@ -145,7 +141,8 @@ public class CameraController : MonoBehaviour {
 			Vector3 offsetTarget = abovePlayer + _camera.rotation * cameraOffset;
 			Vector3 offsetDirection = offsetTarget - abovePlayer;
 			
-			Physics.SphereCast(abovePlayer, 
+			Physics.SphereCast(
+				abovePlayer, 
 				_cameraCollisionRadius, 
 				offsetDirection.normalized, 
 				out RaycastHit hit, 
