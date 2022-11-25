@@ -17,6 +17,7 @@ namespace CallbackSystem {
         public int charge = 0;
         [HideInInspector]public CubeCharge pastCubeCharge;
 
+        [Header("Materials")]
         [SerializeField] private Material onMaterial;
         [SerializeField] private Material offMaterial;
 
@@ -24,18 +25,27 @@ namespace CallbackSystem {
         private ChargeChangedEvent chargeEvent;
         private TimeTravelObject timeTravelObject;
         private MeshRenderer meshRenderer;
-        
+
+        private IconBehaviour iconBehaviour;
 
         private void Start()
         {
+            iconBehaviour = GetComponentInChildren<IconBehaviour>();
+
             cubePush = GetComponent<CubePush>();
             timeTravelObject = GetComponent<TimeTravelObject>();
             meshRenderer = GetComponent<MeshRenderer>();
             if (charge > 0)
             {
                 cubePush.SetPushable(true);
+                iconBehaviour.IsCharged(true);
 
-            } else cubePush.SetPushable(false);
+            } else
+            {
+                cubePush.SetPushable(false);
+                iconBehaviour.IsCharged(false);
+            }
+                
             chargeEvent = new(timeTravelObject);
 
             if(timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>() != null)
@@ -53,11 +63,13 @@ namespace CallbackSystem {
                 if (charge > 0)
                 {
                     cubePush.SetPushable(true);
+                    iconBehaviour.IsCharged(true);
                     SetMaterial(onMaterial);
                 }
                 else
                 {
                     SetMaterial(offMaterial);
+                    iconBehaviour.IsCharged(false);
                 }
                 if (!origin.GetType().Equals(GetType()))
                 {
@@ -82,6 +94,5 @@ namespace CallbackSystem {
         {
             meshRenderer.material = material;
         }
-
     } 
 }

@@ -64,4 +64,6 @@ public class CubePush : MonoBehaviour {
 	}
 
 	public void SetPushable(bool pushable) => this.pushable = pushable;
+
+	public bool Pushable() => pushable;
 }

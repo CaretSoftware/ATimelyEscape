@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using CallbackSystem;
 
 public class IconBehaviour : MonoBehaviour
 {
@@ -18,8 +17,6 @@ public class IconBehaviour : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        CubeIconStateEvent.AddListener<CubeIconStateEvent>(ChangeIcon);
-
         maxDistance = GetComponent<SphereCollider>().radius * transform.parent.localScale.x;
         cubePush = transform.parent.GetComponent<CubePush>();
 
@@ -41,14 +38,11 @@ public class IconBehaviour : MonoBehaviour
         }
     }
 
-    private void ChangeIcon(CubeIconStateEvent e)
+    public void IsCharged(bool isCharged)
     {
         for (int i = 0; sides.Length > i; i++)
         {
-            if (e.objectCharged)
-                sides[i].PlayMovable();
-            else
-                sides[i].PlayBattery();
+            sides[i].SetAnimatorBool(isCharged);
         }
     }
     
