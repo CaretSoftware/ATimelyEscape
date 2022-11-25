@@ -23,6 +23,7 @@ public class Incubator : MonoBehaviour
     [SerializeField] private Light spotlight;
     [SerializeField] private Light spotlight2;
     [SerializeField] private Light spotlight3;
+    [SerializeField] private Light spotlight4;
     [SerializeField] private Material notDone;
     [SerializeField] private Material done;
     [SerializeField] private TextMeshProUGUI instructions;
@@ -111,6 +112,7 @@ public class Incubator : MonoBehaviour
             spotlight.intensity = 0;
             spotlight2.intensity = 0;
             spotlight3.intensity = 0;
+            spotlight4.intensity = 0; 
             signMr.material = done;
             instructions.text = "GOOD";
             puzzleThreeDone = true;
@@ -155,7 +157,7 @@ public class Incubator : MonoBehaviour
         if (puzzleFiveDone && !puzzleFiveStarted)
         {
             cubeManager3.SetActive(true);
-            bigHatchAnim.SetBool("Open", true);
+            bigHatchAnim.SetBool("OpenThird", true);
             platePuzzle2Anim.SetBool("Open", true);
             puzzleFiveStarted = true;
             Debug.Log("STEP15");
