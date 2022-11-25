@@ -18,8 +18,9 @@ public class WatchPickup : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Player")) {
-			instructions.text = "NOW USE \"1\"-KEY TO TIMETRAVEL ONE YEAR BACK";
-			FindObjectOfType<RatCharacterController.CharacterInput>().CanTimeTravel(true);
+			if (instructions != null)
+				instructions.text = "NOW USE \"1\"-KEY TO TIME TRAVEL ONE YEAR BACK";
+			FindObjectOfType<RatCharacterController.CharacterInput>().CanTimeTravel = true;
 			Destroy(this.gameObject);
 		}
 	}
