@@ -114,26 +114,26 @@ public class TimeTravelObjectCreator : EditorWindow
         EditorPrefs.SetString("TTO_defaultPrefab", AssetDatabase.GetAssetPath(defaultPrefab));
         EditorPrefs.SetString("TTO_futurePrefab", AssetDatabase.GetAssetPath(futurePrefab));
 
-        if(pastMaterials != null)
+        if (pastMaterials != null)
         {
-        SaveMaterialArray("TTO_pastMaterials", pastMaterials);
+            SaveMaterialArray("TTO_pastMaterials", pastMaterials);
         }
 
-        if(presentMaterials != null)
+        if (presentMaterials != null)
         {
-        SaveMaterialArray("TTO_presentMaterials", presentMaterials);
+            SaveMaterialArray("TTO_presentMaterials", presentMaterials);
         }
 
-        if(futureMaterials != null)
+        if (futureMaterials != null)
         {
-        SaveMaterialArray("TTO_futureMaterials", futureMaterials);
+            SaveMaterialArray("TTO_futureMaterials", futureMaterials);
         }
     }
 
     private void SaveMaterialArray(string key, Material[] materials)
     {
         string materialsValue = "";
-        for(var i = 0; i < materials.Length; ++i)
+        for (var i = 0; i < materials.Length; ++i)
         {
             materialsValue += AssetDatabase.GetAssetPath(materials[i]) + ",";
         }
@@ -244,6 +244,11 @@ public class TimeTravelObjectCreator : EditorWindow
         {
             PrefabUtility.SaveAsPrefabAsset(ttoManager, "Assets/Prefabs/TimeTravelObjects/" + ttoManager.name + ".prefab");
         }
+
+        if (TimezoneChangeEditor.editorIsEnabled)
+        {
+            TimezoneChangeEditor.ActivateTimezone();
+        }
     }
 
     private GameObject CreateTTOManager()
@@ -290,7 +295,12 @@ public class TimeTravelObjectCreator : EditorWindow
             tto.transform.parent = ttoManager.transform;
             TimeTravelObject ttoComponent = tto.AddComponent<TimeTravelObject>();
             ttoComponent.timeTravelPeriod = timezone;
-           
+
+            if (TimezoneChangeEditor.editorIsEnabled)
+            {
+                TimezoneChangeEditor.AddTTOToDictionary(tto, timezone);
+            }
+
             //ttoComponent.GatherRenderers(tto.transform);
             //ttoComponent.OrderedRenderers;
         }
