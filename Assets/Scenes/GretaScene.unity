@@ -65154,16 +65154,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 0}
-  smoothDampMinVal: 0.1
-  smoothDampMaxVal: 0.22
-  _cameraCollisionRadius: 0.39
-  _headHeight: 1.6
-  firstPerson: 0
   collisionMask:
     serializedVersion: 2
     m_Bits: 2147483647
   cameraOffset: {x: 0, y: -0.38, z: -2}
   smoothness: 0.05
+  smoothDampMinVal: 0.1
+  smoothDampMaxVal: 0.22
 --- !u!1 &3461821365250057606
 GameObject:
   m_ObjectHideFlags: 0
@@ -65233,7 +65230,7 @@ MonoBehaviour:
   cubeLayerMask:
     serializedVersion: 2
     m_Bits: 0
-  _canTimeTravel: 0
+  inputSmoothness: 0.2
 --- !u!114 &3461821365632918417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65246,7 +65243,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54c3deceaa1364dcf89357ad13884fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothTime: 0.1
+  smoothTimeX: 0.1
+  smoothTimeZ: 0.1
 --- !u!136 &3461821365632918420
 CapsuleCollider:
   m_ObjectHideFlags: 0

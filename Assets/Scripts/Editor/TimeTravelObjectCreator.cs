@@ -114,26 +114,26 @@ public class TimeTravelObjectCreator : EditorWindow
         EditorPrefs.SetString("TTO_defaultPrefab", AssetDatabase.GetAssetPath(defaultPrefab));
         EditorPrefs.SetString("TTO_futurePrefab", AssetDatabase.GetAssetPath(futurePrefab));
 
-        if(pastMaterials != null)
+        if (pastMaterials != null)
         {
-        SaveMaterialArray("TTO_pastMaterials", pastMaterials);
+            SaveMaterialArray("TTO_pastMaterials", pastMaterials);
         }
 
-        if(presentMaterials != null)
+        if (presentMaterials != null)
         {
-        SaveMaterialArray("TTO_presentMaterials", presentMaterials);
+            SaveMaterialArray("TTO_presentMaterials", presentMaterials);
         }
 
-        if(futureMaterials != null)
+        if (futureMaterials != null)
         {
-        SaveMaterialArray("TTO_futureMaterials", futureMaterials);
+            SaveMaterialArray("TTO_futureMaterials", futureMaterials);
         }
     }
 
     private void SaveMaterialArray(string key, Material[] materials)
     {
         string materialsValue = "";
-        for(var i = 0; i < materials.Length; ++i)
+        for (var i = 0; i < materials.Length; ++i)
         {
             materialsValue += AssetDatabase.GetAssetPath(materials[i]) + ",";
         }
@@ -244,6 +244,11 @@ public class TimeTravelObjectCreator : EditorWindow
         {
             PrefabUtility.SaveAsPrefabAsset(ttoManager, "Assets/Prefabs/TimeTravelObjects/" + ttoManager.name + ".prefab");
         }
+
+        if (TimezoneChangeEditor.editorIsEnabled)
+        {
+            TimezoneChangeEditor.ActivateTimezone();
+        }
     }
 
     private GameObject CreateTTOManager()
@@ -269,32 +274,82 @@ public class TimeTravelObjectCreator : EditorWindow
     {
         if (changesPrefab)
         {
-            InstantiateTTOPrefab(ttoManager, pastPrefab, "Past", TimeTravelPeriod.Past);
-            InstantiateTTOPrefab(ttoManager, defaultPrefab, "Present", TimeTravelPeriod.Present);
-            InstantiateTTOPrefab(ttoManager, futurePrefab, "Future", TimeTravelPeriod.Future);
+            string guid_01 = System.Guid.NewGuid().ToString();
+            string guid_02 = System.Guid.NewGuid().ToString();
+            GameObject pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
+            GameObject presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
+            GameObject futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
+            ApplyUniqueNamesToChildren(pastObj, presentObj, futureObj);
         }
         else
         {
-            InstantiateTTOPrefab(ttoManager, defaultPrefab, "", TimeTravelPeriod.Present);
+            InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, null, null);
         }
     }
 
-    private void InstantiateTTOPrefab(GameObject ttoManager, GameObject go, string name, TimeTravelPeriod timezone)
+    private GameObject InstantiateTTOPrefab(GameObject ttoManager, GameObject go, TimeTravelPeriod timezone, string guid_01, string guid_02)
     {
         if (go != null)
         {
-            name += "_" + objectName;
             GameObject tto = (GameObject)PrefabUtility.InstantiatePrefab(go);
-            tto.name = name;
             Undo.RegisterCreatedObjectUndo(tto, "Create object");
             tto.transform.parent = ttoManager.transform;
             TimeTravelObject ttoComponent = tto.AddComponent<TimeTravelObject>();
             ttoComponent.timeTravelPeriod = timezone;
-           
+
+            if(guid_01 != null && guid_02 != null)
+            {
+                ApplyNameToObject(tto, timezone.ToString(), guid_01, guid_02);
+            }
+
+            if (TimezoneChangeEditor.editorIsEnabled)
+            {
+                TimezoneChangeEditor.AddTTOToDictionary(tto, timezone);
+            }
+
+            return tto;
             //ttoComponent.GatherRenderers(tto.transform);
             //ttoComponent.OrderedRenderers;
         }
+        return null;
     }
 
+    private void ApplyUniqueNamesToChildren(GameObject past, GameObject present, GameObject future)
+    {
+        for(int i = 0; i < present.transform.childCount; i++)
+        {
+            int counter = 0;
+            while (present.transform.GetChild(i).childCount > 0 + counter)
+            {
+                string guid_01 = System.Guid.NewGuid().ToString();
+                string guid_02 = System.Guid.NewGuid().ToString();
+
+                if (present.transform.GetChild(i).GetComponent<MeshRenderer>())
+                {
+                    ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_01, guid_02);
+                }
+
+                if (past.transform.GetChild(i).GetComponent<MeshRenderer>())
+                {
+                    ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_01, guid_02);
+                }
+
+                if (future.transform.GetChild(i).GetComponent<MeshRenderer>())
+                {
+                    ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_01, guid_02);
+                }
+                counter++;
+            }
+        }
+    }
+
+    private void ApplyNameToObject(GameObject go, string timePeriod, string guid_01, string guid_02)
+    {
+        string baseName = objectName == "" || objectName == null ? go.name : objectName;
+        if (guid_01 != null && guid_02 != null)
+        {
+            go.name = "TTO[" + guid_01 + "]_[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
+        }
+    }
 }
 
