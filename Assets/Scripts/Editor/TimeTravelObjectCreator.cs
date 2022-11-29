@@ -22,6 +22,7 @@ public class TimeTravelObjectCreator : EditorWindow
     public bool canCollideOnTimeTravel;
 
     private string guid_01;
+    private int highestChildCount;
 
     SerializedObject so;
 
@@ -301,7 +302,7 @@ public class TimeTravelObjectCreator : EditorWindow
 
             if (guid_01 != null && guid_02 != null)
             {
-                ApplyNameToObject(tto, timezone.ToString(), guid_01, guid_02);
+                ApplyNameToObject(tto, timezone.ToString(), guid_02);
             }
 
             if (TimezoneChangeEditor.editorIsEnabled)
@@ -318,26 +319,30 @@ public class TimeTravelObjectCreator : EditorWindow
 
     private void ApplyUniqueNamesToChildren(GameObject past, GameObject present, GameObject future)
     {
-        for (int i = 0; i < present.transform.childCount; i++)
+        highestChildCount = Mathf.Max(past.transform.childCount, Mathf.Max(present.transform.childCount, present.transform.childCount));
+        for (int i = 0; i <= highestChildCount; i++)
         { 
             string guid_02 = System.Guid.NewGuid().ToString();
+            bool hasPast = past.transform.childCount > i;
+            bool hasPresent = present.transform.childCount > i;
+            bool hasFuture = future.transform.childCount > i;
 
-            if (present.transform.GetChild(i) != null && present.transform.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasPast && past.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
-                ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_01, guid_02);
+                ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_02);
             }
 
-            if (past.transform.GetChild(i) != null && past.transform.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasPresent && present.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
-                ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_01, guid_02);
+                ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_02);
+            }
+          
+            if (hasFuture && future.transform.GetChild(i).GetComponent<MeshRenderer>())
+            {
+                ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_02);
             }
 
-            if (future.transform.GetChild(i) != null && future.transform.GetChild(i).GetComponent<MeshRenderer>())
-            {
-                ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_01, guid_02);
-            }
-
-            if (present.transform.GetChild(i).transform.childCount > 0)
+            if (hasPast && past.transform.GetChild(i).transform.childCount > 0 || hasPresent && present.transform.GetChild(i).transform.childCount > 0 || hasFuture && future.transform.GetChild(i).transform.childCount > 0)
             {
                 ApplyUniqueNamesToChildren(past.transform.GetChild(i).gameObject, present.transform.GetChild(i).gameObject, future.transform.GetChild(i).gameObject);
             }
@@ -345,7 +350,7 @@ public class TimeTravelObjectCreator : EditorWindow
     }
 
 
-    private void ApplyNameToObject(GameObject go, string timePeriod, string guid_01, string guid_02)
+    private void ApplyNameToObject(GameObject go, string timePeriod, string guid_02)
     {
         string baseName = objectName == "" || objectName == null ? go.name : objectName;
         if (guid_01 != null && guid_02 != null)
