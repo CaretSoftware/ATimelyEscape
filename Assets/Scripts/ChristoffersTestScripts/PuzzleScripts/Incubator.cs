@@ -6,51 +6,66 @@ using TMPro;
 
 public class Incubator : MonoBehaviour
 {
-    [SerializeField] private GameObject puzzleOne;
+    [SerializeField] private GameObject cubeManager;
+    [SerializeField] private GameObject cubeManager2;
+    [SerializeField] private GameObject cubeManager3;
+    [SerializeField] private GameObject puzzleFloor;
     [SerializeField] private GameObject sign;
     [SerializeField] private GameObject bigHatch;
     [SerializeField] private GameObject smallHatch;
     [SerializeField] private GameObject cubePuzzle;
     [SerializeField] private GameObject PlatePuzzle;
+    [SerializeField] private GameObject PlatePuzzle2;
     [SerializeField] private GameObject triggerRed;
+    [SerializeField] private GameObject triggerRed2;
     [SerializeField] private GameObject triggerGreen;
+    [SerializeField] private GameObject triggerGreen2;
     [SerializeField] private Light spotlight;
     [SerializeField] private Light spotlight2;
+    [SerializeField] private Light spotlight3;
+    [SerializeField] private Light spotlight4;
     [SerializeField] private Material notDone;
     [SerializeField] private Material done;
     [SerializeField] private TextMeshProUGUI instructions;
     private MeshRenderer signMr;
-    private IncubateTrigger incubateTrigger;
+    private IncubateTrigger incubateTriggerRed;
     private Animator bigHatchAnim;
     private Animator cubePuzzleAnim;
     private Animator platePuzzleAnim;
+    private Animator platePuzzle2Anim;
     private Animator triggerRedAnim;
     private Animator triggerGreenAnim;
+    private Animator triggerGreen2Anim;
     private bool puzzleOneDone;
-    private bool puzzleTwoDone;
-    private bool puzzleThreeDone; 
+    public bool puzzleTwoHalfDone; 
+    public bool puzzleTwoDone;
+    public bool puzzleThreeHalfDone;
+    private bool puzzleThreeDone;
+    private bool puzzleFourDone;
+    public bool puzzleFiveDone;
+    private bool puzzleFiveStarted; 
+
 
     // Start is called before the first frame update
     void Start()
     {
+        PlatePuzzle2.SetActive(false);
+        cubeManager2.SetActive(false);
         spotlight.intensity = 0;
         spotlight2.intensity = 0;
-        incubateTrigger = GetComponentInChildren<IncubateTrigger>();
+        incubateTriggerRed = triggerRed.GetComponent<IncubateTrigger>();
         TimePeriodChanged.AddListener<TimePeriodChanged>(TimeTravel);
         signMr = sign.GetComponent<MeshRenderer>();
         bigHatchAnim = bigHatch.GetComponent<Animator>();
         cubePuzzleAnim = cubePuzzle.GetComponent<Animator>();
         platePuzzleAnim = PlatePuzzle.GetComponent<Animator>();
+        platePuzzle2Anim = PlatePuzzle2.GetComponent<Animator>();
         triggerRedAnim = triggerRed.GetComponent<Animator>();
         triggerGreenAnim = triggerGreen.GetComponent<Animator>();
+        triggerGreen2Anim = triggerGreen2.GetComponent<Animator>();
         signMr.material = notDone;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     private void TimeTravel(TimePeriodChanged e)
     {
@@ -61,41 +76,53 @@ public class Incubator : MonoBehaviour
             StartCoroutine(Delay());
             bigHatchAnim.SetBool("Open", true);
             cubePuzzleAnim.SetBool("Open", true);
+            Debug.Log("STEP1");
 
         }
         if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && puzzleOneDone)
         {
-            instructions.text = "PUSH THE CUBE TO THE RED LIGHT";
-            triggerRedAnim.SetBool("Open", true);
+            if (!puzzleTwoHalfDone)
+            {
+                instructions.text = "PUSH THE CUBE TO THE RED LIGHT";
+                triggerRedAnim.SetBool("Open", true);
+                Debug.Log("STEP3");
+            }
+            if (puzzleTwoHalfDone)
+            {
+                instructions.text = "MOVE THIS VERSION OF THE CUBE TO THE GREEN LIGHT";
+                spotlight.intensity = 0;
+                spotlight2.intensity = 5;
+                spotlight3.intensity = 5;
+                Debug.Log("STEP9");
+                triggerGreen2Anim.SetBool("Open", true);
+            }
         }
-        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && incubateTrigger.twoHalfDone)
+        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && incubateTriggerRed.twoHalfDone && !puzzleThreeHalfDone)
         {
             triggerGreenAnim.SetBool("Open", true);
             instructions.text = "PUSH THIS PAST VERSION OF THE SAME CUBE TO THE GREEN LIGHT TO CHANGE THE DETINY OF THE FUTURE VERSION OF THE CUBE";
             spotlight.intensity = 0;
             spotlight2.intensity = 5;
+            Debug.Log("STEP5");
 
         }
-        if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && incubateTrigger.puzzleTwoDone)
+
+        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleThreeHalfDone)
         {
-            instructions.text = "MOVE THIS VERSION OF THE CUBE TO THE GREEN LIGHT";
             spotlight.intensity = 0;
-            spotlight2.intensity = 5;
-            
-
-        }
-        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && incubateTrigger.threeHalfDone)
-        {
+            spotlight2.intensity = 0;
+            spotlight3.intensity = 0;
+            spotlight4.intensity = 0; 
             signMr.material = done;
             instructions.text = "GOOD";
-            StartCoroutine(Delay());
-            bigHatchAnim.SetBool("Open", true);
-            cubePuzzleAnim.SetBool("Open", false);
+            puzzleThreeDone = true;
+            Invoke("PuzzleTwoDone", 1);
+            Debug.Log("STEP11");
         }
 
     }
 
-    private IEnumerator Delay()
+    public IEnumerator Delay()
     {
         yield return new WaitForSeconds(3.2f);
         if (!puzzleOneDone)
@@ -104,35 +131,60 @@ public class Incubator : MonoBehaviour
             instructions.text = "NOW PRESS \"2\"-KEY TO TIMETRAVEL ONE YEAR AHEAD";
             Invoke("SpotlightON", 2f);
             puzzleOneDone = true;
-            puzzleOne.SetActive(false);
+            puzzleFloor.SetActive(false);
+            bigHatchAnim.SetBool("Open", false);
+            Debug.Log("STEP2");
 
         }
-        if(puzzleOneDone && puzzleTwoDone)
+        if (puzzleThreeDone && !puzzleFourDone)
         {
-            puzzleThreeDone = true;
-            StartCoroutine(Delay());
-            bigHatchAnim.SetBool("Open", true);
+            cubeManager.SetActive(false);
+            cubeManager2.SetActive(true);
+            puzzleFourDone = true;
+            bigHatchAnim.SetBool("OpenAgain", true);
             platePuzzleAnim.SetBool("Open", true);
-            triggerGreenAnim.SetBool("Open", false);
-            triggerRedAnim.SetBool("Open", false);
+            StartCoroutine(Delay());
+            Debug.Log("STEP12");
 
         }
-        if (puzzleOneDone && puzzleTwoDone && puzzleThreeDone)
+        if (puzzleFourDone && !puzzleFiveDone)
         {
+            puzzleFloor.SetActive(true);
             signMr.material = notDone;
             instructions.text = "PUSH THE CUBE TO THE BUTTON";
+            Debug.Log("STEP13");
         }
+        if (puzzleFiveDone && !puzzleFiveStarted)
+        {
+            cubeManager3.SetActive(true);
+            bigHatchAnim.SetBool("OpenThird", true);
+            platePuzzle2Anim.SetBool("Open", true);
+            puzzleFiveStarted = true;
+            Debug.Log("STEP15");
+        }
+        if (puzzleFiveStarted)
+        {
+            instructions.text = "SOLVE THE PUZZLE";
+            signMr.material = notDone;
+        }
+
+
     }
 
-/*    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Cube")
-        {
-            instructions.text = "GOOD, NOW PRESS \"1\"-KEY TO TIMETRAVEL BACK ONE YEAR AGAIN";
-        }
-    }*/
     public void SpotlightON()
     {
         spotlight.intensity = 5;
     }
+    private void PuzzleTwoDone()
+    {
+        StartCoroutine(Delay());
+        puzzleFloor.SetActive(true);
+        bigHatchAnim.SetBool("Open", true);
+        cubePuzzleAnim.SetBool("Open", false);
+    }
+    private void RemoveFloor()
+    {
+        puzzleFloor.SetActive(false);
+    }
+
 }
