@@ -21,6 +21,8 @@ public class TimeTravelObjectCreator : EditorWindow
     public bool canBeMovedByPlayer;
     public bool canCollideOnTimeTravel;
 
+    private string guid_01;
+
     SerializedObject so;
 
     //SerializedProperty propTimeTravelObjects;
@@ -274,7 +276,7 @@ public class TimeTravelObjectCreator : EditorWindow
     {
         if (changesPrefab)
         {
-            string guid_01 = System.Guid.NewGuid().ToString();
+            guid_01 = System.Guid.NewGuid().ToString();
             string guid_02 = System.Guid.NewGuid().ToString();
             GameObject pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
             GameObject presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
@@ -297,7 +299,7 @@ public class TimeTravelObjectCreator : EditorWindow
             TimeTravelObject ttoComponent = tto.AddComponent<TimeTravelObject>();
             ttoComponent.timeTravelPeriod = timezone;
 
-            if(guid_01 != null && guid_02 != null)
+            if (guid_01 != null && guid_02 != null)
             {
                 ApplyNameToObject(tto, timezone.ToString(), guid_01, guid_02);
             }
@@ -316,32 +318,32 @@ public class TimeTravelObjectCreator : EditorWindow
 
     private void ApplyUniqueNamesToChildren(GameObject past, GameObject present, GameObject future)
     {
-        for(int i = 0; i < present.transform.childCount; i++)
-        {
-            int counter = 0;
-            while (present.transform.GetChild(i).childCount > 0 + counter)
+        for (int i = 0; i < present.transform.childCount; i++)
+        { 
+            string guid_02 = System.Guid.NewGuid().ToString();
+
+            if (present.transform.GetChild(i) != null && present.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
-                string guid_01 = System.Guid.NewGuid().ToString();
-                string guid_02 = System.Guid.NewGuid().ToString();
+                ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_01, guid_02);
+            }
 
-                if (present.transform.GetChild(i).GetComponent<MeshRenderer>())
-                {
-                    ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_01, guid_02);
-                }
+            if (past.transform.GetChild(i) != null && past.transform.GetChild(i).GetComponent<MeshRenderer>())
+            {
+                ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_01, guid_02);
+            }
 
-                if (past.transform.GetChild(i).GetComponent<MeshRenderer>())
-                {
-                    ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_01, guid_02);
-                }
+            if (future.transform.GetChild(i) != null && future.transform.GetChild(i).GetComponent<MeshRenderer>())
+            {
+                ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_01, guid_02);
+            }
 
-                if (future.transform.GetChild(i).GetComponent<MeshRenderer>())
-                {
-                    ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_01, guid_02);
-                }
-                counter++;
+            if (present.transform.GetChild(i).transform.childCount > 0)
+            {
+                ApplyUniqueNamesToChildren(past.transform.GetChild(i).gameObject, present.transform.GetChild(i).gameObject, future.transform.GetChild(i).gameObject);
             }
         }
     }
+
 
     private void ApplyNameToObject(GameObject go, string timePeriod, string guid_01, string guid_02)
     {
