@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using CallbackSystem;
 using NaughtyAttributes;
@@ -100,6 +101,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
         (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
          future.wireBox == null);
 
+    private TimeTravelObject traveledFrom, traveledTo;
 
     public void Awake() {
         CheckForMissingComponents();
@@ -183,6 +185,54 @@ public class TimeTravelObjectManager : MonoBehaviour {
         } else timeTravelObject.previewBoxObject?.SetActive(false);
     }
 
+    private void HandleDisplacement(TimePeriodChanged e) {
+        TimeTravelObject from = null, to = null;
+
+        from = e.from switch {
+            TimeTravelPeriod.Past => past,
+            TimeTravelPeriod.Present => present,
+            TimeTravelPeriod.Future => future,
+            _ => from
+        };
+
+        to = e.to switch {
+            TimeTravelPeriod.Past => past,
+            TimeTravelPeriod.Present => present,
+            TimeTravelPeriod.Future => future,
+            _ => to
+        };
+
+        if (!from || !to) return;
+
+        traveledFrom = from;
+        traveledTo = to;
+
+        Material[] displacementMat = new Material[] { Resources.Load("TimeTravelDisplacement1") as Material };
+
+        for (int i = 0; i < Mathf.Min(from.OrderedRenderers.Count, to.OrderedRenderers.Count); i++) {
+            from.OrderedRenderers[i].materials = displacementMat;
+            to.OrderedRenderers[i].materials = displacementMat;
+            from.OrderedDisplacements[i].Displace(to.OrderedDisplacements[i].transform);
+            /*print($"Displacing from{from.OrderedRenderers[i].name} to {to.OrderedRenderers[i].name}");*/
+        }
+
+        StartCoroutine(DisplacementComplete());
+    }
+
+    private IEnumerator<WaitForSecondsRealtime> DisplacementComplete() {
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        for (int i = 0; i < traveledFrom?.OrderedRenderers.Count; i++) {
+            traveledFrom.OrderedRenderers[i].enabled = false;
+            traveledFrom.OrderedRenderers[i].materials = traveledFrom.OrderedMaterials[i];
+        }
+
+        for (int i = 0; i < traveledTo?.OrderedRenderers.Count; i++) {
+            traveledTo.OrderedRenderers[i].enabled = true;
+            traveledTo.OrderedRenderers[i].materials = traveledTo.OrderedMaterials[i];
+        }
+    }
+
     // callbacks
     private void OnTimePeriodChanged(TimePeriodChanged e) {
         switch (ObjectState) {
@@ -202,6 +252,8 @@ public class TimeTravelObjectManager : MonoBehaviour {
                 present?.SetActive(e.to == TimeTravelPeriod.Present ? true : false);
                 future?.SetActive(e.to == TimeTravelPeriod.Future ? true : false);
 
+                HandleDisplacement(e);
+
                 break;
             case TimeTravelObjectState.SwitchingMaterial:
                 timeTravelObject.UpdateMaterials(e.to);
@@ -218,6 +270,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
                 present.Rigidbody.isKinematic = e.from is TimeTravelPeriod.Future && e.to is TimeTravelPeriod.Present;
         }
     }
+
 
     private void OnCheckPlayerCanMove() {
         if (!canBeMovedByPlayer) return;
