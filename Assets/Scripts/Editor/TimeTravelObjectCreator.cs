@@ -279,9 +279,25 @@ public class TimeTravelObjectCreator : EditorWindow
         {
             guid_01 = System.Guid.NewGuid().ToString();
             string guid_02 = System.Guid.NewGuid().ToString();
-            GameObject pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
-            GameObject presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
-            GameObject futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
+
+            GameObject pastObj = null;
+            GameObject presentObj = null;
+            GameObject futureObj = null;
+
+            if (pastPrefab != null)
+            {
+                pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
+            }
+
+            if(defaultPrefab != null)
+            {
+                presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
+            }
+
+            if(futurePrefab != null)
+            {
+                futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
+            }
             ApplyUniqueNamesToChildren(pastObj, presentObj, futureObj);
         }
         else
@@ -319,13 +335,13 @@ public class TimeTravelObjectCreator : EditorWindow
 
     private void ApplyUniqueNamesToChildren(GameObject past, GameObject present, GameObject future)
     {
-        highestChildCount = Mathf.Max(past.transform.childCount, Mathf.Max(present.transform.childCount, present.transform.childCount));
+        SetHighestChildCount(past, present, future);
         for (int i = 0; i <= highestChildCount; i++)
         { 
             string guid_02 = System.Guid.NewGuid().ToString();
-            bool hasPast = past.transform.childCount > i;
-            bool hasPresent = present.transform.childCount > i;
-            bool hasFuture = future.transform.childCount > i;
+            bool hasPast = past != null && past.transform.childCount > i;
+            bool hasPresent = present != null && present.transform.childCount > i;
+            bool hasFuture = future != null && future.transform.childCount > i;
 
             if (hasPast && past.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
@@ -344,11 +360,21 @@ public class TimeTravelObjectCreator : EditorWindow
 
             if (hasPast && past.transform.GetChild(i).transform.childCount > 0 || hasPresent && present.transform.GetChild(i).transform.childCount > 0 || hasFuture && future.transform.GetChild(i).transform.childCount > 0)
             {
-                ApplyUniqueNamesToChildren(past.transform.GetChild(i).gameObject, present.transform.GetChild(i).gameObject, future.transform.GetChild(i).gameObject);
+                GameObject nextPastObj = hasPast ? past.transform.GetChild(i).gameObject : null;
+                GameObject nextPresentObj = hasPresent ? present.transform.GetChild(i).gameObject : null;
+                GameObject nextFutureObj = hasFuture ? future.transform.GetChild(i).gameObject : null;
+                ApplyUniqueNamesToChildren(nextPastObj, nextPresentObj, nextFutureObj);
             }
         }
     }
 
+    private void SetHighestChildCount(GameObject past, GameObject present, GameObject future)
+    {
+        int pastCount = past != null ? past.transform.childCount : -1;
+        int presentCount = present != null ? present.transform.childCount : -1;
+        int futureCount = future != null ? future.transform.childCount : -1;
+        highestChildCount = Mathf.Max(pastCount, Mathf.Max(presentCount, futureCount));
+    }
 
     private void ApplyNameToObject(GameObject go, string timePeriod, string guid_02)
     {
