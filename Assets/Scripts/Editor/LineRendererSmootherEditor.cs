@@ -58,17 +58,13 @@ public class LineRendererSmootherEditor : Editor
         {
             GUI.enabled = Smoother.Line.positionCount >= 3;
             if (GUILayout.Button(SmoothButtonGUIContent))
-            {
                 SmoothPath();
-            }
-
             bool lineRendererPathAndInitialStateAreSame = Smoother.Line.positionCount == Smoother.InitialState.Length;
 
             if (lineRendererPathAndInitialStateAreSame)
             {
                 Vector3[] positions = new Vector3[Smoother.Line.positionCount];
                 Smoother.Line.GetPositions(positions);
-
                 lineRendererPathAndInitialStateAreSame = positions.SequenceEqual(Smoother.InitialState);
             }
 
@@ -82,7 +78,6 @@ public class LineRendererSmootherEditor : Editor
             }
         }
         EditorGUILayout.EndHorizontal();
-
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -108,10 +103,7 @@ public class LineRendererSmootherEditor : Editor
 
     private void OnSceneGUI()
     {
-        if (Smoother.Line.positionCount < 3)
-        {
-            return;
-        }
+        if (Smoother.Line.positionCount < 3) return; 
         EnsureCurvesMatchLineRendererPositions();
 
         for (int i = 0; i < Curves.Length; i++)
