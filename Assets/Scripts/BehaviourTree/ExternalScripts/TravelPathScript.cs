@@ -1,41 +1,70 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TravelPathScript : MonoBehaviour
 {
-    [SerializeField] private float delay = 5f;
-    [SerializeField] private GameObject objectToTravel;
-
+    [SerializeField] private float speed;
+    [SerializeField] private GameObject objectToMove;
     private LineRenderer line;
-    private float travelTime;
-    private float startTime;
+    private GameObject teleportingObject;
+    private NavMeshHit hit;
+
+    private Vector3[] positions;
+    private Vector3[] pos;
+    private int index;
+    private int iterations = 0;
+
+
+    private bool pathFromFirstIndexPad;
 
     private void Start()
     {
         line = GetComponent<LineRenderer>();
-        travelTime = delay / line.positionCount;
+        positions = new Vector3[line.positionCount];
+        pos = GetLinePointsInWorldSpace();
+        objectToMove.SetActive(false);
     }
 
-    public void TravelPath(int path)
+    private void Update()
     {
-        StartCoroutine(TravelPathCoroutine(path));
+        if (iterations < positions.Length && objectToMove.activeInHierarchy)
+            Move();
     }
 
-    private int current, next;
-    private IEnumerator TravelPathCoroutine(int path)
+    public void TravelPath(bool pathReg, GameObject teleportingObject, Vector3 arrivalLocation)
     {
-        yield return new WaitForSeconds(delay);
+        this.teleportingObject = teleportingObject;
+        pathFromFirstIndexPad = pathReg;
+        index = pathReg ? 0 : pos.Length - 1;
+        iterations = 0;
 
-        current = path == 0 ? 0 : line.positionCount - 1;
-        next = path == 0 ? current + 1 : current - 1;
-        startTime = Time.time;
-        while (Time.time - startTime <= travelTime)
+        this.teleportingObject.SetActive(false);
+        NavMesh.SamplePosition(arrivalLocation, out hit, 1, NavMesh.AllAreas);
+        teleportingObject.transform.position = hit.position;
+
+        objectToMove.SetActive(true);
+        objectToMove.transform.position = pos[index];
+    }
+
+    private Vector3[] GetLinePointsInWorldSpace()
+    {
+        line.GetPositions(positions);
+        return positions;
+    }
+
+    private void Move()
+    {
+        objectToMove.transform.position = Vector3.MoveTowards(objectToMove.transform.position, pos[index], speed * Time.deltaTime);
+        if (objectToMove.transform.position == pos[index])
         {
-            if (path == 0 && next < line.positionCount)
-                transform.position = Vector3.Lerp(line.GetPosition(current++), line.GetPosition(next++), Time.time - startTime);
-            else if(path != 0 && next >= 0)
-                transform.position = Vector3.Lerp(line.GetPosition(current--), line.GetPosition(next--), Time.time - startTime);
-            yield return 1;
+            index = pathFromFirstIndexPad ? ++index : --index; 
+            iterations++;
+        }
+        if (iterations == positions.Length)
+        {
+            objectToMove.SetActive(false);
+            teleportingObject.SetActive(true);
         }
     }
 }
