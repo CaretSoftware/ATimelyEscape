@@ -14,14 +14,16 @@ public class TimezoneChangeEditor : EditorWindow
     }*/
 
     public static TimeTravelPeriod currentTimezone;
+    public static bool editorIsEnabled;
     private static Dictionary<GameObject, TimeTravelPeriod> ttosInScene;
 
     [MenuItem("Tools/EnableTimezoneOption")]
     public static void Enable()
     {
         LoadCurrentTimezone();
-        InitializeTTOManagers();
+        //InitializeTTOManagers();
         InitializeObjectDictionary();
+        editorIsEnabled = true;
         SceneView.duringSceneGui += DuringSceneGUI;
     }
 
@@ -30,6 +32,7 @@ public class TimezoneChangeEditor : EditorWindow
     {
         SaveCurrentTimezone();
         ttosInScene.Clear();
+        editorIsEnabled = false;
         SceneView.duringSceneGui -= DuringSceneGUI;
     }
 
@@ -144,7 +147,7 @@ public class TimezoneChangeEditor : EditorWindow
         }
     }
 
-    private static void ActivateTimezone()
+    public static void ActivateTimezone()
     {
         foreach(KeyValuePair<GameObject, TimeTravelPeriod> tto in ttosInScene)
         {
@@ -167,7 +170,7 @@ public class TimezoneChangeEditor : EditorWindow
         }
     }
 
-    private static void AddTTOToDictionary(GameObject go, TimeTravelPeriod timezone)
+    public static void AddTTOToDictionary(GameObject go, TimeTravelPeriod timezone)
     {
         // implement
         ttosInScene.Add(go, timezone);
