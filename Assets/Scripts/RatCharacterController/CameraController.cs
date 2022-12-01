@@ -1,5 +1,6 @@
 using System;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -110,7 +111,7 @@ public class CameraController : MonoBehaviour {
 	private Vector3 _ratDampVelocity;
 	private Vector3 _ratLeft;
 	private Vector3 _offset;
-	private float _autoRotationSpeed = 300f;
+	[SerializeField] private float _autoRotationSpeed = 500f;
 	private float _lastMouseMovementX;
 	private void DragCameraBehind() {
 		_ratLeft = 
