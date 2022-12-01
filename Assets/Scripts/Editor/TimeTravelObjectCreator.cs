@@ -21,6 +21,9 @@ public class TimeTravelObjectCreator : EditorWindow
     public bool canBeMovedByPlayer;
     public bool canCollideOnTimeTravel;
 
+    private string guid_01;
+    private int highestChildCount;
+
     SerializedObject so;
 
     //SerializedProperty propTimeTravelObjects;
@@ -274,11 +277,27 @@ public class TimeTravelObjectCreator : EditorWindow
     {
         if (changesPrefab)
         {
-            string guid_01 = System.Guid.NewGuid().ToString();
+            guid_01 = System.Guid.NewGuid().ToString();
             string guid_02 = System.Guid.NewGuid().ToString();
-            GameObject pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
-            GameObject presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
-            GameObject futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
+
+            GameObject pastObj = null;
+            GameObject presentObj = null;
+            GameObject futureObj = null;
+
+            if (pastPrefab != null)
+            {
+                pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
+            }
+
+            if(defaultPrefab != null)
+            {
+                presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
+            }
+
+            if(futurePrefab != null)
+            {
+                futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
+            }
             ApplyUniqueNamesToChildren(pastObj, presentObj, futureObj);
         }
         else
@@ -297,9 +316,9 @@ public class TimeTravelObjectCreator : EditorWindow
             TimeTravelObject ttoComponent = tto.AddComponent<TimeTravelObject>();
             ttoComponent.timeTravelPeriod = timezone;
 
-            if(guid_01 != null && guid_02 != null)
+            if (guid_01 != null && guid_02 != null)
             {
-                ApplyNameToObject(tto, timezone.ToString(), guid_01, guid_02);
+                ApplyNameToObject(tto, timezone.ToString(), guid_02);
             }
 
             if (TimezoneChangeEditor.editorIsEnabled)
@@ -316,34 +335,48 @@ public class TimeTravelObjectCreator : EditorWindow
 
     private void ApplyUniqueNamesToChildren(GameObject past, GameObject present, GameObject future)
     {
-        for(int i = 0; i < present.transform.childCount; i++)
-        {
-            int counter = 0;
-            while (present.transform.GetChild(i).childCount > 0 + counter)
+        SetHighestChildCount(past, present, future);
+        for (int i = 0; i <= highestChildCount; i++)
+        { 
+            string guid_02 = System.Guid.NewGuid().ToString();
+            bool hasPast = past != null && past.transform.childCount > i;
+            bool hasPresent = present != null && present.transform.childCount > i;
+            bool hasFuture = future != null && future.transform.childCount > i;
+
+            if (hasPast && past.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
-                string guid_01 = System.Guid.NewGuid().ToString();
-                string guid_02 = System.Guid.NewGuid().ToString();
+                ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_02);
+            }
 
-                if (present.transform.GetChild(i).GetComponent<MeshRenderer>())
-                {
-                    ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_01, guid_02);
-                }
+            if (hasPresent && present.transform.GetChild(i).GetComponent<MeshRenderer>())
+            {
+                ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_02);
+            }
+          
+            if (hasFuture && future.transform.GetChild(i).GetComponent<MeshRenderer>())
+            {
+                ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_02);
+            }
 
-                if (past.transform.GetChild(i).GetComponent<MeshRenderer>())
-                {
-                    ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_01, guid_02);
-                }
-
-                if (future.transform.GetChild(i).GetComponent<MeshRenderer>())
-                {
-                    ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_01, guid_02);
-                }
-                counter++;
+            if (hasPast && past.transform.GetChild(i).transform.childCount > 0 || hasPresent && present.transform.GetChild(i).transform.childCount > 0 || hasFuture && future.transform.GetChild(i).transform.childCount > 0)
+            {
+                GameObject nextPastObj = hasPast ? past.transform.GetChild(i).gameObject : null;
+                GameObject nextPresentObj = hasPresent ? present.transform.GetChild(i).gameObject : null;
+                GameObject nextFutureObj = hasFuture ? future.transform.GetChild(i).gameObject : null;
+                ApplyUniqueNamesToChildren(nextPastObj, nextPresentObj, nextFutureObj);
             }
         }
     }
 
-    private void ApplyNameToObject(GameObject go, string timePeriod, string guid_01, string guid_02)
+    private void SetHighestChildCount(GameObject past, GameObject present, GameObject future)
+    {
+        int pastCount = past != null ? past.transform.childCount : -1;
+        int presentCount = present != null ? present.transform.childCount : -1;
+        int futureCount = future != null ? future.transform.childCount : -1;
+        highestChildCount = Mathf.Max(pastCount, Mathf.Max(presentCount, futureCount));
+    }
+
+    private void ApplyNameToObject(GameObject go, string timePeriod, string guid_02)
     {
         string baseName = objectName == "" || objectName == null ? go.name : objectName;
         if (guid_01 != null && guid_02 != null)
