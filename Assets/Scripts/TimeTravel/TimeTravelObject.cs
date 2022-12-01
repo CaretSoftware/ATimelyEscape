@@ -22,6 +22,8 @@ public class TimeTravelObject : MonoBehaviour {
     public GameObject previewBoxObject { get; set; }
     public WireBox wireBox { get; set; }
     public bool IsActive { get; private set; }
+    public TimeTravelPeriod timeTravelPeriod { get; set; }
+
 
     private List<Component> allComponents;
 

@@ -48,7 +48,7 @@ public class PrefabCannon : EditorWindow
         Handles.zTest = CompareFunction.LessEqual;
         Transform camTransform = sceneView.camera.transform;
 
-        // make sure it reapints on mouse move
+        // make sure it repaints on mouse move
         if(Event.current.type == EventType.MouseMove)
         {
             sceneView.Repaint();
@@ -79,7 +79,7 @@ public class PrefabCannon : EditorWindow
                 {
                     // draw sphere and normal on surface
                     DrawSphere(pointHit.point);
-                    Handles.DrawAAPolyLine(pointHit.point, pointHit.point + pointHit.normal);
+                    //Handles.DrawAAPolyLine(pointHit.point, pointHit.point + pointHit.normal);
                 }
             }
             Handles.DrawAAPolyLine(5, hit.point, hit.point + hit.normal);
