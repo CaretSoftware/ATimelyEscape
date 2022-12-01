@@ -20,8 +20,8 @@ namespace RatCharacterController {
 		public static Transform _transform;
 		private float _velX;
 		private float _velZ;
-		[FormerlySerializedAs("smoothTime")] [SerializeField] private float smoothTimeX = .3f;
-		[FormerlySerializedAs("smoothTimeY")] [SerializeField] private float smoothTimeZ = .1f;
+		[SerializeField] private float smoothTimeX = .3f;
+		[SerializeField] private float smoothTimeZ = .1f;
 		private float _currentVelX;
 		private float _currentVelZ;
 		private Vector3 _inputVector;
