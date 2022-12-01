@@ -381,7 +381,8 @@ public class TimeTravelObjectCreator : EditorWindow
         string baseName = objectName == "" || objectName == null ? go.name : objectName;
         if (guid_01 != null && guid_02 != null)
         {
-            go.name = "TTO[" + guid_01 + "]_[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
+            go.name = "TTO[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
+            //go.name = "TTO[" + guid_01 + "]_[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
         }
     }
 }
