@@ -287,16 +287,19 @@ public class TimeTravelObjectCreator : EditorWindow
             if (pastPrefab != null)
             {
                 pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
+                ttoManager.GetComponent<TimeTravelObjectManager>().Past = pastObj.GetComponent<TimeTravelObject>();
             }
 
             if(defaultPrefab != null)
             {
                 presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
+                ttoManager.GetComponent<TimeTravelObjectManager>().Present = presentObj.GetComponent<TimeTravelObject>();
             }
 
-            if(futurePrefab != null)
+            if (futurePrefab != null)
             {
                 futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
+                ttoManager.GetComponent<TimeTravelObjectManager>().Future = futureObj.GetComponent<TimeTravelObject>();
             }
             ApplyUniqueNamesToChildren(pastObj, presentObj, futureObj);
         }
@@ -381,7 +384,8 @@ public class TimeTravelObjectCreator : EditorWindow
         string baseName = objectName == "" || objectName == null ? go.name : objectName;
         if (guid_01 != null && guid_02 != null)
         {
-            go.name = "TTO[" + guid_01 + "]_[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
+            go.name = "TTO[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
+            //go.name = "TTO[" + guid_01 + "]_[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
         }
     }
 }
