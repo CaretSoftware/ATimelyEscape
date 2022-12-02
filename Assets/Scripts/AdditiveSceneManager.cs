@@ -5,44 +5,40 @@ using System.IO;
 
 [DisallowMultipleComponent]
 public class AdditiveSceneManager : MonoBehaviour {
-	[SerializeField, HideInInspector] private SceneSetup[] _sceneSetups;
+	[SerializeField, HideInInspector] private SceneSetup[] sceneSetups;
 
 	public void SaveScenes() {
-		_sceneSetups = EditorSceneManager.GetSceneManagerSetup();
-		Debug.Log($"{_sceneSetups.Length} additive scene" +
-		          $"{(_sceneSetups.Length > 1 ? "s" : string.Empty)} saved");
+		sceneSetups = EditorSceneManager.GetSceneManagerSetup();
+		Debug.Log($"{sceneSetups.Length} additive scene" +
+		          $"{(sceneSetups.Length > 1 ? "s" : string.Empty)} saved");
 		EditorUtility.SetDirty(this);
 	}
 
-	public void LoadScenes(bool loaded = true) {
+	public void LoadScenes(bool loadedMode = true) {
 
-		if (_sceneSetups == null || _sceneSetups.Length <= 0) {
+		if (sceneSetups == null || sceneSetups.Length <= 0) {
 			Debug.LogWarning("No additive scene setup saved");
 			return;
 		}
 
-		int openScenes = _sceneSetups.Length;
+		int openScenes = sceneSetups.Length;
 		int scenesLoaded = 0;
 		int missingFiles = 0;
 		for (int scene = 0; scene < openScenes; ++scene) {
-			string path = _sceneSetups[scene].path;
+			string path = sceneSetups[scene].path;
 			bool missingFile = !File.Exists(path);
-			OpenSceneMode openSceneMode;
-
-			if (missingFile)
-				++missingFiles; 
-			else
-				++scenesLoaded;
-
-			if (loaded)
-				openSceneMode = _sceneSetups[scene].isLoaded 
-										? OpenSceneMode.Additive 
-										: OpenSceneMode.AdditiveWithoutLoading;
+			OpenSceneMode openSceneMode; 
+			if (loadedMode && sceneSetups[scene].isLoaded)
+				openSceneMode = OpenSceneMode.Additive;
 			else
 				openSceneMode = OpenSceneMode.AdditiveWithoutLoading;
-			
-			if (!missingFile)
+
+			if (!missingFile) {
+				++scenesLoaded;
 				EditorSceneManager.OpenScene(path, openSceneMode);
+			} else {
+				++missingFiles;
+			}
 		}
 
 		string s = string.Empty;

@@ -3,41 +3,53 @@ using UnityEditor;
 
 [CustomEditor(typeof(AdditiveSceneManager))]
 public class AdditiveSceneEditor : Editor {
+	
+	private AdditiveSceneManager _asm;
+	private GUIContent _save;
+	private GUIContent _visibilityMixed;
+	private GUIContent _hidden;
+	private GUIContent[] _loads;
+	
 	public override void OnInspectorGUI() {
-		AdditiveSceneManager ase = (AdditiveSceneManager) target;
+		Initialize();
+		SaveButton();
+		LoadButtons();
+	}
+
+	private void Initialize() {
+		_asm ??= (AdditiveSceneManager)target;
 		
-		GUIContent save =
+		_save ??=
 				new GUIContent(" Save",
 						EditorGUIUtility.IconContent("d_SaveAs").image,
-				"Save All open additive scenes");
-		GUIContent visibilityMixed = 
+						"Save All open additive scenes");
+		_visibilityMixed ??= 
 				new GUIContent(" Load", 
 						EditorGUIUtility.IconContent("d_scenevis_visible-mixed_hover@2x").image, 
 						"Load and Open all unopened scenes");
-		GUIContent hidden = 
+		_hidden ??= 
 				new GUIContent(" Load Unloaded", 
 						EditorGUIUtility.IconContent("d_scenevis_hidden_hover@2x").image, 
 						"Load all unopened scenes unloaded");
 
-		GUIContent[] loads = new GUIContent[] { visibilityMixed, hidden };
-		
-		if (GUILayout.Button(save))
-			ase.SaveScenes();
+		_loads ??= new GUIContent[] { _visibilityMixed, _hidden };
+	}
 
+	private void SaveButton() {
+		if (GUILayout.Button(_save))
+			_asm.SaveScenes();
+	}
+
+	private void LoadButtons() {
 		GUILayout.BeginHorizontal();
 
 		int selected = -1;
-		selected = GUILayout.SelectionGrid(selected, loads, 2);
-			
-		// if (GUILayout.Button(visibilityMixed))
-		// 	ase.LoadScenes();
-		//
-		// if (GUILayout.Button(hidden))
-		// 	ase.LoadScenes(false);
+		selected = GUILayout.SelectionGrid(selected, _loads, 2);
+		
 		if (selected == 0)
-			ase.LoadScenes();
+			_asm.LoadScenes();
 		if (selected == 1)
-			ase.LoadScenes(false);
+			_asm.LoadScenes(false);
 
 		GUILayout.EndHorizontal();
 	}
