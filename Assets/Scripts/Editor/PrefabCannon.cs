@@ -24,18 +24,36 @@ public class PrefabCannon : EditorWindow
     SerializedProperty propSpawnPrefabs;
     SerializedProperty propPreviewMaterial;
 
-    public struct RandomData
+    /*
+    public struct SpawnData
     {
         public Vector2 pointInDisc;
         public float randAngDeg;
-        public void SetRandomValues()
+        public GameObject spawnPrefab;
+
+        public void SetRandomValues(GameObject[] spawnPrefabs)
         {
             pointInDisc = Random.insideUnitCircle;
             randAngDeg = Random.value * 360;
+            spawnPrefab = spawnPrefabs[Random.Range(0, spawnPrefabs.Length)];
         }
     }
-    
-    private RandomData[] randPoints;
+
+    public class SpawnPoint
+    {
+        public SpawnData spawnData;
+        public Vector3 position;
+        public Quaternion rotation;
+
+        public SpawnPoint(Vector3 position, Quaternion rotation, SpawnData spawnData)
+        {
+            this.spawnData = spawnData;
+            this.position = position;
+            this.rotation = rotation;
+        }
+    }
+
+        private SpawnData[] randPoints;
 
 
     private void OnEnable()
@@ -106,10 +124,10 @@ public class PrefabCannon : EditorWindow
                 return new Ray(rayOrigin, rayDirection);
             }
 
-            List<Pose> hitPoses = new List<Pose>(); 
+            List<SpawnPoint> hitPoses = new List<SpawnPoint>(); 
 
             // drawing points
-            foreach(RandomData rndDataPoint in randPoints)
+            foreach(SpawnData rndDataPoint in randPoints)
             {
 
 
@@ -122,7 +140,7 @@ public class PrefabCannon : EditorWindow
                     // calculate rotation and assign to pose together with position
                     Quaternion randRot = Quaternion.Euler(0f, 0f, rndDataPoint.randAngDeg);
                     Quaternion rot = Quaternion.LookRotation(pointHit.normal) * (randRot * Quaternion.Euler(90f, 0f, 0f));
-                    Pose pose = new Pose(pointHit.point, rot);
+                    SpawnPoint spawnPoint = new SpawnPoint(pointHit.point, rot);
                     hitPoses.Add(pose);
 
                     // draw sphere and normal on surface
@@ -132,7 +150,7 @@ public class PrefabCannon : EditorWindow
                     // mesh
                     if (spawnPrefabs != null && spawnPrefabs.Length > 0 && spawnPrefabs[0] != null)
                     {
-                        Matrix4x4 poseToWorld = Matrix4x4.TRS(pose.position, pose.rotation, Vector3.one);
+                        Matrix4x4 poseToWorld = Matrix4x4.TRS(spawnPoint.position, spawnPoint.rotation, Vector3.one);
                         MeshFilter[] filters = spawnPrefabs[0].GetComponentsInChildren<MeshFilter>();
                         foreach (MeshFilter filter in filters)
                         {
@@ -225,37 +243,78 @@ public class PrefabCannon : EditorWindow
         }
     }
 
-    private void TrySpawnObjects(List<Pose> hitPts)
+    private void TrySpawnObjects(List<SpawnPoint> spawnPoints)
     {
         if(spawnPrefabs == null)
         {
             return;
         }
 
-        foreach(Pose pose in hitPts)
+        foreach(SpawnPoint spawnPoint in spawnPoints)
         {
             // spawn prefab
-            int ranIndex = Random.Range(0, spawnPrefabs.Length);
+            //int ranIndex = Random.Range(0, spawnPrefabs.Length);
 
-            if(spawnPrefabs[ranIndex] != null)
+            if(spawnPoint.spawnData.spawnPrefab != null)
             {
-            GameObject spawnedThing = (GameObject)PrefabUtility.InstantiatePrefab(spawnPrefabs[ranIndex]);
+            GameObject spawnedThing = (GameObject)PrefabUtility.InstantiatePrefab(spawnPoint.spawnData.spawnPrefab);
             Undo.RegisterCreatedObjectUndo(spawnedThing, "Spawn Objects");
-            spawnedThing.transform.position = pose.position;
-            spawnedThing.transform.rotation = pose.rotation;
+            spawnedThing.transform.position = spawnPoint.position;
+            spawnedThing.transform.rotation = spawnPoint.rotation;
             }
         }
 
         GenerateRandomPoints(); // update points
     }
 
+    private List<SpawnPoint> GetSpawnPoints(Matrix4x4 tangentToWorld)
+    {
+        List<SpawnPoint> hitSpawnPoints = new List<SpawnPoint>();
+        foreach(SpawnData rndDataPoint in spawnDataPoints)
+        {
+            // create ray for this point
+            Ray ptRay = GetCircleray(tangentToWorld, rndDataPoint.pointInDisc);
+            // raycast to find point on surface
+            if( Physics.Raycast(ptRay, out RaycastHit ptHit))
+            {
+                // calculate rotation and assign to pose together with position
+                Quaternion randRot = Quaternion.Euler(0f, 0f, rndDataPoint.randAngDeg);
+                Quaternion rot = Quaternion.LookRotation(ptHit.normal) * (randRot * Quaternion.Euler(90f, 0f, 0f));
+                SpawnPoint spawnPoint = new SpawnPoint(ptHit.point, rot, rndDataPoint);
+                hitSpawnPoints.Add(spawnPoint);
+            }
+        }
+    }
+
+
+    private void DrawSpawnPreviews(List<SpawnPoint> spawnPoints, Camera cam)
+    {
+        foreach (SpawnPoint spawnPoint in spawnPoints)
+        {
+            if(spawnPrefabs != null && spawnPrefabs.Length > 0)
+            {
+                Matrix4x4 poseToWorld = Matrix4x4.TRS(spawnPoint.position, spawnPoint.rotation, Vector3.one);
+                DrawPrefab(spawnPoint.spawnData.spawnPrefab, poseToWorld, cam);
+            }
+            else
+            {
+                DrawSphere(spawnPoint.position);
+            }
+        }
+    }
+
+    private static void DrawPrefab(GameObject prefab, Matrix4x4 poseToWorld, Camera cam)
+    {
+
+    }
+
     private void GenerateRandomPoints()
     {
-        randPoints = new RandomData[spawnCount];
+        randPoints = new SpawnData[spawnCount];
 
         for(var i = 0; i < spawnCount; i++)
         {
-            randPoints[i].SetRandomValues();
+            randPoints[i].SetRandomValues(spawnPrefabs);
         }
     }
 
@@ -263,4 +322,5 @@ public class PrefabCannon : EditorWindow
     {
         Handles.SphereHandleCap(-1, pos, Quaternion.identity, 0.1f, EventType.Repaint);
     }
+    */
 }
