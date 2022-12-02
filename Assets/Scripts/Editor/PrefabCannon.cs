@@ -24,7 +24,18 @@ public class PrefabCannon : EditorWindow
     SerializedProperty propSpawnPrefabs;
     SerializedProperty propPreviewMaterial;
 
-    private Vector2[] randPoints;
+    public struct RandomData
+    {
+        public Vector2 pointInDisc;
+        public float randAngDeg;
+        public void SetRandomValues()
+        {
+            pointInDisc = Random.insideUnitCircle;
+            randAngDeg = Random.value * 360;
+        }
+    }
+    
+    private RandomData[] randPoints;
 
 
     private void OnEnable()
@@ -98,17 +109,18 @@ public class PrefabCannon : EditorWindow
             List<Pose> hitPoses = new List<Pose>(); 
 
             // drawing points
-            foreach(Vector2 point in randPoints)
+            foreach(RandomData rndDataPoint in randPoints)
             {
+
+
                 // create ray for this point
-                Ray pointRay = GetTangentRay(point);
+                Ray pointRay = GetTangentRay(rndDataPoint.pointInDisc);
 
                 // raycast to find point on surface
                 if(Physics.Raycast(pointRay, out RaycastHit pointHit))
                 {
                     // calculate rotation and assign to pose together with position
-                    float randAngDeg = Random.value * 360;
-                    Quaternion randRot = Quaternion.Euler(0f, 0f, randAngDeg);
+                    Quaternion randRot = Quaternion.Euler(0f, 0f, rndDataPoint.randAngDeg);
                     Quaternion rot = Quaternion.LookRotation(pointHit.normal) * (randRot * Quaternion.Euler(90f, 0f, 0f));
                     Pose pose = new Pose(pointHit.point, rot);
                     hitPoses.Add(pose);
@@ -118,7 +130,7 @@ public class PrefabCannon : EditorWindow
 
 
                     // mesh
-                    if (spawnPrefabs[0] != null)
+                    if (spawnPrefabs != null && spawnPrefabs.Length > 0 && spawnPrefabs[0] != null)
                     {
                         Matrix4x4 poseToWorld = Matrix4x4.TRS(pose.position, pose.rotation, Vector3.one);
                         MeshFilter[] filters = spawnPrefabs[0].GetComponentsInChildren<MeshFilter>();
@@ -152,7 +164,6 @@ public class PrefabCannon : EditorWindow
             {
                 TrySpawnObjects(hitPoses);
             }
-
 
 
             // draw circle adapted to terrain
@@ -240,11 +251,11 @@ public class PrefabCannon : EditorWindow
 
     private void GenerateRandomPoints()
     {
-        randPoints = new Vector2[spawnCount];
+        randPoints = new RandomData[spawnCount];
 
         for(var i = 0; i < spawnCount; i++)
         {
-            randPoints[i] = Random.insideUnitCircle;
+            randPoints[i].SetRandomValues();
         }
     }
 
