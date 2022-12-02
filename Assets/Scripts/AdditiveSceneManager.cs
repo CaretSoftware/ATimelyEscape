@@ -14,7 +14,7 @@ public class AdditiveSceneManager : MonoBehaviour {
 		EditorUtility.SetDirty(this);
 	}
 
-	public void LoadScenes(bool loaded = true) {
+	public void LoadScenes(bool loadedMode = true) {
 
 		if (sceneSetups == null || sceneSetups.Length <= 0) {
 			Debug.LogWarning("No additive scene setup saved");
@@ -27,22 +27,18 @@ public class AdditiveSceneManager : MonoBehaviour {
 		for (int scene = 0; scene < openScenes; ++scene) {
 			string path = sceneSetups[scene].path;
 			bool missingFile = !File.Exists(path);
-			OpenSceneMode openSceneMode;
-
-			if (missingFile)
-				++missingFiles; 
-			else
-				++scenesLoaded;
-
-			if (loaded)
-				openSceneMode = sceneSetups[scene].isLoaded 
-										? OpenSceneMode.Additive 
-										: OpenSceneMode.AdditiveWithoutLoading;
+			OpenSceneMode openSceneMode; 
+			if (loadedMode && sceneSetups[scene].isLoaded)
+				openSceneMode = OpenSceneMode.Additive;
 			else
 				openSceneMode = OpenSceneMode.AdditiveWithoutLoading;
-			
-			if (!missingFile)
+
+			if (!missingFile) {
+				++scenesLoaded;
 				EditorSceneManager.OpenScene(path, openSceneMode);
+			} else {
+				++missingFiles;
+			}
 		}
 
 		string s = string.Empty;
