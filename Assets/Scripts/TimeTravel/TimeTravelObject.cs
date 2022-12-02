@@ -7,35 +7,37 @@ using UnityEngine;
 using StateMachines;
 using UnityEngine.AI;
 
-public class TimeTravelObject : MonoBehaviour
-{
+public class TimeTravelObject : MonoBehaviour {
     [HideInInspector] public TimeTravelObject pastSelf;
     private Transform destiny;
     private TimeTravelObjectManager manager;
     public Rigidbody Rigidbody { get; private set; }
     private StateMachine stateMachine;
     private List<Renderer> renderers;
+    private List<Renderer> renderers2 = new List<Renderer>();
 
     private int numColliders = 0;
     public GameObject previewBoxObject { get; set; }
     public WireBox wireBox { get; set; }
     public bool IsActive { get; private set; }
+    public TimeTravelPeriod timeTravelPeriod { get; set; }
+
 
     private List<Component> allComponents;
 
     private List<GameObject> nonMovableColliderObjects = new List<GameObject>();
     private GameObject nonMovableCollidersParent;
 
+    public List<Renderer> OrderedRenderers { get => renderers2; private set => renderers2 = value; }
 
-    public void SetUpTimeTravelObject(TimeTravelObjectManager manager, TimeTravelObject pastSelf = null)
-    {
+
+    public void SetUpTimeTravelObject(TimeTravelObjectManager manager, TimeTravelObject pastSelf = null) {
         this.manager = manager;
         allComponents = GetComponents<Component>().ToList();
         allComponents.AddRange(GetComponentsInChildren<Component>());
+        GatherRenderers(transform);
 
-
-        switch (manager.ObjectState)
-        {
+        switch (manager.ObjectState) {
             case TimeTravelObjectState.PrefabChanging:
                 break;
             case TimeTravelObjectState.PrefabChangingPlayerMove:
@@ -44,25 +46,24 @@ public class TimeTravelObject : MonoBehaviour
                 stateMachine = new StateMachine(this,
                     new State[] { new TimeTravelIdleState(), new TimeTravelMovingState() });
 
-                if (pastSelf != null)
-                {
-                    var destinyObject = new GameObject(name + "Destiny")
-                    {
+                if (pastSelf != null) {
+                    var destinyObject = new GameObject(name + "Destiny") {
                         transform = { position = transform.position, parent = transform.parent }
                     };
                     destiny = destinyObject.transform;
-                }
-                else destiny = transform;
+                } else destiny = transform;
 
-                if (Rigidbody == null)
-                {
+                if (Rigidbody == null) {
                     throw new MissingComponentException(
                         $"Movable {nameof(TimeTravelObject)}s require a {nameof(Rigidbody)} component!");
                 }
 
                 TimeTravelManager.MovableObjects.Add(Rigidbody);
-                DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
-                break;
+                if (Application.isPlaying)
+                {
+                    DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
+                }
+                    break;
 
             case TimeTravelObjectState.SwitchingMaterial:
                 renderers = manager.Renderers.ToList();
@@ -74,27 +75,34 @@ public class TimeTravelObject : MonoBehaviour
         }
     }
 
-    private void CheckRenderersAndMaterialsMatch()
-    {
+    public void GatherRenderers(Transform currentTransform) {
+        Renderer temp;
+        for (int i = 0; i < currentTransform.childCount; i++) {
+            temp = currentTransform.GetChild(i).GetComponent<Renderer>();
+            if (temp != null) {
+                renderers2.Add(temp);
+                GatherRenderers(temp.transform);
+            }
+        }
+    }
+
+    private void CheckRenderersAndMaterialsMatch() {
         string errorMessage = "";
         if (manager.PastMaterials.Length != renderers.Count) errorMessage += $"[{nameof(manager.PastMaterials)}";
-        if (manager.PresentMaterials.Length != renderers.Count)
-        {
+        if (manager.PresentMaterials.Length != renderers.Count) {
             if (!errorMessage.Contains(nameof(manager.PastMaterials)))
                 errorMessage += $"[{nameof(manager.PresentMaterials)}";
             else errorMessage += $", {nameof(manager.PresentMaterials)}";
         }
 
-        if (manager.FutureMaterials.Length != renderers.Count)
-        {
+        if (manager.FutureMaterials.Length != renderers.Count) {
             if (!errorMessage.Contains(nameof(manager.PastMaterials)) &&
                 !errorMessage.Contains(nameof(manager.PresentMaterials)))
                 errorMessage = $"[{nameof(manager.FutureMaterials)}";
             else errorMessage += $", {nameof(manager.FutureMaterials)}";
         }
 
-        if (errorMessage.Length > 1)
-        {
+        if (errorMessage.Length > 1) {
             errorMessage +=
                 $"] material array(s) do not match the length of the renderer array on {nameof(TimeTravelObjectManager)}: {manager.name}";
             /*Debug.LogWarning("CHRISTOFFER THE ERROR IS HERE!", manager.gameObject);*/
@@ -102,10 +110,8 @@ public class TimeTravelObject : MonoBehaviour
         }
     }
 
-    public void UpdateMaterials(TimeTravelPeriod period)
-    {
-        switch (period)
-        {
+    public void UpdateMaterials(TimeTravelPeriod period) {
+        switch (period) {
             case TimeTravelPeriod.Past:
                 for (int i = 0; i < renderers.Count; i++) renderers[i].materials = manager.PastMaterials[i].materials;
                 break;
@@ -120,48 +126,40 @@ public class TimeTravelObject : MonoBehaviour
         }
     }
 
-    public void SetActive(bool active)
-    {
-        if (manager.CanCollideOnTimeTravel)
-        {
+    public void SetActive(bool active) {
+        if (manager.CanCollideOnTimeTravel) {
             if (!gameObject.activeSelf) gameObject.SetActive(true);
-            foreach (var c in allComponents)
-            {
-                if (c != null)
-                {
+            foreach (var c in allComponents) {
+                if (c != null) {
                     if (!c.gameObject.activeSelf) c.gameObject.SetActive(true);
                     Type t = c.GetType();
-                    if (t.IsSubclassOf(typeof(Behaviour)) && t != typeof(TimeTravelObject) && t != typeof(NavMeshAgent) && t != typeof(NavMeshAgentHandler))
+                    if (t.IsSubclassOf(typeof(Behaviour)) && t != typeof(TimeTravelObject) &&
+                        t != typeof(NavMeshAgent) && t != typeof(NavMeshAgentHandler))
                         ((Behaviour)c).enabled = active;
                     else if (t.IsSubclassOf(typeof(Renderer))) ((Renderer)c).enabled = active;
                 }
             }
 
             UpdateColliderLayers(transform, active);
-        }
-        else gameObject.SetActive(active);
+        } else gameObject.SetActive(active);
 
         IsActive = active;
     }
 
-    private void UpdateColliderLayers(Transform transformToUpdate, bool active)
-    {
+    private void UpdateColliderLayers(Transform transformToUpdate, bool active) {
         transformToUpdate.gameObject.layer = LayerMask.NameToLayer(active
-              ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
-              : "OtherTimePeriod");
-        for (int i = 0; i < transformToUpdate.childCount; i++)
-        {
+            ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
+            : "OtherTimePeriod");
+        for (int i = 0; i < transformToUpdate.childCount; i++) {
             transformToUpdate.GetChild(i).gameObject.layer = LayerMask.NameToLayer(active
-                    ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
-                    : "OtherTimePeriod");
+                ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
+                : "OtherTimePeriod");
             UpdateColliderLayers(transformToUpdate.GetChild(i), active);
         }
     }
 
-    private void Update()
-    {
-        if (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove && IsActive)
-        {
+    private void Update() {
+        if (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove && IsActive) {
             stateMachine.Run();
             if (Input.GetKey(KeyCode.A)) Rigidbody.AddForce(Vector3.left * 10f, ForceMode.Force);
             if (Input.GetKey(KeyCode.D)) Rigidbody.AddForce(Vector3.right * 10f, ForceMode.Force);
@@ -170,11 +168,9 @@ public class TimeTravelObject : MonoBehaviour
         }
     }
 
-    private void OnDestinyChanged(DestinyChanged e)
-    {
+    private void OnDestinyChanged(DestinyChanged e) {
         if (e.changedObject == pastSelf ||
-            (pastSelf != null && pastSelf.pastSelf != null && e.changedObject == pastSelf.pastSelf))
-        {
+            (pastSelf != null && pastSelf.pastSelf != null && e.changedObject == pastSelf.pastSelf)) {
             print($"Destiny of {name} has been changed!");
 
             destiny.position = e.changedObject.transform.position;
@@ -186,34 +182,27 @@ public class TimeTravelObject : MonoBehaviour
     }
 }
 
-namespace StateMachines
-{
-    public class TimeTravelMovingState : State
-    {
+namespace StateMachines {
+    public class TimeTravelMovingState : State {
         private TimeTravelObject TravelObject => (TimeTravelObject)Owner;
 
-        public override void Run()
-        {
+        public override void Run() {
             if (TravelObject.Rigidbody != null && TravelObject.Rigidbody.velocity.magnitude < 0.1f)
                 StateMachine.TransitionTo<TimeTravelIdleState>();
         }
 
-        public override void Exit()
-        {
+        public override void Exit() {
             var destinyChangedEvent =
                 new DestinyChanged() { changedObject = TravelObject, gameObject = TravelObject.gameObject };
             destinyChangedEvent.Invoke();
         }
     }
 
-    public class TimeTravelIdleState : State
-    {
+    public class TimeTravelIdleState : State {
         private TimeTravelObject TravelObject => (TimeTravelObject)Owner;
 
-        public override void Run()
-        {
-            if (TravelObject.Rigidbody != null && TravelObject.Rigidbody.velocity.magnitude > 0.1f)
-            {
+        public override void Run() {
+            if (TravelObject.Rigidbody != null && TravelObject.Rigidbody.velocity.magnitude > 0.1f) {
                 StateMachine.TransitionTo<TimeTravelMovingState>();
             }
         }

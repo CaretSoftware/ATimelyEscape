@@ -5,10 +5,13 @@ using UnityEditor;
 
 public class TimeTravelObjectCreator : EditorWindow
 {
-    //public GameObject[] timeTravelObjects;'
+    //public GameObject[] timeTravelObjects;
     public GameObject defaultPrefab;
     public GameObject pastPrefab;
     public GameObject futurePrefab;
+    public Material[] pastMaterials;
+    public Material[] presentMaterials;
+    public Material[] futureMaterials;
     public string objectName;
 
     private bool showSettings;
@@ -18,20 +21,25 @@ public class TimeTravelObjectCreator : EditorWindow
     public bool canBeMovedByPlayer;
     public bool canCollideOnTimeTravel;
 
+    private string guid_01;
+    private int highestChildCount;
+
     SerializedObject so;
 
     //SerializedProperty propTimeTravelObjects;
     SerializedProperty propPrefab;
     SerializedProperty propPastPrefab;
     SerializedProperty propFuturePrefab;
+    SerializedProperty propPastMaterials;
+    SerializedProperty propPresentMaterials;
+    SerializedProperty propFutureMaterials;
+
     SerializedProperty propObjectName;
     SerializedProperty propMakePrefab;
     SerializedProperty propChangesPrefab;
     SerializedProperty propChangesMaterials;
     SerializedProperty propCanBeMovedByPlayer;
     SerializedProperty propCanCollideOnTimeTravel;
-
-
 
 
     [MenuItem("Tools/TTOCreator")]
@@ -67,6 +75,9 @@ public class TimeTravelObjectCreator : EditorWindow
         propChangesMaterials = so.FindProperty("changesMaterials");
         propCanBeMovedByPlayer = so.FindProperty("canBeMovedByPlayer");
         propCanCollideOnTimeTravel = so.FindProperty("canCollideOnTimeTravel");
+        propPastMaterials = so.FindProperty("pastMaterials");
+        propPresentMaterials = so.FindProperty("presentMaterials");
+        propFutureMaterials = so.FindProperty("futureMaterials");
     }
 
     private void LoadPreviousSettings()
@@ -83,6 +94,17 @@ public class TimeTravelObjectCreator : EditorWindow
         futurePrefab = LoadByPath("TTO_futurePrefab");
     }
 
+    /*private void LoadMaterialArray(string key, Material[] materials)
+    {
+        string materialsStr = EditorPrefs.GetString(key, "");
+        materials = materialsStr.Split(',');
+        for (var i = 0; i < materials.Length; ++i)
+        {
+            materialsValue += AssetDatabase.GetAssetPath(materials[i]) + ",";
+        }
+        EditorPrefs.SetString(key, materialsValue);
+    }*/
+
     private void SaveSettings()
     {
         EditorPrefs.SetString("TTO_CREATOR_objectName", objectName);
@@ -94,6 +116,31 @@ public class TimeTravelObjectCreator : EditorWindow
         EditorPrefs.SetString("TTO_pastPrefab", AssetDatabase.GetAssetPath(pastPrefab));
         EditorPrefs.SetString("TTO_defaultPrefab", AssetDatabase.GetAssetPath(defaultPrefab));
         EditorPrefs.SetString("TTO_futurePrefab", AssetDatabase.GetAssetPath(futurePrefab));
+
+        if (pastMaterials != null)
+        {
+            SaveMaterialArray("TTO_pastMaterials", pastMaterials);
+        }
+
+        if (presentMaterials != null)
+        {
+            SaveMaterialArray("TTO_presentMaterials", presentMaterials);
+        }
+
+        if (futureMaterials != null)
+        {
+            SaveMaterialArray("TTO_futureMaterials", futureMaterials);
+        }
+    }
+
+    private void SaveMaterialArray(string key, Material[] materials)
+    {
+        string materialsValue = "";
+        for (var i = 0; i < materials.Length; ++i)
+        {
+            materialsValue += AssetDatabase.GetAssetPath(materials[i]) + ",";
+        }
+        EditorPrefs.SetString(key, materialsValue);
     }
 
     private GameObject LoadByPath(string editorPrefsKey)
@@ -130,20 +177,26 @@ public class TimeTravelObjectCreator : EditorWindow
         showSettings = EditorGUILayout.Foldout(showSettings, "Settings");
         if (showSettings)
         {
+            EditorGUIUtility.labelWidth = 180f;
             EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(propMakePrefab);
-            EditorGUILayout.PropertyField(propChangesPrefab);
+            EditorGUILayout.PropertyField(propMakePrefab, new GUIContent("Make prefab"));
+            EditorGUILayout.PropertyField(propChangesPrefab, new GUIContent("Changes prefab"));
             if (!changesPrefab)
             {
-                EditorGUILayout.PropertyField(propChangesMaterials);
+                EditorGUILayout.PropertyField(propChangesMaterials, new GUIContent("Changes materials"));
             }
-            EditorGUILayout.PropertyField(propCanBeMovedByPlayer);
-            EditorGUILayout.PropertyField(propCanCollideOnTimeTravel);
+            else
+            {
+                changesMaterials = false;
+            }
+
+            EditorGUILayout.PropertyField(propCanBeMovedByPlayer, new GUIContent("Can be moved by player"));
+            EditorGUILayout.PropertyField(propCanCollideOnTimeTravel, new GUIContent("Can collide on time travel"));
             EditorGUI.indentLevel--;
             GUILayout.Space(40);
+            EditorGUIUtility.labelWidth = 0;
         }
 
-        //EditorGUILayout.PropertyField(propTimeTravelObjects, new GUIContent("Time Travel Objects"));
         if (changesPrefab)
         {
             EditorGUILayout.PropertyField(propPastPrefab, new GUIContent("Past"));
@@ -155,7 +208,14 @@ public class TimeTravelObjectCreator : EditorWindow
             EditorGUILayout.PropertyField(propPrefab, new GUIContent("Prefab"));
         }
 
+        GUILayout.Space(20);
 
+        if (changesMaterials)
+        {
+            EditorGUILayout.PropertyField(propPastMaterials);
+            EditorGUILayout.PropertyField(propPresentMaterials);
+            EditorGUILayout.PropertyField(propFutureMaterials);
+        }
 
         GUILayout.Space(20);
         GUILayout.BeginHorizontal();
@@ -179,15 +239,18 @@ public class TimeTravelObjectCreator : EditorWindow
     private void Create()
     {
         GameObject ttoManager = CreateTTOManager();
-        //if (timeTravelObjects != null && timeTravelObjects.Length > 0)
-        //{
+
         CreateTTObjects(ttoManager);
         ApplySettingsToManager(ttoManager);
-        //}
 
         if (createPrefab)
         {
             PrefabUtility.SaveAsPrefabAsset(ttoManager, "Assets/Prefabs/TimeTravelObjects/" + ttoManager.name + ".prefab");
+        }
+
+        if (TimezoneChangeEditor.editorIsEnabled)
+        {
+            TimezoneChangeEditor.ActivateTimezone();
         }
     }
 
@@ -203,53 +266,123 @@ public class TimeTravelObjectCreator : EditorWindow
     private void ApplySettingsToManager(GameObject ttoManager)
     {
         TimeTravelObjectManager managerComponent = ttoManager.GetComponent<TimeTravelObjectManager>();
-        
+        managerComponent.CanBeMovedByPlayer = canBeMovedByPlayer;
+        managerComponent.CanCollideOnTimeTravel = canCollideOnTimeTravel;
+        managerComponent.ChangesMaterials = changesMaterials;
+        managerComponent.ChangesPrefab = changesPrefab;
+        // add material arrays with setters
     }
 
     private void CreateTTObjects(GameObject ttoManager)
     {
-        //int iterations = changesPrefab ? 3 : 1;
-        //for (var i = 0; i < iterations; ++i)
-        //{
         if (changesPrefab)
         {
-            InstantiateTTOPrefab(ttoManager, pastPrefab, "Past");
-            InstantiateTTOPrefab(ttoManager, defaultPrefab, "Present");
-            InstantiateTTOPrefab(ttoManager, futurePrefab, "Future");
+            guid_01 = System.Guid.NewGuid().ToString();
+            string guid_02 = System.Guid.NewGuid().ToString();
+
+            GameObject pastObj = null;
+            GameObject presentObj = null;
+            GameObject futureObj = null;
+
+            if (pastPrefab != null)
+            {
+                pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
+            }
+
+            if(defaultPrefab != null)
+            {
+                presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
+            }
+
+            if(futurePrefab != null)
+            {
+                futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
+            }
+            ApplyUniqueNamesToChildren(pastObj, presentObj, futureObj);
         }
         else
         {
-            InstantiateTTOPrefab(ttoManager, defaultPrefab, "");
+            InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, null, null);
         }
-
-        //}
     }
 
-    private void InstantiateTTOPrefab(GameObject ttoManager, GameObject go, string name)
+    private GameObject InstantiateTTOPrefab(GameObject ttoManager, GameObject go, TimeTravelPeriod timezone, string guid_01, string guid_02)
     {
         if (go != null)
         {
-            name += "_" + objectName;
             GameObject tto = (GameObject)PrefabUtility.InstantiatePrefab(go);
-            tto.name = name;
             Undo.RegisterCreatedObjectUndo(tto, "Create object");
-            tto.AddComponent<TimeTravelObject>();
             tto.transform.parent = ttoManager.transform;
+            TimeTravelObject ttoComponent = tto.AddComponent<TimeTravelObject>();
+            ttoComponent.timeTravelPeriod = timezone;
+
+            if (guid_01 != null && guid_02 != null)
+            {
+                ApplyNameToObject(tto, timezone.ToString(), guid_02);
+            }
+
+            if (TimezoneChangeEditor.editorIsEnabled)
+            {
+                TimezoneChangeEditor.AddTTOToDictionary(tto, timezone);
+            }
+
+            return tto;
+            //ttoComponent.GatherRenderers(tto.transform);
+            //ttoComponent.OrderedRenderers;
+        }
+        return null;
+    }
+
+    private void ApplyUniqueNamesToChildren(GameObject past, GameObject present, GameObject future)
+    {
+        SetHighestChildCount(past, present, future);
+        for (int i = 0; i <= highestChildCount; i++)
+        { 
+            string guid_02 = System.Guid.NewGuid().ToString();
+            bool hasPast = past != null && past.transform.childCount > i;
+            bool hasPresent = present != null && present.transform.childCount > i;
+            bool hasFuture = future != null && future.transform.childCount > i;
+
+            if (hasPast && past.transform.GetChild(i).GetComponent<MeshRenderer>())
+            {
+                ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_02);
+            }
+
+            if (hasPresent && present.transform.GetChild(i).GetComponent<MeshRenderer>())
+            {
+                ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_02);
+            }
+          
+            if (hasFuture && future.transform.GetChild(i).GetComponent<MeshRenderer>())
+            {
+                ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_02);
+            }
+
+            if (hasPast && past.transform.GetChild(i).transform.childCount > 0 || hasPresent && present.transform.GetChild(i).transform.childCount > 0 || hasFuture && future.transform.GetChild(i).transform.childCount > 0)
+            {
+                GameObject nextPastObj = hasPast ? past.transform.GetChild(i).gameObject : null;
+                GameObject nextPresentObj = hasPresent ? present.transform.GetChild(i).gameObject : null;
+                GameObject nextFutureObj = hasFuture ? future.transform.GetChild(i).gameObject : null;
+                ApplyUniqueNamesToChildren(nextPastObj, nextPresentObj, nextFutureObj);
+            }
         }
     }
 
-    /*private string GetTimePeriodByIndex(int index)
+    private void SetHighestChildCount(GameObject past, GameObject present, GameObject future)
     {
-        switch (index)
+        int pastCount = past != null ? past.transform.childCount : -1;
+        int presentCount = present != null ? present.transform.childCount : -1;
+        int futureCount = future != null ? future.transform.childCount : -1;
+        highestChildCount = Mathf.Max(pastCount, Mathf.Max(presentCount, futureCount));
+    }
+
+    private void ApplyNameToObject(GameObject go, string timePeriod, string guid_02)
+    {
+        string baseName = objectName == "" || objectName == null ? go.name : objectName;
+        if (guid_01 != null && guid_02 != null)
         {
-            case 0:
-                return "Past";
-            case 1:
-                return "Present";
-            case 2:
-                return "Future";
+            go.name = "TTO[" + guid_01 + "]_[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
         }
-        return null;
-    }*/
+    }
 }
 
