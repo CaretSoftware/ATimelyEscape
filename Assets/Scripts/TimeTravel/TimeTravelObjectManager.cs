@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using CallbackSystem;
 using NaughtyAttributes;
+using UnityEngine;
 
 public class TimeTravelObjectManager : MonoBehaviour {
     [Tooltip(
@@ -89,6 +89,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
     private Vector3 activePosition;
 
+    public TimeTravelObject Past { get => past; set => past = value; }
+    public TimeTravelObject Present { get => present; set => present = value; }
+    public TimeTravelObject Future { get => future; set => future = value; }
+
     public bool CanBeMovedByPlayer { get => canBeMovedByPlayer; set => canBeMovedByPlayer = value; }
     public bool ChangesMaterials { get => changesMaterials; set => changesMaterials = value; }
     public bool ChangesPrefab { get => changesPrefab; set => changesPrefab = value; }
@@ -101,7 +105,9 @@ public class TimeTravelObjectManager : MonoBehaviour {
         (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
          future.wireBox == null);
 
-    private TimeTravelObject traveledFrom, traveledTo;
+    private int traveledFromIndex, traveledToIndex;
+
+    private Dictionary<string, DisplacmentInfo[]> DisplacementsAndRenderers = new Dictionary<string, DisplacmentInfo[]>();
 
     public void Awake() {
         CheckForMissingComponents();
@@ -117,6 +123,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
             TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
             PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
         }
+
+        if (past) CategorizeRenderersForDisplacement(past.transform);
+        if (present) CategorizeRenderersForDisplacement(present.transform);
+        if (future) CategorizeRenderersForDisplacement(future.transform);
     }
 
     private void CheckForMissingComponents() {
@@ -145,11 +155,47 @@ public class TimeTravelObjectManager : MonoBehaviour {
                 ObjectState = TimeTravelObjectState.PrefabChangingPlayerMove;
                 break;
             default: {
-                if (changesMaterials && !canBeMovedByPlayer && !changesPrefab)
-                    ObjectState = TimeTravelObjectState.SwitchingMaterial;
-                break;
+                    if (changesMaterials && !canBeMovedByPlayer && !changesPrefab)
+                        ObjectState = TimeTravelObjectState.SwitchingMaterial;
+                    break;
+                }
+        }
+    }
+
+    public class DisplacmentInfo {
+        public Renderer renderer;
+        public string TTOID;
+        public string rendererID;
+        public TimeTravelDisplacement displacement;
+        public Material[] originalMaterials;
+    }
+
+    private void CategorizeRenderersForDisplacement(Transform currentTransform) {
+        Renderer r = currentTransform.GetComponent<Renderer>();
+        if (r) {
+            print("Banana start is reached " + currentTransform.name);
+            DisplacmentInfo info = new DisplacmentInfo();
+            TimeTravelDisplacement d = currentTransform.gameObject.GetOrAddComponent<TimeTravelDisplacement>();
+            info.displacement = d;
+            info.renderer = r;
+            info.originalMaterials = r.materials;
+
+            string[] splitName = currentTransform.name.Split('_');
+
+            string TTOID = splitName[0].Substring(4, splitName[0].Length - 5);
+            string rendererID = splitName[2].Substring(1, splitName[2].Length - 2);
+            info.TTOID = TTOID;
+            info.rendererID = rendererID;
+
+            if (!DisplacementsAndRenderers.ContainsKey(rendererID)) DisplacementsAndRenderers.Add(rendererID, new DisplacmentInfo[3]);
+
+            switch (splitName[3].Substring(1, splitName[3].Length - 2).ToLower()) {
+                case "past": DisplacementsAndRenderers[rendererID][0] = info; break;
+                case "present": DisplacementsAndRenderers[rendererID][1] = info; break;
+                case "future": DisplacementsAndRenderers[rendererID][2] = info; break;
             }
         }
+        for (int i = 0; i < currentTransform.childCount; i++) CategorizeRenderersForDisplacement(currentTransform.GetChild(i));
     }
 
     private void Update() {
@@ -186,34 +232,45 @@ public class TimeTravelObjectManager : MonoBehaviour {
     }
 
     private void HandleDisplacement(TimePeriodChanged e) {
-        TimeTravelObject from = null, to = null;
 
-        from = e.from switch {
-            TimeTravelPeriod.Past => past,
-            TimeTravelPeriod.Present => present,
-            TimeTravelPeriod.Future => future,
-            _ => from
-        };
+        switch (e.from) {
+            case TimeTravelPeriod.Past:
+                if (!past) traveledFromIndex = -1;
+                else traveledFromIndex = 0;
+                break;
+            case TimeTravelPeriod.Present:
+                if (!present) traveledFromIndex = -1;
+                else traveledFromIndex = 1;
+                break;
+            case TimeTravelPeriod.Future:
+                if (!future) traveledFromIndex = -1;
+                else traveledFromIndex = 2;
+                break;
+        }
 
-        to = e.to switch {
-            TimeTravelPeriod.Past => past,
-            TimeTravelPeriod.Present => present,
-            TimeTravelPeriod.Future => future,
-            _ => to
-        };
+        switch (e.to) {
+            case TimeTravelPeriod.Past:
+                if (!past) traveledToIndex = -1;
+                else traveledToIndex = 0;
+                break;
+            case TimeTravelPeriod.Present:
+                if (!present) traveledToIndex = -1;
+                else traveledToIndex = 1;
+                break;
+            case TimeTravelPeriod.Future:
+                if (!future) traveledToIndex = -1;
+                else traveledToIndex = 2;
+                break;
+        }
 
-        if (!from || !to) return;
-
-        traveledFrom = from;
-        traveledTo = to;
+        if (traveledToIndex == -1 || traveledFromIndex == -1) return;
 
         Material[] displacementMat = new Material[] { Resources.Load("TimeTravelDisplacement1") as Material };
-
-        for (int i = 0; i < Mathf.Min(from.OrderedRenderers.Count, to.OrderedRenderers.Count); i++) {
-            from.OrderedRenderers[i].materials = displacementMat;
-            to.OrderedRenderers[i].materials = displacementMat;
-            from.OrderedDisplacements[i].Displace(to.OrderedDisplacements[i].transform);
-            /*print($"Displacing from{from.OrderedRenderers[i].name} to {to.OrderedRenderers[i].name}");*/
+        foreach (var info in DisplacementsAndRenderers.Values) {
+            if (info[traveledFromIndex] == null || info[traveledToIndex] == null) continue;
+            info[traveledFromIndex].renderer.materials = displacementMat;
+            info[traveledToIndex].renderer.materials = displacementMat;
+            info[traveledFromIndex].displacement.Displace(info[traveledToIndex].renderer.transform);
         }
 
         StartCoroutine(DisplacementComplete());
@@ -222,14 +279,13 @@ public class TimeTravelObjectManager : MonoBehaviour {
     private IEnumerator<WaitForSecondsRealtime> DisplacementComplete() {
         yield return new WaitForSecondsRealtime(0.2f);
 
-        for (int i = 0; i < traveledFrom?.OrderedRenderers.Count; i++) {
-            traveledFrom.OrderedRenderers[i].enabled = false;
-            traveledFrom.OrderedRenderers[i].materials = traveledFrom.OrderedMaterials[i];
-        }
-
-        for (int i = 0; i < traveledTo?.OrderedRenderers.Count; i++) {
-            traveledTo.OrderedRenderers[i].enabled = true;
-            traveledTo.OrderedRenderers[i].materials = traveledTo.OrderedMaterials[i];
+        if (traveledFromIndex > -1 || traveledToIndex > -1) {
+            foreach (var info in DisplacementsAndRenderers.Values) {
+                info[traveledFromIndex].renderer.materials = info[traveledFromIndex].originalMaterials;
+                info[traveledFromIndex].renderer.enabled = false;
+                info[traveledToIndex].renderer.materials = info[traveledToIndex].originalMaterials;
+                info[traveledToIndex].renderer.enabled = true;
+            }
         }
     }
 

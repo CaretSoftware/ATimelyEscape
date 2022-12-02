@@ -165,13 +165,13 @@ public class TimeTravelObject : MonoBehaviour {
     }
 
     private void Update() {
-        if (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove && IsActive) {
+/*         if (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove && IsActive) {
             stateMachine.Run();
             if (Input.GetKey(KeyCode.A)) Rigidbody.AddForce(Vector3.left * 10f, ForceMode.Force);
             if (Input.GetKey(KeyCode.D)) Rigidbody.AddForce(Vector3.right * 10f, ForceMode.Force);
             if (Input.GetKey(KeyCode.W)) Rigidbody.AddForce(Vector3.forward * 10f, ForceMode.Force);
             if (Input.GetKey(KeyCode.S)) Rigidbody.AddForce(Vector3.back * 10f, ForceMode.Force);
-        }
+        } */
     }
 
     private void OnDestinyChanged(DestinyChanged e) {
