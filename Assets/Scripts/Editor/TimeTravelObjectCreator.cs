@@ -287,16 +287,19 @@ public class TimeTravelObjectCreator : EditorWindow
             if (pastPrefab != null)
             {
                 pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
+                ttoManager.GetComponent<TimeTravelObjectManager>().Past = pastObj.GetComponent<TimeTravelObject>();
             }
 
             if(defaultPrefab != null)
             {
                 presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
+                ttoManager.GetComponent<TimeTravelObjectManager>().Present = presentObj.GetComponent<TimeTravelObject>();
             }
 
-            if(futurePrefab != null)
+            if (futurePrefab != null)
             {
                 futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
+                ttoManager.GetComponent<TimeTravelObjectManager>().Future = futureObj.GetComponent<TimeTravelObject>();
             }
             ApplyUniqueNamesToChildren(pastObj, presentObj, futureObj);
         }
