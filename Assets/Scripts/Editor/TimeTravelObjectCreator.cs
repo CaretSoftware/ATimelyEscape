@@ -183,7 +183,7 @@ public class TimeTravelObjectCreator : EditorWindow
             EditorGUILayout.PropertyField(propChangesPrefab, new GUIContent("Changes prefab"));
             if (!changesPrefab)
             {
-                EditorGUILayout.PropertyField(propChangesMaterials, new GUIContent("Changes materials"));
+                //EditorGUILayout.PropertyField(propChangesMaterials, new GUIContent("Changes materials"));
             }
             else
             {
@@ -287,16 +287,19 @@ public class TimeTravelObjectCreator : EditorWindow
             if (pastPrefab != null)
             {
                 pastObj = InstantiateTTOPrefab(ttoManager, pastPrefab, TimeTravelPeriod.Past, guid_01, guid_02);
+                ttoManager.GetComponent<TimeTravelObjectManager>().Past = pastObj.GetComponent<TimeTravelObject>();
             }
 
-            if(defaultPrefab != null)
+            if (defaultPrefab != null)
             {
                 presentObj = InstantiateTTOPrefab(ttoManager, defaultPrefab, TimeTravelPeriod.Present, guid_01, guid_02);
+                ttoManager.GetComponent<TimeTravelObjectManager>().Present = presentObj.GetComponent<TimeTravelObject>();
             }
 
-            if(futurePrefab != null)
+            if (futurePrefab != null)
             {
                 futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
+                ttoManager.GetComponent<TimeTravelObjectManager>().Future = futureObj.GetComponent<TimeTravelObject>();
             }
             ApplyUniqueNamesToChildren(pastObj, presentObj, futureObj);
         }
@@ -316,7 +319,7 @@ public class TimeTravelObjectCreator : EditorWindow
             TimeTravelObject ttoComponent = tto.AddComponent<TimeTravelObject>();
             ttoComponent.timeTravelPeriod = timezone;
 
-            if (guid_01 != null && guid_02 != null)
+            if (guid_01 != null && guid_02 != null && tto.GetComponent<MeshRenderer>() != null)
             {
                 ApplyNameToObject(tto, timezone.ToString(), guid_02);
             }
@@ -327,8 +330,6 @@ public class TimeTravelObjectCreator : EditorWindow
             }
 
             return tto;
-            //ttoComponent.GatherRenderers(tto.transform);
-            //ttoComponent.OrderedRenderers;
         }
         return null;
     }
@@ -336,12 +337,19 @@ public class TimeTravelObjectCreator : EditorWindow
     private void ApplyUniqueNamesToChildren(GameObject past, GameObject present, GameObject future)
     {
         SetHighestChildCount(past, present, future);
+
         for (int i = 0; i <= highestChildCount; i++)
-        { 
+        {
             string guid_02 = System.Guid.NewGuid().ToString();
             bool hasPast = past != null && past.transform.childCount > i;
+            Debug.Log($"Has past {hasPast}");
+
             bool hasPresent = present != null && present.transform.childCount > i;
+            Debug.Log($"Has present {hasPresent}");
+
             bool hasFuture = future != null && future.transform.childCount > i;
+            Debug.Log($"Has future {hasFuture}");
+
 
             if (hasPast && past.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
@@ -352,7 +360,7 @@ public class TimeTravelObjectCreator : EditorWindow
             {
                 ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_02);
             }
-          
+
             if (hasFuture && future.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
                 ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_02);
@@ -363,7 +371,13 @@ public class TimeTravelObjectCreator : EditorWindow
                 GameObject nextPastObj = hasPast ? past.transform.GetChild(i).gameObject : null;
                 GameObject nextPresentObj = hasPresent ? present.transform.GetChild(i).gameObject : null;
                 GameObject nextFutureObj = hasFuture ? future.transform.GetChild(i).gameObject : null;
-                ApplyUniqueNamesToChildren(nextPastObj, nextPresentObj, nextFutureObj);
+                if(past.transform.GetChild(i).transform.childCount > 0)
+                {
+                    for(int j = 0; j < past.transform.GetChild(i).transform.childCount; j++)
+                    {
+                        ApplyUniqueNamesToChildren(nextPastObj, nextPresentObj, nextFutureObj);
+                    }
+                }
             }
         }
     }
@@ -381,7 +395,8 @@ public class TimeTravelObjectCreator : EditorWindow
         string baseName = objectName == "" || objectName == null ? go.name : objectName;
         if (guid_01 != null && guid_02 != null)
         {
-            go.name = "TTO[" + guid_01 + "]_[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
+            go.name = "TTO[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
+            //go.name = "TTO[" + guid_01 + "]_[" + baseName + "]_[" + guid_02 + "]_[" + timePeriod + "]";
         }
     }
 }
