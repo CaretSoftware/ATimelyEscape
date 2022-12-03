@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Rendering;
-
+// used Freya Holmér tutorials on tools dev. Made adjustments to fit our game
+// https://www.youtube.com/watch?v=pZ45O2hg_30&t=3s&ab_channel=FreyaHolm%C3%A9r
 
 public struct SpawnData
 {
@@ -56,6 +57,7 @@ public class PrefabCannon : EditorWindow
     public bool areDecals;
     public GameObject[] prefabs;
     private SpawnData[] spawnDataPoints;
+    private GameObject prefabCannonFolder;
 
 
     SerializedObject so;
@@ -70,10 +72,11 @@ public class PrefabCannon : EditorWindow
 
     private void OnEnable()
     {
+        SceneView.duringSceneGui += DuringSceneGUI;
         so = new SerializedObject(this);
         LoadProperties();
         GenerateRandomPoints();
-        SceneView.duringSceneGui += DuringSceneGUI;
+        prefabCannonFolder = TryFindObjectByName("Prefab Cannon Objects");
     }
 
 
@@ -91,6 +94,12 @@ public class PrefabCannon : EditorWindow
         propPreviewMaterial = so.FindProperty("previewMaterial");
         propHasRandomRotation = so.FindProperty("hasRandomRotation");
         propAreDecals = so.FindProperty("areDecals");
+    }
+
+
+    private GameObject TryFindObjectByName(string name)
+    {
+        return GameObject.Find(name);
     }
 
 
@@ -159,8 +168,13 @@ public class PrefabCannon : EditorWindow
         EditorGUILayout.PropertyField(propAreDecals);
         GUILayout.Space(10);
 
+        EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(propSpawnPrefabs);
         GUILayout.Space(10);
+        if (EditorGUI.EndChangeCheck())
+        {
+            GenerateRandomPoints();
+        }
 
         EditorGUILayout.PropertyField(propPreviewMaterial);
 
@@ -187,6 +201,11 @@ public class PrefabCannon : EditorWindow
             return;
         }
 
+        if(prefabCannonFolder == null)
+        {
+            prefabCannonFolder = new GameObject("Prefab Cannon Objects");
+        }
+
         foreach (SpawnPoint spawnPoint in spawnPoints)
         {
             if (spawnPoint.spawnData.prefab != null)
@@ -195,6 +214,7 @@ public class PrefabCannon : EditorWindow
                 Undo.RegisterCreatedObjectUndo(spawnedPrefab, "Spawn Objects");
                 spawnedPrefab.transform.position = spawnPoint.position;
                 spawnedPrefab.transform.rotation = spawnPoint.rotation;
+                spawnedPrefab.transform.parent = prefabCannonFolder.transform;
             }
         }
 
@@ -234,7 +254,8 @@ public class PrefabCannon : EditorWindow
                 Quaternion rot;
                 if (areDecals)
                 {
-                    rot = Quaternion.identity * Quaternion.Euler(0f, -180f, 0f);
+                    float randAng = hasRandomRotation ? Random.value * 360 : 0f;
+                    rot = Quaternion.identity * Quaternion.Euler(0f, -180f, randAng);
                 }
                 else
                 {
@@ -266,7 +287,10 @@ public class PrefabCannon : EditorWindow
 
         for (int i = 0; i < spawnCount; i++)
         {
-            spawnDataPoints[i].SetRandomValues(prefabs, hasRandomRotation, areDecals);
+            if(prefabs != null)
+            {
+                spawnDataPoints[i].SetRandomValues(prefabs, hasRandomRotation, areDecals);
+            }
         }
     }
 
