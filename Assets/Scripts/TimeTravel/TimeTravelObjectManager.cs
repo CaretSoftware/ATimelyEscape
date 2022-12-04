@@ -164,7 +164,6 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
     public class DisplacmentInfo {
         public Renderer renderer;
-        public string TTOID;
         public string rendererID;
         public TimeTravelDisplacement displacement;
         public Material[] originalMaterials;
@@ -173,7 +172,6 @@ public class TimeTravelObjectManager : MonoBehaviour {
     private void CategorizeRenderersForDisplacement(Transform currentTransform) {
         Renderer r = currentTransform.GetComponent<Renderer>();
         if (r) {
-            print("Banana start is reached " + currentTransform.name);
             DisplacmentInfo info = new DisplacmentInfo();
             TimeTravelDisplacement d = currentTransform.gameObject.GetOrAddComponent<TimeTravelDisplacement>();
             info.displacement = d;
@@ -182,14 +180,12 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
             string[] splitName = currentTransform.name.Split('_');
 
-            string TTOID = splitName[0].Substring(4, splitName[0].Length - 5);
-            string rendererID = splitName[2].Substring(1, splitName[2].Length - 2);
-            info.TTOID = TTOID;
+            string rendererID = splitName[1];
             info.rendererID = rendererID;
 
             if (!DisplacementsAndRenderers.ContainsKey(rendererID)) DisplacementsAndRenderers.Add(rendererID, new DisplacmentInfo[3]);
 
-            switch (splitName[3].Substring(1, splitName[3].Length - 2).ToLower()) {
+            switch (splitName[2].Substring(1, splitName[2].Length - 2).ToLower()) {
                 case "past": DisplacementsAndRenderers[rendererID][0] = info; break;
                 case "present": DisplacementsAndRenderers[rendererID][1] = info; break;
                 case "future": DisplacementsAndRenderers[rendererID][2] = info; break;
