@@ -107,7 +107,8 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
     private int traveledFromIndex, traveledToIndex;
 
-    private Dictionary<string, DisplacmentInfo[]> DisplacementsAndRenderers = new Dictionary<string, DisplacmentInfo[]>();
+    private Dictionary<string, DisplacmentInfo[]> DisplacementsAndRenderers =
+        new Dictionary<string, DisplacmentInfo[]>();
 
     public void Awake() {
         CheckForMissingComponents();
@@ -155,10 +156,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
                 ObjectState = TimeTravelObjectState.PrefabChangingPlayerMove;
                 break;
             default: {
-                    if (changesMaterials && !canBeMovedByPlayer && !changesPrefab)
-                        ObjectState = TimeTravelObjectState.SwitchingMaterial;
-                    break;
-                }
+                if (changesMaterials && !canBeMovedByPlayer && !changesPrefab)
+                    ObjectState = TimeTravelObjectState.SwitchingMaterial;
+                break;
+            }
         }
     }
 
@@ -183,15 +184,24 @@ public class TimeTravelObjectManager : MonoBehaviour {
             string rendererID = splitName[1];
             info.rendererID = rendererID;
 
-            if (!DisplacementsAndRenderers.ContainsKey(rendererID)) DisplacementsAndRenderers.Add(rendererID, new DisplacmentInfo[3]);
+            if (!DisplacementsAndRenderers.ContainsKey(rendererID))
+                DisplacementsAndRenderers.Add(rendererID, new DisplacmentInfo[3]);
 
             switch (splitName[2].Substring(1, splitName[2].Length - 2).ToLower()) {
-                case "past": DisplacementsAndRenderers[rendererID][0] = info; break;
-                case "present": DisplacementsAndRenderers[rendererID][1] = info; break;
-                case "future": DisplacementsAndRenderers[rendererID][2] = info; break;
+                case "past":
+                    DisplacementsAndRenderers[rendererID][0] = info;
+                    break;
+                case "present":
+                    DisplacementsAndRenderers[rendererID][1] = info;
+                    break;
+                case "future":
+                    DisplacementsAndRenderers[rendererID][2] = info;
+                    break;
             }
         }
-        for (int i = 0; i < currentTransform.childCount; i++) CategorizeRenderersForDisplacement(currentTransform.GetChild(i));
+
+        for (int i = 0; i < currentTransform.childCount; i++)
+            CategorizeRenderersForDisplacement(currentTransform.GetChild(i));
     }
 
     private void Update() {
@@ -228,7 +238,6 @@ public class TimeTravelObjectManager : MonoBehaviour {
     }
 
     private void HandleDisplacement(TimePeriodChanged e) {
-
         switch (e.from) {
             case TimeTravelPeriod.Past:
                 if (!past) traveledFromIndex = -1;
@@ -277,10 +286,15 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
         if (traveledFromIndex > -1 || traveledToIndex > -1) {
             foreach (var info in DisplacementsAndRenderers.Values) {
-                info[traveledFromIndex].renderer.materials = info[traveledFromIndex].originalMaterials;
-                info[traveledFromIndex].renderer.enabled = false;
-                info[traveledToIndex].renderer.materials = info[traveledToIndex].originalMaterials;
-                info[traveledToIndex].renderer.enabled = true;
+                if (info[traveledFromIndex] != null) {
+                    info[traveledFromIndex].renderer.materials = info[traveledFromIndex].originalMaterials;
+                    info[traveledFromIndex].renderer.enabled = false;
+                }
+
+                if (info[traveledToIndex] != null) {
+                    info[traveledToIndex].renderer.materials = info[traveledToIndex].originalMaterials;
+                    info[traveledToIndex].renderer.enabled = true;
+                }
             }
         }
     }
