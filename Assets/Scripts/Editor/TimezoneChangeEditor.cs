@@ -122,9 +122,9 @@ public class TimezoneChangeEditor : EditorWindow
         TimeTravelObject[] timeTravelObjects = Resources.FindObjectsOfTypeAll<TimeTravelObject>();
         if (timeTravelObjects.Length > 0)
 
-        for (var i = 0; i < timeTravelObjects.Length; ++i)
-        {
-            TimeTravelPeriod timezone;
+            for (var i = 0; i < timeTravelObjects.Length; ++i)
+            {
+                TimeTravelPeriod timezone;
 
                 if (timeTravelObjects[i].timeTravelPeriod == TimeTravelPeriod.Past)//(timeTravelObjects[i].pastSelf != null && timeTravelObjects[i].pastSelf.pastSelf != null)
                 {
@@ -142,22 +142,28 @@ public class TimezoneChangeEditor : EditorWindow
                 {
                     timezone = TimeTravelPeriod.Dummy;
                 }
-            ttosInScene.Add(timeTravelObjects[i].gameObject, timezone);
-            //Debug.Log(timeTravelObjects[i].name + ": " + timezone);
-        }
+                ttosInScene.TryAdd(timeTravelObjects[i].gameObject, timezone);
+                //Debug.Log(timeTravelObjects[i].name + ": " + timezone);
+            }
     }
 
     public static void ActivateTimezone()
     {
-        foreach(KeyValuePair<GameObject, TimeTravelPeriod> tto in ttosInScene)
+        foreach (KeyValuePair<GameObject, TimeTravelPeriod> tto in ttosInScene)
         {
-            if(tto.Value == currentTimezone)
+            if (currentTimezone == TimeTravelPeriod.Dummy)
             {
                 tto.Key.SetActive(true);
-            }
-            else
+            } else
             {
-                tto.Key.SetActive(false);
+                if (tto.Value == currentTimezone)
+                {
+                    tto.Key.SetActive(true);
+                }
+                else
+                {
+                    tto.Key.SetActive(false);
+                }
             }
         }
     }
