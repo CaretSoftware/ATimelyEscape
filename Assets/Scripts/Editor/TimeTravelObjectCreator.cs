@@ -86,7 +86,7 @@ public class TimeTravelObjectCreator : EditorWindow
         createPrefab = EditorPrefs.GetBool("TTO_CREATOR_createPrefab", false);
         changesPrefab = EditorPrefs.GetBool("TTO_CREATOR_changesPrefab", false);
         canBeMovedByPlayer = EditorPrefs.GetBool("TTO_CREATOR_canBeMovedByPlayer", false);
-        canCollideOnTimeTravel = EditorPrefs.GetBool("TTO_CREATOR_canCollideOnTimeTravel", false);
+        canCollideOnTimeTravel = EditorPrefs.GetBool("TTO_CREATOR_canCollideOnTimeTravel", true);
         showSettings = EditorPrefs.GetBool("TTO_CREATOR_showSettings", false);
 
         pastPrefab = LoadByPath("TTO_pastPrefab");
