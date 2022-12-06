@@ -111,16 +111,27 @@ namespace CallbackSystem
                     yield return null;
                 }
             }
+            if (charge > 0)
+            {
+                iconBehaviour.IsCharged(true);
+
+            }
+            else
+            {
+                iconBehaviour.IsCharged(false);
+            }
         }
         private void changedTime(TimePeriodChanged timePeriodChanged)
         {
             if (charge > 0)
             {
                 pingPong.SetPower(1);
+                iconBehaviour.IsCharged(true);
             }
             else
             {
                 pingPong.SetPower(0);
+                iconBehaviour.IsCharged(false);
             }
         }
     }
