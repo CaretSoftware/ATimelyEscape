@@ -12,5 +12,9 @@ public class KillZone : MonoBehaviour
         {
             other.transform.position = checkPoint.transform.position;
         }
+        else
+        {
+            Destroy(other.gameObject);
+        }
     }
 }
