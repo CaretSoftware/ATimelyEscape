@@ -301,7 +301,7 @@ public class TimeTravelObjectCreator : EditorWindow
                 futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
                 ttoManager.GetComponent<TimeTravelObjectManager>().Future = futureObj.GetComponent<TimeTravelObject>();
             }
-            ApplyUniqueNamesToChildren(pastObj.transform, presentObj.transform, futureObj.transform);
+            ApplyUniqueNamesToChildren(pastObj, presentObj, futureObj);
         }
         else
         {
@@ -334,50 +334,50 @@ public class TimeTravelObjectCreator : EditorWindow
         return null;
     }
 
-    private void ApplyUniqueNamesToChildren(Transform past, Transform present, Transform future)
+    private void ApplyUniqueNamesToChildren(GameObject past, GameObject present, GameObject future)
     {
         int count = SetHighestChildCount(past, present, future);
 
         for (int i = 0; i <= count; i++)
         {
             string guid_02 = System.Guid.NewGuid().ToString();
-            bool hasPast = past != null && past.childCount > i;
-            bool hasPresent = present != null && present.childCount > i;
-            bool hasFuture = future != null && future.childCount > i;
+            bool hasPast = past != null && past.transform.childCount > i;
+            bool hasPresent = present != null && present.transform.childCount > i;
+            bool hasFuture = future != null && future.transform.childCount > i;
             
-            if (hasPast && past.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasPast && past.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
-                ApplyNameToObject(past.GetChild(i).gameObject, "Past", guid_02);
+                ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_02);
             }
 
-            if (hasPresent && present.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasPresent && present.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
-                ApplyNameToObject(present.GetChild(i).gameObject, "Present", guid_02);
+                ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_02);
             }
 
-            if (hasFuture && future.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasFuture && future.transform.GetChild(i).GetComponent<MeshRenderer>())
             {
-                ApplyNameToObject(future.GetChild(i).gameObject, "Future", guid_02);
+                ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_02);
             }
 
-            if (hasPast && past.GetChild(i).childCount > 0 || 
-                hasPresent && present.GetChild(i).childCount > 0 ||
-                hasFuture && future.GetChild(i).childCount > 0)
+            if (hasPast && past.transform.GetChild(i).childCount > 0 || 
+                hasPresent && present.transform.GetChild(i).childCount > 0 ||
+                hasFuture && future.transform.GetChild(i).childCount > 0)
             {
-                Transform nextPastObj = hasPast ? past.GetChild(i) : null;
-                Transform nextPresentObj = hasPresent ? present.GetChild(i) : null;
-                Transform nextFutureObj = hasFuture ? future.GetChild(i) : null;
+                GameObject nextPastObj = hasPast ? past.transform.GetChild(i).gameObject : null;
+                GameObject nextPresentObj = hasPresent ? present.transform.GetChild(i).gameObject : null;
+                GameObject nextFutureObj = hasFuture ? future.transform.GetChild(i).gameObject : null;
                 
                 ApplyUniqueNamesToChildren(nextPastObj, nextPresentObj, nextFutureObj);
             }
         }
     }
 
-    private int SetHighestChildCount(Transform past, Transform present, Transform future)
+    private int SetHighestChildCount(GameObject past, GameObject present, GameObject future)
     {
-        int pastCount = past != null ? (past.childCount) : -1;
-        int presentCount = present != null ? (present.childCount) : -1;
-        int futureCount = future != null ? (future.childCount) : -1;
+        int pastCount = past != null ? (past.transform.childCount) : -1;
+        int presentCount = present != null ? (present.transform.childCount) : -1;
+        int futureCount = future != null ? (future.transform.childCount) : -1;
         return Mathf.Max(pastCount, Mathf.Max(presentCount, futureCount));
     }
 
