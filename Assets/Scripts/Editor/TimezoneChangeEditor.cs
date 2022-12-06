@@ -142,7 +142,7 @@ public class TimezoneChangeEditor : EditorWindow
                 {
                     timezone = TimeTravelPeriod.Dummy;
                 }
-                ttosInScene.Add(timeTravelObjects[i].gameObject, timezone);
+                ttosInScene.TryAdd(timeTravelObjects[i].gameObject, timezone);
                 //Debug.Log(timeTravelObjects[i].name + ": " + timezone);
             }
     }

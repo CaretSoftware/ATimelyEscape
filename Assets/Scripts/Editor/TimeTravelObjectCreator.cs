@@ -301,7 +301,7 @@ public class TimeTravelObjectCreator : EditorWindow
                 futureObj = InstantiateTTOPrefab(ttoManager, futurePrefab, TimeTravelPeriod.Future, guid_01, guid_02);
                 ttoManager.GetComponent<TimeTravelObjectManager>().Future = futureObj.GetComponent<TimeTravelObject>();
             }
-            ApplyUniqueNamesToChildren(pastObj, presentObj, futureObj);
+            ApplyUniqueNamesToChildren(pastObj.transform, presentObj.transform, futureObj.transform);
         }
         else
         {
@@ -334,60 +334,51 @@ public class TimeTravelObjectCreator : EditorWindow
         return null;
     }
 
-    private void ApplyUniqueNamesToChildren(GameObject past, GameObject present, GameObject future)
+    private void ApplyUniqueNamesToChildren(Transform past, Transform present, Transform future)
     {
-        SetHighestChildCount(past, present, future);
+        int count = SetHighestChildCount(past, present, future);
 
-        for (int i = 0; i <= highestChildCount; i++)
+        for (int i = 0; i <= count; i++)
         {
             string guid_02 = System.Guid.NewGuid().ToString();
-            bool hasPast = past != null && past.transform.childCount > i;
-            Debug.Log($"Has past {hasPast}");
-
-            bool hasPresent = present != null && present.transform.childCount > i;
-            Debug.Log($"Has present {hasPresent}");
-
-            bool hasFuture = future != null && future.transform.childCount > i;
-            Debug.Log($"Has future {hasFuture}");
-
-
-            if (hasPast && past.transform.GetChild(i).GetComponent<MeshRenderer>())
+            bool hasPast = past != null && past.childCount > i;
+            bool hasPresent = present != null && present.childCount > i;
+            bool hasFuture = future != null && future.childCount > i;
+            
+            if (hasPast && past.GetChild(i).GetComponent<MeshRenderer>())
             {
-                ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", guid_02);
+                ApplyNameToObject(past.GetChild(i).gameObject, "Past", guid_02);
             }
 
-            if (hasPresent && present.transform.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasPresent && present.GetChild(i).GetComponent<MeshRenderer>())
             {
-                ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", guid_02);
+                ApplyNameToObject(present.GetChild(i).gameObject, "Present", guid_02);
             }
 
-            if (hasFuture && future.transform.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasFuture && future.GetChild(i).GetComponent<MeshRenderer>())
             {
-                ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", guid_02);
+                ApplyNameToObject(future.GetChild(i).gameObject, "Future", guid_02);
             }
 
-            if (hasPast && past.transform.GetChild(i).transform.childCount > 0 || hasPresent && present.transform.GetChild(i).transform.childCount > 0 || hasFuture && future.transform.GetChild(i).transform.childCount > 0)
+            if (hasPast && past.GetChild(i).childCount > 0 || 
+                hasPresent && present.GetChild(i).childCount > 0 ||
+                hasFuture && future.GetChild(i).childCount > 0)
             {
-                GameObject nextPastObj = hasPast ? past.transform.GetChild(i).gameObject : null;
-                GameObject nextPresentObj = hasPresent ? present.transform.GetChild(i).gameObject : null;
-                GameObject nextFutureObj = hasFuture ? future.transform.GetChild(i).gameObject : null;
-                if(past.transform.GetChild(i).transform.childCount > 0)
-                {
-                    for(int j = 0; j < past.transform.GetChild(i).transform.childCount; j++)
-                    {
-                        ApplyUniqueNamesToChildren(nextPastObj, nextPresentObj, nextFutureObj);
-                    }
-                }
+                Transform nextPastObj = hasPast ? past.GetChild(i) : null;
+                Transform nextPresentObj = hasPresent ? present.GetChild(i) : null;
+                Transform nextFutureObj = hasFuture ? future.GetChild(i) : null;
+                
+                ApplyUniqueNamesToChildren(nextPastObj, nextPresentObj, nextFutureObj);
             }
         }
     }
 
-    private void SetHighestChildCount(GameObject past, GameObject present, GameObject future)
+    private int SetHighestChildCount(Transform past, Transform present, Transform future)
     {
-        int pastCount = past != null ? past.transform.childCount : -1;
-        int presentCount = present != null ? present.transform.childCount : -1;
-        int futureCount = future != null ? future.transform.childCount : -1;
-        highestChildCount = Mathf.Max(pastCount, Mathf.Max(presentCount, futureCount));
+        int pastCount = past != null ? (past.childCount) : -1;
+        int presentCount = present != null ? (present.childCount) : -1;
+        int futureCount = future != null ? (future.childCount) : -1;
+        return Mathf.Max(pastCount, Mathf.Max(presentCount, futureCount));
     }
 
     private void ApplyNameToObject(GameObject go, string timePeriod, string guid_02)
