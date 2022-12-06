@@ -8,6 +8,8 @@ namespace RatCharacterController {
 		private string keypadTag = "Keypad";
 		[SerializeField] private LayerMask groundedLayerMask;
 		[SerializeField] private LayerMask cubeLayerMask;
+		[SerializeField] private float jumpForceUp = 1f;
+		[SerializeField] private float jumpForceForward = 1f;
 		private float ledgeDistance = 0.05f;
 		private CharacterAnimationController _characterAnimationController;
 		private CameraFollow _cameraFollow;
@@ -22,8 +24,23 @@ namespace RatCharacterController {
 		private float _characterHalfHeight;
 
 		public bool CanTimeTravel { get; set; }
+		private bool _canTimeTravelPast = true;
+		private bool _canTimeTravelPresent = true;
+		private bool _canTimeTravelFuture = true;
+		public bool CantTimeTravelPast {
+			get => _canTimeTravelPast;
+			set => _canTimeTravelPast = value;
+		}
+		public bool CantTimeTravelPresent {
+			get => _canTimeTravelPresent;
+			set => _canTimeTravelPresent = value;
 
-		//private static CharacterInput _instance;
+		}
+		public bool CantTimeTravelFuture {
+			get => _canTimeTravelFuture;
+			set => _canTimeTravelFuture = value;
+		}
+		
 		private bool _jumping;
 		private static bool _paused;
 
@@ -152,10 +169,10 @@ namespace RatCharacterController {
 			Transform playerTransform = _playerTransform;
 			Vector3 playerPosition = playerTransform.position;
 			// float playerScale = playerTransform.localScale.y;
-			float margin = 0.01f; //.1f * playerScale;
+			//float margin = 0.01f; //.1f * playerScale;
 			Ray ray = RayAtHalfHeight(playerTransform);
 			CapsuleCollider capsuleCollider = _collider;
-			float radius = 0.03f; // capsuleCollider.radius * playerScale;
+			//float radius = 0.03f; // capsuleCollider.radius * playerScale;
 			_playerForward = playerTransform.forward;
 
 			if (!_jumping && Grounded()) {
@@ -166,7 +183,9 @@ namespace RatCharacterController {
 					playerTransform.position = hitPosition + ledgeDistance * -playerTransform.forward;
 					_characterAnimationController.JumpToFreeHang();
 				}
-				else {
+				else
+				{
+					_rigidBody.AddForce((playerTransform.rotation * new Vector3(0,jumpForceUp, jumpForceForward)), ForceMode.VelocityChange);
 					_characterAnimationController.LeapJump();
 				}
 			}
