@@ -66,13 +66,11 @@ namespace CallbackSystem
                 if (charge > 0)
                 {
                     cubePush.SetPushable(true);
-                    iconBehaviour.IsCharged(true);
                     StartCoroutine(SetMaterial(true));
                 }
                 else
                 {
                     StartCoroutine(SetMaterial(false));
-                    iconBehaviour.IsCharged(false);
                 }
                 if (!origin.GetType().Equals(GetType()))
                 {
