@@ -161,6 +161,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    //skriv om dessa utefter mål
     public void OnAnimationGrabbedItem()
     {
         playerTransform.SetParent(handBone, true);
