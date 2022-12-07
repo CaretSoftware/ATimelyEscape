@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CallbackSystem;
-using UnityEngine;
 using StateMachines;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class TimeTravelObject : MonoBehaviour {
@@ -153,25 +153,23 @@ public class TimeTravelObject : MonoBehaviour {
     }
 
     private void UpdateColliderLayers(Transform transformToUpdate, bool active) {
+        string timePeriodLayerName = "";
+
+        switch(timeTravelPeriod){
+            case TimeTravelPeriod.Past: timePeriodLayerName = "PastTimePeriod"; break;
+            case TimeTravelPeriod.Present: timePeriodLayerName = "PresentTimePeriod"; break;
+            case TimeTravelPeriod.Future: timePeriodLayerName = "FutureTimePeriod"; break;
+        }
+
         transformToUpdate.gameObject.layer = LayerMask.NameToLayer(active
             ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
-            : "OtherTimePeriod");
+            : timePeriodLayerName);
         for (int i = 0; i < transformToUpdate.childCount; i++) {
             transformToUpdate.GetChild(i).gameObject.layer = LayerMask.NameToLayer(active
                 ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
-                : "OtherTimePeriod");
+                : timePeriodLayerName);
             UpdateColliderLayers(transformToUpdate.GetChild(i), active);
         }
-    }
-
-    private void Update() {
-/*         if (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove && IsActive) {
-            stateMachine.Run();
-            if (Input.GetKey(KeyCode.A)) Rigidbody.AddForce(Vector3.left * 10f, ForceMode.Force);
-            if (Input.GetKey(KeyCode.D)) Rigidbody.AddForce(Vector3.right * 10f, ForceMode.Force);
-            if (Input.GetKey(KeyCode.W)) Rigidbody.AddForce(Vector3.forward * 10f, ForceMode.Force);
-            if (Input.GetKey(KeyCode.S)) Rigidbody.AddForce(Vector3.back * 10f, ForceMode.Force);
-        } */
     }
 
     private void OnDestinyChanged(DestinyChanged e) {
