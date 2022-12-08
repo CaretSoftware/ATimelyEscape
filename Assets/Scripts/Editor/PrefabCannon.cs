@@ -118,12 +118,11 @@ public class PrefabCannon : EditorWindow {
         string[] paths = EditorPrefs.GetString(editorPrefsPre + "prefabs").Split(',');
         for(int i = 0; i < paths.Length - 1; i++) {
             GameObject go = LoadByPath(paths[i]);
-            if(go != null) {
+            if(go != null && !prefabs.Contains(go)) {
                 prefabs.Add(go);
             }
         }   
     }
-
 
 
     private void SaveGameObjectArray(string key, List<GameObject> arr) {
@@ -165,6 +164,7 @@ public class PrefabCannon : EditorWindow {
 
             so.Update();
             propRadius.floatValue *= 1f - scrollDir * 0.05f;
+            GenerateRandomPoints();
             so.ApplyModifiedProperties();
             Event.current.Use();
         }
@@ -172,7 +172,7 @@ public class PrefabCannon : EditorWindow {
         // if the cursor is pointing on valid ground
         Transform camTransform = sceneView.camera.transform;
         if(TryRaycastFromCamera(camTransform.up, out Matrix4x4 tangentToWorld)) {
-            List<SpawnPoint> spawnPoints = GetSpawnPoints(tangentToWorld);
+            List<SpawnPoint> spawnPoints = GetSpawnPoints(camTransform.rotation, tangentToWorld);
 
             if(Event.current.type == EventType.Repaint) {
                 DrawCircleRegion(tangentToWorld);
@@ -180,7 +180,7 @@ public class PrefabCannon : EditorWindow {
             }
 
             // spawn on press
-            if(Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.D) {
+            if(Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.W) {
                 TrySpawnObjects(spawnPoints);
             }
         }
@@ -217,9 +217,16 @@ public class PrefabCannon : EditorWindow {
 
         //EditorGUILayout.PropertyField(propPreviewMaterial);
         //GUILayout.Space(10);
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(70);
+        if (GUILayout.Button("Randomize points", GUILayout.Height(25)))
+        {
+            GenerateRandomPoints();
+        }
+        GUILayout.Space(70);
+        GUILayout.EndHorizontal();
 
         GUILayout.FlexibleSpace();
-
         GUILayout.BeginHorizontal();
         GUILayout.Space(70);
         if(GUILayout.Button("Remove last created", GUILayout.Height(25))) {
@@ -289,7 +296,7 @@ public class PrefabCannon : EditorWindow {
     }
 
 
-    private List<SpawnPoint> GetSpawnPoints(Matrix4x4 tangentToWorld) {
+    private List<SpawnPoint> GetSpawnPoints(Quaternion camRot, Matrix4x4 tangentToWorld) {
         List<SpawnPoint> hitSpawnPoints = new List<SpawnPoint>();
         foreach(SpawnData rndDataPoint in spawnDataPoints) {
             // create ray for this point
@@ -299,8 +306,9 @@ public class PrefabCannon : EditorWindow {
                 // calculate rotation and assign to pose together with position
                 Quaternion rot;
                 if(decalMode) {
-                    float randAng = hasRandomRotation ? Random.value * 360 : 0f;
-                    rot = Quaternion.identity * Quaternion.Euler(0f, 0f, randAng);
+                    float randAng = hasRandomRotation ? Random.value * 360f : camRot.z;
+                    rot = new Quaternion(camRot.x, camRot.y, camRot.z, camRot.w) * Quaternion.Euler(0f, 0f, randAng);
+                    //Quaternion.identity * Quaternion.Euler(0f, 0f, randAng);
                 }
                 else {
                     Quaternion randRot = Quaternion.Euler(0f, 0f, rndDataPoint.randAngDeg);
