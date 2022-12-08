@@ -10,10 +10,10 @@ public class LineEditor : EditorWindow
     public List<GameObject> points;
     public int vertexCount = 12;
     private Camera camTf = null;
-
-
+    
     SerializedObject so;
     SerializedProperty propVertexCount;
+
 
     [MenuItem("Tools/LineEditor")]
     public static void OpenLineEditor()
@@ -50,8 +50,8 @@ public class LineEditor : EditorWindow
 
         if (line != null)
         {
-            if (points.Count > 1);// && !PointIsNull())
-            {
+            if (points.Count > 1);
+            { 
                 LoadExistingLine(line);
                 GenerateLine();
                 OnDrawHandles();
@@ -89,11 +89,16 @@ public class LineEditor : EditorWindow
             GUILayout.Space(40);
             GUILayout.EndHorizontal();
 
+            GUILayout.Space(10);
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(40);
             EditorGUILayout.PropertyField(propVertexCount, new GUIContent("Vertex count"));
             propVertexCount.intValue = Mathf.Max(0, propVertexCount.intValue);
             propVertexCount.intValue = Mathf.Min(100, propVertexCount.intValue);
-
             GUILayout.Space(40);
+            GUILayout.EndHorizontal();
+
+            GUILayout.FlexibleSpace();
         }
 
         GUILayout.Space(20);
