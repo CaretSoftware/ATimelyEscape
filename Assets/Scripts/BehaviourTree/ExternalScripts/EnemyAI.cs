@@ -20,7 +20,6 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Rig Setup")]
     [SerializeField] private Transform handIKTarget;
-    [SerializeField] private Transform handBone;
 
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
@@ -156,23 +155,8 @@ public class EnemyAI : MonoBehaviour
     {
         if (agentCenterTransform != null)
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
         }
-    }
-
-    //skriv om dessa utefter mål
-    public void OnAnimationGrabbedItem()
-    {
-        playerTransform.SetParent(handBone, true);
-        playerTransform.position = handBone.position;
-    }
-
-    public void OnAnimationStoredItem()
-    {
-        playerTransform.SetParent(null, true);
-        playerTransform.position = checkpoint.position;
-        playerTransform.rotation = checkpoint.rotation; 
-        animator.SetBool("GrabItem", false);
     }
 }
