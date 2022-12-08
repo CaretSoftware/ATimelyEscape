@@ -125,9 +125,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
             PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
         }
 
-        if (past) CategorizeRenderersForDisplacement(past.transform);
-        if (present) CategorizeRenderersForDisplacement(present.transform);
-        if (future) CategorizeRenderersForDisplacement(future.transform);
+        if (past) { CategorizeRenderersForDisplacement(past.transform); past.timeTravelPeriod = TimeTravelPeriod.Past; }
+        if (present) { CategorizeRenderersForDisplacement(present.transform); present.timeTravelPeriod = TimeTravelPeriod.Present; }
+        if (future) { CategorizeRenderersForDisplacement(future.transform); future.timeTravelPeriod = TimeTravelPeriod.Future; }
+
     }
 
     private void CheckForMissingComponents() {
@@ -156,10 +157,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
                 ObjectState = TimeTravelObjectState.PrefabChangingPlayerMove;
                 break;
             default: {
-                if (changesMaterials && !canBeMovedByPlayer && !changesPrefab)
-                    ObjectState = TimeTravelObjectState.SwitchingMaterial;
-                break;
-            }
+                    if (changesMaterials && !canBeMovedByPlayer && !changesPrefab)
+                        ObjectState = TimeTravelObjectState.SwitchingMaterial;
+                    break;
+                }
         }
     }
 
