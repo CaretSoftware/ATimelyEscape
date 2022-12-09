@@ -19,12 +19,10 @@ public class Selector : Node
                 case NodeState.RUNNING:
                     _nodeState = NodeState.RUNNING;
                     return _nodeState;  
-                    break;
 
                 case NodeState.SUCCESS:
                     _nodeState = NodeState.SUCCESS;
                     return _nodeState;
-                    break;
 
                 case NodeState.FAILURE:
                     break;
