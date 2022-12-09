@@ -16,6 +16,7 @@ public class LineRendererSmootherEditor : Editor
     private GUIContent SmoothButtonGUIContent = new GUIContent("Smooth Path");
     private GUIContent RestoreDefaultGUIContent = new GUIContent("Restore Default Path");
 
+    private float GUIsize = 0.05f;
     private bool ExpandCurves = false;
     private BezierCurve[] Curves;
 
@@ -100,7 +101,6 @@ public class LineRendererSmootherEditor : Editor
         SmoothingLength.floatValue = 0;
         serializedObject.ApplyModifiedProperties();
     }
-
     private void OnSceneGUI()
     {
         if (Smoother.Line.positionCount < 3) return; 
@@ -119,12 +119,12 @@ public class LineRendererSmootherEditor : Editor
             Vector3 endTangent = (nextDirection + lastDirection) * -1 * SmoothingLength.floatValue;
 
             Handles.color = Color.green;
-            Handles.DotHandleCap(EditorGUIUtility.GetControlID(FocusType.Passive), position + startTangent, Quaternion.identity, 0.25f, EventType.Repaint);
+            Handles.DotHandleCap(EditorGUIUtility.GetControlID(FocusType.Passive), position + startTangent, Quaternion.identity, GUIsize, EventType.Repaint);
 
             if (i != 0)
             {
                 Handles.color = Color.blue;
-                Handles.DotHandleCap(EditorGUIUtility.GetControlID(FocusType.Passive), nextPosition + endTangent, Quaternion.identity, 0.25f, EventType.Repaint);
+                Handles.DotHandleCap(EditorGUIUtility.GetControlID(FocusType.Passive), nextPosition + endTangent, Quaternion.identity, GUIsize, EventType.Repaint);
             }
 
             Curves[i].Points[0] = position; // Start Position (P0)
@@ -142,7 +142,7 @@ public class LineRendererSmootherEditor : Editor
                 (nextDirection + lastDirection) * -1 * SmoothingLength.floatValue;
 
             Handles.color = Color.blue;
-            Handles.DotHandleCap(EditorGUIUtility.GetControlID(FocusType.Passive), Curves[0].Points[2], Quaternion.identity, 0.25f, EventType.Repaint);
+            Handles.DotHandleCap(EditorGUIUtility.GetControlID(FocusType.Passive), Curves[0].Points[2], Quaternion.identity, GUIsize, EventType.Repaint);
         }
 
         DrawSegments();
