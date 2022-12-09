@@ -16,9 +16,11 @@ public class FlickerLightControl : MonoBehaviour
 
     private float originalSpotIntensity;
     private float originalPointIntensity;
+    private AudioSource audioSource; 
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         if(spotLight == null)
             spotLight = GetComponent<Light>();
         originalSpotIntensity = spotLight.intensity;
@@ -33,6 +35,7 @@ public class FlickerLightControl : MonoBehaviour
         if (!isFlickering)
         {
             StartCoroutine(FlickeringLight());
+            audioSource.Play();
         }
     }
      
