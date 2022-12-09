@@ -16,9 +16,9 @@ public class Plate : MonoBehaviour
     [SerializeField] private GameObject cord;
     [SerializeField] private GameObject cord2;
     [SerializeField] private GameObject sign;
-    [SerializeField] private GameObject clock;
+    /*[SerializeField] private GameObject clock;
     [SerializeField] private GameObject pastClock;
-    [SerializeField] private GameObject presentClock;
+    [SerializeField] private GameObject presentClock;*/
 
     public bool pastOn;
     public bool presentOn;
@@ -28,11 +28,11 @@ public class Plate : MonoBehaviour
     private MeshRenderer cordMeshRenderer;
     private MeshRenderer cord2MeshRenderer;
     private MeshRenderer signMeshRenderer;
-    private DigitalClock digitalClock;
+/*    private DigitalClock digitalClock;
     private DigitalClock pastDigitalClock;
-    private DigitalClock presentDigitalClock;
-    private TextMeshProUGUI pastText;
-    private TextMeshProUGUI presentText;
+    private DigitalClock presentDigitalClock;*/
+    /*private TextMeshProUGUI pastText;
+    private TextMeshProUGUI presentText;*/
     private PlateHolder plateHolder;
 
 
@@ -47,10 +47,10 @@ public class Plate : MonoBehaviour
         cordMeshRenderer = cord.GetComponent<MeshRenderer>();
         cord2MeshRenderer = cord2.GetComponent<MeshRenderer>();
         signMeshRenderer = sign.GetComponent<MeshRenderer>();
-        digitalClock = clock.GetComponent<DigitalClock>();
+        //digitalClock = clock.GetComponent<DigitalClock>();
         plateHolder = plateHolderGO.GetComponent<PlateHolder>();
 
-        if (pastClock != null)
+       /* if (pastClock != null)
         {
             pastDigitalClock = pastClock.GetComponent<DigitalClock>();
             pastText = pastClock.GetComponentInChildren<TextMeshProUGUI>();
@@ -59,7 +59,7 @@ public class Plate : MonoBehaviour
         {
             presentDigitalClock = presentClock.GetComponent<DigitalClock>();
             presentText = presentClock.GetComponentInChildren<TextMeshProUGUI>();
-        }
+        }*/
     }
 
     private void OnTriggerEnter(Collider other)
@@ -69,10 +69,10 @@ public class Plate : MonoBehaviour
             if (other.gameObject.tag == "CubePast")
             {
                 ButtonOn();
-                pastDigitalClock.enabled = false;
-                pastText.text = "0";
+                //pastDigitalClock.enabled = false;
+                //pastText.text = "0";
                 pastOn = true;
-                digitalClock.takingAway = false;
+                //digitalClock.takingAway = false;
             }
         }
         if (isPresent)
@@ -80,12 +80,12 @@ public class Plate : MonoBehaviour
             if (other.gameObject.tag == "CubePresent")
             {
                 ButtonOn();
-                pastDigitalClock.enabled = false;
-                presentDigitalClock.enabled = false;
-                pastText.text = "0";
-                presentText.text = "0";
+                //pastDigitalClock.enabled = false;
+                //presentDigitalClock.enabled = false;
+                //pastText.text = "0";
+                //presentText.text = "0";
                 presentOn = true;
-                digitalClock.takingAway = false;
+                //digitalClock.takingAway = false;
 
             }
         }
@@ -95,7 +95,7 @@ public class Plate : MonoBehaviour
             {
                 ButtonOn();
                 futureOn = true;
-                digitalClock.takingAway = false;
+                //digitalClock.takingAway = false;
             }
         }
     }
@@ -110,7 +110,7 @@ public class Plate : MonoBehaviour
                 if (other.gameObject.tag == "CubePast")
                 {
                     ButtonOff();
-                    pastDigitalClock.enabled = true;
+                    //pastDigitalClock.enabled = true;
                     pastOn = false;
                 }
             }
@@ -119,8 +119,8 @@ public class Plate : MonoBehaviour
                 if (other.gameObject.tag == "CubePresent")
                 {
                     ButtonOff();
-                    pastDigitalClock.enabled = true;
-                    presentDigitalClock.enabled = true;
+                    //pastDigitalClock.enabled = true;
+                    //presentDigitalClock.enabled = true;
                     presentOn = false;
                 }
             }
@@ -151,7 +151,7 @@ public class Plate : MonoBehaviour
         cordMeshRenderer.material = OnMaterial;
         cord2MeshRenderer.material = OnMaterial;
         signMeshRenderer.material = OnMaterial;
-        digitalClock.isOn = true;
+        //digitalClock.isOn = true;
     }
     private void ButtonOff()
     {
@@ -159,7 +159,7 @@ public class Plate : MonoBehaviour
         cordMeshRenderer.material = OffMaterial;
         cord2MeshRenderer.material = OffMaterial;
         signMeshRenderer.material = OffMaterial;
-        digitalClock.isOn = false;
+        //digitalClock.isOn = false;
     }
 
 
