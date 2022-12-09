@@ -50,12 +50,12 @@ public class LineEditor : EditorWindow
 
         if (line != null)
         {
-            if (points.Count > 1);
-            { 
+      /*       if (points.Count > 1);
+            {  */
                 LoadExistingLine(line);
                 GenerateLine();
                 OnDrawHandles();
-            }
+           // }
         }
 
     }
