@@ -7,15 +7,15 @@ public class ObjectiveHolder : MonoBehaviour
 {
     //all objectives for this room.
     private List<Objective> objectives;
-    private BoxCollider collider;
+    private BoxCollider boxCollider;
 
     //the objective with the lowest index on the list.
     [HideInInspector] public Vector3 currentObjective { get; private set; }
 
     private void Start()
     {
-        collider = GetComponent<BoxCollider>();
-        collider.isTrigger = true;
+        boxCollider = GetComponent<BoxCollider>();
+        boxCollider.isTrigger = true;
         GetChildren();
     }
 
