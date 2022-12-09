@@ -14,14 +14,15 @@ public class TimezoneChangeEditor : EditorWindow
     }*/
 
     public static TimeTravelPeriod currentTimezone;
+    public static bool editorIsEnabled;
     private static Dictionary<GameObject, TimeTravelPeriod> ttosInScene;
 
     [MenuItem("Tools/EnableTimezoneOption")]
     public static void Enable()
     {
         LoadCurrentTimezone();
-        InitializeTTOManagers();
-        InitializeObjectDictionary();
+        ActivateObjectsByTimezone();
+        editorIsEnabled = true;
         SceneView.duringSceneGui += DuringSceneGUI;
     }
 
@@ -29,7 +30,7 @@ public class TimezoneChangeEditor : EditorWindow
     public static void Disable()
     {
         SaveCurrentTimezone();
-        ttosInScene.Clear();
+        editorIsEnabled = false;
         SceneView.duringSceneGui -= DuringSceneGUI;
     }
 
@@ -71,6 +72,7 @@ public class TimezoneChangeEditor : EditorWindow
         EditorPrefs.SetInt("TimezoneChangeEditor_currentTimezone", currentTimezone);
     }
 
+
     private static void DuringSceneGUI(SceneView sceneview)
     {
         Handles.BeginGUI();
@@ -79,9 +81,7 @@ public class TimezoneChangeEditor : EditorWindow
         currentTimezone = (TimeTravelPeriod)EditorGUI.EnumPopup(new Rect(5, 10, 67, 15), currentTimezone);
         if (EditorGUI.EndChangeCheck())
         {
-            ActivateTimezone();
-            //PrintObjects();
-            //ChangeTimezone();
+            ActivateObjectsByTimezone();
         }
 
         Handles.EndGUI();
@@ -103,71 +103,141 @@ public class TimezoneChangeEditor : EditorWindow
         }
     }*/
 
-    private static void InitializeTTOManagers()
+
+    /*private static void InitializeTTOManagers()
     {
         TimeTravelObjectManager[] ttoManagers = FindObjectsOfType<TimeTravelObjectManager>();
         for (var i = 0; i < ttoManagers.Length; ++i)
         {
             ttoManagers[i].Awake();
         }
-    }
+    }*/
 
-    private static void InitializeObjectDictionary()
+    /*public static void ActivateTimezone()
     {
-        ttosInScene = new Dictionary<GameObject, TimeTravelPeriod>();
+        ActivateObjectsByTimezone();
 
-        TimeTravelObject[] timeTravelObjects = Resources.FindObjectsOfTypeAll<TimeTravelObject>();
-        if (timeTravelObjects.Length > 0)
-
-        for (var i = 0; i < timeTravelObjects.Length; ++i)
+        foreach (KeyValuePair<GameObject, TimeTravelPeriod> tto in ttosInScene)
         {
-            TimeTravelPeriod timezone;
-
-                if (timeTravelObjects[i].timeTravelPeriod == TimeTravelPeriod.Past)//(timeTravelObjects[i].pastSelf != null && timeTravelObjects[i].pastSelf.pastSelf != null)
-                {
-                    timezone = TimeTravelPeriod.Past;
-                }
-                else if (timeTravelObjects[i].timeTravelPeriod == TimeTravelPeriod.Present)//(timeTravelObjects[i].pastSelf != null)
-                {
-                    timezone = TimeTravelPeriod.Present;
-                }
-                else if (timeTravelObjects[i].timeTravelPeriod == TimeTravelPeriod.Future)
-                {
-                    timezone = TimeTravelPeriod.Future;
-                }
-                else
-                {
-                    timezone = TimeTravelPeriod.Dummy;
-                }
-            ttosInScene.Add(timeTravelObjects[i].gameObject, timezone);
-            //Debug.Log(timeTravelObjects[i].name + ": " + timezone);
-        }
-    }
-
-    private static void ActivateTimezone()
-    {
-        foreach(KeyValuePair<GameObject, TimeTravelPeriod> tto in ttosInScene)
-        {
-            if(tto.Value == currentTimezone)
+            if (currentTimezone == TimeTravelPeriod.Dummy)
             {
                 tto.Key.SetActive(true);
             }
             else
             {
-                tto.Key.SetActive(false);
+                if (tto.Value == currentTimezone)
+                {
+                    tto.Key.SetActive(true);
+                }
+                else
+                {
+                    tto.Key.SetActive(false);
+                }
             }
         }
+    }*/
+
+
+    public static void ActivateObjectsByTimezone()
+    {
+        TimeTravelObjectManager[] timeTravelManagers = Resources.FindObjectsOfTypeAll<TimeTravelObjectManager>();
+
+        if (timeTravelManagers.Length > 0)
+
+            for (var i = 0; i < timeTravelManagers.Length; ++i)
+            {
+                ActivateObjects(timeTravelManagers[i]);
+            }
     }
 
-    private static void PrintObjects()
+
+    private static void ActivateObjects(TimeTravelObjectManager ttoManager)
     {
-        foreach (KeyValuePair<GameObject, TimeTravelPeriod> tto in ttosInScene)
+        GameObject past = null;
+        GameObject present = null;
+        GameObject future = null;
+
+        if (ttoManager.Past)
         {
-            Debug.Log(tto.Key.name + ": " + tto.Value);
+            past = ttoManager.Past.gameObject;
+        }
+
+        if (ttoManager.Present)
+        {
+            present = ttoManager.Present.gameObject;
+        }
+
+        if (ttoManager.Future)
+        {
+            future = ttoManager.Future.gameObject;
+        }
+
+        switch (currentTimezone)
+        {
+            case TimeTravelPeriod.Dummy:
+                if (past != null)
+                {
+                    past.SetActive(true);
+                }
+                if (present != null)
+                {
+                    present.SetActive(true);
+                }
+                if (future != null)
+                {
+                    future.SetActive(true);
+                }
+                break;
+
+            case TimeTravelPeriod.Past:
+                if (past != null)
+                {
+                    past.SetActive(true);
+                }
+                if (present != null)
+                {
+                    present.SetActive(false);
+                }
+                if (future != null)
+                {
+                    future.SetActive(false);
+                }
+                break;
+
+            case TimeTravelPeriod.Present:
+                if (past != null)
+                {
+                    past.SetActive(false);
+                }
+                if (present != null)
+                {
+                    present.SetActive(true);
+                }
+                if (future != null)
+                {
+                    future.SetActive(false);
+                }
+                break;
+
+            case TimeTravelPeriod.Future:
+                if (past != null)
+                {
+                    past.SetActive(false);
+                }
+                if (present != null)
+                {
+                    present.SetActive(false);
+                }
+                if (future != null)
+                {
+                    future.SetActive(true);
+                }
+                break;
         }
     }
 
-    private static void AddTTOToDictionary(GameObject go, TimeTravelPeriod timezone)
+
+    public static void AddTTOToDictionary(GameObject go, TimeTravelPeriod timezone)
     {
         // implement
         ttosInScene.Add(go, timezone);
