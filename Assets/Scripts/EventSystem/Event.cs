@@ -72,4 +72,8 @@ namespace CallbackSystem {
             Debug.Log(vignette);
         }
     }
+    public class ButtonEvent : Event
+    {
+        public bool isOn; 
+    }
 }
