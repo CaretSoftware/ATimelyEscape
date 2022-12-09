@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using CallbackSystem;
 using RatCharacterController;
-using UnityEngine;
 using StateMachines;
 using TMPro;
+using UnityEngine;
 
 public class TimeTravelManager : MonoBehaviour {
     private StateMachine stateMachine;
@@ -98,13 +98,21 @@ namespace StateMachines {
 
         public override void Run() {
             if (TimeTravelManager.currentPeriod != TimeTravelManager.desiredPeriod) {
+                
+                LayerMask mask = 0;
+                switch(TimeTravelManager.desiredPeriod){
+                    case TimeTravelPeriod.Past: mask = LayerMask.GetMask("PastTimePeriod"); break;
+                    case TimeTravelPeriod.Present: mask = LayerMask.GetMask("PresentTimePeriod"); break;
+                    case TimeTravelPeriod.Future: mask = LayerMask.GetMask("FutureTimePeriod"); break;
+                }
+
                 var cols = Physics.OverlapCapsule(
                     new Vector3(TimeTravelManager.playerTransform.position.x,
                         TimeTravelManager.playerTransform.position.y + 0.1f,
                         TimeTravelManager.playerTransform.position.z),
                     new Vector3(TimeTravelManager.playerTransform.position.x,
                         TimeTravelManager.playerTransform.position.y - 0.1f,
-                        TimeTravelManager.playerTransform.position.z), 0.05f, LayerMask.GetMask("OtherTimePeriod"));
+                        TimeTravelManager.playerTransform.position.z), 0.05f, mask);
 
                 if (cols.Length == 0 || cols.All(c => c.isTrigger)) {
                     State nextState = StateMachine.stateDict[
@@ -116,7 +124,7 @@ namespace StateMachines {
                     TimeTravelManager.desiredPeriod = TimeTravelManager.currentPeriod;
                     Debug.LogError("You tried Time Travelling into another object!");
 
-                    CallHintAnimation callHint = new CallHintAnimation() { animationName = "TravelWarning",  waitForTime = 0.5f};
+                    CallHintAnimation callHint = new CallHintAnimation() { animationName = "TravelWarning", waitForTime = 0.5f };
                     callHint.Invoke();
 
                     //TimeTravelManager.collisionWarning.ShowWarning();

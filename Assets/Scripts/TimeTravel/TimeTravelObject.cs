@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CallbackSystem;
-using UnityEngine;
 using StateMachines;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class TimeTravelObject : MonoBehaviour {
@@ -15,11 +15,15 @@ public class TimeTravelObject : MonoBehaviour {
     private StateMachine stateMachine;
     private List<Renderer> renderers;
     private List<Renderer> renderers2 = new List<Renderer>();
+    private List<TimeTravelDisplacement> displacements = new List<TimeTravelDisplacement>();
+    private List<Material[]> materialsList = new List<Material[]>();
 
     private int numColliders = 0;
     public GameObject previewBoxObject { get; set; }
     public WireBox wireBox { get; set; }
     public bool IsActive { get; private set; }
+    public TimeTravelPeriod timeTravelPeriod { get; set; }
+
 
     private List<Component> allComponents;
 
@@ -28,12 +32,18 @@ public class TimeTravelObject : MonoBehaviour {
 
     public List<Renderer> OrderedRenderers { get => renderers2; private set => renderers2 = value; }
 
+    public List<TimeTravelDisplacement> OrderedDisplacements {
+        get => displacements;
+        private set => displacements = value;
+    }
+
+    public List<Material[]> OrderedMaterials { get => materialsList; private set => materialsList = value; }
 
     public void SetUpTimeTravelObject(TimeTravelObjectManager manager, TimeTravelObject pastSelf = null) {
         this.manager = manager;
         allComponents = GetComponents<Component>().ToList();
         allComponents.AddRange(GetComponentsInChildren<Component>());
-        GatherRenderers(transform);
+        GatherRenderersMatsAndDisplacements(transform);
 
         switch (manager.ObjectState) {
             case TimeTravelObjectState.PrefabChanging:
@@ -57,7 +67,7 @@ public class TimeTravelObject : MonoBehaviour {
                 }
 
                 TimeTravelManager.MovableObjects.Add(Rigidbody);
-                DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
+                if (Application.isPlaying) DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
                 break;
 
             case TimeTravelObjectState.SwitchingMaterial:
@@ -70,15 +80,16 @@ public class TimeTravelObject : MonoBehaviour {
         }
     }
 
-    public void GatherRenderers(Transform currentTransform) {
-        Renderer temp;
-        for (int i = 0; i < currentTransform.childCount; i++) {
-            temp = currentTransform.GetChild(i).GetComponent<Renderer>();
-            if (temp != null) {
-                renderers2.Add(temp);
-                GatherRenderers(temp.transform);
-            }
+    public void GatherRenderersMatsAndDisplacements(Transform currentTransform) {
+        Renderer temp = currentTransform.GetComponent<Renderer>();
+        if (temp != null) {
+            renderers2.Add(temp);
+            displacements.Add(temp.gameObject.GetOrAddComponent<TimeTravelDisplacement>());
+            OrderedMaterials.Add(temp.materials);
         }
+
+        for (int i = 0; i < currentTransform.childCount; i++)
+            GatherRenderersMatsAndDisplacements(currentTransform.GetChild(i).transform);
     }
 
     private void CheckRenderersAndMaterialsMatch() {
@@ -131,7 +142,7 @@ public class TimeTravelObject : MonoBehaviour {
                     if (t.IsSubclassOf(typeof(Behaviour)) && t != typeof(TimeTravelObject) &&
                         t != typeof(NavMeshAgent) && t != typeof(NavMeshAgentHandler))
                         ((Behaviour)c).enabled = active;
-                    else if (t.IsSubclassOf(typeof(Renderer))) ((Renderer)c).enabled = active;
+                    // else if (t.IsSubclassOf(typeof(Renderer))) ((Renderer)c).enabled = active;
                 }
             }
 
@@ -142,24 +153,22 @@ public class TimeTravelObject : MonoBehaviour {
     }
 
     private void UpdateColliderLayers(Transform transformToUpdate, bool active) {
+        string timePeriodLayerName = "";
+
+        switch(timeTravelPeriod){
+            case TimeTravelPeriod.Past: timePeriodLayerName = "PastTimePeriod"; break;
+            case TimeTravelPeriod.Present: timePeriodLayerName = "PresentTimePeriod"; break;
+            case TimeTravelPeriod.Future: timePeriodLayerName = "FutureTimePeriod"; break;
+        }
+
         transformToUpdate.gameObject.layer = LayerMask.NameToLayer(active
             ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
-            : "OtherTimePeriod");
+            : timePeriodLayerName);
         for (int i = 0; i < transformToUpdate.childCount; i++) {
             transformToUpdate.GetChild(i).gameObject.layer = LayerMask.NameToLayer(active
                 ? (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove ? "Cube" : "Default")
-                : "OtherTimePeriod");
+                : timePeriodLayerName);
             UpdateColliderLayers(transformToUpdate.GetChild(i), active);
-        }
-    }
-
-    private void Update() {
-        if (manager.ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove && IsActive) {
-            stateMachine.Run();
-            if (Input.GetKey(KeyCode.A)) Rigidbody.AddForce(Vector3.left * 10f, ForceMode.Force);
-            if (Input.GetKey(KeyCode.D)) Rigidbody.AddForce(Vector3.right * 10f, ForceMode.Force);
-            if (Input.GetKey(KeyCode.W)) Rigidbody.AddForce(Vector3.forward * 10f, ForceMode.Force);
-            if (Input.GetKey(KeyCode.S)) Rigidbody.AddForce(Vector3.back * 10f, ForceMode.Force);
         }
     }
 

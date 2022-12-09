@@ -2,49 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations.Rigging;
 
 public class CaptureNode : Node
 {
-    //private GameOverScreen gameOverScreen;
-    private Transform checkpoint;
+    private MultiAimConstraint multiAimConstraint;
+    private ChainIKConstraint chainIKConstraint;
     private NavMeshAgent agent;
-    private Transform target;
+    private Animator animator;
+
     private Transform agentTransform;
+    private Transform handIKTarget;
+    private Transform checkpoint;
+    private Transform player;
 
     private float captureDistance;
     private float destinationDistance;
-    private bool endScreenTriggered;
 
-    public CaptureNode(NavMeshAgent agent, Transform target, float captureDistance, Transform checkpoint, Transform agentTransform)
+    public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform checkpoint,
+        Transform agentTransform, Transform handIKTarget, Animator animator, MultiAimConstraint multiAimConstraint, ChainIKConstraint chainIKConstraint)
     {
         this.agent = agent;
-        this.target = target;
+        this.player = player;
         this.captureDistance = captureDistance;
         this.checkpoint = checkpoint;
         this.agentTransform = agentTransform;
+        this.handIKTarget = handIKTarget;
+        this.animator = animator;
+        this.multiAimConstraint = multiAimConstraint;
+        this.chainIKConstraint = chainIKConstraint;
     }
-
 
     public override NodeState Evaluate()
     {
-        //Debug.Log("Trying to capture");
-        destinationDistance = Vector3.Distance(target.position, agentTransform.transform.position);
-        if (destinationDistance < captureDistance)
+        destinationDistance = Vector3.Distance(player.position, agentTransform.transform.position);
+        if (destinationDistance < captureDistance - 0.1f)
         {
-            //Debug.Log("CAPTURED");
-            if (!endScreenTriggered)
-            {
-                target.transform.position = checkpoint.position;
-                endScreenTriggered = true;
-            }
-            agent.isStopped = true;
+            handIKTarget.position = player.position;
+            //animation to lerp handIKTarget towards player position
+            //if handIKTarget reach player, transform player position to checkpoint
+            //if (animator.GetIKPositionWeight(AvatarIKGoal.RightHand))
+                player.transform.position = checkpoint.position;
+                agent.isStopped = true;
             return NodeState.FAILURE;
-            //return NodeState.SUCCESS;
         }
         else
         {
             agent.isStopped = false;
-            agent.SetDestination(target.position);
+            agent.SetDestination(player.position);
             return NodeState.RUNNING;
         }
     }
