@@ -9,7 +9,7 @@ public class CameraZoom : MonoBehaviour
     [SerializeField] private Camera firstPersonCamera;
     void Start()
     { 
-        
+        firstPersonCamera.enabled = false;
     }
 
     // Update is called once per frame
