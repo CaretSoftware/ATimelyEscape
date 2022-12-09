@@ -9,14 +9,14 @@ public class PlateHolder : MonoBehaviour
     [SerializeField] private GameObject past;
     [SerializeField] private GameObject present;
     [SerializeField] private GameObject future;
-    [SerializeField] private GameObject futureTimer;
+    //[SerializeField] private GameObject futureTimer;
     [SerializeField] private GameObject doneCord;
     [SerializeField] private GameObject doneCord2;
     [SerializeField] private GameObject doneCord3;
     [SerializeField] private Material onMaterial;
     [SerializeField] private GameObject wellDoneText;
 
-
+    private Animator hatchAnim;
     private Plate pastPlate;
     private Plate presentPlate;
     private Plate futurePlate;
@@ -34,13 +34,14 @@ public class PlateHolder : MonoBehaviour
         pastPlate = past.GetComponent<Plate>();
         presentPlate = present.GetComponent<Plate>();
         futurePlate = future.GetComponent<Plate>();
-        futureTimerClock = futureTimer.GetComponent<DigitalClock>();
+        //futureTimerClock = futureTimer.GetComponent<DigitalClock>();
+        hatchAnim = hatch.GetComponent<Animator>();
     }
     private void Update()
     {
-        if (pastPlate.pastOn && presentPlate.presentOn && futurePlate.futureOn && futureTimerClock.futureDone)
+        if (pastPlate.pastOn && presentPlate.presentOn && futurePlate.futureOn )//&& futureTimerClock.futureDone)
         {
-            hatch.GetComponent<Animator>().SetBool("Open", true);
+            hatchAnim.SetBool("Open", true);
             candyFeeder.GetComponent<Animator>().SetBool("Open", true);
             pastPlate.GetComponent<MeshRenderer>().material = onMaterial;
             presentPlate.GetComponent<MeshRenderer>().material = onMaterial;

@@ -42,47 +42,38 @@ namespace CallbackSystem {
         public TimeTravelPeriod to;
     }
 
-
     // this looks feels very redundant, looking into alternative solutions.
-    public class PhysicsSimulationComplete : DebugEvent
-    {
+    public class PhysicsSimulationComplete : DebugEvent {
         public TimeTravelPeriod from;
         public TimeTravelPeriod to;
     }
 
-    public class CheckpointEvent : Event
-    {
+    public class TimeDisplacementComplete : DebugEvent { }
+
+    public class CheckpointEvent : Event {
         public Transform respawnPoint;
 
-        public CheckpointEvent(Transform respawnPoint)
-        {
-            this.respawnPoint = respawnPoint;
-        }
+        public CheckpointEvent(Transform respawnPoint) { this.respawnPoint = respawnPoint; }
     }
 
-    public class FailStateEvent : Event
-    {
+    public class FailStateEvent : Event { }
 
-    }
-
-    public class ChargeChangedEvent : Event
-    {
+    public class ChargeChangedEvent : Event {
         public TimeTravelObject changedObject;
 
-        public ChargeChangedEvent(TimeTravelObject changedObject)
-        {
-            this.changedObject = changedObject;
-        }
+        public ChargeChangedEvent(TimeTravelObject changedObject) { this.changedObject = changedObject; }
     }
 
-    public class SetVignetteModifierEvent : Event
-    {
+    public class SetVignetteModifierEvent : Event {
         public Vignette vignette;
 
-        public SetVignetteModifierEvent(Vignette vignette)
-        {
+        public SetVignetteModifierEvent(Vignette vignette) {
             this.vignette = vignette;
             Debug.Log(vignette);
         }
+    }
+    public class ButtonEvent : Event
+    {
+        public bool isOn; 
     }
 }
