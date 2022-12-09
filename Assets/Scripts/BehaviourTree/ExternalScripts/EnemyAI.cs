@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations.Rigging;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -19,12 +20,14 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Rig Setup")]
     [SerializeField] private Transform handIKTarget;
-    [SerializeField] private Transform handBone;
 
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
     [HideInInspector] public bool activeAI;
 
+    private MultiAimConstraint multiAimConstraint;
+    private ChainIKConstraint chainIKConstraint;
+    private GameObject fullBodyRig;
     private EnemyFOV enemyFOV;
     private NavMeshHit hit;
     private Node topNode;
@@ -40,7 +43,6 @@ public class EnemyAI : MonoBehaviour
     private float deltaMagnitude;
     private float chaseRange;
     private float captureRange;
-    private float infrequentTimer = 0;
     private float onMeshThreshold = 3;
     private float smooth;
     private float dx;
@@ -56,6 +58,9 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         enemyFOV = GetComponent<EnemyFOV>();
+        fullBodyRig = GameObject.Find("FullBodyRig").transform.GetChild(0).gameObject;
+        chainIKConstraint = fullBodyRig.GetComponent<ChainIKConstraint>();
+        multiAimConstraint = fullBodyRig.GetComponent<MultiAimConstraint>();
         animator.applyRootMotion = true;
         agent.updatePosition = false;
         agent.updateRotation = true;
@@ -113,10 +118,10 @@ public class EnemyAI : MonoBehaviour
     private void ConstructBehaviourTreePersonnel()
     {
         GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, gameObject, idleActivityTimer);
-        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
+        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange, multiAimConstraint);
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, checkpoint, agentCenterTransform, handIKTarget, animator);
+        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, checkpoint, agentCenterTransform, handIKTarget, animator, multiAimConstraint, chainIKConstraint);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
         Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode });
@@ -150,22 +155,8 @@ public class EnemyAI : MonoBehaviour
     {
         if (agentCenterTransform != null)
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
         }
-    }
-
-    public void OnAnimationGrabbedItem()
-    {
-        playerTransform.SetParent(handBone, true);
-        playerTransform.position = handBone.position;
-    }
-
-    public void OnAnimationStoredItem()
-    {
-        playerTransform.SetParent(null, true);
-        playerTransform.position = checkpoint.position;
-        playerTransform.rotation = checkpoint.rotation; 
-        animator.SetBool("GrabItem", false);
     }
 }
