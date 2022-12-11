@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CallbackSystem;
+using UnityEngine.Events;
 
 public class Open : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Open : MonoBehaviour
     [SerializeField] private bool onlyPresent;
     [SerializeField] private bool onlyFuture;
     private Animator whatToOpenAnim;
-
+    //[SerializeField] private UnityEvent whatToDo;
     private void Start()
     {
         whatToOpenAnim = whatToOpen.GetComponent<Animator>();
@@ -21,11 +22,13 @@ public class Open : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        //whatToDo.Invoke();
         if(other.gameObject.tag == "Cube")
         {
             whatToOpenAnim.SetBool("Open", true);
             ButtonEvent buttonEvent = new ButtonEvent { };
             buttonEvent.Invoke();
+            
         }
         if (other.gameObject.tag == "CubePast" && onlyPast)
         {
@@ -42,6 +45,9 @@ public class Open : MonoBehaviour
     }
     private void ButtonOn(ButtonEvent e)
     {
+        if(e.open = this)
+        {
 
+        }
     }
 }
