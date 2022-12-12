@@ -12,7 +12,7 @@ public class Open : MonoBehaviour
     [SerializeField] private bool onlyPresent;
     [SerializeField] private bool onlyFuture;
     private Animator whatToOpenAnim;
-    //[SerializeField] private UnityEvent whatToDo;
+    //[SerializeField] private UnityEvent switchOn;
     private void Start()
     {
         whatToOpenAnim = whatToOpen.GetComponent<Animator>();
@@ -21,7 +21,7 @@ public class Open : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        //whatToDo.Invoke();
+        //switchOn.Invoke();
         if(other.gameObject.tag == "Cube")
         {
             whatToOpenAnim.SetBool("Open", true);

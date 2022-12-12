@@ -5,14 +5,21 @@ using UnityEngine.Events;
 
 public class SwitchOn : MonoBehaviour
 {
-    [SerializeField] private UnityEvent whatToDo;
-
+    [SerializeField] private UnityEvent switchOn;
+    [SerializeField] private UnityEvent switchOff;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (whatToDo != null && other.gameObject.tag == "Cube")
+        if (switchOn != null && other.gameObject.tag == "Cube")
         {
-            whatToDo.Invoke();
+            switchOn.Invoke();
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (switchOff != null && other.gameObject.tag == "Cube")
+        {
+            switchOff.Invoke();
         }
     }
 
