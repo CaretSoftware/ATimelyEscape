@@ -48,9 +48,11 @@ public class LineEditor : EditorWindow
             camTf = sceneView.camera;
         }
 
+        SetLineSelected();
+
         if (line != null)
         {
-            if (points.Count > 1);
+            if (points != null && points.Count > 1);
             { 
                 LoadExistingLine(line);
                 GenerateLine();
@@ -59,7 +61,6 @@ public class LineEditor : EditorWindow
         }
 
     }
-
 
     private void OnGUI()
     {
@@ -113,19 +114,15 @@ public class LineEditor : EditorWindow
 
         GUILayout.Space(20);
 
-        GUILayout.BeginHorizontal();
+        /*GUILayout.BeginHorizontal();
         GUILayout.Space(40);
         if (GUILayout.Button("Load selected", GUILayout.Height(25)))
         {
-            GameObject selectedObject = Selection.activeGameObject;
-            if (selectedObject && selectedObject != line && selectedObject.transform.CompareTag("Line"))
-            {
-                LoadExistingLine(selectedObject);
-            }
+            SetLineSelected();
         }
         GUILayout.Space(40);
         GUILayout.EndHorizontal();
-        GUILayout.Space(20);
+        GUILayout.Space(20);*/
 
 
         if (so.ApplyModifiedProperties())
@@ -134,6 +131,17 @@ public class LineEditor : EditorWindow
         };
 
         return;
+    }
+
+    
+    private void SetLineSelected()
+    {
+        GameObject selectedObject = Selection.activeGameObject;
+        if (selectedObject && selectedObject != line && selectedObject.transform.CompareTag("Line"))
+        {
+            line = selectedObject;
+            //LoadExistingLine(selectedObject);
+        }
     }
 
     private void AddPoint()
@@ -207,9 +215,10 @@ public class LineEditor : EditorWindow
         lineRenderer = line.AddComponent<LineRenderer>();
 
         var width = 0.2f;
-
-        lineRenderer.startWidth = width;
-        lineRenderer.endWidth = width;
+        AnimationCurve curve = new AnimationCurve();
+        curve.AddKey(0, width);
+        curve.AddKey(1, width);
+        lineRenderer.widthCurve = curve;
     }
 
     private void LoadExistingLine(GameObject selectedObject)
