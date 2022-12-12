@@ -9,9 +9,8 @@ public class Charger : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Cube")
+        if(other.gameObject.GetComponent<CubeCharge>() != null)
         {
-            Debug.Log(1);
             other.gameObject.GetComponent<CubeCharge>().Charging(charge, this);
         }
     }
