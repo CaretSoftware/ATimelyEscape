@@ -12,7 +12,7 @@ public class Objective : MonoBehaviour
     [SerializeField] private Material completeMaterial;
     private ObjectiveHolder parent;
     private Transform questlog;
-    private BoxCollider collider;
+    private BoxCollider boxCollider;
     private TextMeshProUGUI objectiveText;
     private MeshRenderer mr;
     private RectTransform rt;
@@ -23,10 +23,10 @@ public class Objective : MonoBehaviour
     {
         questlog = GameObject.Find("QuestLog").transform;
         parent = GetComponentInParent<ObjectiveHolder>();
-        collider = GetComponent<BoxCollider>();
+        boxCollider = GetComponent<BoxCollider>();
         mr = GetComponent<MeshRenderer>();
         mr.material = idleMaterial;
-        collider.isTrigger = true;
+        boxCollider.isTrigger = true;
         isComplete = false;
         gameObject.SetActive(false);
         

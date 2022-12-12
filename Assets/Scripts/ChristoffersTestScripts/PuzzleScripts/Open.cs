@@ -12,7 +12,7 @@ public class Open : MonoBehaviour
     [SerializeField] private bool onlyPresent;
     [SerializeField] private bool onlyFuture;
     private Animator whatToOpenAnim;
-
+    //[SerializeField] private UnityEvent switchOn;
     private void Start()
     {
         whatToOpenAnim = whatToOpen.GetComponent<Animator>();
@@ -21,11 +21,13 @@ public class Open : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        //switchOn.Invoke();
         if(other.gameObject.tag == "Cube")
         {
             whatToOpenAnim.SetBool("Open", true);
             ButtonEvent buttonEvent = new ButtonEvent { };
             buttonEvent.Invoke();
+            
         }
         if (other.gameObject.tag == "CubePast" && onlyPast)
         {
@@ -42,6 +44,9 @@ public class Open : MonoBehaviour
     }
     private void ButtonOn(ButtonEvent e)
     {
+        if(e.open = this)
+        {
 
+        }
     }
 }

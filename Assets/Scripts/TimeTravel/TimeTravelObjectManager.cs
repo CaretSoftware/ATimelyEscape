@@ -120,6 +120,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
             future?.SetUpTimeTravelObject(this, present);
         } else timeTravelObject.SetUpTimeTravelObject(this);
 
+
         if (Application.isPlaying) {
             TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
             PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
@@ -189,20 +190,13 @@ public class TimeTravelObjectManager : MonoBehaviour {
                 DisplacementsAndRenderers.Add(rendererID, new DisplacmentInfo[3]);
 
             switch (splitName[2].Substring(1, splitName[2].Length - 2).ToLower()) {
-                case "past":
-                    DisplacementsAndRenderers[rendererID][0] = info;
-                    break;
-                case "present":
-                    DisplacementsAndRenderers[rendererID][1] = info;
-                    break;
-                case "future":
-                    DisplacementsAndRenderers[rendererID][2] = info;
-                    break;
+                case "past": DisplacementsAndRenderers[rendererID][0] = info; break;
+                case "present": DisplacementsAndRenderers[rendererID][1] = info; break;
+                case "future": DisplacementsAndRenderers[rendererID][2] = info; break;
             }
         }
 
-        for (int i = 0; i < currentTransform.childCount; i++)
-            CategorizeRenderersForDisplacement(currentTransform.GetChild(i));
+        for (int i = 0; i < currentTransform.childCount; i++) CategorizeRenderersForDisplacement(currentTransform.GetChild(i));
     }
 
     private void Update() {
@@ -287,14 +281,11 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
         if (traveledFromIndex > -1 || traveledToIndex > -1) {
             foreach (var info in DisplacementsAndRenderers.Values) {
-                if (info[traveledFromIndex] != null) {
-                    info[traveledFromIndex].renderer.materials = info[traveledFromIndex].originalMaterials;
-                    info[traveledFromIndex].renderer.enabled = false;
-                }
+                for (int i = 0; i < 3; i++) {
+                    if (info[i] == null) continue;
+                    info[i].renderer.materials = info[i].originalMaterials;
+                    info[i].renderer.enabled = i == traveledToIndex ? true : false;
 
-                if (info[traveledToIndex] != null) {
-                    info[traveledToIndex].renderer.materials = info[traveledToIndex].originalMaterials;
-                    info[traveledToIndex].renderer.enabled = true;
                 }
             }
         }

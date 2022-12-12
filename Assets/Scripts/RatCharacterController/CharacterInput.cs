@@ -152,10 +152,10 @@ namespace RatCharacterController {
 			Transform playerTransform = _playerTransform;
 			Vector3 playerPosition = playerTransform.position;
 			// float playerScale = playerTransform.localScale.y;
-			float margin = 0.01f; //.1f * playerScale;
+			//float margin = 0.01f; //.1f * playerScale;
 			Ray ray = RayAtHalfHeight(playerTransform);
 			CapsuleCollider capsuleCollider = _collider;
-			float radius = 0.03f; // capsuleCollider.radius * playerScale;
+			//float radius = 0.03f; // capsuleCollider.radius * playerScale;
 			_playerForward = playerTransform.forward;
 
 			if (!_jumping && Grounded()) {
