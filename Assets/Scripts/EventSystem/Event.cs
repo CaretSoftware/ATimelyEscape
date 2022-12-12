@@ -72,4 +72,9 @@ namespace CallbackSystem {
             Debug.Log(vignette);
         }
     }
+    public class ButtonEvent : Event
+    {
+        public GameObject whatToOpen;
+        public Open open; 
+    }
 }

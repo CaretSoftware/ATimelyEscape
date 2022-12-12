@@ -13,7 +13,7 @@ public class TechnoVacuum : MonoBehaviour {
     [SerializeField] private AudioClip music;
     [SerializeField] private float minDistance;
     [SerializeField] private AnimationCurve curve;
-    [SerializeField] private GameObject light;
+    [SerializeField] private GameObject technoLight;
     private float bpm = 139;
 
     void Start() {
@@ -44,9 +44,9 @@ public class TechnoVacuum : MonoBehaviour {
 
     private IEnumerator LightShow() {
         isRunning = true;
-        light.SetActive(false);
+        technoLight.SetActive(false);
         yield return new WaitForSecondsRealtime(60f / bpm);
-        light.SetActive(true);
+        technoLight.SetActive(true);
         isRunning = false;
     }
 }
