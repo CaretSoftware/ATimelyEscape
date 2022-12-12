@@ -36,12 +36,15 @@ public class CaptureNode : Node
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(player.position, agentTransform.transform.position);
+        //animation to lerp handIKTarget towards player position
+        //if handIKTarget reach player, transform player position to checkpoint
+        //if (animator.GetIKPositionWeight(AvatarIKGoal.RightHand))
+        handIKTarget.position = player.position;
+        animator.SetTrigger("GrabTrigger");
+
         if (destinationDistance < captureDistance - 0.1f)
         {
             handIKTarget.position = player.position;
-            //animation to lerp handIKTarget towards player position
-            //if handIKTarget reach player, transform player position to checkpoint
-            //if (animator.GetIKPositionWeight(AvatarIKGoal.RightHand))
                 player.transform.position = checkpoint.position;
                 agent.isStopped = true;
             return NodeState.FAILURE;
