@@ -52,7 +52,7 @@ public class LineEditor : EditorWindow
 
         if (line != null)
         {
-            if (points != null && points.Count > 1);
+            if (points != null && points.Count > 1)
             { 
                 LoadExistingLine(line);
                 GenerateLine();
