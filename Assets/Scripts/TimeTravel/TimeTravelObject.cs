@@ -116,6 +116,8 @@ public class TimeTravelObject : MonoBehaviour {
         }
     }
 
+    private void Update() { stateMachine.Run(); }
+
     public void UpdateMaterials(TimeTravelPeriod period) {
         switch (period) {
             case TimeTravelPeriod.Past:
@@ -155,7 +157,7 @@ public class TimeTravelObject : MonoBehaviour {
     private void UpdateColliderLayers(Transform transformToUpdate, bool active) {
         string timePeriodLayerName = "";
 
-        switch(timeTravelPeriod){
+        switch (timeTravelPeriod) {
             case TimeTravelPeriod.Past: timePeriodLayerName = "PastTimePeriod"; break;
             case TimeTravelPeriod.Present: timePeriodLayerName = "PresentTimePeriod"; break;
             case TimeTravelPeriod.Future: timePeriodLayerName = "FutureTimePeriod"; break;
