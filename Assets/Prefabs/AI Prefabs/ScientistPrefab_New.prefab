@@ -266,7 +266,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.33
-  m_Speed: 1
+  m_Speed: 0.5
   m_Acceleration: 7
   avoidancePriority: 50
   m_AngularSpeed: 360
@@ -298,7 +298,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   handIKTarget: {fileID: 1862078598786630589}
-  handBone: {fileID: 0}
   agent: {fileID: 0}
   animator: {fileID: 0}
   activeAI: 0
@@ -489,6 +488,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1862078598786630589}
+  - component: {fileID: 1917962055}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -511,6 +511,18 @@ Transform:
   m_Father: {fileID: 1862078599184354537}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 180, y: 90, z: 0}
+--- !u!114 &1917962055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862078598786630586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33b2763023f39a94fba9f6726e1a70e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1862078598941953842
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,8 +604,8 @@ MonoBehaviour:
   - m_Transform: {fileID: 1862078598786630589}
     m_Style:
       shape: {fileID: 4300000, guid: 707439f5f179a460987ecbb96364c8a9, type: 2}
-      color: {r: 1, g: 0, b: 0, a: 0.5}
-      size: 0.1
+      color: {r: 1, g: 0.70822835, b: 0, a: 0.5}
+      size: 0.15
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
@@ -645,8 +657,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_Root: {fileID: 0}
-    m_Tip: {fileID: 0}
+    m_Root: {fileID: 6225519464642886834}
+    m_Tip: {fileID: 4894016730336746909}
     m_Target: {fileID: 1862078598786630589}
     m_ChainRotationWeight: 1
     m_TipRotationWeight: 1
@@ -668,7 +680,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 0}
+    m_ConstrainedObject: {fileID: 4880524484917859404}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
@@ -695,7 +707,7 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: -90, y: 0, z: 0}
+    m_Offset: {x: 0, y: 90, z: 0}
     m_MinLimit: -80
     m_MaxLimit: -80
     m_AimAxis: 4
