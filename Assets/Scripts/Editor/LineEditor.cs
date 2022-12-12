@@ -206,15 +206,14 @@ public class LineEditor : EditorWindow
         line = new GameObject("Line");
         line.AddComponent<SpriteRenderer>();
         Undo.RegisterCreatedObjectUndo(line, "Create New Line");
-        line.transform.position = camTf.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 5f));
-
+        line.transform.position = camTf.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.7f));
 
         line.tag = "Line";
 
         points = new List<GameObject>();
         lineRenderer = line.AddComponent<LineRenderer>();
 
-        var width = 0.2f;
+        var width = 0.05f;
         AnimationCurve curve = new AnimationCurve();
         curve.AddKey(0, width);
         curve.AddKey(1, width);
