@@ -28,7 +28,7 @@ public class TeleportPad : MonoBehaviour
     private void OnTriggerEnter(Collider target)
     {
         if (active && !OnCooldown)
-            if (target.transform.tag.Equals("Player") || target.transform.transform.Equals("Cube"))
+            if (target.transform.tag.Equals("Player") || target.transform.tag.Equals("Cube"))
                 Teleport(target.transform);
     }
 
