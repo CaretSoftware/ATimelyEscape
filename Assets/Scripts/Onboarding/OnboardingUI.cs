@@ -22,7 +22,7 @@ public class OnboardingUI : MonoBehaviour {
         if (e.DebugText != null) print(e.DebugText);
 
         switch (e.DebugText) {
-            case "climbing":
+            case "interactions":
                 CreateButton(2, "CUBE & CLIMB TUTORIAL");
                 StartCoroutine(FadeNotification(true, "Cubes and climbing Tutorial Unlocked!"));
                 break;
@@ -35,7 +35,7 @@ public class OnboardingUI : MonoBehaviour {
                 StartCoroutine(FadeNotification(true, "Time Travel Tutorial Unlocked!"));
                 break;
             case "timeTravelFuture":
-                CreateButton(12, "TIME TRAVEL TUTORIAL");
+                CreateButton(12, "FUTURE TUTORIAL");
                 StartCoroutine(FadeNotification(true, "Back to the future Tutorial Unlocked!"));
                 break;
             case "scientist":

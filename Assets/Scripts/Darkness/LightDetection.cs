@@ -89,6 +89,7 @@ namespace CallbackSystem
                     {
                        
                         fail.Invoke();
+                        OnboardingHandler.TimeTravelFutureDiscovered = true;
                     }
                     else
                         timer = 0f;

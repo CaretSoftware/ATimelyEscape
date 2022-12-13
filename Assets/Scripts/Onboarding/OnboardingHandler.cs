@@ -4,22 +4,24 @@ using UnityEngine;
 using CallbackSystem;
 
 public static class OnboardingHandler {
-    private static bool climbingAndCubeDiscovered;
+    private static bool cubeInteractionsDiscovered;
     private static bool cubeChargeDiscovered;
     private static bool timeTravelDiscovered;
     private static bool timeTravelFutureDiscovered;
     private static bool scientistDiscovered;
     private static bool vacuumCleanerDiscovered;
 
-    public static bool ClimbingAndCubeDiscovered {
-        get => climbingAndCubeDiscovered; set {
-            if (!climbingAndCubeDiscovered) {
-                climbingAndCubeDiscovered = value
-                    ; if (value) { DebugEvent e = new DebugEvent() { DebugText = "climbing" }; e.Invoke(); }
+    //CubePush
+    public static bool CubeInteractionsDiscovered {
+        get => cubeInteractionsDiscovered; set {
+            if (!cubeInteractionsDiscovered) {
+                cubeInteractionsDiscovered = value
+                    ; if (value) { DebugEvent e = new DebugEvent() { DebugText = "interactions" }; e.Invoke(); }
             }
         }
     }
 
+    //incubator
     public static bool CubeChargeDiscovered {
         get => cubeChargeDiscovered; set {
             if (!cubeChargeDiscovered) {
@@ -29,6 +31,7 @@ public static class OnboardingHandler {
         }
     }
 
+    //incubator
     public static bool TimeTravelDiscovered {
         get => timeTravelDiscovered; set {
             if (!timeTravelDiscovered) {
@@ -38,7 +41,7 @@ public static class OnboardingHandler {
         }
     }
 
-    // includes darkness
+    // light detection
     public static bool TimeTravelFutureDiscovered {
         get => timeTravelFutureDiscovered; set {
             if (!timeTravelFutureDiscovered) {
