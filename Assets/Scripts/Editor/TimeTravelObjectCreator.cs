@@ -252,7 +252,6 @@ public class TimeTravelObjectCreator : EditorWindow
         TimeTravelObjectManager managerComponent = ttoManager.GetComponent<TimeTravelObjectManager>();
         managerComponent.CanBeMovedByPlayer = canBeMovedByPlayer;
         managerComponent.CanCollideOnTimeTravel = canCollideOnTimeTravel;
-        managerComponent.ChangesMaterials = false;
         managerComponent.ChangesPrefab = true;
         // add material arrays with setters
     }
