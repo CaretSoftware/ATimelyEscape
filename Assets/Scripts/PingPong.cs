@@ -15,6 +15,7 @@ public class PingPong : MonoBehaviour {
    public void SetPower(float power) {
       mpb.SetFloat(PowerLevel, power);
       mr.SetPropertyBlock(mpb);
+        Debug.Log(power);
    }
 
    // private void Update() {
