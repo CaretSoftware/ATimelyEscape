@@ -369,9 +369,9 @@ MonoBehaviour:
   boneShape: 1
   drawBones: 1
   drawTripods: 0
-  boneSize: 3
+  boneSize: 1.5
   tripodSize: 1
-  boneColor: {r: 0, g: 1, b: 0.9017744, a: 0.3529412}
+  boneColor: {r: 1, g: 0.60990745, b: 0, a: 0.3529412}
   m_Transforms:
   - {fileID: 5912528323016904481}
   - {fileID: 4202709986610837085}
@@ -503,14 +503,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1862078598786630586}
-  m_LocalRotation: {x: 0.49599463, y: -0.49650314, z: 0.5034728, w: 0.50397325}
-  m_LocalPosition: {x: -0.6697348, y: 1.3161607, z: -0.028774548}
+  m_LocalRotation: {x: -0.4940114, y: 0.49348482, z: -0.5058534, w: -0.5064956}
+  m_LocalPosition: {x: -0.86973447, y: 1.3161806, z: -0.028774515}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1862078599184354537}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 180, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 91.42401, y: 179.767, z: -90.29999}
 --- !u!114 &1917962055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619,7 +619,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1862078599184354537}
   - component: {fileID: 1862078599184354539}
-  - component: {fileID: 1862078599184354536}
   m_Layer: 0
   m_Name: FullBodyRigConstraints
   m_TagString: Untagged
@@ -657,69 +656,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_Root: {fileID: 6225519464642886834}
+    m_Root: {fileID: 2072646483622271025}
     m_Tip: {fileID: 4894016730336746909}
     m_Target: {fileID: 1862078598786630589}
-    m_ChainRotationWeight: 1
+    m_ChainRotationWeight: 0.174
     m_TipRotationWeight: 1
-    m_MaxIterations: 15
-    m_Tolerance: 0.0001
+    m_MaxIterations: 10
+    m_Tolerance: 0.01
     m_MaintainTargetPositionOffset: 1
     m_MaintainTargetRotationOffset: 1
---- !u!114 &1862078599184354536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1862078599184354518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Weight: 1
-  m_Data:
-    m_ConstrainedObject: {fileID: 4880524484917859404}
-    m_SourceObjects:
-      m_Length: 1
-      m_Item0:
-        transform: {fileID: 0}
-        weight: 1
-      m_Item1:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item2:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item3:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item4:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item5:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item6:
-        transform: {fileID: 0}
-        weight: 0
-      m_Item7:
-        transform: {fileID: 0}
-        weight: 0
-    m_Offset: {x: 0, y: 90, z: 0}
-    m_MinLimit: -80
-    m_MaxLimit: -80
-    m_AimAxis: 4
-    m_UpAxis: 2
-    m_WorldUpType: 0
-    m_WorldUpObject: {fileID: 0}
-    m_WorldUpAxis: 2
-    m_MaintainOffset: 0
-    m_ConstrainedAxes:
-      x: 1
-      y: 1
-      z: 1
 --- !u!1 &1871240765727901351
 GameObject:
   m_ObjectHideFlags: 0

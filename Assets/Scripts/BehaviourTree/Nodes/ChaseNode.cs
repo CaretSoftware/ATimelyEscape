@@ -6,8 +6,6 @@ using UnityEngine.Animations.Rigging;
 
 public class ChaseNode : Node
 {
-
-    private MultiAimConstraint multiAimConstraint;
     private NavMeshAgent agent;
     private Transform target;
     private Transform agentTransform;
@@ -15,13 +13,12 @@ public class ChaseNode : Node
     private float destinationDistance;
     private float triggerDistance;
 
-    public ChaseNode(Transform target, NavMeshAgent agent, Transform agentTransform, float triggerDistance, MultiAimConstraint multiAimConstraint)
+    public ChaseNode(Transform target, NavMeshAgent agent, Transform agentTransform, float triggerDistance)
     {
         this.target = target;
         this.agent = agent;
         this.agentTransform = agentTransform;
         this.triggerDistance = triggerDistance;
-        this.multiAimConstraint = multiAimConstraint;
     }
 
     public override NodeState Evaluate()
@@ -29,7 +26,6 @@ public class ChaseNode : Node
         destinationDistance = Vector3.Distance(target.position, agentTransform.position);
         if(destinationDistance > triggerDistance)
         {
-            //Debug.Log("Chasing");
             agent.isStopped = false;
             agent.SetDestination(target.position);
             return NodeState.RUNNING;
