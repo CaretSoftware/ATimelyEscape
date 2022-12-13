@@ -10,7 +10,7 @@ public class TeleportPad : MonoBehaviour
     private TeleportPad[] pads;
     private MeshRenderer mr;
     private NavMeshHit hit;
-    private bool active;
+    [SerializeField ]private bool active;
 
     [HideInInspector] public Material indicatorMaterial;
     [HideInInspector] public bool OnCooldown;
