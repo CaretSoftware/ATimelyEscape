@@ -72,9 +72,12 @@ namespace CallbackSystem {
             Debug.Log(vignette);
         }
     }
-    public class ButtonEvent : Event
-    {
+    public class ButtonEvent : Event {
         public GameObject whatToOpen;
-        public Open open; 
+        public Open open;
+    }
+
+    public class PauseEvent : DebugEvent {
+        public bool paused;
     }
 }

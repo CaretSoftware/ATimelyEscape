@@ -5,8 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using RatCharacterController;
 
-public class PauseMenuBehaviour : MonoBehaviour
-{
+public class PauseMenuBehaviour : MonoBehaviour {
     private IEnumerator currentCoroutine;
 
     private bool paused;
@@ -15,8 +14,7 @@ public class PauseMenuBehaviour : MonoBehaviour
 
     [SerializeField] private Slider slider;
 
-    private void Start()
-    {
+    private void Start() {
         Time.timeScale = 1;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -25,25 +23,22 @@ public class PauseMenuBehaviour : MonoBehaviour
         pauseMenyAnimator = gameObject.GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) && !paused)
-        {
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape) && !paused) {
             PauseGame();
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && paused)
-        {
+        } else if (Input.GetKeyDown(KeyCode.Escape) && paused) {
             UnPauseGame();
         }
     }
 
-    public void PauseGame()
-    {
-        if (paused)
-        {
+    public void PauseGame() {
+        if (paused) {
             Debug.Log("Error: Is Already Paused");
             return;
         }
+
+        CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = true };
+        pauseEvent.Invoke();
 
         CharacterInput.IsPaused(true);
 
@@ -71,13 +66,11 @@ public class PauseMenuBehaviour : MonoBehaviour
     private float pauseDelay = 1f;
 
     // To Slow down gamepspeed with unscaledDeltaTime
-    private IEnumerator PauseTime()
-    {
+    private IEnumerator PauseTime() {
         float time = 0;
         float startScale = Time.timeScale;
 
-        while (time < pauseDelay)
-        {
+        while (time < pauseDelay) {
             time += Time.unscaledDeltaTime;
 
             Time.timeScale = Mathf.Lerp(startScale, 0, time / pauseDelay);
@@ -86,9 +79,11 @@ public class PauseMenuBehaviour : MonoBehaviour
         }
     }
 
-    public void UnPauseGame()
-    {
+    public void UnPauseGame() {
         //Debug.Log("Info: Unpaused Game");
+
+        CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = false };
+        pauseEvent.Invoke();
 
         pauseMenyAnimator.Play("UnPause");
 
@@ -108,13 +103,11 @@ public class PauseMenuBehaviour : MonoBehaviour
     }
 
     // To speed up gamepspeed with unscaledDeltaTime 
-    private IEnumerator UnPauseTime()
-    {
+    private IEnumerator UnPauseTime() {
         float time = 0;
         float startScale = Time.timeScale;
 
-        while (time < pauseDelay)
-        {
+        while (time < pauseDelay) {
             time += Time.unscaledDeltaTime;
 
             Time.timeScale = Mathf.Lerp(startScale, 1, time / pauseDelay);
@@ -124,28 +117,22 @@ public class PauseMenuBehaviour : MonoBehaviour
     }
 
     // Method to load a scene by insert the index of wished scene presented in buildsettings
-    public void SelectScene(int sceneIndex)
-    {
-        if (sceneIndex < 0 || sceneIndex > SceneManager.sceneCount)
-        {
+    public void SelectScene(int sceneIndex) {
+        if (sceneIndex < 0 || sceneIndex > SceneManager.sceneCount) {
             Debug.Log("Error: Not valid SceneIndex: " + sceneIndex);
-        }
-        else
-        {
+        } else {
             SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
         }
     }
 
     // Method to quit the application anytime
-    public void QuitGame()
-    {
+    public void QuitGame() {
         Debug.Log("Info: Quit button has been Pressed");
 
         Application.Quit();
     }
 
-    public bool isPaused()
-    {
+    public bool isPaused() {
         return paused;
     }
 }
