@@ -243,47 +243,19 @@ public class TimeTravelObjectManager : MonoBehaviour {
     }
 
     private void HandleDisplacement(TimePeriodChanged e) {
-        /*         switch (e.from) {
-                    case TimeTravelPeriod.Past:
-                        if (!past) traveledFromIndex = -1;
-                        else traveledFromIndex = 0;
-                        break;
-                    case TimeTravelPeriod.Present:
-                        if (!present) traveledFromIndex = -1;
-                        else traveledFromIndex = 1;
-                        break;
-                    case TimeTravelPeriod.Future:
-                        if (!future) traveledFromIndex = -1;
-                        else traveledFromIndex = 2;
-                        break;
-                }
-
-                switch (e.to) {
-                    case TimeTravelPeriod.Past:
-                        if (!past) traveledToIndex = -1;
-                        else traveledToIndex = 0;
-                        break;
-                    case TimeTravelPeriod.Present:
-                        if (!present) traveledToIndex = -1;
-                        else traveledToIndex = 1;
-                        break;
-                    case TimeTravelPeriod.Future:
-                        if (!future) traveledToIndex = -1;
-                        else traveledToIndex = 2;
-                        break;
-                } */
         DetermineTimeTravelIndex(true, e.from);
         DetermineTimeTravelIndex(false, e.to);
 
-        if (traveledToIndex == -1 || traveledFromIndex == -1) return;
-
-        Material[] displacementMat = new Material[] { Resources.Load("TimeTravelDisplacement1") as Material };
-        foreach (var info in DisplacementsAndRenderers.Values) {
-            if (info[traveledFromIndex] == null || info[traveledToIndex] == null) continue;
-            info[traveledFromIndex].renderer.materials = displacementMat;
-            info[traveledToIndex].renderer.materials = displacementMat;
-            info[traveledFromIndex].displacement.Displace(info[traveledToIndex].renderer.transform);
+        if (traveledToIndex != -1 && traveledFromIndex != -1) {
+            Material[] displacementMat = new Material[] { Resources.Load("TimeTravelDisplacement1") as Material };
+            foreach (var info in DisplacementsAndRenderers.Values) {
+                if (info[traveledFromIndex] == null || info[traveledToIndex] == null) continue;
+                info[traveledFromIndex].renderer.materials = displacementMat;
+                info[traveledToIndex].renderer.materials = displacementMat;
+                info[traveledFromIndex].displacement.Displace(info[traveledToIndex].renderer.transform);
+            }
         }
+
 
         StartCoroutine(DisplacementComplete());
     }
@@ -307,14 +279,11 @@ public class TimeTravelObjectManager : MonoBehaviour {
         switch (ObjectState) {
             case TimeTravelObjectState.PrefabChanging:
             case TimeTravelObjectState.PrefabChangingPlayerMove:
-                if (past != null && past.wireBox == null &&
-                    ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
+                if (past != null && past.wireBox == null && ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
                     SetUpWireBox(past, Color.white);
-                if (present != null && present.wireBox == null &&
-                    ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
+                if (present != null && present.wireBox == null && ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
                     SetUpWireBox(present, Color.gray);
-                if (future != null && future.wireBox == null &&
-                    ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
+                if (future != null && future.wireBox == null && ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
                     SetUpWireBox(future, Color.blue);
 
                 past?.SetActive(e.to == TimeTravelPeriod.Past ? true : false);
