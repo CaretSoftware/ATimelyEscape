@@ -123,7 +123,7 @@ public class EnemyAI : MonoBehaviour
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange, multiAimConstraint);
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, checkpoint, agentCenterTransform, handIKTarget, animator, multiAimConstraint, chainIKConstraint);
+        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, checkpoint, agentCenterTransform, handIKTarget, animator, chainIKConstraint);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
         Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode });
@@ -151,6 +151,13 @@ public class EnemyAI : MonoBehaviour
             else
                 agent.transform.position = hit.position;
         }
+    }
+
+    public void SetPlayerTransformToCheckpoint()
+    {
+        playerTransform.position = checkpoint.position;
+        animator.SetTrigger("ReturnHandAction");
+
     }
 
     private void OnDrawGizmos()

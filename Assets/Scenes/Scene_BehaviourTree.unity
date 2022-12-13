@@ -1131,6 +1131,11 @@ Transform:
   m_Father: {fileID: 1498130051}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &360554251 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1862078598786630589, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+  m_PrefabInstance: {fileID: 1862078597984413641}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &378886590
 GameObject:
   m_ObjectHideFlags: 0
@@ -1719,7 +1724,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 576455565}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 1.449, z: 4.56}
+  m_LocalPosition: {x: 3.281, y: 0.883, z: 5.273}
   m_LocalScale: {x: 0.1, y: 0.2, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4003,7 +4008,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1529095305}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.23, y: 0, z: 5.16}
+  m_LocalPosition: {x: 2.25, y: 0.77, z: 13.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5323,10 +5328,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScientistPrefab_New
       objectReference: {fileID: 0}
+    - target: {fileID: 1862078598786630589, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5039733
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862078598786630589, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.49650317
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862078599156035364, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: drawTripods
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1862078599156035384, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
       propertyPath: checkpoint
       value: 
       objectReference: {fileID: 1529095306}
+    - target: {fileID: 1862078599156035384, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: handIKTarget
+      value: 
+      objectReference: {fileID: 360554251}
     - target: {fileID: 1862078599156035384, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
       propertyPath: activityWaypoints.Array.data[0]
       value: 
@@ -5349,6 +5370,26 @@ PrefabInstance:
       objectReference: {fileID: 576455569}
     - target: {fileID: 1862078599184354539, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
       propertyPath: m_Weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862078599184354539, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: m_Data.m_Target
+      value: 
+      objectReference: {fileID: 360554251}
+    - target: {fileID: 1862078599184354539, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: m_Data.m_Tolerance
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862078599184354539, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: m_Data.m_MaxIterations
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862078599184354539, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: m_Data.m_TipRotationWeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862078599184354539, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: m_Data.m_ChainRotationWeight
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2188142366783025077, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
@@ -5394,6 +5435,10 @@ PrefabInstance:
     - target: {fileID: 2188142366783025077, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5241621755766273487, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
+      propertyPath: m_WarningMessage
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fda8a73308b42eb4e973d055c6e769db, type: 3}
