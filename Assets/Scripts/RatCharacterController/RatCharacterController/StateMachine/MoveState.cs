@@ -3,8 +3,7 @@
 namespace NewRatCharacterController {
     public class MoveState : BaseState {
 
-        //private float inAirTime;
-        //private float transitionToAirStateTime = .1f;
+        private float _maxSlopeAngle = 40;
         
         private const string State = "MoveState";
         public override void Enter() {
@@ -19,7 +18,7 @@ namespace NewRatCharacterController {
             
             NewRatCharacter.HandleVelocity();
 
-            if (Vector3.Angle(NewRatCharacter.GroundNormal, Vector3.up) < 40)
+            if (Vector3.Angle(NewRatCharacter.GroundNormal, Vector3.up) < _maxSlopeAngle)
                 ApplyStaticFriction();
             else
                 AddGravityForce();

@@ -4,22 +4,19 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace NewRatCharacterController { 
-	[RequireComponent(typeof(CapsuleCollider)), DisallowMultipleComponent, SelectionBase]
+[RequireComponent(typeof(CapsuleCollider)), DisallowMultipleComponent, SelectionBase]
 public class NewRatCharacterController : MonoBehaviour {
 
 	private StateMachine _stateMachine;
 	private List<BaseState> _states = new List<BaseState> { new MoveState(), new JumpState(), new AirState(), new WallRunState(), new WallJumpState() };
 	private Collider[] _OverlapCollidersNonAlloc = new Collider[10];
+	
 	private Transform _camera;
+	public Transform Camera => _camera;
 	private Transform _transform;
-	private AnimationController _animationController;
-	public AnimationController AnimationController { 
-		get => _animationController;
-		private set => GetComponent<AnimationController>();
-	}
-
-	// Animation
-	private static readonly int DuckAnimationSpeedStringHash = Animator.StringToHash("Speed");
+	public Transform Transform => _transform;
+	private NewRatAnimationController _animationController;
+	public NewRatAnimationController AnimationController => _animationController;
 
 	// Collider
 	private CapsuleCollider _collider;
@@ -31,14 +28,13 @@ public class NewRatCharacterController : MonoBehaviour {
 	private const string Horizontal = "Horizontal";
 	private const string Vertical = "Vertical";
 	private Vector3 _inputMovement;
-	private bool _holdingDuck;
 	public bool PressedJump { get; private set; }
 	public bool HoldingJump { get; private set; }
 	public bool Jumped { get; private set; }
 	public Vector3 GroundNormal { get; private set; }
 	[HideInInspector] public Vector3 _velocity;
-
 	
+
 	[Space(10), Header("Character Controller Implementation Details")]
 	[SerializeField, Tooltip("LayerMask(s) the character should collide with")]
 	public LayerMask _collisionMask;
@@ -105,11 +101,6 @@ public class NewRatCharacterController : MonoBehaviour {
 	[SerializeField, Range(0.0f, 1.0f), Tooltip("Force affecting velocity")]
 	private float _airResistanceCoefficient = .5f;
 
-	
-	[Space(10), Header("\tAnimation")]
-	[SerializeField] 
-	private Animator ducking;
-
 	[ContextMenu("Reset Character Position")]
 	private void ResetCharacterPosition() {
 		_transform.position = Vector3.up;
@@ -118,7 +109,7 @@ public class NewRatCharacterController : MonoBehaviour {
 	
 	private void Awake() {
 		_transform = transform;
-		_animationController = FindObjectOfType<AnimationController>();
+		_animationController = GetComponent<NewRatAnimationController>();
 		_stateMachine = new StateMachine(this, _states);
 		_collider = GetComponent<CapsuleCollider>();
 		_camera = GetComponentInChildren<Camera>().transform;
@@ -127,17 +118,11 @@ public class NewRatCharacterController : MonoBehaviour {
 	private void Start() {
 		
 		_colliderRadius = _collider.radius;
-		//ducking.Play("Ducking");
-		//_point1 
-		//_point1Transform.localPosition = _collider.center + Vector3.up * (_collider.height / 2 - _colliderRadius);
-		//_point2 = _collider.center + Vector3.down * (_collider.height / 2 - _colliderRadius);
-		//_point2Transform.localPosition = _point2;
 	}
 	
 	private void Update() {
 		
 		_inputMovement = Vector3.zero;
-		// Ducking();
 		UpdateGrounded();
 		Input();
 		_stateMachine.Run();
@@ -145,20 +130,7 @@ public class NewRatCharacterController : MonoBehaviour {
 		ResolveOverlap();
 		
 		_transform.position += Time.deltaTime * _velocity;
-		RotateTransform();
-	}
-
-	
-	public void Ducking() {
-		
-		float animationProgress = ducking.GetCurrentAnimatorStateInfo(0).normalizedTime;
-		if (_holdingDuck && animationProgress >= 1.0f ||
-		    !_holdingDuck && animationProgress <= 0.0f) {
-			ducking.SetFloat(DuckAnimationSpeedStringHash, 0);
-			return;
-		}
-		
-		ducking.SetFloat(DuckAnimationSpeedStringHash, _holdingDuck ? 1 : -1);
+		//RotateTransform(); // TODO should this be commented out?
 	}
 
 	private void Input() {
@@ -166,12 +138,11 @@ public class NewRatCharacterController : MonoBehaviour {
 		float right = UnityEngine.Input.GetAxisRaw(Horizontal);
 		float forward = UnityEngine.Input.GetAxisRaw(Vertical);
 		
-		_inputMovement = new Vector3(right, 0.0f, forward);
+		_inputMovement = Quaternion.Euler(0, _camera.rotation.y,0)  * new Vector3(right, 0.0f, forward);
 		_inputMovement = InputToCameraProjection(_inputMovement);
 		if (_inputMovement.magnitude > 1.0f) // > 1.0f to keep thumbstick input from being normalized
 			_inputMovement.Normalize();
 
-		_holdingDuck = UnityEngine.Input.GetKey(KeyCode.LeftShift);
 		HoldingJump = UnityEngine.Input.GetButton(Jump);
 		PressedJump = UnityEngine.Input.GetButtonDown(Jump);
 		
@@ -193,11 +164,6 @@ public class NewRatCharacterController : MonoBehaviour {
 			_lastGroundedMoment = Time.time;
 		return !Grounded && _lastGroundedMoment + _coyoteTime > Time.time;
 	}
-	
-	// public bool IsGrounded() {
-	// 	
-	// 	return Grounded;
-	// }
 
 	private void UpdateGrounded() {
 		
@@ -227,23 +193,14 @@ public class NewRatCharacterController : MonoBehaviour {
 	}
 
 	public void HandleVelocity() {
-		
-		float right = UnityEngine.Input.GetAxisRaw(Horizontal);
-		float forward = UnityEngine.Input.GetAxisRaw(Vertical);
-		
-		Vector3 velocityInWorldSpace = _transform.InverseTransformDirection(_velocity);
-		
-		Vector3 velocityChange = Vector3.ProjectOnPlane( new Vector3(right, 0.0f, forward), GroundNormal);
 
 		Vector3 velocity = new Vector3( 
-				Velocity(velocityInWorldSpace.x, velocityChange.x), 
+				HandleAccelerationDecelerationVelocity(_velocity.x, _inputMovement.x), 
 				0.0f, 
-				Velocity(velocityInWorldSpace.z, velocityChange.z));
+				HandleAccelerationDecelerationVelocity(_velocity.z, _inputMovement.z));
 		
-		// velocity = Vector3.ClampMagnitude(velocity, _maxVelocity);
-
 		float verticalVelocity = _velocity.y;
-		_velocity = _transform.TransformDirection(velocity);
+		_velocity = velocity;
 		_velocity.y = verticalVelocity;
 		float angle = Vector3.Angle(Vector3.up, GroundNormal);
 		if (angle < 40 && angle != 0)
@@ -251,8 +208,7 @@ public class NewRatCharacterController : MonoBehaviour {
 
 		_velocity = Vector3.ClampMagnitude(_velocity, _maxVelocity);
 
-		float Velocity(float vel, float inp) {
-
+		float HandleAccelerationDecelerationVelocity(float vel, float inp) {
 			if (Mathf.Abs(inp) > float.Epsilon)
 				vel = Accelerate(vel, inp);
 			else
@@ -261,64 +217,22 @@ public class NewRatCharacterController : MonoBehaviour {
 			return vel;
 			
 			float Accelerate(float vel, float inp) {
-				
-				 return vel + inp * (
-					 //InclineMultiplier() * 
-					 ((ChangedDirection(inp, vel) ? _turnSpeedModifier : 1.0f) *
-					  _acceleration) * Time.deltaTime);
+				return vel + inp * (
+					((ChangedDirection(inp, vel) ? _turnSpeedModifier : 1.0f) *
+					 _acceleration) * Time.deltaTime);
 			}
 
 			float Decelerate(float vel) {
-				
 				if (Mathf.Abs(vel) < _deceleration * Time.deltaTime)
 					return 0.0f;
-				else
+				else {
 					return vel - _deceleration * Time.deltaTime * vel;
+				}
 			}
-		
-			float InclineMultiplier() => Ease.EaseInQuart(Mathf.Clamp01(Vector3.Dot(GroundNormal, Vector3.up)));
 			bool ChangedDirection(float inp, float vel) => inp > 0.0f && vel < 0.0f || inp < 0.0f && vel > 0.0f;
 		}
 	}
-	
-	public void Accelerate(Vector3 input) {
-		// TODO Handle acceleration and deceleration on x and z axis separately 
-		// TODO Clamp fallsSpeed outside of Acceleration 
-		
-		_velocity += input * (InclineMultiplier() * ((ChangedDirection() ? _turnSpeedModifier : 1.0f) *
-		                                             _acceleration) * Time.deltaTime);
 
-		// Clamp Velocities
-		float verticalVelocity = Mathf.Clamp(_velocity.y, -_terminalVelocity, _maxVelocity);
-		_velocity = Vector3.ProjectOnPlane(_velocity, Vector3.up);
-		_velocity = Vector3.ClampMagnitude(_velocity, _maxVelocity);
-		_velocity.y = verticalVelocity;
-
-		float InclineMultiplier() => Ease.EaseInQuart(Mathf.Clamp01(Vector3.Dot(GroundNormal, Vector3.up)));
-		bool ChangedDirection() => Vector3.Dot(input, _velocity) < _turnSpeedModifierThreshold;
-	}
-
-	public void Decelerate() {
-		
-		// TODO This might not have been the problem...
-		// Probably the turnSpeedModifier is increasing the velocity?
-		
-		Vector3 projection = Vector3.ProjectOnPlane(_velocity, GroundNormal);
-
-		if (VelocitySmallerThanDeceleration()) { // prevents vibration
-			_velocity.x = 0.0f;
-			_velocity.z = 0.0f;
-		} else {
-			float verticalVelocity = _velocity.y;
-			_velocity -= _deceleration * Time.deltaTime * _velocity;
-
-			//if (verticalVelocity <= 0.0f)
-				_velocity.y = verticalVelocity;
-		}
-		
-		bool VelocitySmallerThanDeceleration() => _deceleration * Time.deltaTime > projection.magnitude;
-	}
-	
 	public void UpdateVelocity() {
 		
 		normalForce = Normal.Force(_velocity, GroundNormal);
@@ -443,26 +357,5 @@ public class NewRatCharacterController : MonoBehaviour {
 		
 		_transform.rotation = Quaternion.LookRotation(lookDirection);
 	}
-
-	// private Vector3 _debugCollider;
-	// private Color _debugColor = new Color(10, 20, 30);
-	// private void OnDrawGizmos() {
-	// 	
-	// 	_debugCollider = _transform.position + _velocity * Time.deltaTime + Vector3.up * .5f;
-	// 	
-	// 	Gizmos.color = _debugColor;
-	// 	
-	// 	Gizmos.DrawWireSphere(_debugCollider, .5f);
-	// 	
-	// 	Gizmos.DrawLine(_debugCollider + Vector3.back * .5f, _debugCollider + Vector3.up + Vector3.back * .5f);
-	// 	
-	// 	Gizmos.DrawLine(_debugCollider + Vector3.forward * .5f, _debugCollider + Vector3.up + Vector3.forward * .5f);
-	// 	
-	// 	Gizmos.DrawLine(_debugCollider + Vector3.right * .5f, _debugCollider + Vector3.up + Vector3.right * .5f);
-	// 	
-	// 	Gizmos.DrawLine(_debugCollider + Vector3.left * .5f, _debugCollider + Vector3.up + Vector3.left * .5f);
-	// 	
-	// 	Gizmos.DrawWireSphere(_debugCollider + Vector3.up, .5f);
-	// }
 }
 }

@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 
 namespace NewRatCharacterController {
-	public class AnimationController : MonoBehaviour {
+	public class NewRatAnimationController : MonoBehaviour {
+		
 		private static readonly int VelocityZ = Animator.StringToHash("VelocityZ");
 		private static readonly int VelocityX = Animator.StringToHash("VelocityX");
 		private static readonly int Jump = Animator.StringToHash("Jump");
@@ -12,32 +13,33 @@ namespace NewRatCharacterController {
 		private static readonly int Forward = Animator.StringToHash("Forward");
 		
 		private Animator _animator;
-		private Vector3 _inputVector;
+		
+		private float _mantleAnimationLength = .833f + .460f;
+
 		private float _velX;
 		private float _velZ;
-		private float _currentVelX;
-		private float _currentVelZ;
-		[SerializeField] private float smoothTimeX = .3f;
-		[SerializeField] private float smoothTimeZ = .1f;
+
+		private Vector3 _inputVector;
 		
 		private void Awake() {
 			_animator = GetComponent<Animator>();
 		}
 
 		private void Update() {
-			_velX = Mathf.SmoothDamp(_velX, _inputVector.x, ref _currentVelX, smoothTimeX);
-			_velZ = Mathf.SmoothDamp(_velZ, _inputVector.z, ref _currentVelZ, smoothTimeZ);
 			_animator.SetFloat(VelocityZ, _velZ);
 			_animator.SetFloat(VelocityX, _velX);
 		}
-
+		
 		public void InputVector(Vector2 inputVector) => InputVector(inputVector.ToVector3());
 		public void InputVector(Vector3 inputVector) {
-
 			if (inputVector.magnitude > 1)
 				inputVector.Normalize();
 
 			_inputVector = inputVector;
+			_velX = _inputVector.x;
+			_velZ = _inputVector.z;
 		}
+		
+		
 	}
 }
