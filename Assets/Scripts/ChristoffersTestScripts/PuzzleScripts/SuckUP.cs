@@ -8,6 +8,7 @@ public class SuckUP : MonoBehaviour
     [SerializeField] private float suckSpeed;
     private bool buttonOneOn;
     private bool buttonTwoOn;
+    private bool hasStarted;
     private float spinX;
     private float spinY;
     private float spinZ;
@@ -21,8 +22,9 @@ public class SuckUP : MonoBehaviour
     }
     private void Update()
     {
-        if (buttonOneOn && buttonTwoOn)
+        if (buttonOneOn && buttonTwoOn && !hasStarted)
         {
+            hasStarted = true;
             animator.SetBool("Start", true);
             StartCoroutine(Suck());
         }
@@ -51,11 +53,12 @@ public class SuckUP : MonoBehaviour
     }
     private IEnumerator Suck()
     {
+        yield return new WaitForSeconds(1.3f);
         ps.Play();
         Debug.Log("suck");
         yield return new WaitForSeconds(2.0f);
-        Debug.Log("stop");
         ps.Stop();
+        Debug.Log("stop");
         animator.SetBool("Stop", true);
     }
 
