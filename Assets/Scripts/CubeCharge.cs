@@ -17,12 +17,12 @@ namespace CallbackSystem
         [Tooltip("Charge reducese with 1 every forward jump in time. At 0 cube can no longer be puched")]
         public int charge = 0;
         [SerializeField] private float timeToCharge;
-        [HideInInspector] public CubeCharge pastCubeCharge;
+        /*[HideInInspector]*/ public CubeCharge pastCubeCharge;
 
 
         private CubePush cubePush;
         private ChargeChangedEvent chargeEvent;
-        private TimeTravelObject timeTravelObject;
+        [SerializeField] private TimeTravelObject timeTravelObject;
         private MeshRenderer meshRenderer;
         private PingPong pingPong;
 
@@ -30,7 +30,8 @@ namespace CallbackSystem
 
         private void Start()
         {
-            iconBehaviour = GetComponentInChildren<IconBehaviour>();
+            
+            //iconBehaviour = GetComponentInChildren<IconBehaviour>();
 
             cubePush = GetComponent<CubePush>();
             timeTravelObject = GetComponent<TimeTravelObject>();
@@ -39,21 +40,21 @@ namespace CallbackSystem
             if (charge > 0)
             {
                 cubePush.SetPushable(true);
-                iconBehaviour.IsCharged(true);
+                //iconBehaviour.IsCharged(true);
+                pingPong.SetPower(1f);
 
             }
             else
             {
                 cubePush.SetPushable(false);
-                iconBehaviour.IsCharged(false);
+                //iconBehaviour.IsCharged(false);
+                pingPong.SetPower(0f);
+                
             }
 
             chargeEvent = new(timeTravelObject);
 
-            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>() != null)
-            {
-                pastCubeCharge = timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>();
-            }
+            StartCoroutine(SetPast());
             ChargeChangedEvent.AddListener<ChargeChangedEvent>(PastChargeChange);
             TimePeriodChanged.AddListener<TimePeriodChanged>(changedTime);
         }
@@ -65,8 +66,9 @@ namespace CallbackSystem
                 this.charge = charge;
                 if (charge > 0)
                 {
-                    cubePush.SetPushable(true);
                     StartCoroutine(SetMaterial(true));
+                    cubePush.SetPushable(true);
+                    
                 }
                 else
                 {
@@ -81,56 +83,66 @@ namespace CallbackSystem
 
         private void PastChargeChange(ChargeChangedEvent chargeChangedEvent)
         {
-            if (timeTravelObject.pastSelf.pastSelf != null & timeTravelObject.pastSelf.pastSelf.Equals(chargeChangedEvent.changedObject))
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.pastSelf != null && timeTravelObject.pastSelf.pastSelf.Equals(chargeChangedEvent.changedObject))
             {
-                Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
+                    Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
             }
-            if (timeTravelObject.pastSelf != null & timeTravelObject.pastSelf.Equals(chargeChangedEvent.changedObject))
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.Equals(chargeChangedEvent.changedObject))
             {
-                Charging(pastCubeCharge.charge - chargeReductionAfterTimeJump, this);
+                
+                    Charging(pastCubeCharge.charge - chargeReductionAfterTimeJump, this);
             }
         }
 
         private IEnumerator SetMaterial(bool on)
         {
             float timer = 0f;
-            while (timer < 0)
+            while (timer < 1f)
             {
                 if (on)
                 {
                     timer += Time.deltaTime / timeToCharge;
-                    pingPong.SetPower(Mathf.Lerp(0, 1, timer));
+                    pingPong.SetPower(Mathf.Lerp(0f, 1f, timer));
                     yield return null;
                 }
                 else
                 {
                     timer += Time.deltaTime / timeToCharge;
-                    pingPong.SetPower(Mathf.Lerp(1, 0, timer));
+                    pingPong.SetPower(Mathf.Lerp(1f, 0f, timer));
                     yield return null;
                 }
             }
-            if (charge > 0)
-            {
-                iconBehaviour.IsCharged(true);
+            //if (charge > 0)
+            //{
+            //    iconBehaviour.IsCharged(true);
 
-            }
-            else
-            {
-                iconBehaviour.IsCharged(false);
-            }
+            //}
+            //else
+            //{
+            //    iconBehaviour.IsCharged(false);
+            //}
         }
         private void changedTime(TimePeriodChanged timePeriodChanged)
         {
-            if (charge > 0)
+            if (charge > 0f)
             {
-                pingPong.SetPower(1);
-                iconBehaviour.IsCharged(true);
+                pingPong.SetPower(1f);
+                //iconBehaviour.IsCharged(true);
             }
             else
             {
-                pingPong.SetPower(0);
-                iconBehaviour.IsCharged(false);
+                pingPong.SetPower(0f);
+                //iconBehaviour.IsCharged(false);
             }
         }
+        private IEnumerator SetPast()
+        {
+            yield return null;
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>() != null)
+            {
+                pastCubeCharge = timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>();
+            }
+        }
+
     }
 }

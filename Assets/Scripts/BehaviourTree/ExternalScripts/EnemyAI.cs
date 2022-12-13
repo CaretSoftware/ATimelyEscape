@@ -54,7 +54,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Awake()
     {
-        if(ID == null) ID = IDCounter++;
+         // is always false if(ID == null) ID = IDCounter++;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         enemyFOV = GetComponent<EnemyFOV>();
@@ -70,6 +70,8 @@ public class EnemyAI : MonoBehaviour
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
+        chainIKConstraint.weight = 0;
+        multiAimConstraint.weight = 0;
         chaseRange = enemyFOV.ChaseRadius;
         captureRange = enemyFOV.CatchRadius;
         ConstructBehaviourTreePersonnel();
