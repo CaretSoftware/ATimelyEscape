@@ -5,14 +5,14 @@ using UnityEngine;
 public class AllButtonPressed : DeviceController
 {
 
-    [SerializeField] private Button[] buttons;
+    [SerializeField] private CubeButton[] buttons;
     [SerializeField] private bool allPressed;
 
 
     // Start is called before the first frame update
     private void Awake()
     {
-        foreach (Button button in buttons)
+        foreach (CubeButton button in buttons)
         {
             button.SetParent(this);
         }
@@ -20,7 +20,7 @@ public class AllButtonPressed : DeviceController
 
     public void IsAllPressed()
     {
-        foreach (Button button in buttons)
+        foreach (CubeButton button in buttons)
         {
             
             allPressed = button.IsPressed();
