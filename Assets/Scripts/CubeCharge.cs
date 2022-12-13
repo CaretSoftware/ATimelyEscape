@@ -30,7 +30,8 @@ namespace CallbackSystem
 
         private void Start()
         {
-            iconBehaviour = GetComponentInChildren<IconBehaviour>();
+            
+            //iconBehaviour = GetComponentInChildren<IconBehaviour>();
 
             cubePush = GetComponent<CubePush>();
             timeTravelObject = GetComponent<TimeTravelObject>();
@@ -39,13 +40,16 @@ namespace CallbackSystem
             if (charge > 0)
             {
                 cubePush.SetPushable(true);
-                iconBehaviour.IsCharged(true);
+                //iconBehaviour.IsCharged(true);
+                pingPong.SetPower(1f);
 
             }
             else
             {
                 cubePush.SetPushable(false);
-                iconBehaviour.IsCharged(false);
+                //iconBehaviour.IsCharged(false);
+                pingPong.SetPower(0f);
+                
             }
 
             chargeEvent = new(timeTravelObject);
@@ -94,42 +98,42 @@ namespace CallbackSystem
         private IEnumerator SetMaterial(bool on)
         {
             float timer = 0f;
-            while (timer < 0)
+            while (timer < 0f)
             {
                 if (on)
                 {
                     timer += Time.deltaTime / timeToCharge;
-                    pingPong.SetPower(Mathf.Lerp(0, 1, timer));
+                    pingPong.SetPower(Mathf.Lerp(0f, 1f, timer));
                     yield return null;
                 }
                 else
                 {
                     timer += Time.deltaTime / timeToCharge;
-                    pingPong.SetPower(Mathf.Lerp(1, 0, timer));
+                    pingPong.SetPower(Mathf.Lerp(1f, 0f, timer));
                     yield return null;
                 }
             }
-            if (charge > 0)
-            {
-                iconBehaviour.IsCharged(true);
+            //if (charge > 0)
+            //{
+            //    iconBehaviour.IsCharged(true);
 
-            }
-            else
-            {
-                iconBehaviour.IsCharged(false);
-            }
+            //}
+            //else
+            //{
+            //    iconBehaviour.IsCharged(false);
+            //}
         }
         private void changedTime(TimePeriodChanged timePeriodChanged)
         {
-            if (charge > 0)
+            if (charge > 0f)
             {
-                pingPong.SetPower(1);
-                iconBehaviour.IsCharged(true);
+                pingPong.SetPower(1f);
+                //iconBehaviour.IsCharged(true);
             }
             else
             {
-                pingPong.SetPower(0);
-                iconBehaviour.IsCharged(false);
+                pingPong.SetPower(0f);
+                //iconBehaviour.IsCharged(false);
             }
         }
     }
