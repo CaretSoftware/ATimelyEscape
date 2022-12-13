@@ -10,13 +10,13 @@ public class LineEditor : EditorWindow
     public List<GameObject> points;
     public int vertexCount = 12;
     private Camera camTf = null;
-
-
+    
     SerializedObject so;
     SerializedProperty propVertexCount;
 
+
     [MenuItem("Tools/LineEditor")]
-    public static void OpenLevelGenerator()
+    public static void OpenLineEditor()
     {
         GetWindow<LineEditor>();
     }
@@ -48,16 +48,19 @@ public class LineEditor : EditorWindow
             camTf = sceneView.camera;
         }
 
+        SetLineSelected();
+
         if (line != null)
         {
-            if (points.Count > 1)
-            {
+            if (points != null && points.Count > 1)
+            { 
+                LoadExistingLine(line);
+                GenerateLine();
                 OnDrawHandles();
             }
         }
 
     }
-
 
     private void OnGUI()
     {
@@ -87,30 +90,16 @@ public class LineEditor : EditorWindow
             GUILayout.Space(40);
             GUILayout.EndHorizontal();
 
-            GUILayout.Space(20);
+            GUILayout.Space(10);
             GUILayout.BeginHorizontal();
             GUILayout.Space(40);
-            if (GUILayout.Button("Generate Line", GUILayout.Height(25)))
-            {
-                GenerateLine();
-            }
-            GUILayout.Space(40);
-            GUILayout.EndHorizontal();
-            GUILayout.Space(20);
-
-            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(propVertexCount, new GUIContent("Vertex count"));
             propVertexCount.intValue = Mathf.Max(0, propVertexCount.intValue);
             propVertexCount.intValue = Mathf.Min(100, propVertexCount.intValue);
-
             GUILayout.Space(40);
+            GUILayout.EndHorizontal();
 
-            if (EditorGUI.EndChangeCheck())
-            {
-                GenerateLine();
-            }
-
-
+            GUILayout.FlexibleSpace();
         }
 
         GUILayout.Space(20);
@@ -125,19 +114,15 @@ public class LineEditor : EditorWindow
 
         GUILayout.Space(20);
 
-        GUILayout.BeginHorizontal();
+        /*GUILayout.BeginHorizontal();
         GUILayout.Space(40);
         if (GUILayout.Button("Load selected", GUILayout.Height(25)))
         {
-            GameObject selectedObject = Selection.activeGameObject;
-            if (selectedObject && selectedObject != line && selectedObject.transform.CompareTag("Line"))
-            {
-                LoadExistingLine(selectedObject);
-            }
+            SetLineSelected();
         }
         GUILayout.Space(40);
         GUILayout.EndHorizontal();
-        GUILayout.Space(20);
+        GUILayout.Space(20);*/
 
 
         if (so.ApplyModifiedProperties())
@@ -148,13 +133,31 @@ public class LineEditor : EditorWindow
         return;
     }
 
+    
+    private void SetLineSelected()
+    {
+        GameObject selectedObject = Selection.activeGameObject;
+        if (selectedObject && selectedObject != line && selectedObject.transform.CompareTag("Line"))
+        {
+            line = selectedObject;
+            //LoadExistingLine(selectedObject);
+        }
+    }
+
     private void AddPoint()
     {
         GameObject point = new GameObject("Point");
         Undo.RegisterCreatedObjectUndo(point, "Create New Line");
         point.transform.parent = line.gameObject.transform;
+        if(points.Count > 0)
+        {
+            point.transform.position = points[points.Count - 1].transform.position;
+        }
+        else
+        {
+            point.transform.position = line.transform.position;
+        }
         points.Add(point);
-        point.transform.position = line.transform.position;
     }
 
     private void RemovePoint()
@@ -184,10 +187,13 @@ public class LineEditor : EditorWindow
         {
             for (float ratio = 0; ratio <= 1; ratio += 1.0f / vertexCount)
             {
-                var tangentLineVertex1 = Vector3.Lerp(points[i].transform.position, points[i + 1].transform.position, ratio);
-                var tangentLineVertex2 = Vector3.Lerp(points[i + 1].transform.position, points[i + 2].transform.position, ratio);
-                var bezierPoint = Vector3.Lerp(tangentLineVertex1, tangentLineVertex2, ratio);
-                pointList.Add(bezierPoint);
+                if (points[i] && points[i + 1] && points[i + 2])
+                {
+                    var tangentLineVertex1 = Vector3.Lerp(points[i].transform.position, points[i + 1].transform.position, ratio);
+                    var tangentLineVertex2 = Vector3.Lerp(points[i + 1].transform.position, points[i + 2].transform.position, ratio);
+                    var bezierPoint = Vector3.Lerp(tangentLineVertex1, tangentLineVertex2, ratio);
+                    pointList.Add(bezierPoint);
+                }
             }
             lineRenderer.positionCount = pointList.Count;
             lineRenderer.SetPositions(pointList.ToArray());
@@ -200,18 +206,18 @@ public class LineEditor : EditorWindow
         line = new GameObject("Line");
         line.AddComponent<SpriteRenderer>();
         Undo.RegisterCreatedObjectUndo(line, "Create New Line");
-        line.transform.position = camTf.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 5f));
-
+        line.transform.position = camTf.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.7f));
 
         line.tag = "Line";
 
         points = new List<GameObject>();
         lineRenderer = line.AddComponent<LineRenderer>();
 
-        var width = 0.2f;
-
-        lineRenderer.startWidth = width;
-        lineRenderer.endWidth = width;
+        var width = 0.05f;
+        AnimationCurve curve = new AnimationCurve();
+        curve.AddKey(0, width);
+        curve.AddKey(1, width);
+        lineRenderer.widthCurve = curve;
     }
 
     private void LoadExistingLine(GameObject selectedObject)
@@ -232,7 +238,10 @@ public class LineEditor : EditorWindow
         for (int i = 0; i < points.Count - 1; i++)
         {
             Handles.color = Color.green;
-            Handles.DrawLine(points[i].transform.position, points[i + 1].transform.position);
+            if(points[i] && points[i + 1])
+            {
+                Handles.DrawLine(points[i].transform.position, points[i + 1].transform.position);
+            }
 
         }
 
@@ -241,8 +250,25 @@ public class LineEditor : EditorWindow
             Handles.color = Color.red;
             for (float ratio = 0.5f / vertexCount; ratio < 1; ratio += 1.0f / vertexCount)
             {
-                Handles.DrawLine(Vector3.Lerp(points[i].transform.position, points[i + 1].transform.position, ratio), Vector3.Lerp(points[i + 1].transform.position, points[i + 2].transform.position, ratio));
+                if (points[i] && points[i + 1] && points[i + 2])
+                {
+                    Handles.DrawLine(Vector3.Lerp(points[i].transform.position, points[i + 1].transform.position, ratio), Vector3.Lerp(points[i + 1].transform.position, points[i + 2].transform.position, ratio));
+                }
             }
         }
+    }
+
+    
+    private bool PointIsNull()
+    {
+        for(int i = 0; i < points.Count; i++)
+        {
+            if(points[i] == null)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

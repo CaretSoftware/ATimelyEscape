@@ -17,12 +17,12 @@ public class DigitalClock : MonoBehaviour
     [Header("Text Settings")]
     [SerializeField] GameObject textDisplay;
     [SerializeField] bool isFutureTimer;
-    private bool takingAway = false;
+    public bool takingAway;
     private TextMeshProUGUI textMeshPro;
 
     public int time;
     public bool isOn;
-    public bool futureDone; 
+    public bool futureDone;
     void Start()
     {
         time = years * TimeToString.Year + months * TimeToString.Month + weeks * TimeToString.Week
@@ -47,6 +47,7 @@ public class DigitalClock : MonoBehaviour
         time -= 1;
         textMeshPro.text = TimeToString.TimeAsString(time);
         takingAway = false;
+
         if(time <= 0 && isFutureTimer)
         {
             futureDone = true;

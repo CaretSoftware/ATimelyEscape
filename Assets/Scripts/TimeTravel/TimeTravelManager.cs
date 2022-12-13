@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using CallbackSystem;
 using RatCharacterController;
-using UnityEngine;
 using StateMachines;
 using TMPro;
+using UnityEngine;
 
 public class TimeTravelManager : MonoBehaviour {
     private StateMachine stateMachine;
@@ -15,6 +15,7 @@ public class TimeTravelManager : MonoBehaviour {
     public static TimeTravelPeriod desiredPeriod;
     public static HashSet<Rigidbody> MovableObjects = new HashSet<Rigidbody>();
     public static Transform playerTransform;
+    public static TimeTravelCollisionWarning collisionWarning;
 
     public static readonly Dictionary<TimeTravelPeriod, Type> PeriodStates = new Dictionary<TimeTravelPeriod, Type>() {
         { TimeTravelPeriod.Past, typeof(PastState) },
@@ -23,7 +24,8 @@ public class TimeTravelManager : MonoBehaviour {
     };
 
     // Start is called before the first frame update
-    void Awake() {
+    void Start() {
+        collisionWarning = GetComponent<TimeTravelCollisionWarning>();
         MovableObjects.Clear();
         playerTransform = FindObjectOfType<CharacterAnimationController>().transform;
         stateMachine = new StateMachine(this,
@@ -82,10 +84,10 @@ public class TimeTravelManager : MonoBehaviour {
 }
 
 public enum TimeTravelPeriod {
-    Past = 0,
-    Present = 1,
-    Future = 2,
-    Dummy = 3
+    Past,
+    Present,
+    Future,
+    Dummy
 }
 
 
@@ -96,13 +98,21 @@ namespace StateMachines {
 
         public override void Run() {
             if (TimeTravelManager.currentPeriod != TimeTravelManager.desiredPeriod) {
+
+                LayerMask mask = 0;
+                switch (TimeTravelManager.desiredPeriod) {
+                    case TimeTravelPeriod.Past: mask = LayerMask.GetMask("PastTimePeriod"); break;
+                    case TimeTravelPeriod.Present: mask = LayerMask.GetMask("PresentTimePeriod"); break;
+                    case TimeTravelPeriod.Future: mask = LayerMask.GetMask("FutureTimePeriod"); break;
+                }
+
                 var cols = Physics.OverlapCapsule(
                     new Vector3(TimeTravelManager.playerTransform.position.x,
                         TimeTravelManager.playerTransform.position.y + 0.1f,
                         TimeTravelManager.playerTransform.position.z),
                     new Vector3(TimeTravelManager.playerTransform.position.x,
                         TimeTravelManager.playerTransform.position.y - 0.1f,
-                        TimeTravelManager.playerTransform.position.z), 0.05f, LayerMask.GetMask("OtherTimePeriod"));
+                        TimeTravelManager.playerTransform.position.z), 0.05f, mask);
 
                 if (cols.Length == 0 || cols.All(c => c.isTrigger)) {
                     State nextState = StateMachine.stateDict[
@@ -113,6 +123,11 @@ namespace StateMachines {
                 } else {
                     TimeTravelManager.desiredPeriod = TimeTravelManager.currentPeriod;
                     Debug.LogError("You tried Time Travelling into another object!");
+
+                    CallHintAnimation callHint = new CallHintAnimation() { animationName = "TravelWarning", waitForTime = 0.5f };
+                    callHint.Invoke();
+
+                    //TimeTravelManager.collisionWarning.ShowWarning();
                 }
             }
         }

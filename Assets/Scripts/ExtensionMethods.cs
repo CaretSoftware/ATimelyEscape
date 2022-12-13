@@ -36,4 +36,10 @@ public static class ExtensionMethods {
     public static T AddComponent<T>(this GameObject go, T toAdd) where T : Component {
         return go.AddComponent<T>().GetCopyOf(toAdd) as T;
     }
+
+    public static T GetOrAddComponent<T>(this GameObject go) where T : Component {
+        T c = go.GetComponent<T>();
+        if (c == null) c = go.AddComponent<T>();
+        return c;
+    }
 }
