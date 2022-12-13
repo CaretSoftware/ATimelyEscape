@@ -6,6 +6,7 @@ using UnityEngine.Animations.Rigging;
 
 public class CaptureNode : Node
 {
+    private static DummyBehaviour Instance;
     private MultiAimConstraint multiAimConstraint;
     private ChainIKConstraint chainIKConstraint;
     private NavMeshAgent agent;
@@ -19,9 +20,13 @@ public class CaptureNode : Node
     private float captureDistance;
     private float destinationDistance;
 
+    private GameObject GO = new GameObject();
+    private GameObject dummyBehaviourParent;
+
     public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform checkpoint,
         Transform agentTransform, Transform handIKTarget, Animator animator, MultiAimConstraint multiAimConstraint, ChainIKConstraint chainIKConstraint)
     {
+        dummyBehaviourParent = agent.gameObject;
         this.agent = agent;
         this.player = player;
         this.captureDistance = captureDistance;
@@ -31,22 +36,24 @@ public class CaptureNode : Node
         this.animator = animator;
         this.multiAimConstraint = multiAimConstraint;
         this.chainIKConstraint = chainIKConstraint;
+        Instance = GO.AddComponent<DummyBehaviour>();
+        GO.transform.parent = dummyBehaviourParent.transform;
     }
 
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(player.position, agentTransform.transform.position);
-        //animation to lerp handIKTarget towards player position
-        //if handIKTarget reach player, transform player position to checkpoint
-        //if (animator.GetIKPositionWeight(AvatarIKGoal.RightHand))
-        handIKTarget.position = player.position;
-        animator.SetTrigger("GrabTrigger");
 
         if (destinationDistance < captureDistance - 0.1f)
         {
+            //animation to lerp handIKTarget towards player position
+            //if handIKTarget reach player, transform player position to checkpoint
+            //if (animator.GetIKPositionWeight(AvatarIKGoal.RightHand))
             handIKTarget.position = player.position;
-                player.transform.position = checkpoint.position;
-                agent.isStopped = true;
+            Debug.Log($"Target position \n x: {handIKTarget.position.x}, y: {handIKTarget.position.y}, z: {handIKTarget.position.z}");
+            animator.SetTrigger("GrabAction");
+            player.transform.position = checkpoint.position;
+            agent.isStopped = true;
             return NodeState.FAILURE;
         }
         else
@@ -55,5 +62,15 @@ public class CaptureNode : Node
             agent.SetDestination(player.position);
             return NodeState.RUNNING;
         }
+    }
+
+    private class DummyBehaviour : MonoBehaviour { }
+
+    private IEnumerator WaitForAnimation(Animation animation)
+    {
+        do
+        {
+            yield return null;
+        } while (animation.isPlaying);
     }
 }

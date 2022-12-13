@@ -31,13 +31,11 @@ public class ChaseNode : Node
         {
             //Debug.Log("Chasing");
             agent.isStopped = false;
-            multiAimConstraint.weight = 1;
             agent.SetDestination(target.position);
             return NodeState.RUNNING;
         }
         else
         {
-            multiAimConstraint.weight = 0;
             agent.isStopped = true;
             return NodeState.SUCCESS;
         }
