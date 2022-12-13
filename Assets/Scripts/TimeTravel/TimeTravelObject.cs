@@ -116,7 +116,9 @@ public class TimeTravelObject : MonoBehaviour {
         }
     }
 
-    private void Update() { stateMachine.Run(); }
+    private void Update() {
+        if (stateMachine != null) stateMachine.Run();
+    }
 
     public void UpdateMaterials(TimeTravelPeriod period) {
         switch (period) {
@@ -158,9 +160,15 @@ public class TimeTravelObject : MonoBehaviour {
         string timePeriodLayerName = "";
 
         switch (timeTravelPeriod) {
-            case TimeTravelPeriod.Past: timePeriodLayerName = "PastTimePeriod"; break;
-            case TimeTravelPeriod.Present: timePeriodLayerName = "PresentTimePeriod"; break;
-            case TimeTravelPeriod.Future: timePeriodLayerName = "FutureTimePeriod"; break;
+            case TimeTravelPeriod.Past:
+                timePeriodLayerName = "PastTimePeriod";
+                break;
+            case TimeTravelPeriod.Present:
+                timePeriodLayerName = "PresentTimePeriod";
+                break;
+            case TimeTravelPeriod.Future:
+                timePeriodLayerName = "FutureTimePeriod";
+                break;
         }
 
         transformToUpdate.gameObject.layer = LayerMask.NameToLayer(active

@@ -17,12 +17,12 @@ namespace CallbackSystem
         [Tooltip("Charge reducese with 1 every forward jump in time. At 0 cube can no longer be puched")]
         public int charge = 0;
         [SerializeField] private float timeToCharge;
-        [HideInInspector] public CubeCharge pastCubeCharge;
+        /*[HideInInspector]*/ public CubeCharge pastCubeCharge;
 
 
         private CubePush cubePush;
         private ChargeChangedEvent chargeEvent;
-        private TimeTravelObject timeTravelObject;
+        [SerializeField] private TimeTravelObject timeTravelObject;
         private MeshRenderer meshRenderer;
         private PingPong pingPong;
 
@@ -54,10 +54,7 @@ namespace CallbackSystem
 
             chargeEvent = new(timeTravelObject);
 
-            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>() != null)
-            {
-                pastCubeCharge = timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>();
-            }
+            StartCoroutine(SetPast());
             ChargeChangedEvent.AddListener<ChargeChangedEvent>(PastChargeChange);
             TimePeriodChanged.AddListener<TimePeriodChanged>(changedTime);
         }
@@ -69,8 +66,9 @@ namespace CallbackSystem
                 this.charge = charge;
                 if (charge > 0)
                 {
-                    cubePush.SetPushable(true);
                     StartCoroutine(SetMaterial(true));
+                    cubePush.SetPushable(true);
+                    
                 }
                 else
                 {
@@ -85,20 +83,21 @@ namespace CallbackSystem
 
         private void PastChargeChange(ChargeChangedEvent chargeChangedEvent)
         {
-            if (timeTravelObject.pastSelf.pastSelf != null & timeTravelObject.pastSelf.pastSelf.Equals(chargeChangedEvent.changedObject))
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.pastSelf != null && timeTravelObject.pastSelf.pastSelf.Equals(chargeChangedEvent.changedObject))
             {
-                Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
+                    Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
             }
-            if (timeTravelObject.pastSelf != null & timeTravelObject.pastSelf.Equals(chargeChangedEvent.changedObject))
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.Equals(chargeChangedEvent.changedObject))
             {
-                Charging(pastCubeCharge.charge - chargeReductionAfterTimeJump, this);
+                
+                    Charging(pastCubeCharge.charge - chargeReductionAfterTimeJump, this);
             }
         }
 
         private IEnumerator SetMaterial(bool on)
         {
             float timer = 0f;
-            while (timer < 0f)
+            while (timer < 1f)
             {
                 if (on)
                 {
@@ -136,5 +135,14 @@ namespace CallbackSystem
                 //iconBehaviour.IsCharged(false);
             }
         }
+        private IEnumerator SetPast()
+        {
+            yield return null;
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>() != null)
+            {
+                pastCubeCharge = timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>();
+            }
+        }
+
     }
 }
