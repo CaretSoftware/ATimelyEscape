@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Button : MonoBehaviour
+public class CubeButton : MonoBehaviour
 {
     [SerializeField] private LayerMask layerMask;
 
