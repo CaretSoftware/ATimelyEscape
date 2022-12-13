@@ -74,6 +74,7 @@ namespace CallbackSystem {
     }
     public class ButtonEvent : Event
     {
-        public bool isOn; 
+        public GameObject whatToOpen;
+        public Open open; 
     }
 }

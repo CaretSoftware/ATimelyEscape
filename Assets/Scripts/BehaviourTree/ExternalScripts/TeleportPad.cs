@@ -25,19 +25,10 @@ public class TeleportPad : MonoBehaviour
         UpdateIndicatorColor();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            active = !active;
-            UpdateIndicatorColor();
-        }
-    }
-
     private void OnTriggerEnter(Collider target)
     {
         if (active && !OnCooldown)
-            if (target.transform.tag.Equals("Player") || target.transform.transform.Equals("Cube"))
+            if (target.transform.tag.Equals("Player") || target.transform.tag.Equals("Cube"))
                 Teleport(target.transform);
     }
 
@@ -83,5 +74,15 @@ public class TeleportPad : MonoBehaviour
             linkedPad.indicatorMaterial = indicatorMaterial;
         linkedPad.indicatorMaterial.color = indicatorMaterial.color;
         linkedPad.OnCooldown = OnCooldown;
+    }
+    public void TeleportOn()
+    {
+        active = true;
+        UpdateIndicatorColor();
+    }
+    public void TeleportOff()
+    {
+        active = false;
+        UpdateIndicatorColor();
     }
 }

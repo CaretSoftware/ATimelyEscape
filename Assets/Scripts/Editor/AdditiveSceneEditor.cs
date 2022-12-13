@@ -7,7 +7,7 @@ public class AdditiveSceneEditor : Editor {
 	private AdditiveSceneManager _asm;
 	private GUIContent _save;
 	private GUIContent _visibilityMixed;
-	private GUIContent _hidden;
+	private GUIContent _visibilityHidden;
 	private GUIContent[] _loads;
 	
 	public override void OnInspectorGUI() {
@@ -25,14 +25,14 @@ public class AdditiveSceneEditor : Editor {
 						"Save All open additive scenes");
 		_visibilityMixed ??= 
 				new GUIContent(" Load", 
-						EditorGUIUtility.IconContent("d_scenevis_visible-mixed_hover@2x").image, 
+						EditorGUIUtility.IconContent("d_scenevis_visible-mixed_hover").image, 
 						"Load and Open all unopened scenes");
-		_hidden ??= 
+		_visibilityHidden ??= 
 				new GUIContent(" Load Unloaded", 
-						EditorGUIUtility.IconContent("d_scenevis_hidden_hover@2x").image, 
+						EditorGUIUtility.IconContent("d_scenevis_hidden_hover").image, 
 						"Load all unopened scenes unloaded");
 
-		_loads ??= new GUIContent[] { _visibilityMixed, _hidden };
+		_loads ??= new GUIContent[] { _visibilityMixed, _visibilityHidden };
 	}
 
 	private void SaveButton() {
