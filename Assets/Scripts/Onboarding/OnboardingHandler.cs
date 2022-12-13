@@ -5,17 +5,26 @@ using CallbackSystem;
 
 public static class OnboardingHandler {
     private static bool climbingAndCubeDiscovered;
+    private static bool cubeChargeDiscovered;
     private static bool timeTravelDiscovered;
     private static bool timeTravelFutureDiscovered;
     private static bool scientistDiscovered;
     private static bool vacuumCleanerDiscovered;
-    private static bool darknessDiscovered;
 
     public static bool ClimbingAndCubeDiscovered {
         get => climbingAndCubeDiscovered; set {
             if (!climbingAndCubeDiscovered) {
                 climbingAndCubeDiscovered = value
                     ; if (value) { DebugEvent e = new DebugEvent() { DebugText = "climbing" }; e.Invoke(); }
+            }
+        }
+    }
+
+    public static bool CubeChargeDiscovered {
+        get => cubeChargeDiscovered; set {
+            if (!cubeChargeDiscovered) {
+                cubeChargeDiscovered = value
+                    ; if (value) { DebugEvent e = new DebugEvent() { DebugText = "charge" }; e.Invoke(); }
             }
         }
     }
@@ -29,10 +38,11 @@ public static class OnboardingHandler {
         }
     }
 
+    // includes darkness
     public static bool TimeTravelFutureDiscovered {
-        get => timeTravelDiscovered; set {
-            if (!timeTravelDiscovered) {
-                timeTravelDiscovered = value;
+        get => timeTravelFutureDiscovered; set {
+            if (!timeTravelFutureDiscovered) {
+                timeTravelFutureDiscovered = value;
                 if (value) { DebugEvent e = new DebugEvent() { DebugText = "timeTravelFuture" }; e.Invoke(); }
             }
         }
@@ -52,15 +62,6 @@ public static class OnboardingHandler {
             if (!vacuumCleanerDiscovered) {
                 vacuumCleanerDiscovered = value;
                 if (value) { DebugEvent e = new DebugEvent() { DebugText = "vacuumCleaner" }; e.Invoke(); }
-            }
-        }
-    }
-
-    public static bool DarknessDiscovered {
-        get => darknessDiscovered; set {
-            if (!darknessDiscovered) {
-                darknessDiscovered = value;
-                if (value) { DebugEvent e = new DebugEvent() { DebugText = "darkness" }; e.Invoke(); }
             }
         }
     }

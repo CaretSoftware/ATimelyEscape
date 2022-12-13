@@ -63,7 +63,6 @@ namespace RatCharacterController {
 			DeactivatePhysics(true);
 			StartCoroutine(PhysicsDelay());
 			_animator.SetTrigger(Jump);
-			OnboardingHandler.ClimbingAndCubeDiscovered = true;
 		}
 
 		public void LeapJump() {
