@@ -24,7 +24,7 @@ public class TimeTravelManager : MonoBehaviour {
     };
 
     // Start is called before the first frame update
-    void Awake() {
+    void Start() {
         collisionWarning = GetComponent<TimeTravelCollisionWarning>();
         MovableObjects.Clear();
         playerTransform = FindObjectOfType<CharacterAnimationController>().transform;
@@ -69,7 +69,7 @@ public class TimeTravelManager : MonoBehaviour {
         var simulationComplete = new PhysicsSimulationComplete { from = e.from, to = e.to };
         simulationComplete.Invoke();
 
-        switch (e.to) {
+        /*switch (e.to) {
             case TimeTravelPeriod.Past:
                 timeText.text = "Current Time Period: Past";
                 break;
@@ -79,15 +79,15 @@ public class TimeTravelManager : MonoBehaviour {
             case TimeTravelPeriod.Future:
                 timeText.text = "Current Time Period: Future";
                 break;
-        }
+        }*/
     }
 }
 
 public enum TimeTravelPeriod {
-    Past = 0,
-    Present = 1,
-    Future = 2,
-    Dummy = 3
+    Past,
+    Present,
+    Future,
+    Dummy
 }
 
 
@@ -98,9 +98,9 @@ namespace StateMachines {
 
         public override void Run() {
             if (TimeTravelManager.currentPeriod != TimeTravelManager.desiredPeriod) {
-                
+
                 LayerMask mask = 0;
-                switch(TimeTravelManager.desiredPeriod){
+                switch (TimeTravelManager.desiredPeriod) {
                     case TimeTravelPeriod.Past: mask = LayerMask.GetMask("PastTimePeriod"); break;
                     case TimeTravelPeriod.Present: mask = LayerMask.GetMask("PresentTimePeriod"); break;
                     case TimeTravelPeriod.Future: mask = LayerMask.GetMask("FutureTimePeriod"); break;
