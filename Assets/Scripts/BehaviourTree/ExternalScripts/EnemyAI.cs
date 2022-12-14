@@ -152,10 +152,11 @@ public class EnemyAI : MonoBehaviour
 
     public void SetPlayerTransformToCheckpoint()
     {
-        playerTransform.position = checkpoint.position;
+        //fire event with checkpoint.
+        PlayerDeathVisualization.Instance.PlayDeathVisualization(checkpoint);
         animator.SetTrigger("ReturnHandAction");
     }
-
+    //not used (?)
     public void ResetAnimatorTriggers()
     {
         animator.ResetTrigger("GrabAction");
