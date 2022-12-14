@@ -13,7 +13,6 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
     private bool IsNotChangingPrefab => !changesPrefab;
 
-
     [Tooltip(
         "Objects that can be moved by player must have different meshes/instances for each time period it exists in. Any time period it does not exist in can be left as null")]
     [DisableIf(nameof(IsNotChangingPrefab))]
@@ -61,7 +60,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
         (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
          future.wireBox == null);
 
-    private int traveledFromIndex, traveledToIndex;
+    private TimeTravelPeriod traveledFrom, traveledTo;
 
     private Dictionary<string, DisplacmentInfo[]> DisplacementsAndRenderers = new Dictionary<string, DisplacmentInfo[]>();
 
@@ -125,7 +124,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
             info.originalMaterials = subRenderer.materials;
 
             string[] splitName = currentTransform.name.Split('[');
-            
+
             string rendererID = splitName[2].Substring(0, splitName[2].Length - 1);
             info.rendererID = rendererID;
 
@@ -174,40 +173,20 @@ public class TimeTravelObjectManager : MonoBehaviour {
         } else timeTravelObject.previewBoxObject?.SetActive(false);
     }
 
-    private void DetermineTimeTravelIndex(bool from, TimeTravelPeriod period) {
-        int temp = -1;
-        switch (period) {
-            case TimeTravelPeriod.Past:
-                if (!past) temp = -1;
-                else temp = 0;
-                break;
-            case TimeTravelPeriod.Present:
-                if (!present) temp = -1;
-                else temp = 1;
-                break;
-            case TimeTravelPeriod.Future:
-                if (!future) temp = -1;
-                else temp = 2;
-                break;
-        }
-        if (from) traveledFromIndex = temp;
-        else traveledToIndex = temp;
-    }
-
     private void HandleDisplacement(TimePeriodChanged e) {
-        DetermineTimeTravelIndex(true, e.from);
-        DetermineTimeTravelIndex(false, e.to);
+        traveledFrom = e.from;
+        traveledTo = e.to;
 
-        if (traveledToIndex != -1 && traveledFromIndex != -1) {
+        if ((int)traveledFrom < 3 && (int)traveledTo < 3) {
             Material[] displacementMat = new Material[] { Resources.Load("TimeTravelDisplacement1") as Material };
             foreach (var info in DisplacementsAndRenderers.Values) {
-                if (info[traveledFromIndex] == null || info[traveledToIndex] == null) continue;
-                info[traveledFromIndex].renderer.materials = displacementMat;
-                info[traveledToIndex].renderer.materials = displacementMat;
-                info[traveledFromIndex].displacement.Displace(info[traveledToIndex].renderer.transform);
+                if (info[(int)traveledFrom] == null || info[(int)traveledTo] == null ||
+                Vector3.Distance(info[(int)traveledFrom].renderer.transform.position, info[(int)traveledTo].renderer.transform.position) < 0.01f) continue;
+                info[(int)traveledFrom].renderer.materials = displacementMat;
+                info[(int)traveledTo].renderer.materials = displacementMat;
+                info[(int)traveledFrom].displacement.Displace(info[(int)traveledTo].renderer.transform);
             }
         }
-
 
         StartCoroutine(DisplacementComplete());
     }
@@ -215,13 +194,12 @@ public class TimeTravelObjectManager : MonoBehaviour {
     private IEnumerator<WaitForSecondsRealtime> DisplacementComplete() {
         yield return new WaitForSecondsRealtime(0.2f);
 
-        if (traveledFromIndex > -1 || traveledToIndex > -1) {
-
+        if ((int)traveledFrom < 3 || (int)traveledTo < 3) {
             foreach (var info in DisplacementsAndRenderers.Values) {
                 for (int i = 0; i < 3; i++) {
                     if (info[i] == null) continue;
                     info[i].renderer.materials = info[i].originalMaterials;
-                    info[i].renderer.enabled = i == traveledToIndex ? true : false;
+                    info[i].renderer.enabled = i == (int)traveledTo ? true : false;
                 }
             }
         }
@@ -269,7 +247,6 @@ public class TimeTravelObjectManager : MonoBehaviour {
         if (changesPrefab) return;
         canBeMovedByPlayer = false;
     }
-
 }
 
 public enum TimeTravelObjectState {

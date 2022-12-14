@@ -15,7 +15,6 @@ public class TimeTravelManager : MonoBehaviour {
     public static TimeTravelPeriod desiredPeriod;
     public static HashSet<Rigidbody> MovableObjects = new HashSet<Rigidbody>();
     public static Transform playerTransform;
-    public static TimeTravelCollisionWarning collisionWarning;
 
     public static readonly Dictionary<TimeTravelPeriod, Type> PeriodStates = new Dictionary<TimeTravelPeriod, Type>() {
         { TimeTravelPeriod.Past, typeof(PastState) },
@@ -25,7 +24,6 @@ public class TimeTravelManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        collisionWarning = GetComponent<TimeTravelCollisionWarning>();
         MovableObjects.Clear();
         playerTransform = FindObjectOfType<CharacterAnimationController>().transform;
         stateMachine = new StateMachine(this,
@@ -108,10 +106,10 @@ namespace StateMachines {
 
                 var cols = Physics.OverlapCapsule(
                     new Vector3(TimeTravelManager.playerTransform.position.x,
-                        TimeTravelManager.playerTransform.position.y + 0.1f,
+                        TimeTravelManager.playerTransform.position.y + 0.2f,
                         TimeTravelManager.playerTransform.position.z),
                     new Vector3(TimeTravelManager.playerTransform.position.x,
-                        TimeTravelManager.playerTransform.position.y - 0.1f,
+                        TimeTravelManager.playerTransform.position.y + 0.1f,
                         TimeTravelManager.playerTransform.position.z), 0.05f, mask);
 
                 if (cols.Length == 0 || cols.All(c => c.isTrigger)) {
@@ -126,8 +124,6 @@ namespace StateMachines {
 
                     CallHintAnimation callHint = new CallHintAnimation() { animationName = "TravelWarning", waitForTime = 0.5f };
                     callHint.Invoke();
-
-                    //TimeTravelManager.collisionWarning.ShowWarning();
                 }
             }
         }
