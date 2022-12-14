@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5347482903364261808}
   - component: {fileID: 6771028996749708083}
   - component: {fileID: 6771028996749708094}
-  - component: {fileID: 6771028996749708093}
+  - component: {fileID: 276819007}
   m_Layer: 0
   m_Name: ConveyorBasePast
   m_TagString: Untagged
@@ -28,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5852127748393268837}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.89, y: 7.2414036, z: -2.8259993}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 619997c2e8aa05741a3725fdd5cf1592, type: 2}
-  - {fileID: 2100000, guid: 9e92894aa0104f54dbcab2aba82e4342, type: 2}
+  - {fileID: 2100000, guid: 1fff542259eac834f81d9c8f1d14a125, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,7 +114,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.3370879, y: 1.1765785, z: 1.1024942}
   m_Center: {x: -0.028650165, y: 0.58677554, z: -0.010222912}
---- !u!114 &6771028996749708093
+--- !u!114 &276819007
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,9 +123,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5852127748393268837}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6774e4fb87da20449f1dac6f82427f6, type: 3}
+  m_Script: {fileID: 11500000, guid: c46329d01e7180d458dc456328f3b66f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollSpeedX: 0.5
-  scrollSpeedY: 0
-  material: {fileID: 2100000, guid: 9e92894aa0104f54dbcab2aba82e4342, type: 2}
+  pastSelf: {fileID: 0}
