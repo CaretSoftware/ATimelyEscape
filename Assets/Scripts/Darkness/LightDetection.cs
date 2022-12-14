@@ -17,13 +17,20 @@ namespace CallbackSystem
         [Tooltip("Show the light value in the log.")]
         public bool lightValueLog = false;
         [Tooltip("Time between light value updates")]
-        public float updateTime = 0.1f;
+        public float updateTimeForDetector = 0.1f;
+        [Tooltip("Time between darkness updates")]
+        public float updateTimeForDarkness = 0f;
         [Tooltip("Less light than this and Darkness starts coming")]
         public float minumumLight = .3f;
         [Tooltip("This is the speed att which the deaths approaches in just under minimumLight")]
-        public float timeInMinumumLight = 25f;
+        public float deathTimeInMinumumLight = 25f;
         [Tooltip("This is the speed att which the deaths approaches in Total Darkness")]
-        public float timeInTotalDarkness = 1f;
+        public float deathTimeInTotalDarkness = 1f;
+        [Tooltip("This is the speed att which the light returnes in just at minimumLight")]
+        public float lightTimeInMinumumLight = 5f;
+        [Tooltip("This is the speed att which the light returnes in Total Darkness")]
+        public float lightTimeInTotalLight = 1f;
+
 
 
         public static float lightValue;
@@ -58,8 +65,8 @@ namespace CallbackSystem
         {
             if(obj.to == TimeTravelPeriod.Future)
             {
-                StartCoroutine(LightDetectionUpdate(updateTime));
-                StartCoroutine(Darkness(updateTime));
+                StartCoroutine(LightDetectionUpdate(updateTimeForDetector));
+                StartCoroutine(Darkness(updateTimeForDarkness));
             }
             else
             {
@@ -78,21 +85,20 @@ namespace CallbackSystem
                 if (lightValue < minumumLight)
                 {
                     //timer += (Time.deltaTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, lightValue * (1 / minumumLight)));
-                    timer += (updateTime / Mathf.Lerp(timeInTotalDarkness, timeInMinumumLight, (lightValue * (1 / minumumLight)) / Time.deltaTime));
+                    timer += (updateTime / Mathf.Lerp(deathTimeInTotalDarkness, deathTimeInMinumumLight, (lightValue / minumumLight)));
                 }
-                else
-                    timer = 0f;
+                else if(lightValue >= minumumLight && timer > 0)
+                {
+                    timer -= (updateTime / Mathf.Lerp(lightTimeInMinumumLight, lightTimeInTotalLight, (lightValue - minumumLight) / (1 - minumumLight) ));
+                }
                 if (timer >= 1)
                 {
                     LightDetectior();
                     if (lightValue < minumumLight)
                     {
-                       
+                        timer = 0f;
                         fail.Invoke();
                     }
-                    else
-                        timer = 0f;
-
                 }
                 vignette.intensity.value = timer;
             }
@@ -105,7 +111,7 @@ namespace CallbackSystem
             texTemp = new RenderTexture(textureSize, textureSize, 24);
             rectLight = new Rect(0f, 0f, textureSize, textureSize);
 
-            StartCoroutine(LightDetectionUpdate(updateTime));
+            StartCoroutine(LightDetectionUpdate(updateTimeForDetector));
         }
 
         private IEnumerator LightDetectionUpdate(float updateTime)
