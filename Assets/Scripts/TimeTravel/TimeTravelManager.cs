@@ -69,7 +69,7 @@ public class TimeTravelManager : MonoBehaviour {
         var simulationComplete = new PhysicsSimulationComplete { from = e.from, to = e.to };
         simulationComplete.Invoke();
 
-        switch (e.to) {
+        /*switch (e.to) {
             case TimeTravelPeriod.Past:
                 timeText.text = "Current Time Period: Past";
                 break;
@@ -79,7 +79,7 @@ public class TimeTravelManager : MonoBehaviour {
             case TimeTravelPeriod.Future:
                 timeText.text = "Current Time Period: Future";
                 break;
-        }
+        }*/
     }
 }
 

@@ -94,6 +94,18 @@ namespace CallbackSystem
             }
         }
 
+        private void PastChargeChange()
+        {
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.pastSelf != null)
+            {
+                Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
+            }
+            if (timeTravelObject.pastSelf != null)
+            {
+                Charging(pastCubeCharge.charge - chargeReductionAfterTimeJump, this);
+            }
+        }
+
         private IEnumerator SetMaterial(bool on)
         {
             float timer = 0f;
@@ -134,6 +146,7 @@ namespace CallbackSystem
                 pingPong.SetPower(0f);
                 //iconBehaviour.IsCharged(false);
             }
+            PastChargeChange();
         }
         private IEnumerator SetPast()
         {
