@@ -5,13 +5,18 @@ using UnityEngine;
 
 public class Charger : MonoBehaviour
 {
-    [SerializeField] private int charge = 1;
+    [SerializeField] private int pastCharge = 2;
+    [SerializeField] private int presentCharge = 1;
+    [SerializeField] private int futerCharge = 0;
     
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<CubeCharge>() != null)
+        CubeCharge cubeCharge= other.GetComponent<CubeCharge>();
+        if (cubeCharge != null)
         {
-            other.gameObject.GetComponent<CubeCharge>().Charging(charge, this);
+            if (cubeCharge.pastCubeCharge != null && cubeCharge.pastCubeCharge.pastCubeCharge != null) { cubeCharge.Charging(futerCharge, this); }
+            else if (cubeCharge.pastCubeCharge != null) { cubeCharge.Charging(presentCharge, this); }
+            else cubeCharge.Charging(pastCharge, this);
         }
     }
 }
