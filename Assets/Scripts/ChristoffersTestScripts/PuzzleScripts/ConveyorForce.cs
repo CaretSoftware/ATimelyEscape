@@ -13,7 +13,7 @@ public class ConveyorForce : MonoBehaviour
         {
             other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * speed) * Time.deltaTime, ForceMode.Impulse);
         }
-        if(other.gameObject.tag == "Cube")
+        else if(other.gameObject.tag == "Cube")
         {
             other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * ((speed * speedMultiplier) * cubeSpeedMultiplyer)) * Time.deltaTime, ForceMode.Impulse);
         }
