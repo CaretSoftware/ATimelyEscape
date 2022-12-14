@@ -7,9 +7,22 @@ public class ConveyorForce : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float speedMultiplier;
     [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private Material offMaterial;
+    [SerializeField] private MeshRenderer meshRenderer2;
+    private MaterialPropertyBlock _matPropBlock;
     private float cubeSpeedMultiplyer = 150f;
-    private bool isOn = true;
+    private bool isOn;
+
+    void Awake()
+    {
+        _matPropBlock = new MaterialPropertyBlock();
+    }
+
+    private void Start()
+    {
+        isOn = true;
+        
+
+    }
     private void OnTriggerStay(Collider other)
     {
         if (isOn)
@@ -32,12 +45,22 @@ public class ConveyorForce : MonoBehaviour
     public void TurnOff()
     {
         isOn = false;
-        if (meshRenderer != null)
+
+        if (_matPropBlock != null)
         {
-            Material[] materials = meshRenderer.sharedMaterials;
-            materials[1] = offMaterial;
-            meshRenderer.material = offMaterial;
-            meshRenderer.sharedMaterials = materials;
+            _matPropBlock.SetFloat("_Scrolling_Time_X", 0f);
+
+            // Apply the edited values to the renderer.
+            meshRenderer.SetPropertyBlock(_matPropBlock);
+        }
+        if (_matPropBlock != null)
+        {
+            _matPropBlock.SetFloat("_Scrolling_Time_X", 0f);
+
+            // Apply the edited values to the renderer.
+            meshRenderer2.SetPropertyBlock(_matPropBlock);
         }
     }
+
+
 }
