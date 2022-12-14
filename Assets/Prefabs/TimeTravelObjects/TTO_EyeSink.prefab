@@ -48,20 +48,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changesPrefab: 1
-  changesMaterials: 0
   canBeMovedByPlayer: 0
   showPreviewBox: 0
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 1
-  pastMaterials: []
-  presentMaterials: []
-  futureMaterials: []
-  renderers: []
   past: {fileID: 6201559943264088152}
   present: {fileID: 9180424038168204790}
   future: {fileID: 491707397484710711}
-  timeTravelObject: {fileID: 0}
 --- !u!1001 &234379275623869920
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -117,6 +111,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TTO[EyeSink]_[5d8969ec-69ff-4ba3-b0af-e9f00367fb93]_[Future]
       objectReference: {fileID: 0}
+    - target: {fileID: 788031046417341546, guid: 4a0870ec71c9b9d4d91a1068e56ca88c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a0870ec71c9b9d4d91a1068e56ca88c, type: 3}
 --- !u!4 &208529075010612016 stripped
@@ -152,6 +150,10 @@ PrefabInstance:
     - target: {fileID: 8112520271876279342, guid: 6b5a5ca8ed0f30b41857e9d9ae6cbdd0, type: 3}
       propertyPath: m_Name
       value: TTO[EyeSink]_[5d8969ec-69ff-4ba3-b0af-e9f00367fb93]_[Present]
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112520271876279342, guid: 6b5a5ca8ed0f30b41857e9d9ae6cbdd0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8925754683610830484, guid: 6b5a5ca8ed0f30b41857e9d9ae6cbdd0, type: 3}
       propertyPath: m_RootOrder
@@ -232,6 +234,10 @@ PrefabInstance:
     - target: {fileID: 1292697214561409501, guid: 0bd88d599783b18468aca24413b341a0, type: 3}
       propertyPath: m_Name
       value: TTO[EyeSink]_[5d8969ec-69ff-4ba3-b0af-e9f00367fb93]_[Past]
+      objectReference: {fileID: 0}
+    - target: {fileID: 1292697214561409501, guid: 0bd88d599783b18468aca24413b341a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1926210128879649639, guid: 0bd88d599783b18468aca24413b341a0, type: 3}
       propertyPath: m_RootOrder
