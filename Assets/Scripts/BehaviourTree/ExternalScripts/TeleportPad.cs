@@ -10,7 +10,7 @@ public class TeleportPad : MonoBehaviour
     private TeleportPad[] pads;
     private MeshRenderer mr;
     private NavMeshHit hit;
-    private bool active;
+    [SerializeField ]private bool active;
 
     [HideInInspector] public Material indicatorMaterial;
     [HideInInspector] public bool OnCooldown;
@@ -28,7 +28,7 @@ public class TeleportPad : MonoBehaviour
     private void OnTriggerEnter(Collider target)
     {
         if (active && !OnCooldown)
-            if (target.transform.tag.Equals("Player") || target.transform.transform.Equals("Cube"))
+            if (target.transform.tag.Equals("Player") || target.transform.tag.Equals("Cube"))
                 Teleport(target.transform);
     }
 

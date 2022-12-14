@@ -7,21 +7,11 @@ using UnityEngine;
 public class TimeTravelObjectManager : MonoBehaviour {
     [Tooltip(
         "Whether the time travelling object uses different prefabs in different time periods, this goes for meshes AND decals")]
-    [DisableIf(nameof(changesMaterials))]
     [OnValueChanged(nameof(OnCheckChangesMesh))]
     [SerializeField]
     private bool changesPrefab;
 
-    [Tooltip("Whether the object changes materials upon travelling between different time periods. " +
-             "ATTENTION: It's very important that the renderers are added in the arrays in the SAME ORDER as the materials otherwise it will not work properly." +
-             " NOTE: Materials specific for each period have to be already applied to the meshes in question")]
-    [DisableIf(EConditionOperator.Or, nameof(canBeMovedByPlayer), nameof(changesPrefab))]
-    [OnValueChanged(nameof(OnCheckMaterialsChange))]
-    [SerializeField]
-    private bool changesMaterials;
-
     private bool IsNotChangingPrefab => !changesPrefab;
-
 
     [Tooltip(
         "Objects that can be moved by player must have different meshes/instances for each time period it exists in. Any time period it does not exist in can be left as null")]
@@ -50,42 +40,11 @@ public class TimeTravelObjectManager : MonoBehaviour {
     [SerializeField]
     private bool canCollideOnTimeTravel;
 
-    [ShowIf(nameof(changesMaterials))]
-    [AllowNesting]
-    [SerializeField]
-    private MaterialInfo[] pastMaterials;
-
-
-    [ShowIf(nameof(changesMaterials))]
-    [AllowNesting]
-    [SerializeField]
-    private MaterialInfo[] presentMaterials;
-
-
-    [ShowIf(nameof(changesMaterials))]
-    [AllowNesting]
-    [SerializeField]
-    private MaterialInfo[] futureMaterials;
-
-    [ShowIf(nameof(changesMaterials))]
-    [SerializeField]
-    private Renderer[] renderers;
-
-
     [ShowIf(EConditionOperator.Or, nameof(changesPrefab), nameof(canBeMovedByPlayer))]
     [SerializeField]
     private TimeTravelObject past, present, future;
 
-    [HideIf(EConditionOperator.Or, nameof(changesPrefab), nameof(canBeMovedByPlayer))]
-    [SerializeField]
-    private TimeTravelObject timeTravelObject;
-
     public TimeTravelObjectState ObjectState { get; private set; }
-
-    public MaterialInfo[] PastMaterials => pastMaterials;
-    public MaterialInfo[] PresentMaterials => presentMaterials;
-    public MaterialInfo[] FutureMaterials => futureMaterials;
-    public Renderer[] Renderers => renderers;
 
     private Vector3 activePosition;
 
@@ -94,32 +53,24 @@ public class TimeTravelObjectManager : MonoBehaviour {
     public TimeTravelObject Future { get => future; set => future = value; }
 
     public bool CanBeMovedByPlayer { get => canBeMovedByPlayer; set => canBeMovedByPlayer = value; }
-    public bool ChangesMaterials { get => changesMaterials; set => changesMaterials = value; }
     public bool ChangesPrefab { get => changesPrefab; set => changesPrefab = value; }
-    public bool ShowPreviewBox { get => showPreviewBox; set => showPreviewBox = value; }
-    public float PreviewBoxScale { get => previewBoxScale; set => previewBoxScale = value; }
-    public float PreviewBoxMinDistance { get => previewBoxMinShowDistance; set => previewBoxMinShowDistance = value; }
     public bool CanCollideOnTimeTravel { get => canCollideOnTimeTravel; set => canCollideOnTimeTravel = value; }
 
     private bool TObjectOrWBoxNull =>
         (past == null || present == null || future == null || past.wireBox == null || present.wireBox == null ||
          future.wireBox == null);
 
-    private int traveledFromIndex, traveledToIndex;
+    private TimeTravelPeriod traveledFrom, traveledTo;
 
-    private Dictionary<string, DisplacmentInfo[]> DisplacementsAndRenderers =
-        new Dictionary<string, DisplacmentInfo[]>();
+    private Dictionary<string, DisplacmentInfo[]> DisplacementsAndRenderers = new Dictionary<string, DisplacmentInfo[]>();
 
     public void Awake() {
         CheckForMissingComponents();
         DetermineTimeTravelObjectState();
 
-        if (changesPrefab || canBeMovedByPlayer) {
-            past?.SetUpTimeTravelObject(this);
-            present?.SetUpTimeTravelObject(this, past);
-            future?.SetUpTimeTravelObject(this, present);
-        } else timeTravelObject.SetUpTimeTravelObject(this);
-
+        past?.SetUpTimeTravelObject(this);
+        present?.SetUpTimeTravelObject(this, past);
+        future?.SetUpTimeTravelObject(this, present);
 
         if (Application.isPlaying) {
             TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimePeriodChanged);
@@ -151,17 +102,8 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
     private void DetermineTimeTravelObjectState() {
         switch (changesPrefab) {
-            case true when !canBeMovedByPlayer:
-                ObjectState = TimeTravelObjectState.PrefabChanging;
-                break;
-            case true when canBeMovedByPlayer:
-                ObjectState = TimeTravelObjectState.PrefabChangingPlayerMove;
-                break;
-            default: {
-                    if (changesMaterials && !canBeMovedByPlayer && !changesPrefab)
-                        ObjectState = TimeTravelObjectState.SwitchingMaterial;
-                    break;
-                }
+            case true when !canBeMovedByPlayer: ObjectState = TimeTravelObjectState.PrefabChanging; break;
+            case true when canBeMovedByPlayer: ObjectState = TimeTravelObjectState.PrefabChangingPlayerMove; break;
         }
     }
 
@@ -173,23 +115,22 @@ public class TimeTravelObjectManager : MonoBehaviour {
     }
 
     private void CategorizeRenderersForDisplacement(Transform currentTransform) {
-        Renderer r = currentTransform.GetComponent<Renderer>();
-        if (r) {
+        Renderer subRenderer = currentTransform.GetComponent<Renderer>();
+        if (subRenderer) {
             DisplacmentInfo info = new DisplacmentInfo();
-            TimeTravelDisplacement d = currentTransform.gameObject.GetOrAddComponent<TimeTravelDisplacement>();
-            info.displacement = d;
-            info.renderer = r;
-            info.originalMaterials = r.materials;
+            TimeTravelDisplacement displacement = currentTransform.gameObject.GetOrAddComponent<TimeTravelDisplacement>();
+            info.displacement = displacement;
+            info.renderer = subRenderer;
+            info.originalMaterials = subRenderer.materials;
 
-            string[] splitName = currentTransform.name.Split('_');
+            string[] splitName = currentTransform.name.Split('[');
 
-            string rendererID = splitName[1];
+            string rendererID = splitName[2].Substring(0, splitName[2].Length - 1);
             info.rendererID = rendererID;
 
-            if (!DisplacementsAndRenderers.ContainsKey(rendererID))
-                DisplacementsAndRenderers.Add(rendererID, new DisplacmentInfo[3]);
+            if (!DisplacementsAndRenderers.ContainsKey(rendererID)) DisplacementsAndRenderers.Add(rendererID, new DisplacmentInfo[3]);
 
-            switch (splitName[2].Substring(1, splitName[2].Length - 2).ToLower()) {
+            switch (splitName[3].Substring(0, splitName[3].Length - 1).ToLower()) {
                 case "past": DisplacementsAndRenderers[rendererID][0] = info; break;
                 case "present": DisplacementsAndRenderers[rendererID][1] = info; break;
                 case "future": DisplacementsAndRenderers[rendererID][2] = info; break;
@@ -233,44 +174,18 @@ public class TimeTravelObjectManager : MonoBehaviour {
     }
 
     private void HandleDisplacement(TimePeriodChanged e) {
-        switch (e.from) {
-            case TimeTravelPeriod.Past:
-                if (!past) traveledFromIndex = -1;
-                else traveledFromIndex = 0;
-                break;
-            case TimeTravelPeriod.Present:
-                if (!present) traveledFromIndex = -1;
-                else traveledFromIndex = 1;
-                break;
-            case TimeTravelPeriod.Future:
-                if (!future) traveledFromIndex = -1;
-                else traveledFromIndex = 2;
-                break;
-        }
+        traveledFrom = e.from;
+        traveledTo = e.to;
 
-        switch (e.to) {
-            case TimeTravelPeriod.Past:
-                if (!past) traveledToIndex = -1;
-                else traveledToIndex = 0;
-                break;
-            case TimeTravelPeriod.Present:
-                if (!present) traveledToIndex = -1;
-                else traveledToIndex = 1;
-                break;
-            case TimeTravelPeriod.Future:
-                if (!future) traveledToIndex = -1;
-                else traveledToIndex = 2;
-                break;
-        }
-
-        if (traveledToIndex == -1 || traveledFromIndex == -1) return;
-
-        Material[] displacementMat = new Material[] { Resources.Load("TimeTravelDisplacement1") as Material };
-        foreach (var info in DisplacementsAndRenderers.Values) {
-            if (info[traveledFromIndex] == null || info[traveledToIndex] == null) continue;
-            info[traveledFromIndex].renderer.materials = displacementMat;
-            info[traveledToIndex].renderer.materials = displacementMat;
-            info[traveledFromIndex].displacement.Displace(info[traveledToIndex].renderer.transform);
+        if ((int)traveledFrom < 3 && (int)traveledTo < 3) {
+            Material[] displacementMat = new Material[] { Resources.Load("TimeTravelDisplacement1") as Material };
+            foreach (var info in DisplacementsAndRenderers.Values) {
+                if (info[(int)traveledFrom] == null || info[(int)traveledTo] == null ||
+                Vector3.Distance(info[(int)traveledFrom].renderer.transform.position, info[(int)traveledTo].renderer.transform.position) < 0.01f) continue;
+                info[(int)traveledFrom].renderer.materials = displacementMat;
+                info[(int)traveledTo].renderer.materials = displacementMat;
+                info[(int)traveledFrom].displacement.Displace(info[(int)traveledTo].renderer.transform);
+            }
         }
 
         StartCoroutine(DisplacementComplete());
@@ -279,13 +194,12 @@ public class TimeTravelObjectManager : MonoBehaviour {
     private IEnumerator<WaitForSecondsRealtime> DisplacementComplete() {
         yield return new WaitForSecondsRealtime(0.2f);
 
-        if (traveledFromIndex > -1 || traveledToIndex > -1) {
+        if ((int)traveledFrom < 3 || (int)traveledTo < 3) {
             foreach (var info in DisplacementsAndRenderers.Values) {
                 for (int i = 0; i < 3; i++) {
                     if (info[i] == null) continue;
                     info[i].renderer.materials = info[i].originalMaterials;
-                    info[i].renderer.enabled = i == traveledToIndex ? true : false;
-
+                    info[i].renderer.enabled = i == (int)traveledTo ? true : false;
                 }
             }
         }
@@ -296,14 +210,11 @@ public class TimeTravelObjectManager : MonoBehaviour {
         switch (ObjectState) {
             case TimeTravelObjectState.PrefabChanging:
             case TimeTravelObjectState.PrefabChangingPlayerMove:
-                if (past != null && past.wireBox == null &&
-                    ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
+                if (past != null && past.wireBox == null && ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
                     SetUpWireBox(past, Color.white);
-                if (present != null && present.wireBox == null &&
-                    ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
+                if (present != null && present.wireBox == null && ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
                     SetUpWireBox(present, Color.gray);
-                if (future != null && future.wireBox == null &&
-                    ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
+                if (future != null && future.wireBox == null && ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
                     SetUpWireBox(future, Color.blue);
 
                 past?.SetActive(e.to == TimeTravelPeriod.Past ? true : false);
@@ -313,9 +224,6 @@ public class TimeTravelObjectManager : MonoBehaviour {
                 HandleDisplacement(e);
 
                 break;
-            case TimeTravelObjectState.SwitchingMaterial:
-                timeTravelObject.UpdateMaterials(e.to);
-                break;
             case TimeTravelObjectState.Dummy: break;
         }
     }
@@ -324,40 +232,25 @@ public class TimeTravelObjectManager : MonoBehaviour {
     private void OnPhysicsSimulationComplete(PhysicsSimulationComplete e) {
         if (ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove) {
             if (past?.Rigidbody != null) past.Rigidbody.isKinematic = e.to is not TimeTravelPeriod.Past;
-            if (present?.Rigidbody != null)
-                present.Rigidbody.isKinematic = e.from is TimeTravelPeriod.Future && e.to is TimeTravelPeriod.Present;
+            if (present?.Rigidbody != null) present.Rigidbody.isKinematic = e.from is TimeTravelPeriod.Future && e.to is TimeTravelPeriod.Present;
         }
     }
-
 
     private void OnCheckPlayerCanMove() {
         if (!canBeMovedByPlayer) return;
         if (canBeMovedByPlayer) canCollideOnTimeTravel = true;
-        changesMaterials = false;
     }
 
-    private void OnCheckCanCollide() {
-        if (canBeMovedByPlayer && !canCollideOnTimeTravel) canBeMovedByPlayer = false;
-    }
-
-    private void OnCheckMaterialsChange() {
-        if (changesMaterials) changesPrefab = false;
-    }
+    private void OnCheckCanCollide() { if (canBeMovedByPlayer && !canCollideOnTimeTravel) canBeMovedByPlayer = false; }
 
     private void OnCheckChangesMesh() {
         if (changesPrefab) return;
         canBeMovedByPlayer = false;
     }
-
-    [Serializable]
-    public class MaterialInfo {
-        public Material[] materials;
-    }
 }
 
 public enum TimeTravelObjectState {
-    PrefabChanging = 0,
-    PrefabChangingPlayerMove = 1,
-    SwitchingMaterial = 2,
-    Dummy = 3
+    PrefabChanging,
+    PrefabChangingPlayerMove,
+    Dummy
 }

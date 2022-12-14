@@ -6,11 +6,16 @@ public class ConveyorForce : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float speedMultiplier;
+    private float cubeSpeedMultiplyer = 150f; 
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
             other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * speed) * Time.deltaTime, ForceMode.Impulse);
+        }
+        else if(other.gameObject.tag == "Cube")
+        {
+            other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * ((speed * speedMultiplier) * cubeSpeedMultiplyer)) * Time.deltaTime, ForceMode.Impulse);
         }
         else
         {

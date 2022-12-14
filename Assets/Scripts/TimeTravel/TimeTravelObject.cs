@@ -13,41 +13,19 @@ public class TimeTravelObject : MonoBehaviour {
     private TimeTravelObjectManager manager;
     public Rigidbody Rigidbody { get; private set; }
     private StateMachine stateMachine;
-    private List<Renderer> renderers;
-    private List<Renderer> renderers2 = new List<Renderer>();
-    private List<TimeTravelDisplacement> displacements = new List<TimeTravelDisplacement>();
-    private List<Material[]> materialsList = new List<Material[]>();
-
-    private int numColliders = 0;
     public GameObject previewBoxObject { get; set; }
     public WireBox wireBox { get; set; }
     public bool IsActive { get; private set; }
     public TimeTravelPeriod timeTravelPeriod { get; set; }
-
-
     private List<Component> allComponents;
-
-    private List<GameObject> nonMovableColliderObjects = new List<GameObject>();
-    private GameObject nonMovableCollidersParent;
-
-    public List<Renderer> OrderedRenderers { get => renderers2; private set => renderers2 = value; }
-
-    public List<TimeTravelDisplacement> OrderedDisplacements {
-        get => displacements;
-        private set => displacements = value;
-    }
-
-    public List<Material[]> OrderedMaterials { get => materialsList; private set => materialsList = value; }
 
     public void SetUpTimeTravelObject(TimeTravelObjectManager manager, TimeTravelObject pastSelf = null) {
         this.manager = manager;
         allComponents = GetComponents<Component>().ToList();
         allComponents.AddRange(GetComponentsInChildren<Component>());
-        GatherRenderersMatsAndDisplacements(transform);
 
         switch (manager.ObjectState) {
-            case TimeTravelObjectState.PrefabChanging:
-                break;
+            case TimeTravelObjectState.PrefabChanging: break;
             case TimeTravelObjectState.PrefabChangingPlayerMove:
                 this.pastSelf = pastSelf;
                 Rigidbody = GetComponent<Rigidbody>();
@@ -70,81 +48,23 @@ public class TimeTravelObject : MonoBehaviour {
                 if (Application.isPlaying) DestinyChanged.AddListener<DestinyChanged>(OnDestinyChanged);
                 break;
 
-            case TimeTravelObjectState.SwitchingMaterial:
-                renderers = manager.Renderers.ToList();
-                CheckRenderersAndMaterialsMatch();
-                break;
-
             case TimeTravelObjectState.Dummy: break;
             default: throw new ArgumentOutOfRangeException();
         }
     }
 
-    public void GatherRenderersMatsAndDisplacements(Transform currentTransform) {
-        Renderer temp = currentTransform.GetComponent<Renderer>();
-        if (temp != null) {
-            renderers2.Add(temp);
-            displacements.Add(temp.gameObject.GetOrAddComponent<TimeTravelDisplacement>());
-            OrderedMaterials.Add(temp.materials);
-        }
-
-        for (int i = 0; i < currentTransform.childCount; i++)
-            GatherRenderersMatsAndDisplacements(currentTransform.GetChild(i).transform);
-    }
-
-    private void CheckRenderersAndMaterialsMatch() {
-        string errorMessage = "";
-        if (manager.PastMaterials.Length != renderers.Count) errorMessage += $"[{nameof(manager.PastMaterials)}";
-        if (manager.PresentMaterials.Length != renderers.Count) {
-            if (!errorMessage.Contains(nameof(manager.PastMaterials)))
-                errorMessage += $"[{nameof(manager.PresentMaterials)}";
-            else errorMessage += $", {nameof(manager.PresentMaterials)}";
-        }
-
-        if (manager.FutureMaterials.Length != renderers.Count) {
-            if (!errorMessage.Contains(nameof(manager.PastMaterials)) &&
-                !errorMessage.Contains(nameof(manager.PresentMaterials)))
-                errorMessage = $"[{nameof(manager.FutureMaterials)}";
-            else errorMessage += $", {nameof(manager.FutureMaterials)}";
-        }
-
-        if (errorMessage.Length > 1) {
-            errorMessage +=
-                $"] material array(s) do not match the length of the renderer array on {nameof(TimeTravelObjectManager)}: {manager.name}";
-            /*Debug.LogWarning("CHRISTOFFER THE ERROR IS HERE!", manager.gameObject);*/
-            throw new ArgumentException(errorMessage);
-        }
-    }
-
-    private void Update() { stateMachine.Run(); }
-
-    public void UpdateMaterials(TimeTravelPeriod period) {
-        switch (period) {
-            case TimeTravelPeriod.Past:
-                for (int i = 0; i < renderers.Count; i++) renderers[i].materials = manager.PastMaterials[i].materials;
-                break;
-            case TimeTravelPeriod.Present:
-                for (int i = 0; i < renderers.Count; i++)
-                    renderers[i].materials = manager.PresentMaterials[i].materials;
-                break;
-            case TimeTravelPeriod.Future:
-                for (int i = 0; i < renderers.Count; i++)
-                    renderers[i].materials = manager.FutureMaterials[i].materials;
-                break;
-        }
-    }
+    private void Update() { if (stateMachine != null) stateMachine.Run(); }
 
     public void SetActive(bool active) {
         if (manager.CanCollideOnTimeTravel) {
             if (!gameObject.activeSelf) gameObject.SetActive(true);
-            foreach (var c in allComponents) {
-                if (c != null) {
-                    if (!c.gameObject.activeSelf) c.gameObject.SetActive(true);
-                    Type t = c.GetType();
-                    if (t.IsSubclassOf(typeof(Behaviour)) && t != typeof(TimeTravelObject) &&
-                        t != typeof(NavMeshAgent) && t != typeof(NavMeshAgentHandler))
-                        ((Behaviour)c).enabled = active;
-                    // else if (t.IsSubclassOf(typeof(Renderer))) ((Renderer)c).enabled = active;
+            foreach (var component in allComponents) {
+                if (component != null) {
+                    if (!component.gameObject.activeSelf) component.gameObject.SetActive(true);
+                    Type type = component.GetType();
+                    if (type.IsSubclassOf(typeof(Behaviour)) && type != typeof(TimeTravelObject) &&
+                        type != typeof(NavMeshAgent) && type != typeof(NavMeshAgentHandler))
+                        ((Behaviour)component).enabled = active;
                 }
             }
 
