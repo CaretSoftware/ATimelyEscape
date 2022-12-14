@@ -39,11 +39,18 @@ public class TravelPathScript : MonoBehaviour
         index = pathReg ? 0 : pos.Length - 1;
         iterations = 0;
 
+        Debug.Log($"Telport tag{teleportingObject.tag}");
+
         this.teleportingObject.SetActive(false);
-        NavMesh.SamplePosition(arrivalLocation, out hit, 1, NavMesh.AllAreas);
-        teleportingObject.transform.position = hit.position;
+        /* NavMesh.SamplePosition(arrivalLocation, out hit, 1, NavMesh.AllAreas);
+         teleportingObject.transform.position = hit.position;*/
+        teleportingObject.transform.position = arrivalLocation;
 
         objectToMove.SetActive(true);
+        if(teleportingObject.tag == "Cube")
+        {
+            teleportingObject.GetComponent<Rigidbody>().AddForce(Vector3.forward, ForceMode.Impulse);
+        }
         objectToMove.transform.position = pos[index];
     }
 
