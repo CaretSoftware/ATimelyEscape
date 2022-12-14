@@ -39,7 +39,9 @@ namespace NewRatCharacterController {
 			_velX = _inputVector.x;
 			_velZ = _inputVector.z;
 		}
-		
-		
+
+		public void SetJumped() {
+			_animator.SetTrigger(Jump);
+		}
 	}
 }

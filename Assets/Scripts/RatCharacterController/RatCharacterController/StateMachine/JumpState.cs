@@ -11,6 +11,7 @@ namespace NewRatCharacterController {
             NewRatCharacter._jumpedOnce = true;
             NewRatCharacter.airTime = 0;
             NewRatCharacter._velocity.y = NewRatCharacter._jumpForce;
+            NewRatCharacter.AnimationController.SetJumped();
         }
 
         public override void Run() {

@@ -48,7 +48,6 @@ namespace NewRatCharacterController {
                     maxDistance,
                     NewRatCharacter._collisionMask) &&
                 NewRatCharacter._velocity.y < float.Epsilon &&
-                // Vector3.Dot(lowHit.normal, Vector3.up) < .6f &&
                 !Physics.CapsuleCast(
                     NewRatCharacter._point1Transform.position + stepHeightVector,
                     NewRatCharacter._point2Transform.position + stepHeightVector, 
@@ -72,21 +71,11 @@ namespace NewRatCharacterController {
         }
 
         private void ApplyStaticFriction() {
-
-            // if (Char._velocity.magnitude < 
-            //     Char.normalForce.magnitude * Char._staticFrictionCoefficient) {
-            //     Char._velocity = Vector3.zero;
-            // } else {
-            //     Char._velocity -= Char._velocity.normalized * Char.normalForce.magnitude *
-            //                 Char._kineticFrictionCoefficient;
-            // }
             
             if (Vector3.ProjectOnPlane(NewRatCharacter._velocity, Vector3.up).magnitude <
                 NewRatCharacter.normalForce.magnitude * NewRatCharacter._staticFrictionCoefficient) {
                 
-                // float verticalVelocity = Char._velocity.y;
                 NewRatCharacter._velocity = Vector3.zero;
-                // Char._velocity.y = verticalVelocity;
             }
         }
 

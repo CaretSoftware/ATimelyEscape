@@ -125,6 +125,7 @@ public class NewRatCharacterController : MonoBehaviour {
 		_inputMovement = Vector3.zero;
 		UpdateGrounded();
 		Input();
+		AnimationController.InputVector(_inputMovement);
 		_stateMachine.Run();
 		UpdateVelocity();
 		ResolveOverlap();
