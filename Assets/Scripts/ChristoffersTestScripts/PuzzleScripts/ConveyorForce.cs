@@ -6,20 +6,38 @@ public class ConveyorForce : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float speedMultiplier;
-    private float cubeSpeedMultiplyer = 150f; 
+    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private Material offMaterial;
+    private float cubeSpeedMultiplyer = 150f;
+    private bool isOn = true;
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (isOn)
         {
-            other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * speed) * Time.deltaTime, ForceMode.Impulse);
+            if (other.gameObject.tag == "Player")
+            {
+                other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * speed) * Time.deltaTime, ForceMode.Impulse);
+            }
+            else if (other.gameObject.tag == "Cube")
+            {
+                other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * ((speed * speedMultiplier) * cubeSpeedMultiplyer)) * Time.deltaTime, ForceMode.Impulse);
+            }
+            else
+            {
+                other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * (speed * speedMultiplier)) * Time.deltaTime, ForceMode.Impulse);
+            }
         }
-        else if(other.gameObject.tag == "Cube")
+    }
+
+    public void TurnOff()
+    {
+        isOn = false;
+        if (meshRenderer != null)
         {
-            other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * ((speed * speedMultiplier) * cubeSpeedMultiplyer)) * Time.deltaTime, ForceMode.Impulse);
-        }
-        else
-        {
-            other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * (speed * speedMultiplier)) * Time.deltaTime, ForceMode.Impulse);
+            Material[] materials = meshRenderer.sharedMaterials;
+            materials[1] = offMaterial;
+            meshRenderer.material = offMaterial;
+            meshRenderer.sharedMaterials = materials;
         }
     }
 }
