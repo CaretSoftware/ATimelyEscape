@@ -33,7 +33,7 @@ public class CaptureNode : Node
 
         if (destinationDistance < captureDistance - 0.1f)
         {
-            handIKTarget.position = new Vector3(player.position.x, player.position.y + 0.1f, player.position.z);
+            handIKTarget.position = player.position;
             animator.SetTrigger("GrabAction");
             agent.isStopped = true;
             return NodeState.FAILURE;
