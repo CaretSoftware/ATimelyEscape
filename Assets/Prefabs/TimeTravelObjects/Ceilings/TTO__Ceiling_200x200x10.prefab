@@ -48,20 +48,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changesPrefab: 1
-  changesMaterials: 0
   canBeMovedByPlayer: 0
   showPreviewBox: 0
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 1
-  pastMaterials: []
-  presentMaterials: []
-  futureMaterials: []
-  renderers: []
   past: {fileID: 3134874636058263118}
   present: {fileID: 1481469140508748096}
   future: {fileID: 2946603336581655363}
-  timeTravelObject: {fileID: 0}
 --- !u!1001 &1661062599343071347
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -121,6 +115,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6287315363354258961, guid: 9b1a245b26fabb64da0655623fca2734, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: b3581814192582e4da0caca0239b8ce4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b1a245b26fabb64da0655623fca2734, type: 3}
 --- !u!4 &5766687233911174413 stripped
@@ -203,7 +201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 996347371256715459, guid: 1bb3a67df43164c41b69d4da4a231f97, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bb3a67df43164c41b69d4da4a231f97, type: 3}
@@ -287,8 +285,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5494941794342375364, guid: 863bcd594e75c8f4cbf142a011300630, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6287315363354258961, guid: 863bcd594e75c8f4cbf142a011300630, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6287315363354258961, guid: 863bcd594e75c8f4cbf142a011300630, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: b3581814192582e4da0caca0239b8ce4, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 863bcd594e75c8f4cbf142a011300630, type: 3}
 --- !u!1 &8533475705702389704 stripped
