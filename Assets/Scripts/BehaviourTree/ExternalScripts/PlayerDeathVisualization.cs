@@ -12,18 +12,12 @@ public class PlayerDeathVisualization : MonoBehaviour
         get { return _instance; }
     }
     
-    [SerializeField] private float fadeOutDividerVar = 2;
-    [SerializeField] private float fadeBackDividerVar = 1;
-
-    //Place Gameobject with this script as child of main camera.
-    private Animator hyperDriveAnimator;
-
-    //Place Gameobject as child of Canvas.
-    private CanvasGroup blackScreenCanvasGroup;
-
-    private ParticleSystem ps;
+    private Animator hyperDriveAnimator; //Place Gameobject with this script as child of main camera.
+    private CanvasGroup blackScreenCanvasGroup; //Place Gameobject as child of Canvas.
     private Transform checkpoint;
     private Transform player;
+    private ImageFadeFunctions imageFunctionality;
+
 
     private void Awake()
     {
@@ -37,51 +31,25 @@ public class PlayerDeathVisualization : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
         hyperDriveAnimator = GetComponent<Animator>();
-        blackScreenCanvasGroup = GameObject.Find("Canvas/BlackScreen").GetComponent<CanvasGroup>();
-        ps = GetComponent<ParticleSystem>();
+        imageFunctionality = GameObject.Find("Canvas/BlackScreen").GetComponent<ImageFadeFunctions>();
     }
 
     //Call on when player dies.
     public void PlayDeathVisualization(Transform checkpoint)
     {
         this.checkpoint = checkpoint;
-        StartCoroutine(FadeToBlack());
+        hyperDriveAnimator.gameObject.SetActive(true);
         hyperDriveAnimator.SetTrigger("DeathAnimTrigger");
     }
 
-    //enables/disables relevant components.
-    private void StopVisualization()
-    {
-        ps.Stop();
-        blackScreenCanvasGroup.alpha = 0;
-    }
+    public void FadeToBlack() { imageFunctionality.RunFadeToBlack(); }
+    public void FadeToWhite() { imageFunctionality.RunFadeToWhite(); }
 
-    //fade blackScreenCanvasGroup from transparent to black.
-    private IEnumerator FadeToBlack()
-    {
-        while (blackScreenCanvasGroup.alpha < 1)
-        {
-            blackScreenCanvasGroup.alpha += Time.deltaTime / fadeOutDividerVar;
-            yield return null;
-        }
-    }
-
-    //called on as animation event when player should spawn and animation end.
-    public void RespawnPlayer()
+    public void FadeBack()
     {
         player.position = checkpoint.position;
-        StartCoroutine(FadeBack());
-        StopVisualization();
+        imageFunctionality.RunFadeBack();
         hyperDriveAnimator.ResetTrigger("DeathAnimTrigger");
-    }
-    
-    private IEnumerator FadeBack()
-    {
-        while (blackScreenCanvasGroup.alpha > 0)
-        {
-            blackScreenCanvasGroup.alpha -= Time.deltaTime / fadeBackDividerVar;
-            yield return null;
-        }
-
+        hyperDriveAnimator.gameObject.SetActive(false);
     }
 }
