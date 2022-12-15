@@ -6,8 +6,6 @@ using UnityEngine.Animations.Rigging;
 
 public class EnemyAI : MonoBehaviour
 {
-    public static bool isAnimationRunning;
-    
     private const float MovingToIdleMagnitude = 0.5f;
     private const float NavMeshRadiusOffstep = 20f;
 
@@ -51,7 +49,8 @@ public class EnemyAI : MonoBehaviour
     private float dy;
 
     private bool shouldMove;
-    private bool isReaching;
+    public static bool isReaching;
+    private bool isAnimationRunning;
 
     public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
 
