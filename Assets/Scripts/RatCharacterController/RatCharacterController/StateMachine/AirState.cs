@@ -7,8 +7,8 @@ namespace NewRatCharacterController {
 
 		private const string State = "AirState";
 		public override void Enter() {
-			
 			StateChange.stateUpdate?.Invoke(State);
+			NewRatCharacter.AnimationController.Fall();
 		}
 
 		public override void Run() {

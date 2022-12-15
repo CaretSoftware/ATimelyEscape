@@ -3,7 +3,7 @@ using UnityEngine;
 namespace NewRatCharacterController {
 	public class WallRunState : BaseState {
 		private const float AntiFloatForce = 25.0f;
-		private static float wallRunMagnitudeThreshold = .4f;
+		private static float wallRunMagnitudeThreshold = 0.04f;
 		private Vector3 _wallNormal;
 		private const string State = "WallRunState";
 
@@ -31,9 +31,10 @@ namespace NewRatCharacterController {
 
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
-			RaycastHit rightHit = RayCast(NewRatCharacter, NewRatCharacter.transform.right);
-			RaycastHit leftHit = RayCast(NewRatCharacter, -NewRatCharacter.transform.right);
-
+			Vector3 transformRight = NewRatCharacter.transform.right;
+			RaycastHit rightHit = RayCast(NewRatCharacter, transformRight);
+			RaycastHit leftHit = RayCast(NewRatCharacter, -transformRight);
+			
 			if (rightHit.collider)
 				_wallNormal = rightHit.normal;
 			else if (leftHit.collider)

@@ -70,6 +70,10 @@ public class NewRatCameraController : MonoBehaviour {
 		_cam = Camera.main;
 	}
 
+	private void Start() {
+		// _camera.parent = null;
+	}
+
 	private void Update() {
 		Input();
 	}
@@ -84,11 +88,16 @@ public class NewRatCameraController : MonoBehaviour {
 		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, clampLookupMax - LookOffset, clampLookupMin - LookOffset);
 	}
 
+	// private Vector3 _targetDampened;
+	// private float _targetSmoothTime = .05f;
+	// private Vector3 _currentVelocity;
+	
 	private bool _debugHit;
 	private void MoveCamera() {
+		
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 
-		_cam.cullingMask = _firstPerson ? ~(1 << 1) : -1;
+		_cam.cullingMask = _firstPerson ? ~(1 << 1) : -1; // TODO What is this for?
 		
 		if (_firstPerson) {
 			_camera.localPosition = _cameraGimble.localPosition;

@@ -125,11 +125,10 @@ public class NewRatCharacterController : MonoBehaviour {
 		_inputMovement = Vector3.zero;
 		UpdateGrounded();
 		Input();
-		AnimationController.InputVector(_inputMovement);
+		AnimationController.Vector(_inputMovement);
 		_stateMachine.Run();
 		UpdateVelocity();
 		ResolveOverlap();
-		
 		_transform.position += Time.deltaTime * _velocity;
 		//RotateTransform(); // TODO should this be commented out?
 	}

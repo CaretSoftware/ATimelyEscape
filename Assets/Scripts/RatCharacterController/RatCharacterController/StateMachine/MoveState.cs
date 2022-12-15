@@ -9,7 +9,7 @@ namespace NewRatCharacterController {
         public override void Enter() {
             StateChange.stateUpdate?.Invoke(State);
             NewRatCharacter._jumpedOnce = false;
-            //inAirTime = 0.0f;
+            NewRatCharacter.AnimationController.SetGrounded(true);
         }
 
         public override void Run() {
@@ -23,7 +23,7 @@ namespace NewRatCharacterController {
             else
                 AddGravityForce();
             
-            NewRatCharacter.AnimationController.InputVector(NewRatCharacter._velocity.ToVector2());
+            //NewRatCharacter.AnimationController.Vector(NewRatCharacter._velocity.ToVector2());
             
             if (NewRatCharacter.Jumped)
                 stateMachine.TransitionTo<JumpState>();
@@ -85,6 +85,9 @@ namespace NewRatCharacterController {
             NewRatCharacter._velocity.y += gravityMovement;
         }
 
-        public override void Exit() { }
+        public override void Exit() {
+            NewRatCharacter.AnimationController.SetGrounded(false);
+
+        }
     }
 }

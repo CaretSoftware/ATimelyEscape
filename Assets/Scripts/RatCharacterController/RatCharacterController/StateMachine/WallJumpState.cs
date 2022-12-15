@@ -30,6 +30,8 @@ namespace NewRatCharacterController {
 			redirectedVelocity += redirectedVelocity.normalized * 1.0f;
 			redirectedVelocity.y = NewRatCharacter._jumpForce;;
 			NewRatCharacter._velocity = redirectedVelocity;
+			
+			NewRatCharacter.AnimationController.Jump(); // TODO change to Wall Run Kickoff Animation
 		}
 
 		private Vector3 RedirectVelocity(Vector3 velocity, Vector3 normal) {
