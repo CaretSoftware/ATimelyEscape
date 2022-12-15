@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerDeathVisualization : MonoBehaviour
+public class FailStateScript : MonoBehaviour
 {
-    private static PlayerDeathVisualization _instance;
-    public static PlayerDeathVisualization Instance
+    private static FailStateScript _instance;
+    public static FailStateScript Instance
     {
         get { return _instance; }
     }
@@ -29,9 +29,9 @@ public class PlayerDeathVisualization : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Rat/Rat Mesh").transform;
         hyperDriveAnimator = GetComponent<Animator>();
-        imageFunctionality = GameObject.Find("Canvas/BlackScreen").GetComponent<ImageFadeFunctions>();
+        imageFunctionality = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
     }
 
     //Call on when player dies.
@@ -47,7 +47,9 @@ public class PlayerDeathVisualization : MonoBehaviour
 
     public void FadeBack()
     {
+        //player.gameObject.SetActive(false);
         player.position = checkpoint.position;
+        //player.gameObject.SetActive(true);
         imageFunctionality.RunFadeBack();
         hyperDriveAnimator.ResetTrigger("DeathAnimTrigger");
         hyperDriveAnimator.gameObject.SetActive(false);

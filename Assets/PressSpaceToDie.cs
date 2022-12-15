@@ -8,6 +8,6 @@ public class PressSpaceToDie : MonoBehaviour
     void Update()
     {
            if(Input.GetKeyDown(KeyCode.Space))
-               PlayerDeathVisualization.Instance.PlayDeathVisualization(checkpoint);
+               FailStateScript.Instance.PlayDeathVisualization(checkpoint);
     }
 }

@@ -153,7 +153,7 @@ public class EnemyAI : MonoBehaviour
     public void SetPlayerTransformToCheckpoint()
     {
         //fire event with checkpoint.
-        PlayerDeathVisualization.Instance.PlayDeathVisualization(checkpoint);
+        FailStateScript.Instance.PlayDeathVisualization(checkpoint);
         animator.SetTrigger("ReturnHandAction");
     }
     //not used (?)
