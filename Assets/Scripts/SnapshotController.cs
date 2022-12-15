@@ -2,10 +2,10 @@ using System.Collections;
 using UnityEngine.Audio;
 using System.Collections.Generic;
 using UnityEngine;
+using CallbackSystem;
 
 public class SnapshotController : MonoBehaviour
 {
-
     public AudioMixerSnapshot past;
     public AudioMixerSnapshot present;
     public AudioMixerSnapshot future;
@@ -15,14 +15,15 @@ public class SnapshotController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        present.TransitionTo(0f);
+        TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimeTravel);
+        //present.TransitionTo(0f);
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+/*        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             past.TransitionTo(0.5f);
         }
@@ -35,7 +36,19 @@ public class SnapshotController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             future.TransitionTo(0.5f);
-        }
+        }*/
     }
 
+    void OnTimeTravel(TimePeriodChanged tpc)
+    {
+        switch (tpc.to)
+        {
+            case TimeTravelPeriod.Past: past.TransitionTo(0.5f); 
+                break;
+            case TimeTravelPeriod.Present: present.TransitionTo(0.5f);
+                break;
+            case TimeTravelPeriod.Future: future.TransitionTo(0.5f);
+                break;
+        }
+    }
 }
