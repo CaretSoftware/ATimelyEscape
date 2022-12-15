@@ -10,7 +10,6 @@ public class SnapshotController : MonoBehaviour
     public AudioMixerSnapshot present;
     public AudioMixerSnapshot future;
 
-    private AudioSource source;
     public AudioClip zap;
 
     // Start is called before the first frame update
