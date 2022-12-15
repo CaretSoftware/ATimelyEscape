@@ -137,8 +137,12 @@ public class NewRatCharacterController : MonoBehaviour {
 		
 		float right = UnityEngine.Input.GetAxisRaw(Horizontal);
 		float forward = UnityEngine.Input.GetAxisRaw(Vertical);
+
+		Vector3 inputVector = new Vector3(right, 0.0f, forward);
 		
-		_inputMovement = Quaternion.Euler(0, _camera.rotation.y,0)  * new Vector3(right, 0.0f, forward);
+		AnimationController.SetInputVector(inputVector);
+		
+		_inputMovement = Quaternion.Euler(0, _camera.rotation.y,0)  * inputVector;
 		_inputMovement = InputToCameraProjection(_inputMovement);
 		if (_inputMovement.magnitude > 1.0f) // > 1.0f to keep thumbstick input from being normalized
 			_inputMovement.Normalize();

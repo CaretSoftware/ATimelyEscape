@@ -335,8 +335,7 @@ namespace RatCharacterController {
 			_characterAnimationController.Push(false);
 
 			_cameraFollow.SetFollowTransform(_playerTransform);
-
-
+			
 			CubePush.NotClosest();
 
 			_playerInputActions.BoxMovement.Disable();
