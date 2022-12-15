@@ -48,20 +48,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changesPrefab: 1
-  changesMaterials: 0
   canBeMovedByPlayer: 0
   showPreviewBox: 0
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 1
-  pastMaterials: []
-  presentMaterials: []
-  futureMaterials: []
-  renderers: []
   past: {fileID: 3381866240428307993}
   present: {fileID: 7033900315908818640}
   future: {fileID: 3142941278163533476}
-  timeTravelObject: {fileID: 0}
 --- !u!1001 &1188006743055247399
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,7 +113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3101565370124718340, guid: b3bc33cb56b76cb4aba94d5fd3f29d31, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3bc33cb56b76cb4aba94d5fd3f29d31, type: 3}
@@ -203,7 +197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6726510435055404757, guid: 015a4c5c08749764388cc880267e450e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 015a4c5c08749764388cc880267e450e, type: 3}
@@ -237,6 +231,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6346028481100401273}
     m_Modifications:
+    - target: {fileID: 5233397591438249347, guid: d1aa6008079943348a1d0077fa3176b9, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: eeff9ce861da0394dbe19f5fba746254, type: 2}
     - target: {fileID: 6025885645826714710, guid: d1aa6008079943348a1d0077fa3176b9, type: 3}
       propertyPath: m_Name
       value: TTO[WallWindow_300x230x10]_[04847c1d-66b0-4e46-a279-9599cb399ec3]_[Present]
