@@ -16,7 +16,7 @@ public class SnapshotController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-    
+        present.TransitionTo(0f);
     }
 
     // Update is called once per frame
@@ -25,17 +25,17 @@ public class SnapshotController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            past.TransitionTo(0f);
+            past.TransitionTo(0.5f);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            present.TransitionTo(0f);
+            present.TransitionTo(0.5f);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            future.TransitionTo(0f);
+            future.TransitionTo(0.5f);
         }
     }
 
