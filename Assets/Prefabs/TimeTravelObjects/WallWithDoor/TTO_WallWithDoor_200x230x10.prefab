@@ -48,20 +48,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changesPrefab: 1
-  changesMaterials: 0
   canBeMovedByPlayer: 0
   showPreviewBox: 0
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 1
-  pastMaterials: []
-  presentMaterials: []
-  futureMaterials: []
-  renderers: []
   past: {fileID: 187918171524811588}
   present: {fileID: 3257629773687681736}
   future: {fileID: 2329131416753900043}
-  timeTravelObject: {fileID: 0}
 --- !u!1001 &3450175173016345496
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -69,6 +63,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7908559960679396353}
     m_Modifications:
+    - target: {fileID: 5087211016219344727, guid: b25549c4aeb9b254584ae6b5623ca60f, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: eeff9ce861da0394dbe19f5fba746254, type: 2}
     - target: {fileID: 6256146033993761848, guid: b25549c4aeb9b254584ae6b5623ca60f, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -159,7 +157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2770514476425311205, guid: c4e08b1db7ee0ee4ea4260f56ab177a6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3258645221404584287, guid: c4e08b1db7ee0ee4ea4260f56ab177a6, type: 3}
       propertyPath: m_RootOrder
@@ -243,7 +241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4620737937010355891, guid: 3014b493f6a286c4cabdeac9f054701a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5434710056872195081, guid: 3014b493f6a286c4cabdeac9f054701a, type: 3}
       propertyPath: m_RootOrder
