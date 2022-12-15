@@ -7,7 +7,12 @@ public class ConvecyorBelt : MonoBehaviour
     [SerializeField] private GameObject[] spawnThis;
     [SerializeField] private float timeBetweenSpawn;
     [SerializeField] private Transform spawnPos;
+    private bool isOn;
 
+    private void Awake()
+    {
+        isOn = true; 
+    }
     private void Start()
     {
         StartCoroutine(SpawnObject());
@@ -15,7 +20,7 @@ public class ConvecyorBelt : MonoBehaviour
 
     IEnumerator SpawnObject()
     {
-        while (true)
+        while (true && isOn)
         {
             int randomIndex = Random.Range(0, spawnThis.Length);
 
@@ -23,5 +28,10 @@ public class ConvecyorBelt : MonoBehaviour
 
             yield return new WaitForSeconds(timeBetweenSpawn);
         }
+    }
+
+    public void mashineOff()
+    {
+        isOn = false;
     }
 }
