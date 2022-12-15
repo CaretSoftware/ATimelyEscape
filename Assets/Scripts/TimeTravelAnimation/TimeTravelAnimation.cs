@@ -7,22 +7,31 @@ using RatCharacterController;
 public class TimeTravelAnimation : MonoBehaviour
 {
     [SerializeField] private Material timeTravelMaterial;
+    [SerializeField] private Material watchEffectMaterial;
+    [SerializeField] private MeshRenderer watchEffectRenderer;
+    [SerializeField] private float watchStartDuration = 0.5f;
+    [SerializeField] private float watchEndDuration = 3f;
     [SerializeField] private float startDuration = 0.5f;
     [SerializeField] private float endDuration = 0.5f;
     [SerializeField] private float distance = 0.2f;
     [SerializeField] private float amount = 0.2f;
     [SerializeField] private float fresnelPower = 2f;
     [SerializeField] private float wobbleSpeed = 2f;
+    [SerializeField] private float watchTransparency = 0.5f;
+    [SerializeField] private float swirlSpeed = 1f;
 
     //private Transform playerTransform;
     private SkinnedMeshRenderer meshRenderer;
     private Material[] defaultMaterials;
-    private MaterialPropertyBlock _matPropBlock;
+    private MaterialPropertyBlock _matPropBlock; 
+    private MaterialPropertyBlock _watchEffectMatPropBlock;
     private List<ParticleSystem> particleSystems;
     private float initialDistance;
     private float initialAmount;
     private float initialFresnelPower;
     private float initialWobbleSpeed;
+    private float initialTransparency;
+    private float initialSwirlSpeed;
     private bool playing;
 
 
@@ -34,6 +43,7 @@ public class TimeTravelAnimation : MonoBehaviour
         LoadMaterialProperties();
         LoadParticleSystems();
         _matPropBlock = new MaterialPropertyBlock();
+        _watchEffectMatPropBlock = new MaterialPropertyBlock();
         TimePeriodChanged.AddListener<TimePeriodChanged>(PlayTimeTravelEffect);
     }
 
@@ -43,6 +53,12 @@ public class TimeTravelAnimation : MonoBehaviour
         initialAmount = timeTravelMaterial.GetFloat("_Amount");
         initialFresnelPower = timeTravelMaterial.GetFloat("_FresnelPower");
         initialWobbleSpeed = timeTravelMaterial.GetFloat("_WobbleSpeed");
+
+        if (watchEffectMaterial)
+        {
+            initialTransparency = watchEffectMaterial.GetFloat("_Transparency");
+            initialSwirlSpeed = watchEffectMaterial.GetFloat("_SwirlSpeed");
+        }
     }
 
     private void LoadParticleSystems()
@@ -66,7 +82,6 @@ public class TimeTravelAnimation : MonoBehaviour
             StopAllCoroutines();
         }
 
-        SetTimeTravelMaterial(false);
         playing = true;
         PlayParticles(true);
         StartCoroutine(AnimateTravel());
@@ -75,6 +90,21 @@ public class TimeTravelAnimation : MonoBehaviour
     private IEnumerator AnimateTravel()
     {
         float elapsedTime = 0f;
+        while (elapsedTime < watchStartDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            if(_watchEffectMatPropBlock != null && watchEffectRenderer != null && watchEffectMaterial != null)
+            {
+                watchEffectMaterial.SetFloat("_Transparency", Ease.EaseInOutSine(Mathf.Lerp(initialTransparency, watchTransparency, elapsedTime / watchStartDuration)));
+                watchEffectMaterial.SetFloat("_SwirlSpeed", Ease.EaseInOutSine(Mathf.Lerp(initialSwirlSpeed, swirlSpeed, elapsedTime / watchStartDuration)));
+
+                watchEffectRenderer.SetPropertyBlock(_watchEffectMatPropBlock);           
+            }
+            yield return null;
+        }
+
+        SetTimeTravelMaterial(false);
+        elapsedTime = 0f;
         while (elapsedTime < startDuration)
         {
             elapsedTime += Time.deltaTime;
@@ -115,9 +145,34 @@ public class TimeTravelAnimation : MonoBehaviour
 
             meshRenderer.SetPropertyBlock(_matPropBlock);
         }
+
+        if (_watchEffectMatPropBlock != null && watchEffectRenderer != null && watchEffectMaterial != null)
+        {
+            watchEffectMaterial.SetFloat("_Transparency", 0f);
+            watchEffectMaterial.SetFloat("_SwirlSpeed", 0.2f);
+
+            watchEffectRenderer.SetPropertyBlock(_watchEffectMatPropBlock);
+        }
+
+
         SetTimeTravelMaterial(true);
-        playing = false;
         PlayParticles(false);
+
+        elapsedTime = 0f;
+        while (elapsedTime < watchEndDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            if (_watchEffectMatPropBlock != null && watchEffectRenderer != null && watchEffectMaterial != null)
+            {
+                watchEffectMaterial.SetFloat("_Transparency", Ease.EaseInSine(Mathf.Lerp(watchTransparency, 0f, elapsedTime / watchEndDuration)));
+                watchEffectMaterial.SetFloat("_SwirlSpeed", Ease.EaseInSine(Mathf.Lerp(swirlSpeed, 0.2f, elapsedTime / watchEndDuration)));
+
+                watchEffectRenderer.SetPropertyBlock(_watchEffectMatPropBlock);
+            }
+            yield return null;
+        }
+
+        playing = false;
     }
 
     private void SetTimeTravelMaterial(bool reset)
