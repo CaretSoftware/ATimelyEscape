@@ -6,6 +6,8 @@ using UnityEngine.Animations.Rigging;
 
 public class EnemyAI : MonoBehaviour
 {
+    public static bool isAnimationRunning;
+    
     private const float MovingToIdleMagnitude = 0.5f;
     private const float NavMeshRadiusOffstep = 20f;
 
@@ -50,7 +52,6 @@ public class EnemyAI : MonoBehaviour
 
     private bool shouldMove;
     private bool isReaching;
-    private bool isAnimationRunning;
 
     public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
 
@@ -69,7 +70,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerTransform = GameObject.Find("Rat/Rat Mesh/RatGrabPoint").transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
         chainIKConstraint.weight = 0;
         defaultIKTarget = handIKTarget;
