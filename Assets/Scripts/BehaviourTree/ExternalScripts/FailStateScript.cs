@@ -18,7 +18,6 @@ public class FailStateScript : MonoBehaviour
     private Transform player;
     private ImageFadeFunctions imageFunctionality;
 
-
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -37,6 +36,7 @@ public class FailStateScript : MonoBehaviour
     //Call on when player dies.
     public void PlayDeathVisualization(Transform checkpoint)
     {
+        print($"animations triggered");
         this.checkpoint = checkpoint;
         hyperDriveAnimator.gameObject.SetActive(true);
         hyperDriveAnimator.SetTrigger("DeathAnimTrigger");
@@ -51,7 +51,7 @@ public class FailStateScript : MonoBehaviour
         player.position = checkpoint.position;
         //player.gameObject.SetActive(true);
         imageFunctionality.RunFadeBack();
-        hyperDriveAnimator.ResetTrigger("DeathAnimTrigger");
+        //hyperDriveAnimator.ResetTrigger("DeathAnimTrigger");
         hyperDriveAnimator.gameObject.SetActive(false);
     }
 }

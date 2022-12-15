@@ -8,7 +8,7 @@ public class CaptureNode : Node
 {
     private NavMeshAgent agent;
     private Animator animator;
-
+    private EnemyAI ai;
     private Transform agentTransform;
     private Transform handIKTarget;
     private Transform player;
@@ -17,25 +17,25 @@ public class CaptureNode : Node
     private float destinationDistance;
 
 
-    public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform agentTransform, Transform handIKTarget, Animator animator)
+    public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform agentTransform, Animator animator, EnemyAI ai)
     {
         this.agent = agent;
         this.player = player;
         this.captureDistance = captureDistance;
         this.agentTransform = agentTransform;
-        this.handIKTarget = handIKTarget;
         this.animator = animator;
+        this.ai = ai;
     }
 
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(player.position, agentTransform.transform.position);
 
-        if (destinationDistance < captureDistance)
+        if (destinationDistance < captureDistance && !ai.IsReaching)
         {
-            handIKTarget.position = player.position;
             animator.SetTrigger("GrabAction");
             agent.isStopped = true;
+            ai.IsReaching = true;
             return NodeState.FAILURE;
         }
         else
