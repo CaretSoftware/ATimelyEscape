@@ -6,44 +6,36 @@ using UnityEngine.Animations.Rigging;
 
 public class CaptureNode : Node
 {
-    private MultiAimConstraint multiAimConstraint;
-    private ChainIKConstraint chainIKConstraint;
     private NavMeshAgent agent;
     private Animator animator;
-
+    private EnemyAI ai;
     private Transform agentTransform;
     private Transform handIKTarget;
-    private Transform checkpoint;
     private Transform player;
 
     private float captureDistance;
     private float destinationDistance;
 
-    public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform checkpoint,
-        Transform agentTransform, Transform handIKTarget, Animator animator, MultiAimConstraint multiAimConstraint, ChainIKConstraint chainIKConstraint)
+
+    public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform agentTransform, Animator animator, EnemyAI ai)
     {
         this.agent = agent;
         this.player = player;
         this.captureDistance = captureDistance;
-        this.checkpoint = checkpoint;
         this.agentTransform = agentTransform;
-        this.handIKTarget = handIKTarget;
         this.animator = animator;
-        this.multiAimConstraint = multiAimConstraint;
-        this.chainIKConstraint = chainIKConstraint;
+        this.ai = ai;
     }
 
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(player.position, agentTransform.transform.position);
-        if (destinationDistance < captureDistance - 0.1f)
+
+        if (destinationDistance < captureDistance && !ai.IsReaching)
         {
-            handIKTarget.position = player.position;
-            //animation to lerp handIKTarget towards player position
-            //if handIKTarget reach player, transform player position to checkpoint
-            //if (animator.GetIKPositionWeight(AvatarIKGoal.RightHand))
-                player.transform.position = checkpoint.position;
-                agent.isStopped = true;
+            animator.SetTrigger("GrabAction");
+            agent.isStopped = true;
+            ai.IsReaching = true;
             return NodeState.FAILURE;
         }
         else
