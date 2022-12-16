@@ -48,7 +48,9 @@ namespace CallbackSystem {
         public TimeTravelPeriod to;
     }
 
-    public class TimeDisplacementComplete : DebugEvent { }
+    public class PlayerEnterRoom : DebugEvent {
+        public int roomIndex;
+    }
 
     public class CheckpointEvent : Event {
         public Transform respawnPoint;
@@ -72,9 +74,8 @@ namespace CallbackSystem {
             Debug.Log(vignette);
         }
     }
-    public class ButtonEvent : Event
-    {
+    public class ButtonEvent : Event {
         public GameObject whatToOpen;
-        public Open open; 
+        public Open open;
     }
 }
