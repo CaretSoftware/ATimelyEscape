@@ -195,7 +195,7 @@ public class PrefabCannon : EditorWindow {
         GUILayout.Space(40);
 
         EditorGUILayout.PropertyField(propRadius);
-        propRadius.floatValue = Mathf.Max(1f, propRadius.floatValue);
+        propRadius.floatValue = Mathf.Max(0.1f, propRadius.floatValue);
         GUILayout.Space(5);
 
         EditorGUILayout.PropertyField(propSpawnCount);
