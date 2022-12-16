@@ -28,7 +28,7 @@ public class FailStateScript : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Rat/Rat Mesh").transform;
+        player = GameObject.Find("Player").transform;
         hyperDriveAnimator = GetComponent<Animator>();
         imageFunctionality = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
     }
