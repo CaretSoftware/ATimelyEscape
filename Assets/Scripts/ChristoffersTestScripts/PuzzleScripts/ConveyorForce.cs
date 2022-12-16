@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CallbackSystem;
 
 public class ConveyorForce : MonoBehaviour
 {
@@ -20,8 +21,7 @@ public class ConveyorForce : MonoBehaviour
     private void Start()
     {
         isOn = true;
-        
-
+        TimePeriodChanged.AddListener<TimePeriodChanged>(TimeMachineOff);
     }
     private void OnTriggerStay(Collider other)
     {
@@ -59,6 +59,25 @@ public class ConveyorForce : MonoBehaviour
 
             // Apply the edited values to the renderer.
             meshRenderer2.SetPropertyBlock(_matPropBlock);
+        }
+    }
+    private void TimeMachineOff(TimePeriodChanged e)
+    {
+        if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present)
+        {
+            isOn = false;
+        }
+        else if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Future)
+        {
+            isOn = false;
+        }
+        else if (e.from == TimeTravelPeriod.Future && e.to == TimeTravelPeriod.Past)
+        {
+            isOn = true;
+        }
+        else if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past)
+        {
+            isOn = true;
         }
     }
 
