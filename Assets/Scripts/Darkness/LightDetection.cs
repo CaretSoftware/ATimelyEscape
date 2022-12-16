@@ -71,7 +71,6 @@ namespace CallbackSystem
             else
             {
                 StopAllCoroutines();
-                timer = 0f;
                 if(vignette != null)
                     vignette.intensity.value = timer;
             }
@@ -101,6 +100,7 @@ namespace CallbackSystem
                     }
                 }
                 vignette.intensity.value = timer;
+    
             }
         }
 
