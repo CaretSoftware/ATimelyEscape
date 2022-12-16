@@ -30,6 +30,7 @@ public class ConvecyorBelt : MonoBehaviour
                 int randomIndex = Random.Range(0, spawnThis.Length);
 
                 Instantiate(spawnThis[randomIndex], spawnPos.position, spawnPos.rotation);
+                
             }
             yield return new WaitForSeconds(timeBetweenSpawn);
         }
