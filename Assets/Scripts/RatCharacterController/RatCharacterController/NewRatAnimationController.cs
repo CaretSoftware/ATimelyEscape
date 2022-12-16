@@ -52,39 +52,36 @@ namespace NewRatCharacterController {
 			// }
 		}
 
-		private void Update() {
-			_animator.SetFloat(VelocityZ, _vector.y);
-			_animator.SetFloat(VelocityX, _vector.x);
-
 			// if (_vector.sqrMagnitude > minEpsilon)
 			// 	_lookDirection = Vector3.SmoothDamp(_lookDirection, _vector.normalized.ProjectOnPlane(), ref _currentVelocity, _smoothTime);
 
-			float singleStep = rotationVelocity * Time.deltaTime;
-
-			_lookDirection = Vector3.RotateTowards(rat.forward, _vector.ProjectOnPlane(), singleStep, maxMagnitudeDelta);
-			
-			if (_lookDirection != Vector3.zero)
-				rat.rotation = Quaternion.LookRotation(_lookDirection);
+		private void Update() {
+			RotateCharacterMesh();
 
 			_blendVector = BlendVector(_inputVector);
 			
+			_animator.SetFloat(VelocityZ, _vector.y);
+			_animator.SetFloat(VelocityX, _vector.x);
 			_animator.SetFloat(VelocityForward, _blendVector.y);
 			_animator.SetFloat(VelocityLateral, _blendVector.x);
-			// rat.LookAt(rat.position + _lookDirection, Vector3.up);
+		}
+
+		private void RotateCharacterMesh() {
+			float singleStep = rotationVelocity * Time.deltaTime;
+
+			_lookDirection = Vector3.RotateTowards(rat.forward, _vector.ProjectOnPlane(), 
+				singleStep, maxMagnitudeDelta);
+			
+			if (_lookDirection != Vector3.zero)
+				rat.rotation = Quaternion.LookRotation(_lookDirection);
 		}
 
 		private Vector2 BlendVector(Vector3 input) {
-
-			// float dotFwd = Vector3.Dot();
-
-
 			Vector3 projectedInput = InputToCameraProjection(input);
 			
 			Vector3 transformInputDir = rat.InverseTransformDirection(projectedInput);
 
-			return transformInputDir.ToVector2(); // TODO 
-			//
-			// return transformInputDir.ToVector2();
+			return transformInputDir.ToVector2();
 		}
 		
 		private Vector3 InputToCameraProjection(Vector3 input) {
