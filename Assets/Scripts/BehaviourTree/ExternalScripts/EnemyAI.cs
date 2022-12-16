@@ -25,7 +25,6 @@ public class EnemyAI : MonoBehaviour
     [HideInInspector] public Animator animator;
     [HideInInspector] public bool activeAI;
 
-    private MultiAimConstraint multiAimConstraint;
     private ChainIKConstraint chainIKConstraint;
     private GameObject fullBodyRig;
     private EnemyFOV enemyFOV;
@@ -34,6 +33,7 @@ public class EnemyAI : MonoBehaviour
 
     private Transform playerTransform;
     private Transform agentCenterTransform;
+    private Transform defaultIKTarget;
     private Vector3 worldDeltaPosition;
     private Vector3 rootPosition;
     private Vector2 smoothDeltaPosition;
@@ -49,6 +49,8 @@ public class EnemyAI : MonoBehaviour
     private float dy;
 
     private bool shouldMove;
+    public static bool isReaching;
+    private bool isAnimationRunning;
 
     public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
 
@@ -60,7 +62,6 @@ public class EnemyAI : MonoBehaviour
         enemyFOV = GetComponent<EnemyFOV>();
         fullBodyRig = GameObject.Find("FullBodyRig").transform.GetChild(0).gameObject;
         chainIKConstraint = fullBodyRig.GetComponent<ChainIKConstraint>();
-        multiAimConstraint = fullBodyRig.GetComponent<MultiAimConstraint>();
         animator.applyRootMotion = true;
         agent.updatePosition = false;
         agent.updateRotation = true;
@@ -68,10 +69,10 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerTransform = GameObject.Find("Rat/Rat Mesh/RatGrabPoint").transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
         chainIKConstraint.weight = 0;
-        multiAimConstraint.weight = 0;
+        defaultIKTarget = handIKTarget;
         chaseRange = enemyFOV.ChaseRadius;
         captureRange = enemyFOV.CatchRadius;
         ConstructBehaviourTreePersonnel();
@@ -81,6 +82,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (activeAI)
         {
+            handIKTarget.position = isReaching ? playerTransform.position : defaultIKTarget.position;
             SynchronizeAnimatorAndAgent();
             topNode.Evaluate();
             if (topNode.nodeState == NodeState.FAILURE)
@@ -120,10 +122,10 @@ public class EnemyAI : MonoBehaviour
     private void ConstructBehaviourTreePersonnel()
     {
         GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, gameObject, idleActivityTimer);
-        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange, multiAimConstraint);
+        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, chaseRange);
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, checkpoint, agentCenterTransform, handIKTarget, animator, multiAimConstraint, chainIKConstraint);
+        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
         Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode });
@@ -152,7 +154,7 @@ public class EnemyAI : MonoBehaviour
                 agent.transform.position = hit.position;
         }
     }
-
+    
     private void OnDrawGizmos()
     {
         if (agentCenterTransform != null)
@@ -160,5 +162,23 @@ public class EnemyAI : MonoBehaviour
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
         }
+    }
+
+    //Animation event methods.
+    public void ResetAfterAnimations()
+    {
+        isReaching = false;
+        isAnimationRunning = false;
+    }
+    public void SetPlayerTransformToCheckpoint() { FailStateScript.Instance.PlayDeathVisualization(checkpoint); }
+    public void ReturnHand() { animator.SetTrigger("ReturnHandAction"); }
+    public void StartReaching()
+    {
+        isReaching = true;
+    } 
+    public bool IsReaching
+    {
+        get { return isReaching; }
+        set { isReaching = value; }
     }
 }
