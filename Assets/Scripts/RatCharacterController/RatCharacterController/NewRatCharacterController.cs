@@ -119,18 +119,19 @@ public class NewRatCharacterController : MonoBehaviour {
 		
 		_colliderRadius = _collider.radius;
 	}
-	
+
+	public float velocityMagnitude;
 	private void Update() {
 		
 		_inputMovement = Vector3.zero;
 		UpdateGrounded();
 		Input();
-		AnimationController.Vector(_inputMovement);
+		// used to be here
 		_stateMachine.Run();
 		UpdateVelocity();
 		ResolveOverlap();
 		_transform.position += Time.deltaTime * _velocity;
-		//RotateTransform(); // TODO should this be commented out?
+		AnimationController.Vector(_inputMovement);
 	}
 
 	private void Input() {
