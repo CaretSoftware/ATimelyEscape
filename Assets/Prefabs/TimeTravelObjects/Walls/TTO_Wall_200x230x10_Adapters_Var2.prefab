@@ -48,20 +48,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changesPrefab: 1
-  changesMaterials: 0
   canBeMovedByPlayer: 0
   showPreviewBox: 0
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 1
-  pastMaterials: []
-  presentMaterials: []
-  futureMaterials: []
-  renderers: []
   past: {fileID: 6150328973140432385}
   present: {fileID: 5183230645273266065}
   future: {fileID: 2431292047229783813}
-  timeTravelObject: {fileID: 0}
 --- !u!1001 &1431796904397082157
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,8 +113,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3305844366934561932, guid: 13e1e3d7a34425e45a4acb271e5544d7, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3954243623187641689, guid: 13e1e3d7a34425e45a4acb271e5544d7, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: eeff9ce861da0394dbe19f5fba746254, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13e1e3d7a34425e45a4acb271e5544d7, type: 3}
 --- !u!4 &3852166413602750491 stripped
@@ -291,7 +289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 958957143319520332, guid: c53da183e397d6844ab9a262965350bf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c53da183e397d6844ab9a262965350bf, type: 3}

@@ -82,28 +82,5 @@ public class GoToActivityNode : Node
         isTimerDone = true;
     }
 
-    private Vector3 targetRotation;
-    private float faceActivityTimer;
-    private float elapsedTime;
-    private Quaternion rotation;
-    /*
-    private IEnumerator FaceTarget()
-    {
-        elapsedTime = 0;
-        isCoroutineRunning = true;
-        targetRotation = waypoints[targetIndex].forward * 5f ;
-        rotation = Quaternion.LookRotation(targetRotation);
-
-        while (elapsedTime < faceActivityTimer)
-        {
-            agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, rotation, (elapsedTime / faceActivityTimer));
-            elapsedTime += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        yield return 0;
-        Instance.StartCoroutine(Timer());
-    }
-    */
-
     private class DummyBehaviour : MonoBehaviour { }
 }
