@@ -41,7 +41,6 @@ public class DialogueManager : MonoBehaviour
         DisplayNextSentence();
     }
 
-
     public void DisplayNextSentence()
     {
         if (sentences.Count == 0)
@@ -71,6 +70,20 @@ public class DialogueManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(timeBetweenSentences);
         DisplayNextSentence();
+    }
+
+    public void GoalReached(AudioClip clip)
+    {
+        animator.SetBool("IsOpen", true);
+        if (clip)
+        {
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+
+        sentences.Clear();
+        StopAllCoroutines();
+        StartCoroutine(TypeSentence("Congratulations, you have finished the tutorial!"));
     }
 
     private void EndDialogue()

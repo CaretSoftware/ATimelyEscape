@@ -14,6 +14,9 @@ public class EdgeCollider : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        other.transform.position = spawnPosition;
+        if (other.GetComponentInChildren<RatCharacterController.CharacterInput>())
+        {
+            other.transform.position = spawnPosition;
+        }
     }
 }
