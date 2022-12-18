@@ -13,6 +13,8 @@ public class CameraController : MonoBehaviour {
 		set => mouseSensitivity = Mathf.Max(0.0f, value);
 	}
 
+	private bool paused;
+
 	[SerializeField] 
 	private Transform _camera;
 	private Transform _rat;
@@ -58,9 +60,9 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	private void Start() {
-		pauseMenuBehaviour = FindObjectOfType<PauseMenuBehaviour>();
+		// pauseMenuBehaviour = FindObjectOfType<PauseMenuBehaviour>();
 		CameraFollow cameraFollow = FindObjectOfType<CameraFollow>();
-		
+
 		Vector3 initialCameraVector = cameraFollow.Follow.rotation.eulerAngles;
 		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
 		
@@ -73,13 +75,13 @@ public class CameraController : MonoBehaviour {
 		_rat = FindObjectOfType<RatCharacterController.CharacterInput>().transform;
 		_ratRigidBody = _rat.GetComponent<Rigidbody>();
 
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
+		// Cursor.visible = false;
+		// Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	private void LateUpdate() {
 		
-		if (pauseMenuBehaviour != null && pauseMenuBehaviour.isPaused()) return;
+		// if (pauseMenuBehaviour != null && pauseMenuBehaviour.isPaused()) return;
 
 		ClampCameraTilt();
 		DragCameraBehind();

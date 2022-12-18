@@ -14,7 +14,8 @@ public class NewRatCharacterController : MonoBehaviour {
 		new AirState(), 
 		new WallRunState(), 
 		new WallJumpState(), 
-		new LedgeJumpState() 
+		new LedgeJumpState(),
+		new PauseState(),
 	};
 	private Collider[] _OverlapCollidersNonAlloc = new Collider[10];
 	
@@ -37,12 +38,8 @@ public class NewRatCharacterController : MonoBehaviour {
 	[HideInInspector] public Vector3 normalForce;
 	
 	// Input
-	private const string Jump = "Jump";
-	private const string Horizontal = "Horizontal";
-	private const string Vertical = "Vertical";
 	private Vector3 _inputMovement;
-	// public bool PressedJump { get; private set; }
-	// public bool HoldingJump { get; private set; }
+	public bool paused;
 	public bool Jumped { get; private set; }
 	public Vector3 GroundNormal { get; private set; }
 	[HideInInspector] public Vector3 _velocity;
@@ -60,8 +57,8 @@ public class NewRatCharacterController : MonoBehaviour {
 	[SerializeField] 
 	public Transform _point2Transform;
 
-	
-	[Space(10), Header("\tJump"), Header("Character Settings")]
+	// Vertical Movement
+	[Space(10), Header("\tVertical Movement"), Header("Character Settings")]
 	[SerializeField] private float _jumpBuffer = .25f;
 	[SerializeField] private float _coyoteTime = .2f;
 	[FormerlySerializedAs("minAirControl")] [SerializeField] private float maxAirControl = .5f;
@@ -81,8 +78,8 @@ public class NewRatCharacterController : MonoBehaviour {
 	[SerializeField] [Range(0.0f, 100.0f)] [Tooltip("Max fall speed")]
 	private float _terminalVelocity = 12.0f;
 	
-	
-	[Space(10), Header("\tMovement")]
+	// Horizontal Movement
+	[Space(10), Header("\tHorizontal Movement")]
 	[SerializeField, Range(0.0f, 30.0f)]
 	private float _acceleration = 20.0f;
 
@@ -141,6 +138,9 @@ public class NewRatCharacterController : MonoBehaviour {
 		UpdateGrounded();
 		
 		Input();
+		
+		if (paused)
+			_stateMachine.TransitionTo<PauseState>();
 		
 		_stateMachine.Run();
 		

@@ -5,19 +5,17 @@ namespace NewRatCharacterController {
 		private const string State = "PauseState";
 
 		public override void Enter() {
+			PauseMenuBehaviour.pauseDelegate?.Invoke(true);
 			StateChange.stateUpdate?.Invoke(State);
-			Cursor.lockState = CursorLockMode.None;
-			Cursor.visible = true;
 		} 
 
 		public override void Run() {
-			// if (!NewRatCharacter.Paused)
-			// 	stateMachine.TransitionToLastState();
+			if (!NewRatCharacter.paused)
+				stateMachine.TransitionTo<MoveState>();
 		}
 
 		public override void Exit() {
-			Cursor.lockState = CursorLockMode.Locked;
-			Cursor.visible = false;
+			PauseMenuBehaviour.pauseDelegate?.Invoke(false);
 		}
 	}
 }

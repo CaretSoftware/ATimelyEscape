@@ -25,6 +25,7 @@ public class NewRatCameraController : MonoBehaviour {
 	private float _rotationY;
 	private float _smoothDollyTime;
 	private Camera _cam;
+	private bool _paused;
 	
 	[HideInInspector]
 	public float clampLookupMax;
@@ -64,6 +65,8 @@ public class NewRatCameraController : MonoBehaviour {
 	
 	[SerializeField] private Transform _cameraGimble;
 
+	public float MouseSensitivity { get; set; } = .2f;
+
 	private void Awake() {
 		_fpsCameraPos = _camera.localPosition;
 		_cameraPos = transform.position;
@@ -72,19 +75,30 @@ public class NewRatCameraController : MonoBehaviour {
 
 	private void Start() {
 		// _camera.parent = null;
+		PauseMenuBehaviour.pauseDelegate += Pause;
 	}
 
+	private void OnDestroy() {
+		PauseMenuBehaviour.pauseDelegate -= Pause;
+	}
+
+	private void Pause(bool paused) => _paused = paused;
+
 	private void Update() {
+		if (_paused) return;
+		
 		Input();
 	}
 
 	private void LateUpdate() {
+		if (_paused) return;
+		
 		MoveCamera();
 	}
 
 	private void Input() {
-		_mouseMovement.x += UnityEngine.Input.GetAxisRaw(MouseX) * mouseSensitivityX;
-		_mouseMovement.y -= UnityEngine.Input.GetAxisRaw(MouseY) * mouseSensitivityY;
+		_mouseMovement.x += UnityEngine.Input.GetAxisRaw(MouseX) * MouseSensitivity * 50f;
+		_mouseMovement.y -= UnityEngine.Input.GetAxisRaw(MouseY) * MouseSensitivity * 50f;
 		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, clampLookupMax - LookOffset, clampLookupMin - LookOffset);
 	}
 
