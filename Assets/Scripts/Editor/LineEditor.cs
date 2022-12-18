@@ -23,16 +23,29 @@ public class LineEditor : EditorWindow
 
     private void OnEnable()
     {
-        SetPropsToSerialized();
         SceneView.duringSceneGui += DuringSceneGUI;
+        SetPropsToSerialized();
+        LoadSettings();
     }
 
     private void OnDisable()
     {
+        SceneView.duringSceneGui -= DuringSceneGUI;
+        SaveSettings();
         line = null;
         points = null;
-        SceneView.duringSceneGui -= DuringSceneGUI;
     }
+
+    private void SaveSettings()
+    {
+        EditorPrefs.SetInt("LINEEDITOR_VertexCount", vertexCount);
+    }
+
+    private void LoadSettings()
+    {
+        vertexCount = EditorPrefs.GetInt("LINEEDITOR_VertexCount", 20);
+    }
+
 
     private void SetPropsToSerialized()
     {
@@ -82,7 +95,7 @@ public class LineEditor : EditorWindow
             if (GUILayout.Button("Remove point", GUILayout.Height(25)))
             {
                 RemovePoint();
-                if(points.Count > 1)
+                if (points.Count > 1)
                 {
                     GenerateLine();
                 }
@@ -101,6 +114,17 @@ public class LineEditor : EditorWindow
 
             GUILayout.FlexibleSpace();
         }
+
+        GUILayout.Space(20);
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(40);
+        if (GUILayout.Button("Load selected", GUILayout.Height(25)))
+        {
+            SetLineSelected();
+            LoadExistingLine(line);
+        }
+        GUILayout.Space(40);
+        GUILayout.EndHorizontal();
 
         GUILayout.Space(20);
         GUILayout.BeginHorizontal();
@@ -140,7 +164,6 @@ public class LineEditor : EditorWindow
         if (selectedObject && selectedObject != line && selectedObject.transform.CompareTag("Line"))
         {
             line = selectedObject;
-            //LoadExistingLine(selectedObject);
         }
     }
 
