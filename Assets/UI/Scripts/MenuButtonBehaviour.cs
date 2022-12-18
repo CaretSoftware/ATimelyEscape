@@ -13,6 +13,8 @@ public class MenuButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerU
     [Header("Text To Speach Clips")]
     [SerializeField] private AudioClip speach;
 
+    public static bool shouldPlayTextToSpeach;
+
     [Header("Button Clips")]
     [SerializeField] private AudioClip click;
     [SerializeField] private AudioClip hover;
@@ -175,6 +177,11 @@ public class MenuButtonBehaviour : MonoBehaviour, IPointerDownHandler, IPointerU
 
     private void PlaySpeachClip()
     {
+        if (!shouldPlayTextToSpeach)
+        {
+            return;
+        }
+
         if (speach != null)
         {
             source.PlayOneShot(speach);
