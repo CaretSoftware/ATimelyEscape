@@ -7,6 +7,7 @@ namespace NewRatCharacterController {
 [RequireComponent(typeof(CapsuleCollider)), DisallowMultipleComponent, SelectionBase]
 public class NewRatCharacterController : MonoBehaviour {
 
+	// State Machine
 	private StateMachine _stateMachine;
 	private List<BaseState> _states = new List<BaseState> { 
 		new MoveState(), 
@@ -17,13 +18,17 @@ public class NewRatCharacterController : MonoBehaviour {
 		new LedgeJumpState(),
 		new PauseState(),
 	};
-	private Collider[] _OverlapCollidersNonAlloc = new Collider[10];
 	
+	
+	// Transforms
 	private Transform _camera;
 	public Transform Camera => _camera;
 	private Transform _transform;
 	public Transform Transform => _transform;
-	private NewRatAnimationController _animationController;
+
+	
+	// Animations
+	private NewRatAnimationController _animationController; // TODO remove private ref, keep auto property reference
 	public NewRatAnimationController AnimationController => _animationController;
 
 	[SerializeField] private Transform ratMesh; 
@@ -32,10 +37,13 @@ public class NewRatCharacterController : MonoBehaviour {
 		private set { }
 	}
 
+	
 	// Collider
 	public CapsuleCollider CharCollider { get; private set; }
 	[HideInInspector] public float _colliderRadius;
 	[HideInInspector] public Vector3 normalForce;
+	private Collider[] _overlapCollidersNonAlloc = new Collider[10];
+	
 	
 	// Input
 	private Vector3 _inputMovement;
@@ -44,10 +52,13 @@ public class NewRatCharacterController : MonoBehaviour {
 	public Vector3 GroundNormal { get; private set; }
 	[HideInInspector] public Vector3 _velocity;
 	
-
+	
+	// Collisions and Layers
 	[Space(10), Header("Character Controller Implementation Details")]
 	[SerializeField, Tooltip("LayerMask(s) the character should collide with")]
 	public LayerMask _collisionMask;
+	[SerializeField, Tooltip("LayerMask that is cubes")] 
+	public LayerMask cubeLayerMask;
 	[SerializeField, Range(0.0f, 0.15f), Tooltip("The distance the character should stop before a collider")]
 	public float _skinWidth = 0.1f;
 	[SerializeField, Range(0.0f, 0.2f), Tooltip("The distance the character should count as being grounded")]
@@ -57,6 +68,7 @@ public class NewRatCharacterController : MonoBehaviour {
 	[SerializeField] 
 	public Transform _point2Transform;
 
+	
 	// Vertical Movement
 	[Space(10), Header("\tVertical Movement"), Header("Character Settings")]
 	[SerializeField] private float _jumpBuffer = .25f;
@@ -78,6 +90,16 @@ public class NewRatCharacterController : MonoBehaviour {
 	[SerializeField] [Range(0.0f, 100.0f)] [Tooltip("Max fall speed")]
 	private float _terminalVelocity = 12.0f;
 	
+	[SerializeField, Range(0.0f, 20.0f), Tooltip("Set before hitting [\u25BA]\nOnly changed during start")]
+	public float _jumpForce = 10.0f;
+	
+	[SerializeField, Tooltip("The height the character can step over without jumping")] 
+	public float stepHeight = 0.03f;
+	
+	[SerializeField, Range(0.0f, 1.0f), Tooltip("Force affecting velocity")]
+	private float _airResistanceCoefficient = .5f;
+
+	
 	// Horizontal Movement
 	[Space(10), Header("\tHorizontal Movement")]
 	[SerializeField, Range(0.0f, 30.0f)]
@@ -93,13 +115,7 @@ public class NewRatCharacterController : MonoBehaviour {
 	private float _turnSpeedModifierThreshold;
 	
 	[SerializeField, Range(0.0f, 30.0f), Tooltip("Max ground speed")]
-	private float _maxVelocity = 2.0f;
-	
-	[SerializeField, Range(0.0f, 20.0f), Tooltip("Set before hitting [\u25BA]\nOnly changed during start")]
-	public float _jumpForce = 10.0f;
-	
-	[SerializeField, Tooltip("The height the character can step over without jumping")] 
-	public float stepHeight = 0.03f;
+	private float _maxVelocity = 1.0f;
 
 	[Space(10), Header("\tFriction")]
 	[SerializeField, Range(0.0f, 1.0f), Tooltip("Force to overcome friction from a standstill")]
@@ -107,10 +123,8 @@ public class NewRatCharacterController : MonoBehaviour {
 
 	[SerializeField, Range(0.0f, 1.0f), Tooltip("Force applied when moving\n(60-70% of static friction usually)")]
 	public float _kineticFrictionCoefficient = 0.2f; 
-	
-	[SerializeField, Range(0.0f, 1.0f), Tooltip("Force affecting velocity")]
-	private float _airResistanceCoefficient = .5f;
 
+	
 	[ContextMenu("Reset Character Position")]
 	private void ResetCharacterPosition() {
 		_transform.position = Vector3.up;
@@ -126,7 +140,6 @@ public class NewRatCharacterController : MonoBehaviour {
 	}
 
 	private void Start() {
-		
 		_colliderRadius = CharCollider.radius;
 	}
 
@@ -173,6 +186,14 @@ public class NewRatCharacterController : MonoBehaviour {
 		           PressedJump && (Grounded || CoyoteTime()));
 		
 		PressedJump = false;
+	}
+
+	public void Interact() {
+		
+	}
+	
+	public void StopInteract() {
+		
 	}
 
 	private bool JumpBuffer() {
@@ -302,7 +323,7 @@ public class NewRatCharacterController : MonoBehaviour {
 			_point1Transform.position,
 			_point2Transform.position,
 			CharCollider.radius,
-			_OverlapCollidersNonAlloc,
+			_overlapCollidersNonAlloc,
 			_collisionMask);
 
 		while (_count > 0 && _exit++ < 10) {
@@ -312,9 +333,9 @@ public class NewRatCharacterController : MonoBehaviour {
 					    CharCollider, // TODO optimize this? _collider.transform.position should be _transform.position and .rotation??
 					    CharCollider.transform.position,
 					    CharCollider.transform.rotation, 
-					    _OverlapCollidersNonAlloc[i], 
-					    _OverlapCollidersNonAlloc[i].gameObject.transform.position, 
-					    _OverlapCollidersNonAlloc[i].gameObject.transform.rotation,
+					    _overlapCollidersNonAlloc[i], 
+					    _overlapCollidersNonAlloc[i].gameObject.transform.position, 
+					    _overlapCollidersNonAlloc[i].gameObject.transform.rotation,
 					    out var direction,
 					    out var distance)) {
 
@@ -328,7 +349,7 @@ public class NewRatCharacterController : MonoBehaviour {
 				_point1Transform.position,
 				_point2Transform.position,
 				CharCollider.radius,
-				_OverlapCollidersNonAlloc,
+				_overlapCollidersNonAlloc,
 				_collisionMask);
 			_exit++;
 		}

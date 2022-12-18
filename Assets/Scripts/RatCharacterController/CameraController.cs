@@ -50,7 +50,6 @@ public class CameraController : MonoBehaviour {
 	private Vector3 dragTransform;
 	
 	private void Awake() {
-		// if (Instance == null) 
 		Instance ??= this;
 		
 		if (_camera == null)
@@ -74,9 +73,6 @@ public class CameraController : MonoBehaviour {
 
 		_rat = FindObjectOfType<RatCharacterController.CharacterInput>().transform;
 		_ratRigidBody = _rat.GetComponent<Rigidbody>();
-
-		// Cursor.visible = false;
-		// Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	private void LateUpdate() {

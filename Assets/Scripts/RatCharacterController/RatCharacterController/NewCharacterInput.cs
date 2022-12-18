@@ -9,6 +9,7 @@ namespace NewRatCharacterController {
 	public class NewCharacterInput : MonoBehaviour {
 		private PlayerInputActions _playerInputActions;
 		private NewRatCharacterController _newRatCharacterController;
+		private NewRatCameraController _camController;
 
 		// Timetravel
 		public bool CanTimeTravel { get; set; }
@@ -37,6 +38,8 @@ namespace NewRatCharacterController {
 		private void Start() {
 			PauseMenuBehaviour.pauseDelegate += Paused;
 
+			_camController = GetComponent<NewRatCameraController>();
+			
 			_newRatCharacterController = GetComponent<NewRatCharacterController>();
 			
 			_playerInputActions = new PlayerInputActions();
@@ -58,7 +61,9 @@ namespace NewRatCharacterController {
 
 		private void Update() {
 			if (_paused) return;
-				MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
+
+			MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
+			CameraInput();
 			DeveloperCheats();
 		}
 
@@ -66,7 +71,14 @@ namespace NewRatCharacterController {
 
 		private void MovementInput(Vector3 input) =>
 			_newRatCharacterController.InputVector = input;
+		
+		private void CameraInput() {
+			Vector2 cameraStickInput = _playerInputActions.CameraControls.CameraThumbstick.ReadValue<Vector2>();
+			Vector2 cameraMouseInput = _playerInputActions.CameraControls.CameraMouseInput.ReadValue<Vector2>();
 
+			_camController.StickInput(cameraStickInput);
+			_camController.MouseInput(cameraMouseInput);
+		}
 
 		private void Jump(InputAction.CallbackContext context) {
 			_newRatCharacterController.PressedJump = true;
@@ -78,6 +90,14 @@ namespace NewRatCharacterController {
 
 		private void Pause(InputAction.CallbackContext context) {
 			_newRatCharacterController.paused = !_newRatCharacterController.paused;
+		}
+
+		private void Interact(InputAction.CallbackContext context) {
+			_newRatCharacterController.Interact();
+		}
+		
+		private void StopInteract(InputAction.CallbackContext context) {
+			_newRatCharacterController.StopInteract();
 		}
 
 		private void TravelToPast(InputAction.CallbackContext context) {
@@ -115,8 +135,8 @@ namespace NewRatCharacterController {
 			_playerInputActions.CharacterMovement.Jump.started -= Jump;
 			_playerInputActions.CharacterMovement.Jump.canceled -= JumpReleased;
 			_playerInputActions.Pause.Pause.performed -= Pause;
-			// _playerInputActions.Interact.Interact.performed -= Interact;
-			// _playerInputActions.Interact.Interact.canceled -= StopInteract;
+			_playerInputActions.Interact.Interact.performed -= Interact;
+			_playerInputActions.Interact.Interact.canceled -= StopInteract;
 			_playerInputActions.Interact.Past.performed -= TravelToPast;
 			_playerInputActions.Interact.Present.performed -= TravelToPresent;
 			_playerInputActions.Interact.Future.performed -= TravelToFuture;
