@@ -8,7 +8,14 @@ namespace NewRatCharacterController {
 public class NewRatCharacterController : MonoBehaviour {
 
 	private StateMachine _stateMachine;
-	private List<BaseState> _states = new List<BaseState> { new MoveState(), new JumpState(), new AirState(), new WallRunState(), new WallJumpState() };
+	private List<BaseState> _states = new List<BaseState> { 
+		new MoveState(), 
+		new JumpState(), 
+		new AirState(), 
+		new WallRunState(), 
+		new WallJumpState(), 
+		new LedgeJumpState() 
+	};
 	private Collider[] _OverlapCollidersNonAlloc = new Collider[10];
 	
 	private Transform _camera;
@@ -18,8 +25,14 @@ public class NewRatCharacterController : MonoBehaviour {
 	private NewRatAnimationController _animationController;
 	public NewRatAnimationController AnimationController => _animationController;
 
+	[SerializeField] private Transform ratMesh; 
+	public Transform RatMesh {
+		get => ratMesh;
+		private set { }
+	}
+
 	// Collider
-	private CapsuleCollider _collider;
+	public CapsuleCollider CharCollider { get; private set; }
 	[HideInInspector] public float _colliderRadius;
 	[HideInInspector] public Vector3 normalForce;
 	
@@ -28,8 +41,8 @@ public class NewRatCharacterController : MonoBehaviour {
 	private const string Horizontal = "Horizontal";
 	private const string Vertical = "Vertical";
 	private Vector3 _inputMovement;
-	public bool PressedJump { get; private set; }
-	public bool HoldingJump { get; private set; }
+	// public bool PressedJump { get; private set; }
+	// public bool HoldingJump { get; private set; }
 	public bool Jumped { get; private set; }
 	public Vector3 GroundNormal { get; private set; }
 	[HideInInspector] public Vector3 _velocity;
@@ -111,51 +124,55 @@ public class NewRatCharacterController : MonoBehaviour {
 		_transform = transform;
 		_animationController = GetComponent<NewRatAnimationController>();
 		_stateMachine = new StateMachine(this, _states);
-		_collider = GetComponent<CapsuleCollider>();
+		CharCollider = GetComponent<CapsuleCollider>();
 		_camera = GetComponentInChildren<Camera>().transform;
 	}
 
 	private void Start() {
 		
-		_colliderRadius = _collider.radius;
+		_colliderRadius = CharCollider.radius;
 	}
 
 	public float velocityMagnitude;
 	private void Update() {
 		
 		_inputMovement = Vector3.zero;
+		
 		UpdateGrounded();
+		
 		Input();
-		// used to be here
+		
 		_stateMachine.Run();
+		
 		UpdateVelocity();
+		
 		ResolveOverlap();
+		
 		_transform.position += Time.deltaTime * _velocity;
+		
 		AnimationController.Vector(_inputMovement);
 	}
 
+	public Vector3 InputVector { get; set; }
+	public bool PressedJump { get; set; }
+	public bool HoldingJump { get; set; }
+
 	private void Input() {
 		
-		float right = UnityEngine.Input.GetAxisRaw(Horizontal);
-		float forward = UnityEngine.Input.GetAxisRaw(Vertical);
-
-		Vector3 inputVector = new Vector3(right, 0.0f, forward);
+		AnimationController.SetInputVector(InputVector);
 		
-		AnimationController.SetInputVector(inputVector);
-		
-		_inputMovement = Quaternion.Euler(0, _camera.rotation.y,0)  * inputVector;
+		_inputMovement = Quaternion.Euler(0, _camera.rotation.y,0)  * InputVector;
 		_inputMovement = InputToCameraProjection(_inputMovement);
 		if (_inputMovement.magnitude > 1.0f) // > 1.0f to keep thumbstick input from being normalized
 			_inputMovement.Normalize();
 
-		HoldingJump = UnityEngine.Input.GetButton(Jump);
-		PressedJump = UnityEngine.Input.GetButtonDown(Jump);
-		
 		_pressedJumpMoment = PressedJump ? Time.time : _pressedJumpMoment;
 
 		Jumped = !_jumpedOnce && 
 		          (JumpBuffer() ||
 		           PressedJump && (Grounded || CoyoteTime()));
+		
+		PressedJump = false;
 	}
 
 	private bool JumpBuffer() {
@@ -174,7 +191,7 @@ public class NewRatCharacterController : MonoBehaviour {
 		
 		Grounded =
 			Physics.SphereCast(
-				_point2Transform.position,//transform.position + _point2, 
+				_point2Transform.position, 
 				_colliderRadius, 
 				Vector3.down, 
 				out var hit, 
@@ -282,9 +299,9 @@ public class NewRatCharacterController : MonoBehaviour {
 
 		int _exit = 0;
 		int _count = Physics.OverlapCapsuleNonAlloc(
-			_point1Transform.position,// transform.position + _point1,
-			_point2Transform.position,//transform.position + _point2,
-			_collider.radius,
+			_point1Transform.position,
+			_point2Transform.position,
+			CharCollider.radius,
 			_OverlapCollidersNonAlloc,
 			_collisionMask);
 
@@ -292,9 +309,9 @@ public class NewRatCharacterController : MonoBehaviour {
 
 			for (int i = 0; i < _count; i++) {
 				if (Physics.ComputePenetration(
-					    _collider, // TODO optimize this? _collider.transform.position should be _transform.position and .rotation??
-					    _collider.transform.position,
-					    _collider.transform.rotation, 
+					    CharCollider, // TODO optimize this? _collider.transform.position should be _transform.position and .rotation??
+					    CharCollider.transform.position,
+					    CharCollider.transform.rotation, 
 					    _OverlapCollidersNonAlloc[i], 
 					    _OverlapCollidersNonAlloc[i].gameObject.transform.position, 
 					    _OverlapCollidersNonAlloc[i].gameObject.transform.rotation,
@@ -308,9 +325,9 @@ public class NewRatCharacterController : MonoBehaviour {
 			}
 
 			_count = Physics.OverlapCapsuleNonAlloc(
-				_point1Transform.position,//transform.position + _point1,
-				_point2Transform.position,//transform.position + _point2,
-				_collider.radius,
+				_point1Transform.position,
+				_point2Transform.position,
+				CharCollider.radius,
 				_OverlapCollidersNonAlloc,
 				_collisionMask);
 			_exit++;
@@ -346,8 +363,8 @@ public class NewRatCharacterController : MonoBehaviour {
 
 	private RaycastHit CapsuleCasts(Vector3 direction, Vector3 position, float distance = float.PositiveInfinity) {
 		
-		Physics.CapsuleCast( _point1Transform.position,//position + _point1, 
-			_point2Transform.position,//position + _point2, 
+		Physics.CapsuleCast( _point1Transform.position, 
+			_point2Transform.position, 
 			_colliderRadius, 
 			direction, 
 			out var hit, 
@@ -356,11 +373,27 @@ public class NewRatCharacterController : MonoBehaviour {
 		return hit;
 	}
 
+	[SerializeField] private Vector3 ledgeVaultEndPos;
+	public void LedgeVaultTeleport() {
+		Quaternion rot = RatMesh.rotation;
+		Vector3 tpt = rot * ledgeVaultEndPos;
+		transform.position += tpt;
+	}
+
 	private void RotateTransform() {
 		
 		Vector3	lookDirection = Vector3.ProjectOnPlane(_camera.forward, Vector3.up);
 		
 		_transform.rotation = Quaternion.LookRotation(lookDirection);
+	}
+
+	public Vector3 point0;
+	public Vector3 point1;
+	private void OnDrawGizmos() {
+		if (!Application.isPlaying) return;
+		
+		Gizmos.DrawWireSphere(point0, _colliderRadius);
+		Gizmos.DrawWireSphere(point1, _colliderRadius);
 	}
 }
 }

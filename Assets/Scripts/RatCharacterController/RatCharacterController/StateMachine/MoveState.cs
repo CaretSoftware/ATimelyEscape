@@ -22,12 +22,15 @@ namespace NewRatCharacterController {
                 ApplyStaticFriction();
             else
                 AddGravityForce();
-            
-            //NewRatCharacter.AnimationController.Vector(NewRatCharacter._velocity.ToVector2());
-            
+
+            NewRatCharacter.AnimationController.RotateCharacterMesh();
+
             if (NewRatCharacter.Jumped)
                 stateMachine.TransitionTo<JumpState>();
 
+            if (NewRatCharacter.Jumped && LedgeJumpState.Requirement(NewRatCharacter))
+                stateMachine.TransitionTo<LedgeJumpState>();
+            
             if (!NewRatCharacter.Grounded)
                 stateMachine.TransitionTo<AirState>();
         }

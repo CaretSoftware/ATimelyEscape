@@ -33,7 +33,6 @@ public class FootstepSound : MonoBehaviour {
     }
 
     public void Landing(AnimationEvent evt) {
-        Debug.Log("Landed");
         float randomVolumePercentage = 1f - Random.Range(0f, randomVolumeDifference);
         float volume = Mathf.InverseLerp(minVelocity,   maxVelocity, landingVolume) * footStepVolume * randomVolumePercentage;
         PlayFootstep(volume);
