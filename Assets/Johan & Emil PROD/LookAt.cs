@@ -6,7 +6,7 @@ public class LookAt : MonoBehaviour
 
 {
 
-    public Transform target;
+    public Transform cameraTarget;
     // Start is called before the first frame update
     [SerializeField] private Camera thirdPersonCamera;
     [SerializeField] private Camera exitCamera;
@@ -18,7 +18,7 @@ public class LookAt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(target);
+        transform.LookAt(cameraTarget);
 
             if(Input.GetKeyDown(KeyCode.RightShift)){
             thirdPersonCamera.enabled = false;
