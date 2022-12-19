@@ -80,6 +80,10 @@ public class ConveyorForce : MonoBehaviour
             isOn = true;
         }
     }
+    private void OnDestroy()
+    {
+        if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeMachineOff);
+    }
 
 
 }
