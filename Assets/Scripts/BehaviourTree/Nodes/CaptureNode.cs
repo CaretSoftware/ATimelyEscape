@@ -39,11 +39,11 @@ public class CaptureNode : Node
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(player.position, agentTransform.transform.position);
-        Debug.Log("Destination distance:" + destinationDistance);
+        //Debug.Log("Destination distance:" + destinationDistance);
         
         if (destinationDistance < captureDistance && !ai.IsCapturing && !recentlyCaught)
         {
-            Debug.Log("GrabAction triggered");
+            //Debug.Log("GrabAction triggered");
             animator.SetTrigger("GrabAction");
             agent.isStopped = true;
             ai.IsCapturing = true;
