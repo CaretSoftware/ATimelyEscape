@@ -295,7 +295,7 @@ public class TimeTravelObjectCreator : EditorWindow
             TimeTravelObject ttoComponent = tto.AddComponent<TimeTravelObject>();
             ttoComponent.timeTravelPeriod = timezone;
 
-            if (id != null && tto.GetComponent<MeshRenderer>() != null)
+            if (id != null && (tto.GetComponent<MeshRenderer>() != null || tto.GetComponent<SkinnedMeshRenderer>() != null))
             {
                 ApplyNameToObject(tto, timezone.ToString(), id);
             }
@@ -321,17 +321,17 @@ public class TimeTravelObjectCreator : EditorWindow
             bool hasPresent = present != null && present.transform.childCount > i;
             bool hasFuture = future != null && future.transform.childCount > i;
 
-            if (hasPast && past.transform.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasPast && (past.transform.GetChild(i).GetComponent<MeshRenderer>() || past.transform.GetChild(i).GetComponent<SkinnedMeshRenderer>()))
             {
                 ApplyNameToObject(past.transform.GetChild(i).gameObject, "Past", id);
             }
 
-            if (hasPresent && present.transform.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasPresent && (present.transform.GetChild(i).GetComponent<MeshRenderer>() || present.transform.GetChild(i).GetComponent<SkinnedMeshRenderer>()))
             {
                 ApplyNameToObject(present.transform.GetChild(i).gameObject, "Present", id);
             }
 
-            if (hasFuture && future.transform.GetChild(i).GetComponent<MeshRenderer>())
+            if (hasFuture && (future.transform.GetChild(i).GetComponent<MeshRenderer>() || future.transform.GetChild(i).GetComponent<SkinnedMeshRenderer>()))
             {
                 ApplyNameToObject(future.transform.GetChild(i).gameObject, "Future", id);
             }
