@@ -40,7 +40,7 @@ public class ConvecyorBelt : MonoBehaviour
     {
         isOn = false;
     }
-    private void TimeMachineOff(TimePeriodChanged e)w
+    private void TimeMachineOff(TimePeriodChanged e)
     {
         if (e.from == TimeTravelPeriod.Past)
         {
