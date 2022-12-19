@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SwitchOn : MonoBehaviour
+public class OnPresent : MonoBehaviour
 {
     [SerializeField] private Material onMaterial;
     [SerializeField] private Material offMaterial;
@@ -15,10 +15,9 @@ public class SwitchOn : MonoBehaviour
     {
         meshRenderer = GetComponent<MeshRenderer>();
     }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (switchOn != null && other.gameObject.tag == "Cube")
+        if (switchOn != null && other.gameObject.tag == "CubePast")
         {
             switchOn.Invoke();
             meshRenderer.material = onMaterial;
@@ -26,11 +25,10 @@ public class SwitchOn : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (switchOff != null && other.gameObject.tag == "Cube")
+        if (switchOff != null && other.gameObject.tag == "CubePast")
         {
             switchOff.Invoke();
             meshRenderer.material = offMaterial;
         }
     }
-
 }
