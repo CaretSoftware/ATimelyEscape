@@ -10,12 +10,27 @@ public class DialogueTrigger : MonoBehaviour
     private void Start()
     {
         dialogueManager = FindObjectOfType<DialogueManager>();
-        //Change so buttons work
-        TriggerDialogue();
     }
 
-    public void TriggerDialogue()
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (dialogueManager.dialogueStarted)
+            {
+                dialogueManager.NextPressed();
+            }
+            else
+            {
+                dialogueManager.dialogueStarted = true;
+                dialogueManager.StartDialogue(dialogue);
+            }
+        }
+    }
+
+    /*public void TriggerDialogue()
     {
         dialogueManager.StartDialogue(dialogue);
-    }
+    }*/
+
 }

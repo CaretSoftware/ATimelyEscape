@@ -15,18 +15,24 @@ public class DialogueManager : MonoBehaviour
     private Queue<AudioClip> audioClips;
     private AudioSource audioSource;
 
+    public bool dialogueStarted;
+
     void Awake()
     {
         sentences = new Queue<string>();
         audioClips = new Queue<AudioClip>();
         audioSource = FindObjectOfType<AudioSource>();
     }
+    private void Update()
+    {
+        
+    }
 
     public void StartDialogue(Dialogue dialogue)
     {
         animator.SetBool("IsOpen", true);
-
         sentences.Clear();
+        audioClips.Clear();
 
         foreach (string sentence in dialogue.sentences)
         {
@@ -43,7 +49,7 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
-        if (sentences.Count == 0)
+        if (sentences.Count == 0 || audioClips.Count == 0)
         {
             EndDialogue();
             return;
@@ -68,8 +74,8 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(typingSpeed);
         }
 
-        yield return new WaitForSecondsRealtime(timeBetweenSentences);
-        DisplayNextSentence();
+        //yield return new WaitForSecondsRealtime(timeBetweenSentences);
+        //DisplayNextSentence();
     }
 
     public void GoalReached(AudioClip clip)
@@ -82,6 +88,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         sentences.Clear();
+        audioClips.Clear();
         StopAllCoroutines();
         StartCoroutine(TypeSentence("Congratulations, you have finished the tutorial!"));
     }
@@ -90,5 +97,18 @@ public class DialogueManager : MonoBehaviour
     {
         animator.SetBool("IsOpen", false);
         audioSource.Stop();
+        Invoke(nameof(SetDialogueStarted), 1f);
+    }
+
+    private void SetDialogueStarted()
+    {
+        dialogueStarted = false;
+    }
+
+    public void NextPressed()
+    {
+        StopAllCoroutines();
+        audioSource.Stop();
+        DisplayNextSentence();
     }
 }
