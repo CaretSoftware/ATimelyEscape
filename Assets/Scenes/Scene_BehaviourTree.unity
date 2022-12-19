@@ -554,8 +554,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 104149456}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.59, y: 0, z: 6.8899994}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 1.1900003, y: 0, z: 9.380002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1484,8 +1484,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591852932}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2.7, y: 0, z: 4.12}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 4.9700007, y: 0, z: 8.170001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3007,7 +3007,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271092716}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.2399997, y: 0, z: 4.59}
+  m_LocalPosition: {x: 0.14, y: 0, z: 2.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3433,12 +3433,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1560898079}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.15, z: 0}
+  m_LocalPosition: {x: 0, y: 0.14999998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1889881313}
-  m_RootOrder: 3
+  m_Father: {fileID: 1721825825}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1564057181
 PrefabInstance:
@@ -3817,6 +3817,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b91ac7be8f569d54da7e0f02ad16a5fe, type: 3}
+--- !u!4 &1721825825 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 543450653623646525, guid: e680922f86ca241e89ec04c64e981fa2, type: 3}
+  m_PrefabInstance: {fileID: 1889881312}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1723115683
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3891,6 +3896,10 @@ PrefabInstance:
     - target: {fileID: 7621525463942781570, guid: aa1a3b8fae44e39409b86118244c7d45, type: 3}
       propertyPath: m_Name
       value: RobotVacuum
+      objectReference: {fileID: 0}
+    - target: {fileID: 7621525463942781570, guid: aa1a3b8fae44e39409b86118244c7d45, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5576038306581932126, guid: aa1a3b8fae44e39409b86118244c7d45, type: 3}
@@ -4527,11 +4536,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e680922f86ca241e89ec04c64e981fa2, type: 3}
---- !u!4 &1889881313 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3461821365117264175, guid: e680922f86ca241e89ec04c64e981fa2, type: 3}
-  m_PrefabInstance: {fileID: 1889881312}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1891046094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4863,7 +4867,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6242426797241970599, guid: 4de75bb585523cd44bf703ecff1c83af, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6512459910051239325, guid: 4de75bb585523cd44bf703ecff1c83af, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4882,6 +4886,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1529095306}
     - target: {fileID: 6512459911112439184, guid: 4de75bb585523cd44bf703ecff1c83af, type: 3}
+      propertyPath: activityWaypoints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6512459911112439184, guid: 4de75bb585523cd44bf703ecff1c83af, type: 3}
       propertyPath: activityWaypoints.Array.data[0]
       value: 
       objectReference: {fileID: 591852933}
@@ -4889,6 +4897,10 @@ PrefabInstance:
       propertyPath: activityWaypoints.Array.data[1]
       value: 
       objectReference: {fileID: 104149457}
+    - target: {fileID: 6512459911112439184, guid: 4de75bb585523cd44bf703ecff1c83af, type: 3}
+      propertyPath: activityWaypoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 1271092717}
     - target: {fileID: 6767325524567848221, guid: 4de75bb585523cd44bf703ecff1c83af, type: 3}
       propertyPath: m_RootOrder
       value: 10
