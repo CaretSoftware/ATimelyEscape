@@ -47,11 +47,8 @@ public class FailStateScript : MonoBehaviour
 
     public void FadeBack()
     {
-        //player.gameObject.SetActive(false);
         player.position = checkpoint.position;
-        //player.gameObject.SetActive(true);
         imageFunctionality.RunFadeBack();
-        //hyperDriveAnimator.ResetTrigger("DeathAnimTrigger");
         hyperDriveAnimator.gameObject.SetActive(false);
     }
 }
