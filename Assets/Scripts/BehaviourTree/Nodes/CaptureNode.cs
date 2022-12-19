@@ -6,6 +6,11 @@ using UnityEngine.Animations.Rigging;
 
 public class CaptureNode : Node
 {
+    private static DummyBehaviour Instance;
+    
+    private GameObject GO = new GameObject();
+    private GameObject dummyBehaviourParent;
+    
     private NavMeshAgent agent;
     private Animator animator;
     private EnemyAI ai;
@@ -25,17 +30,23 @@ public class CaptureNode : Node
         this.agentTransform = agentTransform;
         this.animator = animator;
         this.ai = ai;
+        dummyBehaviourParent = agent.gameObject;
+        Instance = GO.AddComponent<DummyBehaviour>();
+        GO.transform.parent = dummyBehaviourParent.transform;
     }
 
+    private bool recentlyCaught;
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(player.position, agentTransform.transform.position);
-
-        if (destinationDistance < captureDistance && !ai.IsReaching)
+        Debug.Log("Destination distance:" + destinationDistance);
+        
+        if (destinationDistance < captureDistance && !ai.IsCapturing && !recentlyCaught)
         {
+            Debug.Log("GrabAction triggered");
             animator.SetTrigger("GrabAction");
             agent.isStopped = true;
-            ai.IsReaching = true;
+            ai.IsCapturing = true;
             return NodeState.FAILURE;
         }
         else
@@ -45,4 +56,12 @@ public class CaptureNode : Node
             return NodeState.RUNNING;
         }
     }
+
+    private IEnumerator RecentlyCaughtTimer()
+    {
+        recentlyCaught = true;
+        yield return new WaitForSeconds(3f);
+        recentlyCaught = false;
+    }
+    private class DummyBehaviour : MonoBehaviour { }
 }

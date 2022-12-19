@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class GoToActivityNode : Node
 {
     private static DummyBehaviour Instance;
-    private const float DestinationOffset = 0.7f;
+    private const float DestinationOffset = 0.3f;
 
     private System.Random random = new System.Random();
     private GameObject GO = new GameObject();
