@@ -28,7 +28,7 @@ public class FailStateScript : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Player/Rat Mesh").transform;
         hyperDriveAnimator = GetComponent<Animator>();
         imageFunctionality = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
     }
@@ -47,7 +47,9 @@ public class FailStateScript : MonoBehaviour
 
     public void FadeBack()
     {
+        //player.gameObject.SetActive(false);
         player.position = checkpoint.position;
+        //player.gameObject.SetActive(true);
         imageFunctionality.RunFadeBack();
         hyperDriveAnimator.gameObject.SetActive(false);
     }
