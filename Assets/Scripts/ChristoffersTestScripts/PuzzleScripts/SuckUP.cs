@@ -5,6 +5,7 @@ using UnityEngine;
 public class SuckUP : MonoBehaviour
 {
     [SerializeField] private Transform suckPosition;
+    [SerializeField] private GameObject suckArea;
     [SerializeField] private float suckSpeed;
     private bool buttonOneOn;
     private bool buttonTwoOn;
@@ -15,6 +16,10 @@ public class SuckUP : MonoBehaviour
     private Vector3 suckDirection;
     private Animator animator;
     private ParticleSystem ps;
+    private void Awake()
+    {
+        suckArea.SetActive(false);
+    }
     private void Start()
     {
         animator = GetComponentInParent<Animator>();
@@ -26,7 +31,7 @@ public class SuckUP : MonoBehaviour
         {
             hasStarted = true;
             animator.SetBool("Start", true);
-            StartCoroutine(Suck());
+            //StartCoroutine(Suck());
         }
     }
     private void OnTriggerStay(Collider other)
@@ -53,13 +58,12 @@ public class SuckUP : MonoBehaviour
     }
     private IEnumerator Suck()
     {
-        yield return new WaitForSeconds(1.3f);
+        //yield return new WaitForSeconds(1.3f);
         ps.Play();
-        Debug.Log("suck");
-        yield return new WaitForSeconds(2.0f);
+        suckArea.SetActive(true);
+        yield return new WaitForSeconds(4.0f);
         ps.Stop();
-        Debug.Log("stop");
-        animator.SetBool("Stop", true);
+        //animator.SetBool("Stop", true);
     }
 
 
