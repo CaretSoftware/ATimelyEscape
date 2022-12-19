@@ -5,7 +5,7 @@ namespace NewRatCharacterController {
 		private const float AntiFloatForce = 25.0f;
 		private static float wallRunMagnitudeThreshold = 0.04f;
 		private Vector3 _wallNormal;
-		private const string State = "WallRunState";
+		private const string State = nameof(WallRunState);
 
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
 

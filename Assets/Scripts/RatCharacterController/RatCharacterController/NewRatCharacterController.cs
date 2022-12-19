@@ -49,6 +49,7 @@ public class NewRatCharacterController : MonoBehaviour {
 	private Vector3 _inputMovement;
 	public bool paused;
 	public bool Jumped { get; private set; }
+	public bool Interacting { get; set; }
 	public Vector3 GroundNormal { get; private set; }
 	[HideInInspector] public Vector3 _velocity;
 	
@@ -415,6 +416,16 @@ public class NewRatCharacterController : MonoBehaviour {
 		
 		Gizmos.DrawWireSphere(point0, _colliderRadius);
 		Gizmos.DrawWireSphere(point1, _colliderRadius);
+	}
+
+	public bool InFrontOfCube() {
+		Vector3 halfHeight = new Vector3(0, .05f, 0);
+		float maxLength = .1f;
+		Vector3 fwd = RatMesh.forward;
+		Vector3 pos = RatMesh.position + halfHeight;
+		Ray ray = new Ray(pos, fwd);
+		
+		return (Physics.Raycast(pos, fwd, maxLength, cubeLayerMask, QueryTriggerInteraction.Ignore));
 	}
 }
 }

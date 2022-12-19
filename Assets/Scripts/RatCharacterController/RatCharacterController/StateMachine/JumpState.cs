@@ -2,7 +2,7 @@
 
 namespace NewRatCharacterController {
     public class JumpState : BaseState {
-        private const string State = "JumpState";
+        private const string State = nameof(JumpState);
         private bool _falling = false;
 
         public override void Enter() {

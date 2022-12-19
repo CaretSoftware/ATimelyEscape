@@ -2,13 +2,20 @@ using UnityEngine;
 
 namespace NewRatCharacterController {
 	public class CubePushState : BaseState {
+		private const string State = nameof(CubePushState);
 
-		// public static bool Requirement(NewRatCharacterController newRatCharacter) {
-		// 	return false;
-		// }
+		public static bool Requirement(NewRatCharacterController newRatCharacter) {
+			// are we pressing interact? are we in front of cube?
+			if (newRatCharacter.Interacting && newRatCharacter.InFrontOfCube())
+				return true;
+			
+			return false;
+		}
 
 		public override void Enter() {
-			throw new System.NotImplementedException();
+			StateChange.stateUpdate?.Invoke(State);
+			// parent player to cube?
+			
 		}
 
 		public override void Run() {

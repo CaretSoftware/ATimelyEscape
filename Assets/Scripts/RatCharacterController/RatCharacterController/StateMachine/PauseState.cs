@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace NewRatCharacterController {
 	public class PauseState : BaseState {
-		private const string State = "PauseState";
+		private const string State = nameof(PauseState);
+
 
 		public override void Enter() {
 			PauseMenuBehaviour.pauseDelegate?.Invoke(true);

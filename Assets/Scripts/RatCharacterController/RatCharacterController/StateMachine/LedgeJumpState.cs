@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace NewRatCharacterController {
 	public class LedgeJumpState : BaseState {
-		
+		private const string State = nameof(LedgeJumpState);
+
 		public delegate void LedgeJumpDone();
 		public static LedgeJumpDone ledgeJumpDone;
 		
@@ -86,6 +87,7 @@ namespace NewRatCharacterController {
 		}
 
 		public override void Enter() {
+			StateChange.stateUpdate?.Invoke(State);
 			_ledgeJumpDone = false;
 			NewRatCharacter._velocity = Vector3.zero;
 			Quaternion rotation = Quaternion.LookRotation(_hitInverseNormal, Vector3.up);

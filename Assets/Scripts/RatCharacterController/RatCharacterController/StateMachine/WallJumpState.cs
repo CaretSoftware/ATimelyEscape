@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace NewRatCharacterController {
 	public class WallJumpState : BaseState {
+		private const string State = nameof(WallJumpState);
 		private bool _falling = false;
 
-		private const string State = "WallJumpState";
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
 			

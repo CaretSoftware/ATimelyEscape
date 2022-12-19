@@ -11,29 +11,14 @@ namespace NewRatCharacterController {
 		private NewRatCharacterController _newRatCharacterController;
 		private NewRatCameraController _camController;
 
-		// Timetravel
-		public bool CanTimeTravel { get; set; }
-		private bool _canTimeTravelPast = true;
-		private bool _canTimeTravelPresent = true;
-		private bool _canTimeTravelFuture = true;
-
 		private bool _paused;
 
-		public bool CantTimeTravelPast {
-			get => _canTimeTravelPast;
-			set => _canTimeTravelPast = value;
-		}
+		// Time Travel
+		public bool CanTimeTravel { get; set; }
 
-		public bool CantTimeTravelPresent {
-			get => _canTimeTravelPresent;
-			set => _canTimeTravelPresent = value;
-
-		}
-
-		public bool CantTimeTravelFuture {
-			get => _canTimeTravelFuture;
-			set => _canTimeTravelFuture = value;
-		}
+		public bool CantTimeTravelPast { get; set; } = true;
+		public bool CantTimeTravelPresent { get; set; } = true;
+		public bool CantTimeTravelFuture { get; set; } = true;
 
 		private void Start() {
 			PauseMenuBehaviour.pauseDelegate += Paused;
