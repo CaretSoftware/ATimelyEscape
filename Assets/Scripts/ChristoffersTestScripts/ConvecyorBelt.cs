@@ -40,7 +40,7 @@ public class ConvecyorBelt : MonoBehaviour
     {
         isOn = false;
     }
-    private void TimeMachineOff(TimePeriodChanged e)
+    private void TimeMachineOff(TimePeriodChanged e)w
     {
         if (e.from == TimeTravelPeriod.Past)
         {
@@ -50,6 +50,11 @@ public class ConvecyorBelt : MonoBehaviour
         {
             isOn = true;
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeMachineOff);
     }
 
 }
