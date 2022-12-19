@@ -26,6 +26,11 @@ public class DialogueTrigger : MonoBehaviour
                 dialogueManager.StartDialogue(dialogue);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            //Go back to game
+        }
     }
 
     /*public void TriggerDialogue()

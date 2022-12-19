@@ -23,10 +23,6 @@ public class DialogueManager : MonoBehaviour
         audioClips = new Queue<AudioClip>();
         audioSource = FindObjectOfType<AudioSource>();
     }
-    private void Update()
-    {
-        
-    }
 
     public void StartDialogue(Dialogue dialogue)
     {
@@ -76,6 +72,10 @@ public class DialogueManager : MonoBehaviour
 
         //yield return new WaitForSecondsRealtime(timeBetweenSentences);
         //DisplayNextSentence();
+        if (sentence.Contains("Congratulations"))
+        {
+            Invoke(nameof(EndDialogue), 3f);
+        }
     }
 
     public void GoalReached(AudioClip clip)
