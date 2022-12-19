@@ -49,10 +49,32 @@ public class EnemyAI : MonoBehaviour
     private float dy;
 
     private bool shouldMove;
-    public static bool isReaching;
+    public static bool isCapturing;
     private bool isAnimationRunning;
+    
+    public float ChaseRange
+    {
+        get { return chaseRange;}
+        set { chaseRange = value; }
+    }
+    
+    public float CaptureRange
+    {
+        get { return captureRange; }
+        set { captureRange = value; }
+    }
+    
+    public float IdleActivityTime
+    {
+        get { return idleActivityTimer; }
+        set { idleActivityTimer = value; }
+    }
 
-    public Transform AgentCenterTransform { get { return agentCenterTransform; } private set { agentCenterTransform = value; } }
+    public Transform AgentCenterTransform
+    {
+        get { return agentCenterTransform; } 
+        private set { agentCenterTransform = value; }
+    }
 
     private void Awake()
     {
@@ -69,7 +91,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = GameObject.Find("Rat/Rat Mesh/RatGrabPoint").transform;
+        playerTransform = GameObject.Find("Player/Rat Mesh/Point2").transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
         chainIKConstraint.weight = 0;
         defaultIKTarget = handIKTarget;
@@ -82,7 +104,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (activeAI)
         {
-            handIKTarget.position = isReaching ? playerTransform.position : defaultIKTarget.position;
+            handIKTarget.position = isCapturing ? playerTransform.position : defaultIKTarget.position;
             SynchronizeAnimatorAndAgent();
             topNode.Evaluate();
             if (topNode.nodeState == NodeState.FAILURE)
@@ -167,18 +189,18 @@ public class EnemyAI : MonoBehaviour
     //Animation event methods.
     public void ResetAfterAnimations()
     {
-        isReaching = false;
-        isAnimationRunning = false;
+        handIKTarget.position = defaultIKTarget.position;
+        isCapturing = false;
     }
     public void SetPlayerTransformToCheckpoint() { FailStateScript.Instance.PlayDeathVisualization(checkpoint); }
     public void ReturnHand() { animator.SetTrigger("ReturnHandAction"); }
     public void StartReaching()
     {
-        isReaching = true;
+        isCapturing = true;
     } 
-    public bool IsReaching
+    public bool IsCapturing
     {
-        get { return isReaching; }
-        set { isReaching = value; }
+        get { return isCapturing; }
+        set { isCapturing = value; }
     }
 }
