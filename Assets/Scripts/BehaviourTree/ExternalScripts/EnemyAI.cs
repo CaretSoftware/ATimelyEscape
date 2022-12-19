@@ -69,7 +69,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = GameObject.Find("Rat/Rat Mesh/RatGrabPoint").transform;
+        playerTransform = GameObject.Find("Player/Point2").transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
         chainIKConstraint.weight = 0;
         defaultIKTarget = handIKTarget;
