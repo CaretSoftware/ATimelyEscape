@@ -17,7 +17,7 @@ public class Objective : MonoBehaviour
     private MeshRenderer mr;
     private RectTransform rt;
     private Vector2 objectiveSizeUI = new Vector2(200, 20);
-    [HideInInspector] public bool isComplete { get; private set; }
+    public bool isComplete { get; private set; }
     
     private void Start()
     {
@@ -29,7 +29,7 @@ public class Objective : MonoBehaviour
         boxCollider.isTrigger = true;
         isComplete = false;
         gameObject.SetActive(false);
-        
+        //mr.enabled = false;
     }
     
     private void UpdateTextObject()
@@ -64,7 +64,7 @@ public class Objective : MonoBehaviour
 
     public void ClearObjective()
     {
-        Destroy(objectiveText);
+        Destroy(objectiveText.gameObject);
         Destroy(gameObject);
     }
 }

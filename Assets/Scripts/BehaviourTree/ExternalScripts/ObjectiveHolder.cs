@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -10,11 +11,12 @@ public class ObjectiveHolder : MonoBehaviour
     private BoxCollider boxCollider;
 
     //the objective with the lowest index on the list.
-    [HideInInspector] public Vector3 currentObjective { get; private set; }
+    public Vector3 currentObjective { get; private set; }
 
     private void Start()
     {
         boxCollider = GetComponent<BoxCollider>();
+        objectives = new List<Objective>();
         boxCollider.isTrigger = true;
         GetChildren();
     }
@@ -38,6 +40,7 @@ public class ObjectiveHolder : MonoBehaviour
             for (int i = 0; i < objectives.Count; i++)
                 objectives[i].AddObjective();
             UpdateObjectiveList();
+            GuideArrow.Instance.ToggleGuideArrow(true);
         }
     }
 
@@ -51,11 +54,14 @@ public class ObjectiveHolder : MonoBehaviour
             else
             {
                 currentObjective = objectives[i].transform.position;
+                GuideArrow.Instance.SetTarget(objectives[i].transform);
                 return;
             }
         }
         foreach (Objective obj in objectives)
             obj.ClearObjective();
         print("Clear list");
+        GuideArrow.Instance.ToggleGuideArrow(false);
+        
     }
 }
