@@ -533,7 +533,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6613199357421126137}
   - component: {fileID: 6613199357421126136}
-  - component: {fileID: 1728976519483366821}
   m_Layer: 0
   m_Name: AudioParent
   m_TagString: Untagged
@@ -575,27 +574,6 @@ MonoBehaviour:
   past: {fileID: 3668196830929974210, guid: ccb2cbaa0094a4747ab4c0428fac841a, type: 2}
   present: {fileID: 6545496334133852666, guid: ccb2cbaa0094a4747ab4c0428fac841a, type: 2}
   future: {fileID: -1795263775480413324, guid: ccb2cbaa0094a4747ab4c0428fac841a, type: 2}
---- !u!114 &1728976519483366821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6613199357421126135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63ba4c4dac0aed34a9c0b6f6f63ffae6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  changesPrefab: 1
-  canBeMovedByPlayer: 0
-  showPreviewBox: 0
-  previewBoxScale: 1
-  previewBoxMinShowDistance: 1
-  canCollideOnTimeTravel: 0
-  past: {fileID: 0}
-  present: {fileID: 0}
-  future: {fileID: 0}
 --- !u!1001 &2799577451273162930
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -606,6 +584,10 @@ PrefabInstance:
     - target: {fileID: 6270455519128477303, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
       propertyPath: m_Pitch
       value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6270455519128477303, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
+      propertyPath: m_Volume
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6270455519128477305, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
       propertyPath: m_IsActive
@@ -661,19 +643,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6270455520175325537, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6270455520175325567, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
       propertyPath: m_Pitch
       value: -0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 6270455520175325567, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
+      propertyPath: m_Volume
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6270455520758962785, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
       propertyPath: m_Pitch
       value: -0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 6270455520758962785, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
+      propertyPath: m_Volume
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6270455520758962787, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6dafa32556617d040a217025291c8b3f, type: 3}
