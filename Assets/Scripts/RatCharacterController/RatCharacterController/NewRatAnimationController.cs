@@ -11,11 +11,11 @@ namespace NewRatCharacterController {
 		private static readonly int Jumped = Animator.StringToHash("Jump");
 		private static readonly int Leap = Animator.StringToHash("Leap");
 		private static readonly int Grounded = Animator.StringToHash("Grounded");
-		private static readonly int Pushing = Animator.StringToHash("Push");
+		private static readonly int Pushing = Animator.StringToHash("Pushing");
 		private static readonly int Forward = Animator.StringToHash("Forward");
 		private static readonly int Falling = Animator.StringToHash("Falling");
 		private static readonly int LedgeJump = Animator.StringToHash("JumpToLedge");
-			
+
 		private Vector2 _blendVector;
 		
 		private Animator _animator;
@@ -111,6 +111,8 @@ namespace NewRatCharacterController {
 		public void Jump() => _animator.SetTrigger(Jumped);
 
 		public void Fall() => _animator.SetTrigger(Falling);
+
+		public void Push(bool pushing) => _animator.SetBool(Pushing, pushing);
 
 		public void SetGrounded(bool grounded) => _animator.SetBool(Grounded, grounded);
 

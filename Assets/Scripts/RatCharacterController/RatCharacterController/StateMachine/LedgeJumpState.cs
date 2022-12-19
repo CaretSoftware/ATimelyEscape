@@ -30,10 +30,7 @@ namespace NewRatCharacterController {
 		}
 		
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
-			if (!newRatCharacter.Grounded)
-				return false;
-
-			return LedgeAhead(newRatCharacter);
+			return newRatCharacter.Grounded && LedgeAhead(newRatCharacter);
 		}
 
 		private static bool LedgeAhead(NewRatCharacterController ratCharacter) {

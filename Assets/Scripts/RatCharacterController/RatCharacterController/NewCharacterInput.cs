@@ -35,8 +35,8 @@ namespace NewRatCharacterController {
 			_playerInputActions.CharacterMovement.Jump.started += Jump;
 			_playerInputActions.CharacterMovement.Jump.canceled += JumpReleased;
 			_playerInputActions.Pause.Pause.performed += Pause;
-			// _playerInputActions.Interact.Interact.performed += Interact;
-			// _playerInputActions.Interact.Interact.canceled += StopInteract;
+			_playerInputActions.Interact.Interact.performed += Interact;
+			_playerInputActions.Interact.Interact.canceled += StopInteract;
 			_playerInputActions.Interact.Past.performed += TravelToPast;
 			_playerInputActions.Interact.Present.performed += TravelToPresent;
 			_playerInputActions.Interact.Future.performed += TravelToFuture;

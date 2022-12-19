@@ -17,8 +17,11 @@ public class NewRatCharacterController : MonoBehaviour {
 		new WallJumpState(), 
 		new LedgeJumpState(),
 		new PauseState(),
+		new CubePushState(),
 	};
 	
+	public Vector3 halfHeight = new Vector3(0, .05f, 0);
+
 	
 	// Transforms
 	private Transform _camera;
@@ -125,6 +128,9 @@ public class NewRatCharacterController : MonoBehaviour {
 	[SerializeField, Range(0.0f, 1.0f), Tooltip("Force applied when moving\n(60-70% of static friction usually)")]
 	public float _kineticFrictionCoefficient = 0.2f; 
 
+	[SerializeField]
+	public float pushSpeed = .3f;
+
 	
 	[ContextMenu("Reset Character Position")]
 	private void ResetCharacterPosition() {
@@ -164,7 +170,7 @@ public class NewRatCharacterController : MonoBehaviour {
 		
 		_transform.position += Time.deltaTime * _velocity;
 		
-		AnimationController.Vector(_inputMovement);
+		AnimationController.Vector(_inputMovement); // TODO why not _velocity? I cannot remember at this point. Debug Later ;)
 	}
 
 	public Vector3 InputVector { get; set; }
@@ -190,11 +196,11 @@ public class NewRatCharacterController : MonoBehaviour {
 	}
 
 	public void Interact() {
-		
+		Interacting = true;
 	}
 	
 	public void StopInteract() {
-		
+		Interacting = false;
 	}
 
 	private bool JumpBuffer() {
@@ -225,7 +231,7 @@ public class NewRatCharacterController : MonoBehaviour {
 		GroundNormal = Grounded ? hit.normal : Vector3.up;
 	}
 
-	private Vector3 InputToCameraProjection(Vector3 input) {
+	public Vector3 InputToCameraProjection(Vector3 input) {
 		
 		if (_camera == null) 
 			return input;
@@ -419,13 +425,25 @@ public class NewRatCharacterController : MonoBehaviour {
 	}
 
 	public bool InFrontOfCube() {
-		Vector3 halfHeight = new Vector3(0, .05f, 0);
 		float maxLength = .1f;
 		Vector3 fwd = RatMesh.forward;
 		Vector3 pos = RatMesh.position + halfHeight;
 		Ray ray = new Ray(pos, fwd);
-		
-		return (Physics.Raycast(pos, fwd, maxLength, cubeLayerMask, QueryTriggerInteraction.Ignore));
+
+		if (Physics.Raycast(pos, fwd, out RaycastHit hitInfo, maxLength, cubeLayerMask, QueryTriggerInteraction.Ignore)) {
+			cubeHitPosition = hitInfo.point;
+			cubeHitInverseNormal = -hitInfo.normal;
+			cubeTransform = hitInfo.transform;
+			return true;
+		}
+
+		return false;
 	}
+
+	public Vector3 cubeHitPosition;
+	public Vector3 cubeHitInverseNormal;
+	public Transform cubeTransform;
+	public Vector3 pushOffset;
+
 }
 }
