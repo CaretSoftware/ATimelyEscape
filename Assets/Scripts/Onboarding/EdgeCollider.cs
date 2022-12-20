@@ -5,21 +5,17 @@ using UnityEngine;
 public class EdgeCollider : MonoBehaviour
 {
     private Vector3 spawnPosition;
-    [SerializeField] Transform playerTransform;
+    [SerializeField] private Transform playerPos;
 
     void Start()
     {
-        if (playerTransform)
+        if (playerPos)
         {
-            spawnPosition = playerTransform.position;
+            spawnPosition = playerPos.position;
         }
         else
         {
-            Transform tryFindTransform = FindObjectOfType<RatCharacterController.CharacterInput>().transform;
-            if (tryFindTransform)
-            {
-                spawnPosition = tryFindTransform.position;
-            }
+            spawnPosition = GameObject.FindWithTag("Player").transform.position;
         }
     }
 
