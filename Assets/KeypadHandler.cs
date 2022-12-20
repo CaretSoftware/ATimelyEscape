@@ -28,4 +28,14 @@ public class KeypadHandler : MonoBehaviour
         keypadUI.GetComponent<Animator>().Play("Close");
         CharacterInput.IsPaused(false);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        OpenKeypad();
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        CloseKeypad();
+    }
+
 }

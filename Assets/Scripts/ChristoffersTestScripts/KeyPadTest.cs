@@ -7,7 +7,6 @@ using TMPro;
 public class KeyPadTest : MonoBehaviour
 {
     
-    [SerializeField] private GameObject player;
     [SerializeField] private GameObject keyPad;
     [SerializeField] private GameObject resetKeyPadTrigger;
     //[SerializeField] private GameObject hud;
@@ -62,7 +61,7 @@ public class KeyPadTest : MonoBehaviour
         resetKeyPadTrigger.SetActive(true);
         keyPad.SetActive(false);
         //hud.SetActive(true);
-        player.SetActive(true);
+        //player.SetActive(true);
         keyPadTrigger.enabled = false;
     }
     private void Update()
@@ -73,7 +72,7 @@ public class KeyPadTest : MonoBehaviour
         }
         if (keyPad.activeInHierarchy)
         {
-            player.SetActive(false);
+            //player.SetActive(false);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
