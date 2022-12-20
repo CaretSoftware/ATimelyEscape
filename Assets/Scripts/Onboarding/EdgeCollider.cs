@@ -5,18 +5,33 @@ using UnityEngine;
 public class EdgeCollider : MonoBehaviour
 {
     private Vector3 spawnPosition;
+    [SerializeField] Transform playerTransform;
 
     void Start()
     {
-        spawnPosition = FindObjectOfType<RatCharacterController.CharacterInput>().transform.position;
+        if (playerTransform)
+        {
+            spawnPosition = playerTransform.position;
+        }
+        else
+        {
+            Transform tryFindTransform = FindObjectOfType<RatCharacterController.CharacterInput>().transform;
+            if (tryFindTransform)
+            {
+                spawnPosition = tryFindTransform.position;
+            }
+        }
     }
 
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponentInChildren<RatCharacterController.CharacterInput>())
+        if (other.CompareTag("Player"))
         {
-            other.transform.position = spawnPosition;
+            if (spawnPosition != null)
+            {
+                other.transform.position = spawnPosition;
+            }
         }
     }
 }

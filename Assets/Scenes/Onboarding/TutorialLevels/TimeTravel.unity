@@ -287,6 +287,7 @@ MonoBehaviour:
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 1
+  displaceOnTimeTravel: 1
   past: {fileID: 754710812}
   present: {fileID: 521792902}
   future: {fileID: 0}
@@ -565,6 +566,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2931043531995609816, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2931043531995609816, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 1053157660}
     - target: {fileID: 2931043531995609818, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -575,7 +584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2931043531995609818, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.99
       objectReference: {fileID: 0}
     - target: {fileID: 2931043531995609818, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
       propertyPath: m_LocalPosition.z
@@ -609,9 +618,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2931043531995609819, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
+      propertyPath: m_Size.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2931043531995609819, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2931043531995609821, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
       propertyPath: m_Name
       value: EdgeCollider
+      objectReference: {fileID: 0}
+    - target: {fileID: 2931043531995609821, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6abf8d64e4a7cb42b2449e6e2eef283, type: 3}
@@ -827,6 +848,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pastSelf: {fileID: 0}
+--- !u!4 &1053157660 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 543450653623646525, guid: e680922f86ca241e89ec04c64e981fa2, type: 3}
+  m_PrefabInstance: {fileID: 1999492063}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1211156628
 GameObject:
   m_ObjectHideFlags: 0
@@ -1175,6 +1201,7 @@ MonoBehaviour:
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 1
+  displaceOnTimeTravel: 1
   past: {fileID: 706785889}
   present: {fileID: 430113319}
   future: {fileID: 0}
@@ -1303,11 +1330,11 @@ PrefabInstance:
     - target: {fileID: 8074493630867090373, guid: 2f6e5bc52c6837945a8e9c7315419ead, type: 3}
       propertyPath: dialogue.audioClips.Array.data[0]
       value: 
-      objectReference: {fileID: 8300000, guid: 00007cdbd37b3124fa1debabdcbac64a, type: 3}
+      objectReference: {fileID: 8300000, guid: 79e825892eabad6489c443c46ae42036, type: 3}
     - target: {fileID: 8074493630867090373, guid: 2f6e5bc52c6837945a8e9c7315419ead, type: 3}
       propertyPath: dialogue.audioClips.Array.data[1]
       value: 
-      objectReference: {fileID: 8300000, guid: 4bab93df92cd139468c4a35b17fae80a, type: 3}
+      objectReference: {fileID: 8300000, guid: ecd73cb611c0f394495895b5819ec786, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f6e5bc52c6837945a8e9c7315419ead, type: 3}
 --- !u!1 &1922537259
@@ -1545,6 +1572,7 @@ MonoBehaviour:
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 1
+  displaceOnTimeTravel: 1
   past: {fileID: 1425101465}
   present: {fileID: 777418398}
   future: {fileID: 0}

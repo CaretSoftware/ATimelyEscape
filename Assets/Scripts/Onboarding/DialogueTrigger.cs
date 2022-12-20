@@ -33,9 +33,10 @@ public class DialogueTrigger : MonoBehaviour
         }
     }
 
+
+
     /*public void TriggerDialogue()
     {
         dialogueManager.StartDialogue(dialogue);
     }*/
-
 }
