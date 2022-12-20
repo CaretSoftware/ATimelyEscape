@@ -40,6 +40,8 @@ public class TimeTravelObjectManager : MonoBehaviour {
     [SerializeField]
     private bool canCollideOnTimeTravel;
 
+    [SerializeField] private bool displaceOnTimeTravel = true;
+
     [ShowIf(EConditionOperator.Or, nameof(changesPrefab), nameof(canBeMovedByPlayer))]
     [SerializeField]
     private TimeTravelObject past, present, future;
@@ -63,10 +65,15 @@ public class TimeTravelObjectManager : MonoBehaviour {
     private TimeTravelPeriod traveledFrom, traveledTo;
 
     private Dictionary<string, DisplacmentInfo[]> DisplacementsAndRenderers = new Dictionary<string, DisplacmentInfo[]>();
+    private Material pastDisplacement, presentDisplacement, futureDisplacement;
 
     public void Awake() {
         CheckForMissingComponents();
         DetermineTimeTravelObjectState();
+        pastDisplacement = Resources.Load("TimeTravelDisplacement0") as Material;
+        presentDisplacement = Resources.Load("TimeTravelDisplacement1") as Material;
+        futureDisplacement = Resources.Load("TimeTravelDisplacement2") as Material;
+
 
         past?.SetUpTimeTravelObject(this);
         present?.SetUpTimeTravelObject(this, past);
@@ -77,9 +84,11 @@ public class TimeTravelObjectManager : MonoBehaviour {
             PhysicsSimulationComplete.AddListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
         }
 
-        if (past) { CategorizeRenderersForDisplacement(past.transform); past.timeTravelPeriod = TimeTravelPeriod.Past; }
-        if (present) { CategorizeRenderersForDisplacement(present.transform); present.timeTravelPeriod = TimeTravelPeriod.Present; }
-        if (future) { CategorizeRenderersForDisplacement(future.transform); future.timeTravelPeriod = TimeTravelPeriod.Future; }
+        if (!gameObject.activeSelf) gameObject.SetActive(true);
+
+        if (past) { CategorizeRenderersForDisplacement(past.transform, past); past.timeTravelPeriod = TimeTravelPeriod.Past; past.gameObject.SetActive(true); }
+        if (present) { CategorizeRenderersForDisplacement(present.transform, present); present.timeTravelPeriod = TimeTravelPeriod.Present; present.gameObject.SetActive(true); }
+        if (future) { CategorizeRenderersForDisplacement(future.transform, future); future.timeTravelPeriod = TimeTravelPeriod.Future; future.gameObject.SetActive(true); }
 
     }
 
@@ -114,9 +123,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
         public Material[] originalMaterials;
     }
 
-    private void CategorizeRenderersForDisplacement(Transform currentTransform) {
+    private void CategorizeRenderersForDisplacement(Transform currentTransform, TimeTravelObject currentTTO) {
         Renderer subRenderer = currentTransform.GetComponent<Renderer>();
-        if (subRenderer) {
+
+        if (subRenderer && currentTransform.name.Split('[').Length >= 3) { // TTO was not made with correct ID in name
             DisplacmentInfo info = new DisplacmentInfo();
             TimeTravelDisplacement displacement = currentTransform.gameObject.GetOrAddComponent<TimeTravelDisplacement>();
             info.displacement = displacement;
@@ -127,6 +137,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
             string rendererID = splitName[2].Substring(0, splitName[2].Length - 1);
             info.rendererID = rendererID;
+            currentTTO.RendererIDs.Add(rendererID);
 
             if (!DisplacementsAndRenderers.ContainsKey(rendererID)) DisplacementsAndRenderers.Add(rendererID, new DisplacmentInfo[3]);
 
@@ -137,8 +148,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
             }
         }
 
-        for (int i = 0; i < currentTransform.childCount; i++) CategorizeRenderersForDisplacement(currentTransform.GetChild(i));
+        for (int i = 0; i < currentTransform.childCount; i++) CategorizeRenderersForDisplacement(currentTransform.GetChild(i), currentTTO);
     }
+
+    public void RemoveRendererInfo(string ID) { if (DisplacementsAndRenderers.ContainsKey(ID)) DisplacementsAndRenderers.Remove(ID); }
 
     private void Update() {
         if (TObjectOrWBoxNull) return;
@@ -177,28 +190,35 @@ public class TimeTravelObjectManager : MonoBehaviour {
         traveledFrom = e.from;
         traveledTo = e.to;
 
-        if ((int)traveledFrom < 3 && (int)traveledTo < 3) {
-            Material[] displacementMat = new Material[] { Resources.Load("TimeTravelDisplacement1") as Material };
+        Material displacement = null;
+        switch (e.to) {
+            case TimeTravelPeriod.Past: displacement = pastDisplacement; break;
+            case TimeTravelPeriod.Present: displacement = presentDisplacement; break;
+            case TimeTravelPeriod.Future: displacement = futureDisplacement; break;
+        }
+
+        if ((int)traveledFrom < 3 && (int)traveledTo < 3 && !e.IsReload) {
+            Material[] displacementMat = new Material[] { displacement };
+
             foreach (var info in DisplacementsAndRenderers.Values) {
-                if (info[(int)traveledFrom] == null || info[(int)traveledTo] == null ||
-                Vector3.Distance(info[(int)traveledFrom].renderer.transform.position, info[(int)traveledTo].renderer.transform.position) < 0.01f) continue;
-                info[(int)traveledFrom].renderer.materials = displacementMat;
-                info[(int)traveledTo].renderer.materials = displacementMat;
-                info[(int)traveledFrom].displacement.Displace(info[(int)traveledTo].renderer.transform);
+                if (!displaceOnTimeTravel || info[(int)traveledFrom] == null || info[(int)traveledTo] == null) continue;
+                if (gameObject.activeInHierarchy) info[(int)traveledFrom].renderer.sharedMaterials = displacementMat;
+                if (gameObject.activeInHierarchy) info[(int)traveledTo].renderer.sharedMaterials = displacementMat;
+                if (gameObject.activeInHierarchy) info[(int)traveledFrom].displacement.Displace(info[(int)traveledTo].renderer.transform);
             }
         }
 
-        StartCoroutine(DisplacementComplete());
+        if (gameObject.activeInHierarchy) StartCoroutine(DisplacementComplete());
     }
 
     private IEnumerator<WaitForSecondsRealtime> DisplacementComplete() {
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(!displaceOnTimeTravel ? 0 : 0.4f);
 
         if ((int)traveledFrom < 3 || (int)traveledTo < 3) {
             foreach (var info in DisplacementsAndRenderers.Values) {
                 for (int i = 0; i < 3; i++) {
                     if (info[i] == null) continue;
-                    info[i].renderer.materials = info[i].originalMaterials;
+                    info[i].renderer.sharedMaterials = info[i].originalMaterials;
                     info[i].renderer.enabled = i == (int)traveledTo ? true : false;
                 }
             }
@@ -217,9 +237,9 @@ public class TimeTravelObjectManager : MonoBehaviour {
                 if (future != null && future.wireBox == null && ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove)
                     SetUpWireBox(future, Color.blue);
 
-                past?.SetActive(e.to == TimeTravelPeriod.Past ? true : false);
-                present?.SetActive(e.to == TimeTravelPeriod.Present ? true : false);
-                future?.SetActive(e.to == TimeTravelPeriod.Future ? true : false);
+                if (past) past.SetActive(e.to == TimeTravelPeriod.Past ? true : false);
+                if (present) present.SetActive(e.to == TimeTravelPeriod.Present ? true : false);
+                if (future) future.SetActive(e.to == TimeTravelPeriod.Future ? true : false);
 
                 HandleDisplacement(e);
 
@@ -227,7 +247,6 @@ public class TimeTravelObjectManager : MonoBehaviour {
             case TimeTravelObjectState.Dummy: break;
         }
     }
-
 
     private void OnPhysicsSimulationComplete(PhysicsSimulationComplete e) {
         if (ObjectState == TimeTravelObjectState.PrefabChangingPlayerMove) {
@@ -246,6 +265,13 @@ public class TimeTravelObjectManager : MonoBehaviour {
     private void OnCheckChangesMesh() {
         if (changesPrefab) return;
         canBeMovedByPlayer = false;
+    }
+
+    private void OnDestroy() {
+        if (EventSystem.Current != null) {
+            TimePeriodChanged.RemoveListener<TimePeriodChanged>(OnTimePeriodChanged);
+            PhysicsSimulationComplete.RemoveListener<PhysicsSimulationComplete>(OnPhysicsSimulationComplete);
+        }
     }
 }
 

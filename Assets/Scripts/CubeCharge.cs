@@ -98,7 +98,7 @@ namespace CallbackSystem
         {
             /*if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.pastSelf != null)
             {
-                Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
+//                Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
             }
             if (timeTravelObject.pastSelf != null)
             {
