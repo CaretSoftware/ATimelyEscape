@@ -94,10 +94,11 @@ public class Incubator : MonoBehaviour {
         }
         if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && incubateTriggerRed.twoHalfDone && !puzzleThreeHalfDone) {
             triggerGreenAnim.SetBool("Open", true);
-            instructions.text = "PUSH THIS PAST VERSION OF THE SAME CUBE TO THE GREEN LIGHT TO CHANGE THE DETINY OF THE FUTURE VERSION OF THE CUBE";
+            instructions.text = "PUSH THIS PAST VERSION OF THE SAME CUBE TO THE GREEN LIGHT TO CHANGE THE DESTINY OF THE FUTURE VERSION OF THE CUBE";
             spotlight.intensity = 0;
             spotlight2.intensity = 5;
             Debug.Log("STEP5");
+            OnboardingHandler.TimeTravelDiscovered = true;
 
         }
 
@@ -146,6 +147,7 @@ public class Incubator : MonoBehaviour {
             signMr.material = notDone;
             instructions.text = "PUSH THE CUBE TO THE BUTTON";
             Debug.Log("STEP13");
+            OnboardingHandler.CubeChargeDiscovered = true; 
         }
         if (puzzleFiveDone && !puzzleFiveStarted) {
             cubeManager3.SetActive(true);
