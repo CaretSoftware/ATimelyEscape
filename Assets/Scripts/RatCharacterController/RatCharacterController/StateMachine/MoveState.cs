@@ -36,6 +36,9 @@ namespace NewRatCharacterController {
             
             if (!NewRatCharacter.Grounded)
                 stateMachine.TransitionTo<AirState>();
+            
+            if (NewRatCharacter.Caught)
+                stateMachine.TransitionTo<CaughtState>();
         }
 
         private void StepUp() {

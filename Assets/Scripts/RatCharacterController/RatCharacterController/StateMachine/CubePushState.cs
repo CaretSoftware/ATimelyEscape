@@ -80,6 +80,9 @@ namespace NewRatCharacterController {
 			
 			if (!NewRatCharacter.Interacting)
 				stateMachine.TransitionTo<MoveState>();
+			
+			if (NewRatCharacter.Caught)
+				stateMachine.TransitionTo<CaughtState>();
 		}
 
 		public override void Exit() {

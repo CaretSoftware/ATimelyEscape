@@ -62,6 +62,9 @@ namespace NewRatCharacterController {
 
 			if (NewRatCharacter.Grounded && NewRatCharacter._velocity.y < float.Epsilon)
 				stateMachine.TransitionTo<MoveState>();
+			
+			if (NewRatCharacter.Caught)
+				stateMachine.TransitionTo<CaughtState>();
 		}
 
 		private static RaycastHit RayCast(NewRatCharacterController newRatCharacter, Vector3 direction) {

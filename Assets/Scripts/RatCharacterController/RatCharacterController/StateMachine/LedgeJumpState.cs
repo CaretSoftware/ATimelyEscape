@@ -100,6 +100,9 @@ namespace NewRatCharacterController {
 				stateMachine.TransitionTo<MoveState>();
 				NewRatCharacter.LedgeVaultTeleport();
 			}
+			
+			if (NewRatCharacter.Caught) 
+				stateMachine.TransitionTo<CaughtState>();
 		}
 
 		public override void Exit() { }

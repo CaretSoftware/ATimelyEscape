@@ -27,6 +27,9 @@ namespace NewRatCharacterController {
 
 			if (WallRunState.Requirement(NewRatCharacter))
 				stateMachine.TransitionTo<WallRunState>();
+			
+			if (NewRatCharacter.Caught)
+				stateMachine.TransitionTo<CaughtState>();
 		}
 
 		private void AddGravityForce() {

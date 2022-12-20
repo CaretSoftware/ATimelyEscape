@@ -5,8 +5,13 @@ using UnityEngine.Serialization;
 
 namespace NewRatCharacterController { 
 [RequireComponent(typeof(CapsuleCollider)), DisallowMultipleComponent, SelectionBase]
-public class NewRatCharacterController : MonoBehaviour {
+public class NewRatCharacterController : MonoBehaviour
+{
+	public delegate void CaughtEvent(bool caught);
+	public static CaughtEvent caughtEvent;
 
+	public bool Caught;// { get; set; }
+	
 	// State Machine
 	private StateMachine _stateMachine;
 	private List<BaseState> _states = new List<BaseState> { 
@@ -18,6 +23,7 @@ public class NewRatCharacterController : MonoBehaviour {
 		new LedgeJumpState(),
 		new PauseState(),
 		new CubePushState(),
+		new CaughtState(),
 	};
 	
 	public Vector3 halfHeight = new Vector3(0, .05f, 0);
@@ -137,13 +143,22 @@ public class NewRatCharacterController : MonoBehaviour {
 		_transform.position = Vector3.up;
 		_velocity = Vector3.zero;
 	}
+
+	private void CaughtMe(bool caught) {
+		Caught = caught;
+	}
 	
 	private void Awake() {
+		caughtEvent += CaughtMe;
 		_transform = transform;
 		_animationController = GetComponent<NewRatAnimationController>();
 		_stateMachine = new StateMachine(this, _states);
 		CharCollider = GetComponent<CapsuleCollider>();
 		_camera = GetComponentInChildren<Camera>().transform;
+	}
+
+	private void OnDestroy() {
+		caughtEvent -= CaughtMe;
 	}
 
 	private void Start() {

@@ -37,6 +37,9 @@ namespace NewRatCharacterController {
 
             if (NewRatCharacter.Grounded && NewRatCharacter._velocity.y < float.Epsilon)
                 stateMachine.TransitionTo<MoveState>();
+            
+            if (NewRatCharacter.Caught)
+                stateMachine.TransitionTo<CaughtState>();
         }
 
         public override void Exit() {
