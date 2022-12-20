@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class MouseSensitivityListener : MonoBehaviour {
     private Slider _slider;
-    private static CameraController _cameraController;
+    private static NewRatCameraController _cameraController;
 
     private void Start() {
         _slider = GetComponent<Slider>();
@@ -12,7 +12,7 @@ public class MouseSensitivityListener : MonoBehaviour {
     }
 
     private void SetMouseSensitivity(float value) {
-        _cameraController ??= FindObjectOfType<CameraController>();
+        _cameraController ??= FindObjectOfType<NewRatCameraController>();
 
         if (_cameraController != null)
             _cameraController.MouseSensitivity = value;

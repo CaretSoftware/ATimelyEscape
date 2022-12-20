@@ -12,9 +12,10 @@ public class TravelPathScript : MonoBehaviour
 
     private Vector3[] positions;
     private Vector3[] pos;
+    private Vector3 location;
     private int index;
     private int iterations = 0;
-
+    private NewRatCharacterController.NewRatCharacterController playerParent;
 
     private bool pathFromFirstIndexPad;
 
@@ -24,6 +25,8 @@ public class TravelPathScript : MonoBehaviour
         positions = new Vector3[line.positionCount];
         pos = GetLinePointsInWorldSpace();
         objectToMove.SetActive(false);
+        playerParent = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
+
     }
 
     private void Update()
@@ -36,23 +39,22 @@ public class TravelPathScript : MonoBehaviour
     {
         this.teleportingObject = teleportingObject;
         pathFromFirstIndexPad = pathReg;
+        location = arrivalLocation;
         index = pathReg ? 0 : pos.Length - 1;
         iterations = 0;
 
-        //Debug.Log($"Telport tag{teleportingObject.tag}");
-
-        this.teleportingObject.SetActive(false);
-        /* NavMesh.SamplePosition(arrivalLocation, out hit, 1, NavMesh.AllAreas);
-         teleportingObject.transform.position = hit.position;*/
-        teleportingObject.transform.position = arrivalLocation;
-
-        objectToMove.SetActive(true);
-        /*
-        if(teleportingObject.tag == "Cube")
+        if(this.teleportingObject.tag.Equals("Player"))
+            this.teleportingObject.transform.Find("Rat").gameObject.SetActive(false);
+        else if (this.teleportingObject.tag.Equals("Cube"))
         {
-            teleportingObject.GetComponent<Rigidbody>().AddForce(Vector3.forward, ForceMode.Impulse);
+            this.teleportingObject.gameObject.SetActive(false);
+            playerParent.transform.Find("Rat").gameObject.SetActive(false);
+            playerParent.LetGoOfCube = true;
+
         }
-        */
+            
+        
+        objectToMove.SetActive(true);
         objectToMove.transform.position = pos[index];
     }
 
@@ -61,19 +63,28 @@ public class TravelPathScript : MonoBehaviour
         line.GetPositions(positions);
         return positions;
     }
-
+    
     private void Move()
     {
         objectToMove.transform.position = Vector3.MoveTowards(objectToMove.transform.position, pos[index], speed * Time.deltaTime);
         if (objectToMove.transform.position == pos[index])
         {
+            playerParent.transform.position = objectToMove.transform.position;
             index = pathFromFirstIndexPad ? ++index : --index; 
             iterations++;
         }
         if (iterations == positions.Length)
         {
             objectToMove.SetActive(false);
-            teleportingObject.SetActive(true);
+            teleportingObject.transform.position = location;
+            if(teleportingObject.tag.Equals("Player"))
+                teleportingObject.transform.Find("Rat").gameObject.SetActive(true);
+            else if (teleportingObject.tag.Equals("Cube"))
+            {
+                teleportingObject.gameObject.SetActive(true);
+                playerParent.transform.Find("Rat").gameObject.SetActive(true);
+                playerParent.transform.position = location + (Vector3.left / 5);
+            }
         }
     }
 }
