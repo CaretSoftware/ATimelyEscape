@@ -117,4 +117,6 @@ public class RuntimeSceneManager : MonoBehaviour {
             activeSceneIndexes.Add(sceneToLoad);
         }
     }
+
+    public int GetCurrentSceneIndex() { return currentSceneIndex; }
 }
