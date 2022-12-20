@@ -5,15 +5,13 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 public class NewRatCameraController : MonoBehaviour {
-	//
-	// private const string MouseX = "Mouse X";
-	// private const string MouseY = "Mouse Y";
-	// private const float LookOffset = 90;
-	//
-	private Camera _cam;
+	
+	private const string MouseX = "Mouse X";
+	private const string MouseY = "Mouse Y";
+	private const float LookOffset = 90;
 	
 	private RaycastHit _hit;
-	
+	private Vector3 _fpsCameraPos;
 	private Vector3 _smoothDampCurrentVelocity;
 	private Vector3 _smoothDampCurrentVelocityLateral;
 	private Vector3 _offset;
@@ -22,36 +20,35 @@ public class NewRatCameraController : MonoBehaviour {
 	private Vector3 _offsetDirection;
 	private Vector3 _lerpOffset;
 	private Vector3 _cameraPos;
-	
 	private Vector2 _mouseMovement;
-	private Vector2 _thumbstickDelta;
-	
 	private float _rotationX;
 	private float _rotationY;
 	private float _smoothDollyTime;
+	private Camera _cam;
 	
-	private bool _paused;
-	
-	// [HideInInspector]
-	public float ClampLookupMax = 50f;
 	[HideInInspector]
-	public float ClampLookupMin = 175f;
+	public float clampLookupMax;
+	[HideInInspector]
+	public float clampLookupMin;
 	[HideInInspector]
 	public float smoothDampMinVal;
 	[HideInInspector]
 	public float smoothDampMaxVal;
 	
+	[SerializeField]
+	private bool _firstPerson;
+
 	[SerializeField] 
 	private LayerMask _collisionMask;
 	
 	[SerializeField]
 	private Transform _camera;
 	
-	// [SerializeField] [Range(1.0f, 10.0f)]
-	// private float mouseSensitivityX = 1.0f;
+	[SerializeField] [Range(1.0f, 10.0f)]
+	private float mouseSensitivityX = 1.0f;
 	
-	// [SerializeField] [Range(1.0f, 10.0f)]
-	// private float mouseSensitivityY = 1.0f;
+	[SerializeField] [Range(1.0f, 10.0f)]
+	private float mouseSensitivityY = 1.0f;
 		
 	[SerializeField] [Range(0.0f, 2.0f)]
 	private float _cameraCollisionRadius;
@@ -67,73 +64,45 @@ public class NewRatCameraController : MonoBehaviour {
 	
 	[SerializeField] private Transform _cameraGimble;
 
-	public float MouseSensitivity { get; set; } = .2f;
-
-	private void Awake()
-	{
-		Debug.Log("AWAKE");
+	private void Awake() {
+		_fpsCameraPos = _camera.localPosition;
 		_cameraPos = transform.position;
 		_cam = Camera.main;
 	}
 
 	private void Start() {
-		PauseMenuBehaviour.pauseDelegate += Pause;
+		// _camera.parent = null;
 	}
 
-	private void OnDestroy() {
-		PauseMenuBehaviour.pauseDelegate -= Pause;
+	private void Update() {
+		Input();
 	}
-
-	private void Pause(bool paused) => _paused = paused;
-
-	// private void Update() {
-	// 	if (_paused) return;
-	// 	
-		// Input();
-	// }
 
 	private void LateUpdate() {
-		if (_paused) return;
-
-		ClampCameraTilt();
 		MoveCamera();
 	}
 
-	// private void Input() {
-	// 	_mouseMovement.x += UnityEngine.Input.GetAxisRaw(MouseX) * MouseSensitivity * 50f;
-	// 	_mouseMovement.y -= UnityEngine.Input.GetAxisRaw(MouseY) * MouseSensitivity * 50f;
-	// 	_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, ClampLookupMax - LookOffset, ClampLookupMin - LookOffset);
-	// }
-	
-	public void MouseInput(Vector2 mouseDelta) {
-		const float mouseSensitivity = 25f;
-		if (_paused) return;
-		
-		_mouseMovement.x += mouseDelta.x * MouseSensitivity * Time.deltaTime * mouseSensitivity;
-		_mouseMovement.y -= mouseDelta.y * MouseSensitivity * Time.deltaTime * mouseSensitivity;
+	private void Input() {
+		_mouseMovement.x += UnityEngine.Input.GetAxisRaw(MouseX) * mouseSensitivityX;
+		_mouseMovement.y -= UnityEngine.Input.GetAxisRaw(MouseY) * mouseSensitivityY;
+		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, clampLookupMax - LookOffset, clampLookupMin - LookOffset);
 	}
 
-	public void StickInput(Vector2 stickDelta) {
-		const float stickSensitivity = 150f;
-		if (_paused) return;
-		
-		_thumbstickDelta = stickSensitivity * Time.deltaTime * new Vector2(stickDelta.x, -stickDelta.y);
-		_mouseMovement += _thumbstickDelta;
-	}
+	// private Vector3 _targetDampened;
+	// private float _targetSmoothTime = .05f;
+	// private Vector3 _currentVelocity;
 	
-	private void ClampCameraTilt() {
-		const float lookOffset = 90;
-		float min = ClampLookupMax - lookOffset;
-		float max = ClampLookupMin - lookOffset;
-		
-		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, min, max);
-	}
-	
+	private bool _debugHit;
 	private void MoveCamera() {
 		
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 
-		//_cam.cullingMask = _firstPerson ? ~(1 << 1) : -1; // TODO What is this for?
+		_cam.cullingMask = _firstPerson ? ~(1 << 1) : -1; // TODO What is this for?
+		
+		if (_firstPerson) {
+			_camera.localPosition = _cameraGimble.localPosition;
+			return;
+		}
 
 		_cameraPos = Vector3.SmoothDamp(_cameraPos, transform.position, ref _smoothDampCurrentVelocityLateral, _smoothCameraPosTime);
 		
@@ -153,6 +122,8 @@ public class NewRatCameraController : MonoBehaviour {
 		else
 			_offset = _camera3rdPersonOffset;
 
+		_debugHit = _hit.collider;
+		
 		_smoothDollyTime = _hit.collider ? smoothDampMinVal : smoothDampMaxVal;
 		_lerpOffset = Vector3.SmoothDamp(_lerpOffset, _offset, ref _smoothDampCurrentVelocity, _smoothDollyTime);
 

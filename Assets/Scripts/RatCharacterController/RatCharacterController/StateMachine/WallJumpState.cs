@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace NewRatCharacterController {
 	public class WallJumpState : BaseState {
-		private const string State = nameof(WallJumpState);
 		private bool _falling = false;
 
+		private const string State = "WallJumpState";
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
 			
@@ -62,9 +62,6 @@ namespace NewRatCharacterController {
 
 			if (NewRatCharacter.Grounded && NewRatCharacter._velocity.y < float.Epsilon)
 				stateMachine.TransitionTo<MoveState>();
-			
-			if (NewRatCharacter.Caught)
-				stateMachine.TransitionTo<CaughtState>();
 		}
 
 		private static RaycastHit RayCast(NewRatCharacterController newRatCharacter, Vector3 direction) {

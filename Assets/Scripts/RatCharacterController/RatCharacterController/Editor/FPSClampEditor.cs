@@ -9,8 +9,8 @@ public class FPSClampEditor : Editor {
 
 	private void OnEnable() {
 		_cameraController = (NewRatCameraController) target;
-		_minVal = 180 - _cameraController.ClampLookupMin;
-		_maxVal = 180 - _cameraController.ClampLookupMax;
+		_minVal = 180 - _cameraController.clampLookupMin;
+		_maxVal = 180 - _cameraController.clampLookupMax;
 	}
 
 	private float _minVal   = 0;
@@ -40,8 +40,8 @@ public class FPSClampEditor : Editor {
 		EditorGUILayout.LabelField("Clamp Look Range:", String.Format("{0} - {1}",Mathf.Floor(_minVal), Mathf.Ceil(_maxVal)));
 		EditorGUILayout.MinMaxSlider(ref _minVal, ref _maxVal, _minLimit, _maxLimit);
 
-		_cameraController.ClampLookupMax = 180 - Mathf.CeilToInt(_maxVal);
-		_cameraController.ClampLookupMin = 180 - (int)_minVal;
+		_cameraController.clampLookupMax = 180 - Mathf.CeilToInt(_maxVal);
+		_cameraController.clampLookupMin = 180 - (int)_minVal;
 	}
 
 	private void SmoothDampSmoothTimeMinMaxSlider() {

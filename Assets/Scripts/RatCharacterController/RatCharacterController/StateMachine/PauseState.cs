@@ -2,21 +2,15 @@ using UnityEngine;
 
 namespace NewRatCharacterController {
 	public class PauseState : BaseState {
-		private const string State = nameof(PauseState);
-
-
-		public override void Enter() {
-			StateChange.stateUpdate?.Invoke(State);
-			PauseMenuBehaviour.pauseDelegate?.Invoke(true);
-		} 
+		private const string State = "PauseState";
+		
+		public override void Enter() => StateChange.stateUpdate?.Invoke(State);
 
 		public override void Run() {
-			if (!NewRatCharacter.paused)
-				stateMachine.TransitionTo<MoveState>();
+			// if (!NewRatCharacter.Paused)
+			// 	stateMachine.TransitionToLastState();
 		}
 
-		public override void Exit() {
-			PauseMenuBehaviour.pauseDelegate?.Invoke(false);
-		}
+		public override void Exit() { }
 	}
 }

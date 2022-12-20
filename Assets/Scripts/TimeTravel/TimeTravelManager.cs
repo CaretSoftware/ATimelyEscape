@@ -16,6 +16,7 @@ public class TimeTravelManager : MonoBehaviour {
     public static HashSet<Rigidbody> MovableObjects = new HashSet<Rigidbody>();
     public static Transform playerTransform;
     public static bool SimulatePhysics { get; set; }
+    public StateMachine StateMachine => stateMachine;
 
     public static readonly Dictionary<TimeTravelPeriod, Type> PeriodStates = new Dictionary<TimeTravelPeriod, Type>() {
         { TimeTravelPeriod.Past, typeof(PastState) },
@@ -34,6 +35,7 @@ public class TimeTravelManager : MonoBehaviour {
                 new FutureState() { thisPeriod = TimeTravelPeriod.Future }
             });
         currentPeriod = startPeriod;
+        desiredPeriod = startPeriod;
         TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimeTravel);
         ReloadCurrentTimeTravelPeriod();
     }
@@ -49,7 +51,12 @@ public class TimeTravelManager : MonoBehaviour {
 
     public static void ReloadCurrentTimeTravelPeriod() {
         if (currentPeriod == TimeTravelPeriod.Dummy) return;
+        TimeTravelManager manager = FindObjectOfType<TimeTravelManager>();
         TimePeriodChanged e = new TimePeriodChanged() { from = TimeTravelPeriod.Dummy, to = currentPeriod, IsReload = true };
+
+        State nextState = manager.stateMachine.stateDict[TimeTravelManager.PeriodStates[currentPeriod]];
+        manager.stateMachine.CurrentState = nextState;
+        manager.stateMachine.QueuedState = nextState;
         Debug.Log($"Reloading current time period: {currentPeriod}");
         e.Invoke();
     }
@@ -104,6 +111,7 @@ namespace StateMachines {
         public class Dummy : MonoBehaviour { }
         private Dummy coroutineRunner;
         private GameObject runnerObject = new GameObject("RunnerObject");
+        private CharacterInput input;
 
         public override void Run() {
 
@@ -125,11 +133,12 @@ namespace StateMachines {
                         TimeTravelManager.playerTransform.position.z), 0.05f, mask);
 
                 if (cols.Length == 0 || cols.All(c => c.isTrigger)) {
+
                     State nextState = StateMachine.stateDict[
                         TimeTravelManager.PeriodStates[TimeTravelManager.desiredPeriod]];
                     StateMachine.TransitionTo(nextState);
                     travellingTo = TimeTravelManager.desiredPeriod;
-                    if (TimeTravelManager.currentPeriod == TimeTravelPeriod.Dummy) Exit();
+                    Exit();
                 } else {
                     TimeTravelManager.desiredPeriod = TimeTravelManager.currentPeriod;
                     Debug.LogError("You tried Time Travelling into another object!");
@@ -142,18 +151,19 @@ namespace StateMachines {
 
         public override void Exit() {
             if (!coroutineRunner) coroutineRunner = runnerObject.AddComponent<Dummy>();
+            if (!input) input = TimeTravelManager.FindObjectOfType<CharacterInput>();
 
             var travelEvent = new TimePeriodChanged() { from = thisPeriod, to = travellingTo };
             travelEvent.Invoke();
             Debug.Log("Travelled to: " + travellingTo);
             TimeTravelManager.currentPeriod = travellingTo;
-            coroutineRunner.StartCoroutine(DisableTimeTravelDuringEffect());
+            coroutineRunner.StartCoroutine(DisableTimeTravelDuringEffect(input.CanTimeTravel));
         }
 
-        private IEnumerator<WaitForSecondsRealtime> DisableTimeTravelDuringEffect() {
-            TimeTravelManager.FindObjectOfType<CharacterInput>().CanTimeTravel = false;
+        private IEnumerator<WaitForSecondsRealtime> DisableTimeTravelDuringEffect(bool timeTravelEneabled) {
+            if (timeTravelEneabled) input.CanTimeTravel = false;
             yield return new WaitForSecondsRealtime(0.4f);
-            TimeTravelManager.FindObjectOfType<CharacterInput>().CanTimeTravel = true;
+            if (timeTravelEneabled) input.CanTimeTravel = true;
         }
     }
 

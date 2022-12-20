@@ -5,7 +5,7 @@ namespace NewRatCharacterController {
 		private const float AntiFloatForce = 25.0f;
 		private static float wallRunMagnitudeThreshold = 0.04f;
 		private Vector3 _wallNormal;
-		private const string State = nameof(WallRunState);
+		private const string State = "WallRunState";
 
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
 
@@ -64,9 +64,6 @@ namespace NewRatCharacterController {
 
 			if (NewRatCharacter.Grounded)
 				stateMachine.TransitionTo<MoveState>();
-			
-			if (NewRatCharacter.Caught)
-				stateMachine.TransitionTo<CaughtState>();
 		}
 
 		private void AddGravityForce() {

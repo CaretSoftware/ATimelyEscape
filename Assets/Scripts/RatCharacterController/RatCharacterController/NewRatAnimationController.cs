@@ -11,11 +11,9 @@ namespace NewRatCharacterController {
 		private static readonly int Jumped = Animator.StringToHash("Jump");
 		private static readonly int Leap = Animator.StringToHash("Leap");
 		private static readonly int Grounded = Animator.StringToHash("Grounded");
-		private static readonly int Pushing = Animator.StringToHash("Pushing");
+		private static readonly int Pushing = Animator.StringToHash("Push");
 		private static readonly int Forward = Animator.StringToHash("Forward");
 		private static readonly int Falling = Animator.StringToHash("Falling");
-		private static readonly int LedgeJump = Animator.StringToHash("JumpToLedge");
-		private static readonly int Caught = Animator.StringToHash("Caught");
 
 		private Vector2 _blendVector;
 		
@@ -58,7 +56,7 @@ namespace NewRatCharacterController {
 			// 	_lookDirection = Vector3.SmoothDamp(_lookDirection, _vector.normalized.ProjectOnPlane(), ref _currentVelocity, _smoothTime);
 
 		private void Update() {
-			// RotateCharacterMesh();
+			RotateCharacterMesh();
 
 			_blendVector = BlendVector(_inputVector);
 			
@@ -68,7 +66,7 @@ namespace NewRatCharacterController {
 			_animator.SetFloat(VelocityLateral, _blendVector.x);
 		}
 
-		public void RotateCharacterMesh() {
+		private void RotateCharacterMesh() {
 			float singleStep = rotationVelocity * Time.deltaTime;
 
 			_lookDirection = Vector3.RotateTowards(rat.forward, _vector.ProjectOnPlane(), 
@@ -107,18 +105,20 @@ namespace NewRatCharacterController {
 			_vector = vector;
 		}
 
-		public void SetInputVector(Vector3 input) => _inputVector = input;
+		public void SetInputVector(Vector3 input) {
+			_inputVector = input;
+		}
 
-		public void Jump() => _animator.SetTrigger(Jumped);
+		public void Jump() {
+			_animator.SetTrigger(Jumped);
+		}
 
-		public void Fall() => _animator.SetTrigger(Falling);
+		public void Fall() {
+			_animator.SetTrigger(Falling);
+		}
 
-		public void Push(bool pushing) => _animator.SetBool(Pushing, pushing);
-
-		public void SetGrounded(bool grounded) => _animator.SetBool(Grounded, grounded);
-
-		public void SetLedgeJump() => _animator.SetTrigger(LedgeJump);
-
-		public void SetCaught(bool caught) => _animator.SetBool(Caught, caught);
+		public void SetGrounded(bool grounded) {
+			_animator.SetBool(Grounded, grounded);
+		}
 	}
 }

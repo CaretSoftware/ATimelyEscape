@@ -2,9 +2,9 @@
 
 namespace NewRatCharacterController {
     public class JumpState : BaseState {
-        private const string State = nameof(JumpState);
         private bool _falling = false;
 
+        private const string State = "JumpState";
         public override void Enter() {
             StateChange.stateUpdate?.Invoke(State);
             _falling = false;
@@ -23,8 +23,6 @@ namespace NewRatCharacterController {
             NewRatCharacter._velocity += gravityMovement;
 
             NewRatCharacter.ApplyAirFriction();
-            
-            NewRatCharacter.AnimationController.RotateCharacterMesh();
 
             if (!NewRatCharacter.HoldingJump || NewRatCharacter._velocity.y < float.Epsilon)
                 _falling = true;
@@ -37,9 +35,6 @@ namespace NewRatCharacterController {
 
             if (NewRatCharacter.Grounded && NewRatCharacter._velocity.y < float.Epsilon)
                 stateMachine.TransitionTo<MoveState>();
-            
-            if (NewRatCharacter.Caught)
-                stateMachine.TransitionTo<CaughtState>();
         }
 
         public override void Exit() {
