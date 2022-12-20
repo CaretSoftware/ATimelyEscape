@@ -97,6 +97,7 @@ namespace CallbackSystem
                     {
                         timer = 0f;
                         fail.Invoke();
+                        OnboardingHandler.TimeTravelFutureDiscovered = true;
                     }
                 }
                 vignette.intensity.value = timer;
