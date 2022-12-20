@@ -40,7 +40,7 @@ namespace CallbackSystem {
     public class TimePeriodChanged : DebugEvent {
         public TimeTravelPeriod from;
         public TimeTravelPeriod to;
-        public bool IsReload; 
+        public bool IsReload;
     }
 
     // this looks feels very redundant, looking into alternative solutions.
@@ -80,8 +80,7 @@ namespace CallbackSystem {
         public Open open;
     }
 
-    public class PauseEvent : DebugEvent
-    {
+    public class PauseEvent : DebugEvent {
         public bool paused;
     }
 }
