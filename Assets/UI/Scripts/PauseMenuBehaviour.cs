@@ -92,8 +92,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
         float time = 0;
         float startScale = Time.timeScale;
 
-        while (time < pauseDelay)
-        {
+        while (time < pauseDelay) {
             time += Time.unscaledDeltaTime;
 
             Time.timeScale = Mathf.Lerp(startScale, 0, time / pauseDelay);
@@ -102,9 +101,11 @@ public class PauseMenuBehaviour : MonoBehaviour {
         }
     }
 
-    public void UnPauseGame()
-    {
+    public void UnPauseGame() {
         //Debug.Log("Info: Unpaused Game");
+
+        CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = false };
+        pauseEvent.Invoke();
 
         pauseMenyAnimator.Play("UnPause");
 
@@ -129,8 +130,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
         float time = 0;
         float startScale = Time.timeScale;
 
-        while (time < pauseDelay)
-        {
+        while (time < pauseDelay) {
             time += Time.unscaledDeltaTime;
 
             Time.timeScale = Mathf.Lerp(startScale, 1, time / pauseDelay);
@@ -140,10 +140,8 @@ public class PauseMenuBehaviour : MonoBehaviour {
     }
 
     // Method to load a scene by insert the index of wished scene presented in buildsettings
-    public void SelectScene(int sceneIndex)
-    {
-        if (sceneIndex < 0 || sceneIndex > SceneManager.sceneCount)
-        {
+    public void SelectScene(int sceneIndex) {
+        if (sceneIndex < 0 || sceneIndex > SceneManager.sceneCount) {
             Debug.Log("Error: Not valid SceneIndex: " + sceneIndex);
         }
         else
@@ -153,8 +151,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
     }
 
     // Method to quit the application anytime
-    public void QuitGame()
-    {
+    public void QuitGame() {
         Debug.Log("Info: Quit button has been Pressed");
 
         Application.Quit();

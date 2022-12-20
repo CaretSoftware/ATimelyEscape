@@ -39,6 +39,7 @@ public class CubePush : MonoBehaviour {
 		Vector3 velocity = direction * pushSpeed;
 		desiredVelocity = velocity;
 		//RotateCube(velocity);
+		OnboardingHandler.CubeInteractionsDiscovered = true;
 	}
 
 	private void FixedUpdate()
