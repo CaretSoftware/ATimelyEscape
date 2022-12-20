@@ -7,12 +7,12 @@ using UnityEngine;
 public class KillCollider : MonoBehaviour
 {
     [SerializeField] private Transform checkpoint;
-    private CapsuleCollider collider;
+    private CapsuleCollider capsuleCollider;
 
     private void Start()
     {
-        collider = GetComponent<CapsuleCollider>();
-        collider.isTrigger = true;
+        capsuleCollider = GetComponent<CapsuleCollider>();
+        capsuleCollider.isTrigger = true;
     }
 
     private void OnTriggerEnter(Collider collider)
