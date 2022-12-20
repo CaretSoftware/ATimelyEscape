@@ -146,9 +146,19 @@ public class NewRatCharacterController : MonoBehaviour
 	public void SetJump(float force) {
 		_jumpForce = force;
 	}
+
+	public void SetPushVelocity(float velocity) {
+		pushSpeed = velocity;
+	}
+
+	public void SetAcceleration(float acceleration) {
+		_acceleration = acceleration;
+	}
 	
-	
-	
+	public void SetDeceleration(float acceleration) {
+		_acceleration = acceleration;
+	}
+
 	[ContextMenu("Reset Character Position")]
 	private void ResetCharacterPosition() {
 		_transform.position = new Vector3(-.292f, -.255f, 4.426f);
