@@ -27,7 +27,7 @@ public class TimeTravelManager : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         MovableObjects.Clear();
-        playerTransform = FindObjectOfType<CharacterAnimationController>().transform;
+        playerTransform = FindObjectOfType<NewRatCharacterController.NewRatAnimationController>().transform;
         stateMachine = new StateMachine(this,
             new State[] {
                 new PastState() { thisPeriod = TimeTravelPeriod.Past },
@@ -111,7 +111,7 @@ namespace StateMachines {
         public class Dummy : MonoBehaviour { }
         private Dummy coroutineRunner;
         private GameObject runnerObject = new GameObject("RunnerObject");
-        private CharacterInput input;
+        private NewRatCharacterController.NewCharacterInput input;
 
         public override void Run() {
 
@@ -151,7 +151,7 @@ namespace StateMachines {
 
         public override void Exit() {
             if (!coroutineRunner) coroutineRunner = runnerObject.AddComponent<Dummy>();
-            if (!input) input = TimeTravelManager.FindObjectOfType<CharacterInput>();
+            if (!input) input = TimeTravelManager.FindObjectOfType<NewRatCharacterController.NewCharacterInput>();
 
             var travelEvent = new TimePeriodChanged() { from = thisPeriod, to = travellingTo };
             travelEvent.Invoke();
