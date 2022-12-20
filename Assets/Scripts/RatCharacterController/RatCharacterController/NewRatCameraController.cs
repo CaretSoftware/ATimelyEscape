@@ -77,11 +77,11 @@ public class NewRatCameraController : MonoBehaviour {
 	}
 
 	private void Start() {
-		PauseMenuBehaviour.pauseDelegate += Pause;
+		// PauseMenuBehaviour.pauseDelegate += Pause; // TODO
 	}
 
 	private void OnDestroy() {
-		PauseMenuBehaviour.pauseDelegate -= Pause;
+		// PauseMenuBehaviour.pauseDelegate -= Pause; // TODO
 	}
 
 	private void Pause(bool paused) => _paused = paused;

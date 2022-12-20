@@ -27,7 +27,7 @@ namespace NewRatCharacterController {
 		
 
 		private void Start() {
-			PauseMenuBehaviour.pauseDelegate += Paused;
+			// PauseMenuBehaviour.pauseDelegate += Paused; // TODO
 
 			_camController = GetComponent<NewRatCameraController>();
 			
@@ -134,7 +134,7 @@ namespace NewRatCharacterController {
 		private void OnDestroy() => Unsubscribe();
 		
 		private void Unsubscribe() {
-			PauseMenuBehaviour.pauseDelegate -= Paused;
+			// PauseMenuBehaviour.pauseDelegate -= Paused; // TODO
 			
 			_playerInputActions.Onboarding.DLeft.started -= DPadLeft;
 			_playerInputActions.Onboarding.DRight.started -= DPadRight;
