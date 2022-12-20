@@ -12,7 +12,7 @@ public class TimeTravelDisplacement : MonoBehaviour {
     private static readonly int PositionPropertyID = Shader.PropertyToID("_Direction");
 
     [SerializeField] private Transform other;
-    [SerializeField] private float time = .2f;
+    [SerializeField] private float time = .4f;
 
     private Transform _transform;
     private MaterialPropertyBlock mpb;
@@ -41,7 +41,7 @@ public class TimeTravelDisplacement : MonoBehaviour {
 
     public void Displace(Transform target) {
         other = target;
-        Debug.LogWarning(target.name);
+        //Debug.LogWarning(target.name);
         MoveAndRotateMesh();
     }
 
