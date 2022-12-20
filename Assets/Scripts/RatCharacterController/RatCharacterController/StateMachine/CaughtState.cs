@@ -7,6 +7,7 @@ namespace NewRatCharacterController
         public override void Enter() {
             StateChange.stateUpdate?.Invoke(State);
             NewRatCharacter._velocity = Vector3.zero;
+            NewRatCharacter.AnimationController.SetCaught(true);
         }
 
         public override void Run() {
@@ -15,7 +16,7 @@ namespace NewRatCharacterController
         }
 
         public override void Exit() {
-            
+            NewRatCharacter.AnimationController.SetCaught(false);
         }
     }
 }
