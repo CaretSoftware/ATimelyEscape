@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using CallbackSystem;
+using TMPro;
+using UnityEngine;
 
-public class PlateButton : MonoBehaviour
-{
+public class PlateButton : MonoBehaviour {
     [Header("Materials")]
     [SerializeField] private Material OnMaterial;
     [SerializeField] private Material OffMaterial;
@@ -41,8 +40,7 @@ public class PlateButton : MonoBehaviour
     private Animator platePuzzleAnim;
     public bool pastON;
 
-    private void Start()
-    {
+    private void Start() {
         TimePeriodChanged.AddListener<TimePeriodChanged>(TimeTravel);
         meshRenderer = gameObject.GetComponent<MeshRenderer>();
         cordMeshRenderer = cord.GetComponent<MeshRenderer>();
@@ -56,10 +54,8 @@ public class PlateButton : MonoBehaviour
         bigHatchAnim = bigHatch.GetComponent<Animator>();
         platePuzzleAnim = platePuzzle.GetComponent<Animator>();
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Cube" && puzzleIncubator.PlateButtonInteractable)
-        {
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Cube" && puzzleIncubator.PlateButtonInteractable) {
             platePuzzle2.SetActive(true);
             ButtonOn();
             puzzleIncubator.puzzleFiveDone = true;
@@ -70,22 +66,17 @@ public class PlateButton : MonoBehaviour
             StartCoroutine(puzzleIncubator.Delay());
             Debug.Log("STEP14");
         }
-        if (other.gameObject.tag == "CubePast")
-        {
-            if (isPastPlate)
-            {
+        if (other.gameObject.tag == "CubePast") {
+            if (isPastPlate) {
                 ButtonOn();
                 pastON = true;
-                presentPlate.pastON = true; 
+                presentPlate.pastON = true;
             }
         }
-        if (other.gameObject.tag == "CubePresent")
-        {
-            if (!isPastPlate)
-            {
+        if (other.gameObject.tag == "CubePresent") {
+            if (!isPastPlate) {
                 ButtonOn();
-                if (pastON)
-                {
+                if (pastON) {
                     instructions.text = "GOOD, ALL DONE";
                     signMeshRenderer.material = OnMaterial;
                     exitHatch.GetComponent<Animator>().SetBool("Open", true);
@@ -96,12 +87,9 @@ public class PlateButton : MonoBehaviour
         }
 
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "CubePast")
-        {
-            if (isPastPlate)
-            {
+    private void OnTriggerExit(Collider other) {
+        if (other.gameObject.tag == "CubePast") {
+            if (isPastPlate) {
                 ButtonOff();
                 pastON = false;
                 presentPlate.pastON = false;
@@ -110,25 +98,25 @@ public class PlateButton : MonoBehaviour
 
     }
 
-    private void TimeTravel(TimePeriodChanged e)
-    {
-        if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && pastON)
-        {
+    private void OnDestroy() {
+        if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeTravel);
+    }
+
+    private void TimeTravel(TimePeriodChanged e) {
+        if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && pastON) {
             pastCordMeshRenderer.material = OnMaterial;
             pastCord2MeshRenderer.material = OnMaterial;
             pastPlateMeshrenderer.material = OnMaterial;
             presentPlate.pastON = true;
         }
     }
-    private void ButtonOn()
-    {
+    private void ButtonOn() {
         meshRenderer.material = OnMaterial;
         cordMeshRenderer.material = OnMaterial;
         cord2MeshRenderer.material = OnMaterial;
         plateMeshrenderer.material = OnMaterial;
     }
-    private void ButtonOff()
-    {
+    private void ButtonOff() {
         meshRenderer.material = OffMaterial;
         cordMeshRenderer.material = OffMaterial;
         cord2MeshRenderer.material = OffMaterial;
