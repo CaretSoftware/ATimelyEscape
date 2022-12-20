@@ -9,11 +9,16 @@ public class VariableManager : MonoBehaviour
         ratCharacter = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
     }
 
-    public SetVelocity(float velocity) {
+    public void SetVelocity(float velocity) {
         ratCharacter.SetVelocity(velocity);
     }
 
-    public SetJumpForce(float jumpForce) {
+    public void SetJumpForce(float jumpForce) {
         ratCharacter.SetJump(jumpForce);
     }
+
+    public void SetPushVelocity(float velocity) {
+        ratCharacter.pushSpeed = velocity;
+    }
+    
 }
