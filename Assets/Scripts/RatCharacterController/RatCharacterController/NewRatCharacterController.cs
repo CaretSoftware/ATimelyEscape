@@ -184,6 +184,7 @@ public class NewRatCharacterController : MonoBehaviour
 
 	private void Start() {
 		_colliderRadius = CharCollider.radius;
+		
 	}
 
 	public float velocityMagnitude;
