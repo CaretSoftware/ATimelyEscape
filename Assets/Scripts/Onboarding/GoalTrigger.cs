@@ -9,7 +9,7 @@ public class GoalTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponentInChildren<RatCharacterController.CharacterInput>())
+        if (other.CompareTag("Player"))
         {
             FindObjectOfType<DialogueManager>().GoalReached(goalClip);
         }

@@ -11,15 +11,15 @@ public class DialogueTrigger : MonoBehaviour
     {
         dialogueManager = FindObjectOfType<DialogueManager>();
 
-        //NewCharacterInput.dPadRightPressed += WhatHappensOnDpadRightPressed;
-        //NewCharacterInput.dPadLeftPressed += WhatHappensOnDpadLeftPressed;
+        NewRatCharacterController.NewCharacterInput.dPadRightPressed += WhatHappensOnDpadRightPressed;
+        NewRatCharacterController.NewCharacterInput.dPadLeftPressed += WhatHappensOnDpadLeftPressed;
     }
 
 
     private void OnDestroy()
     {
-        //NewCharacterInput.dPadRightPressed -= WhatHappensOnDpadRightPressed;
-        //NewCharacterInput.dPadLeftPressed -= WhatHappensOnDpadLeftPressed;
+        NewRatCharacterController.NewCharacterInput.dPadRightPressed -= WhatHappensOnDpadRightPressed;
+        NewRatCharacterController.NewCharacterInput.dPadLeftPressed -= WhatHappensOnDpadLeftPressed;
     }
 
     private void WhatHappensOnDpadRightPressed()
