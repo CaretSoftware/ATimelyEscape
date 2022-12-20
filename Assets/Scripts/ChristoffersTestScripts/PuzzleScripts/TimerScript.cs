@@ -6,7 +6,7 @@ using TMPro;
 public class TimerScript : MonoBehaviour
 {
     [SerializeField] private float timeLeft;
-    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI[] timerTexts;
     private bool firstOn;
     private bool secondOn;
 
@@ -15,7 +15,7 @@ public class TimerScript : MonoBehaviour
     {
         if (firstOn && secondOn)
         {
-            if(timeLeft > 0)
+            if (timeLeft > 0)
             {
                 timeLeft -= Time.deltaTime;
                 UpdateTimer(timeLeft);
@@ -35,13 +35,15 @@ public class TimerScript : MonoBehaviour
 
         float minutes = Mathf.FloorToInt(currentTime / 60);
         float seconds = Mathf.FloorToInt(currentTime % 60);
-
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+  
+        timerTexts[0].text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        timerTexts[1].text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        timerTexts[2].text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     public void FirstButtonOn()
     {
-        firstOn = true; 
+        firstOn = true;
     }
     public void SecondButtonOn()
     {
