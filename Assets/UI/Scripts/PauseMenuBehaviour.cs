@@ -148,7 +148,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
         }
         else
         {
-            SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
+            //SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
         }
     }
 
