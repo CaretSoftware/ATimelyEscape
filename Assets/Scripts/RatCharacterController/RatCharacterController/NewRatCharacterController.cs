@@ -137,10 +137,19 @@ public class NewRatCharacterController : MonoBehaviour
 	[SerializeField]
 	public float pushSpeed = .3f;
 
+	public void SetVelocity(float vel) {
+		_maxVelocity = vel;
+	}
+
+	public void SetJump(float force) {
+		_jumpForce = force;
+	}
+	
+	
 	
 	[ContextMenu("Reset Character Position")]
 	private void ResetCharacterPosition() {
-		_transform.position = Vector3.up;
+		_transform.position = new Vector3(-.292f, -.255f, 4.426f);
 		_velocity = Vector3.zero;
 	}
 
