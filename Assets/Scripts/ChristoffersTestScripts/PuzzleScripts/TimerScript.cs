@@ -32,6 +32,7 @@ public class TimerScript : MonoBehaviour
                 timeLeft = 0;
                 firstOn = false;
                 secondOn = false;
+                Invoke("RestartTimer", 1);
                 FailStateScript.Instance.PlayDeathVisualization(checkpoint);
             }
         }
