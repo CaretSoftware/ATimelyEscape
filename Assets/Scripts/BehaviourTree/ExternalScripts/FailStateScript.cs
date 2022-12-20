@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CallbackSystem;
 using UnityEngine;
 using UnityEngine.UI;
+using Event = CallbackSystem.Event;
 
 public class FailStateScript : MonoBehaviour
 {

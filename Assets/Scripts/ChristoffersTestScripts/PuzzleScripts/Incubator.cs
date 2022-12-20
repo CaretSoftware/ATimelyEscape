@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using CallbackSystem;
 using TMPro;
+using UnityEngine;
 
-public class Incubator : MonoBehaviour
-{
+public class Incubator : MonoBehaviour {
     [SerializeField] private GameObject cubeManager;
     [SerializeField] private GameObject cubeManager2;
     [SerializeField] private GameObject cubeManager3;
@@ -37,18 +36,17 @@ public class Incubator : MonoBehaviour
     private Animator triggerGreenAnim;
     private Animator triggerGreen2Anim;
     private bool puzzleOneDone;
-    public bool puzzleTwoHalfDone; 
+    public bool puzzleTwoHalfDone;
     public bool puzzleTwoDone;
     public bool puzzleThreeHalfDone;
     private bool puzzleThreeDone;
     private bool puzzleFourDone;
     public bool puzzleFiveDone;
-    private bool puzzleFiveStarted; 
+    private bool puzzleFiveStarted;
 
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         PlatePuzzle2.SetActive(false);
         cubeManager2.SetActive(false);
         spotlight.intensity = 0;
@@ -67,11 +65,9 @@ public class Incubator : MonoBehaviour
     }
 
 
-    private void TimeTravel(TimePeriodChanged e)
-    {
-        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && !puzzleOneDone)
-        {
-            signMr.material = done;
+    private void TimeTravel(TimePeriodChanged e) {
+        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && !puzzleOneDone) {
+            if (signMr) signMr.material = done;
             instructions.text = "GOOD";
             StartCoroutine(Delay());
             bigHatchAnim.SetBool("Open", true);
@@ -79,16 +75,13 @@ public class Incubator : MonoBehaviour
             Debug.Log("STEP1");
 
         }
-        if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && puzzleOneDone)
-        {
-            if (!puzzleTwoHalfDone)
-            {
+        if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && puzzleOneDone) {
+            if (!puzzleTwoHalfDone) {
                 instructions.text = "PUSH THE CUBE TO THE RED LIGHT";
                 triggerRedAnim.SetBool("Open", true);
                 Debug.Log("STEP3");
             }
-            if (puzzleTwoHalfDone)
-            {
+            if (puzzleTwoHalfDone) {
                 instructions.text = "MOVE THIS VERSION OF THE CUBE TO THE GREEN LIGHT";
                 spotlight.intensity = 0;
                 spotlight2.intensity = 5;
@@ -97,8 +90,7 @@ public class Incubator : MonoBehaviour
                 triggerGreen2Anim.SetBool("Open", true);
             }
         }
-        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && incubateTriggerRed.twoHalfDone && !puzzleThreeHalfDone)
-        {
+        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && incubateTriggerRed.twoHalfDone && !puzzleThreeHalfDone) {
             triggerGreenAnim.SetBool("Open", true);
             instructions.text = "PUSH THIS PAST VERSION OF THE SAME CUBE TO THE GREEN LIGHT TO CHANGE THE DETINY OF THE FUTURE VERSION OF THE CUBE";
             spotlight.intensity = 0;
@@ -107,12 +99,11 @@ public class Incubator : MonoBehaviour
 
         }
 
-        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleThreeHalfDone)
-        {
+        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleThreeHalfDone) {
             spotlight.intensity = 0;
             spotlight2.intensity = 0;
             spotlight3.intensity = 0;
-            spotlight4.intensity = 0; 
+            spotlight4.intensity = 0;
             signMr.material = done;
             instructions.text = "GOOD";
             puzzleThreeDone = true;
@@ -122,11 +113,11 @@ public class Incubator : MonoBehaviour
 
     }
 
-    public IEnumerator Delay()
-    {
+    private void OnDestroy() { if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeTravel); }
+
+    public IEnumerator Delay() {
         yield return new WaitForSeconds(3.2f);
-        if (!puzzleOneDone)
-        {
+        if (!puzzleOneDone) {
             signMr.material = notDone;
             instructions.text = "NOW PRESS \"2\"-KEY TO TIMETRAVEL ONE YEAR AHEAD";
             Invoke("SpotlightON", 2f);
@@ -136,8 +127,7 @@ public class Incubator : MonoBehaviour
             Debug.Log("STEP2");
 
         }
-        if (puzzleThreeDone && !puzzleFourDone)
-        {
+        if (puzzleThreeDone && !puzzleFourDone) {
             cubeManager.SetActive(false);
             cubeManager2.SetActive(true);
             puzzleFourDone = true;
@@ -147,23 +137,20 @@ public class Incubator : MonoBehaviour
             Debug.Log("STEP12");
 
         }
-        if (puzzleFourDone && !puzzleFiveDone)
-        {
+        if (puzzleFourDone && !puzzleFiveDone) {
             puzzleFloor.SetActive(true);
             signMr.material = notDone;
             instructions.text = "PUSH THE CUBE TO THE BUTTON";
             Debug.Log("STEP13");
         }
-        if (puzzleFiveDone && !puzzleFiveStarted)
-        {
+        if (puzzleFiveDone && !puzzleFiveStarted) {
             cubeManager3.SetActive(true);
             bigHatchAnim.SetBool("OpenThird", true);
             platePuzzle2Anim.SetBool("Open", true);
             puzzleFiveStarted = true;
             Debug.Log("STEP15");
         }
-        if (puzzleFiveStarted)
-        {
+        if (puzzleFiveStarted) {
             instructions.text = "SOLVE THE PUZZLE";
             signMr.material = notDone;
         }
@@ -171,19 +158,16 @@ public class Incubator : MonoBehaviour
 
     }
 
-    public void SpotlightON()
-    {
+    public void SpotlightON() {
         spotlight.intensity = 5;
     }
-    private void PuzzleTwoDone()
-    {
+    private void PuzzleTwoDone() {
         StartCoroutine(Delay());
         puzzleFloor.SetActive(true);
         bigHatchAnim.SetBool("Open", true);
         cubePuzzleAnim.SetBool("Open", false);
     }
-    private void RemoveFloor()
-    {
+    private void RemoveFloor() {
         puzzleFloor.SetActive(false);
     }
 

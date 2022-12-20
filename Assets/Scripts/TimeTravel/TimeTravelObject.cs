@@ -17,12 +17,14 @@ public class TimeTravelObject : MonoBehaviour {
     public WireBox wireBox { get; set; }
     public bool IsActive { get; private set; }
     public TimeTravelPeriod timeTravelPeriod { get; set; }
+    public List<string> RendererIDs { get; private set; }
     private List<Component> allComponents;
 
     public void SetUpTimeTravelObject(TimeTravelObjectManager manager, TimeTravelObject pastSelf = null) {
         this.manager = manager;
         allComponents = GetComponents<Component>().ToList();
         allComponents.AddRange(GetComponentsInChildren<Component>());
+        RendererIDs = new List<string>();
 
         switch (manager.ObjectState) {
             case TimeTravelObjectState.PrefabChanging: break;
@@ -105,6 +107,11 @@ public class TimeTravelObject : MonoBehaviour {
             transform.position = destiny.position;
             transform.rotation = destiny.rotation;
         }
+    }
+
+    private void OnDestroy() {
+        if (manager != null && this != null && RendererIDs != null) foreach (var ID in RendererIDs) manager.RemoveRendererInfo(ID);
+        if (EventSystem.Current != null) DestinyChanged.RemoveListener<DestinyChanged>(OnDestinyChanged);
     }
 }
 

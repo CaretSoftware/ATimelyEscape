@@ -9,9 +9,9 @@ public class TimeTravelAnimation : MonoBehaviour
     [SerializeField] private Material timeTravelMaterial;
     [SerializeField] private Material watchEffectMaterial;
     [SerializeField] private MeshRenderer watchEffectRenderer;
-    [SerializeField] private float watchStartDuration = 0.5f;
+    [SerializeField] private float watchStartDuration = 0.01f;
     [SerializeField] private float watchEndDuration = 3f;
-    [SerializeField] private float startDuration = 0.5f;
+    [SerializeField] private float startDuration = 0.01f;
     [SerializeField] private float endDuration = 0.5f;
     [SerializeField] private float distance = 0.2f;
     [SerializeField] private float amount = 0.2f;
@@ -77,6 +77,8 @@ public class TimeTravelAnimation : MonoBehaviour
 
     private void PlayTimeTravelEffect(TimePeriodChanged e)
     {
+        if(e.IsReload) return; 
+
         if (playing)
         {
             StopAllCoroutines();
