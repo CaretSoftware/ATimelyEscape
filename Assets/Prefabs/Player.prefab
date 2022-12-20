@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 171693261}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.29299998, y: 0.46310002, z: -4.426}
+  m_LocalPosition: {x: 0, y: 0.21, z: 0}
   m_LocalScale: {x: 0.099999994, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -59,7 +59,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.03
-  far clip plane: 1.15
+  far clip plane: 0.23
   field of view: 2
   orthographic: 1
   orthographic size: 0.01
@@ -126,10 +126,10 @@ MonoBehaviour:
   lightScan: {fileID: 171693265}
   lightValueLog: 0
   updateTimeForDetector: 0.1
-  updateTimeForDarkness: 0
-  minumumLight: 0.3
+  updateTimeForDarkness: 0.1
+  minumumLight: 0.5
   deathTimeInMinumumLight: 25
-  deathTimeInTotalDarkness: 1
+  deathTimeInTotalDarkness: 5
   lightTimeInMinumumLight: 5
   lightTimeInTotalLight: 1
   postProcesingVolume: {fileID: 0}
