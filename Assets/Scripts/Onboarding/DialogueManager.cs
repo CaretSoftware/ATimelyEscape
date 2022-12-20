@@ -11,6 +11,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private float typingSpeed = 1f;
     [SerializeField] private float timeBetweenSentences = 10f;
     [SerializeField] private AudioClip startClip;
+    [SerializeField] private bool canTimeTravel;
 
     private Queue<string> sentences;
     private Queue<AudioClip> audioClips;
@@ -32,6 +33,15 @@ public class DialogueManager : MonoBehaviour
         {
             audioSource.clip = startClip;
             audioSource.Play();
+        }
+
+        if (canTimeTravel)
+        {
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player)
+            {
+                player.GetComponent<NewRatCharacterController.NewCharacterInput>().CanTimeTravel = true;
+            }
         }
     }
 
