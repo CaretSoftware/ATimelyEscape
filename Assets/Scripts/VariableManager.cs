@@ -17,8 +17,15 @@ public class VariableManager : MonoBehaviour
         ratCharacter.SetJump(jumpForce);
     }
 
-    public void SetPushVelocity(float velocity) {
-        ratCharacter.pushSpeed = velocity;
+    public void SetPushCubeVelocity(float velocity) {
+        ratCharacter.SetPushVelocity(velocity);
+    }
+
+    public void SetAcceleration(float acceleration) {
+        ratCharacter.SetAcceleration(acceleration);
     }
     
+    public void SetDeceleration(float deceleration) {
+        ratCharacter.SetDeceleration(deceleration);
+    }
 }
