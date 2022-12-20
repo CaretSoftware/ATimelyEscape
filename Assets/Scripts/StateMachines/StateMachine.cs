@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace StateMachines {
     public class StateMachine {
-        public State CurrentState { get; private set; }
-        public State QueuedState { get; private set; }
+        public State CurrentState { get; set; }
+        public State QueuedState { get; set; }
 
         private Stack<State> automaton;
         public Dictionary<Type, State> stateDict = new Dictionary<Type, State>();
