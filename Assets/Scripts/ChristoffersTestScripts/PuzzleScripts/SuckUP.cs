@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SuckUP : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class SuckUP : MonoBehaviour
     private Vector3 suckDirection;
     private Animator animator;
     private ParticleSystem ps;
+    private NavMeshAgent roombaNav; 
 
     private void Start()
     {
@@ -34,7 +36,11 @@ public class SuckUP : MonoBehaviour
     {
         if (other.gameObject.tag == "Roomba")
         {
+            roombaNav = other.gameObject.GetComponent<NavMeshAgent>();
+            
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+            other.gameObject.GetComponent<PatrolNavAgent>().enabled = false;
+            Invoke("TurnOffNav", 0.5f);
             suckDirection = suckPosition.position - other.gameObject.transform.position;
             spinX = Random.Range(50, 100) * Time.deltaTime;
             spinY = Random.Range(20, 150) * Time.deltaTime;
@@ -60,6 +66,10 @@ public class SuckUP : MonoBehaviour
         yield return new WaitForSeconds(4.0f);
         ps.Stop();
         
+    }
+    private void TurnOffNav()
+    {
+        roombaNav.enabled = false;
     }
 
 

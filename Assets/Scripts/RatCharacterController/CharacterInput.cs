@@ -24,23 +24,12 @@ namespace RatCharacterController {
 		private float _characterHalfHeight;
 
 		public bool CanTimeTravel { get; set; }
-		private bool _canTimeTravelPast = true;
-		private bool _canTimeTravelPresent = true;
-		private bool _canTimeTravelFuture = true;
-		public bool CantTimeTravelPast {
-			get => _canTimeTravelPast;
-			set => _canTimeTravelPast = value;
-		}
-		public bool CantTimeTravelPresent {
-			get => _canTimeTravelPresent;
-			set => _canTimeTravelPresent = value;
+		public bool CantTimeTravelPast { get; set; } = true;
 
-		}
-		public bool CantTimeTravelFuture {
-			get => _canTimeTravelFuture;
-			set => _canTimeTravelFuture = value;
-		}
-		
+		public bool CantTimeTravelPresent { get; set; } = true;
+
+		public bool CantTimeTravelFuture { get; set; } = true;
+
 		private bool _jumping;
 		private static bool _paused;
 

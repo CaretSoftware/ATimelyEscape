@@ -91,7 +91,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerTransform = GameObject.Find("Rat/Rat Mesh").transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
         chainIKConstraint.weight = 0;
         defaultIKTarget = handIKTarget;
@@ -192,7 +192,7 @@ public class EnemyAI : MonoBehaviour
         handIKTarget.position = defaultIKTarget.position;
         isCapturing = false;
     }
-    public void SetPlayerTransformToCheckpoint() { FailStateScript.Instance.PlayDeathVisualization(checkpoint, transform); }
+    public void SetPlayerTransformToCheckpoint() { FailStateScript.Instance.PlayDeathVisualization(checkpoint); }
     public void ReturnHand() { animator.SetTrigger("ReturnHandAction"); }
     public void StartReaching()
     {

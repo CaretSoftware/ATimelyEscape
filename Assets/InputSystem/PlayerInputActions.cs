@@ -515,6 +515,93 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
             ""id"": ""fd457262-b1d7-47cb-af93-d269b2deb86d"",
             ""actions"": [],
             ""bindings"": []
+        },
+        {
+            ""name"": ""Pause"",
+            ""id"": ""dec40c5d-0603-45b0-9ee0-05edab18233a"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""9f09f049-9a69-4e16-bc62-c045805996e2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""26e6b17d-c9ce-499b-8e50-353e0ecef7a0"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c8c4f24-42cd-48bb-8f7b-44c1eb098a29"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Onboarding"",
+            ""id"": ""60844a0f-68df-488f-8c42-c5f34a7ec646"",
+            ""actions"": [
+                {
+                    ""name"": ""DRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""92305ec1-51bb-4034-a842-a807e82a31a8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""e3ba9e78-99be-4e07-83af-4561264003a3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""eefcddaa-4f36-45c6-9149-092a1e65108d"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08c66380-fe30-4b5f-899f-23dd6bf35329"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -538,6 +625,13 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_BoxMovement_Movement = m_BoxMovement.FindAction("Movement", throwIfNotFound: true);
         // MenuInterraction
         m_MenuInterraction = asset.FindActionMap("MenuInterraction", throwIfNotFound: true);
+        // Pause
+        m_Pause = asset.FindActionMap("Pause", throwIfNotFound: true);
+        m_Pause_Pause = m_Pause.FindAction("Pause", throwIfNotFound: true);
+        // Onboarding
+        m_Onboarding = asset.FindActionMap("Onboarding", throwIfNotFound: true);
+        m_Onboarding_DRight = m_Onboarding.FindAction("DRight", throwIfNotFound: true);
+        m_Onboarding_DLeft = m_Onboarding.FindAction("DLeft", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -790,6 +884,80 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public MenuInterractionActions @MenuInterraction => new MenuInterractionActions(this);
+
+    // Pause
+    private readonly InputActionMap m_Pause;
+    private IPauseActions m_PauseActionsCallbackInterface;
+    private readonly InputAction m_Pause_Pause;
+    public struct PauseActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public PauseActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Pause => m_Wrapper.m_Pause_Pause;
+        public InputActionMap Get() { return m_Wrapper.m_Pause; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PauseActions set) { return set.Get(); }
+        public void SetCallbacks(IPauseActions instance)
+        {
+            if (m_Wrapper.m_PauseActionsCallbackInterface != null)
+            {
+                @Pause.started -= m_Wrapper.m_PauseActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_PauseActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_PauseActionsCallbackInterface.OnPause;
+            }
+            m_Wrapper.m_PauseActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+            }
+        }
+    }
+    public PauseActions @Pause => new PauseActions(this);
+
+    // Onboarding
+    private readonly InputActionMap m_Onboarding;
+    private IOnboardingActions m_OnboardingActionsCallbackInterface;
+    private readonly InputAction m_Onboarding_DRight;
+    private readonly InputAction m_Onboarding_DLeft;
+    public struct OnboardingActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public OnboardingActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @DRight => m_Wrapper.m_Onboarding_DRight;
+        public InputAction @DLeft => m_Wrapper.m_Onboarding_DLeft;
+        public InputActionMap Get() { return m_Wrapper.m_Onboarding; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(OnboardingActions set) { return set.Get(); }
+        public void SetCallbacks(IOnboardingActions instance)
+        {
+            if (m_Wrapper.m_OnboardingActionsCallbackInterface != null)
+            {
+                @DRight.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
+                @DRight.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
+                @DRight.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
+                @DLeft.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
+                @DLeft.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
+                @DLeft.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
+            }
+            m_Wrapper.m_OnboardingActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @DRight.started += instance.OnDRight;
+                @DRight.performed += instance.OnDRight;
+                @DRight.canceled += instance.OnDRight;
+                @DLeft.started += instance.OnDLeft;
+                @DLeft.performed += instance.OnDLeft;
+                @DLeft.canceled += instance.OnDLeft;
+            }
+        }
+    }
+    public OnboardingActions @Onboarding => new OnboardingActions(this);
     public interface ICameraControlsActions
     {
         void OnCameraThumbstick(InputAction.CallbackContext context);
@@ -813,5 +981,14 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     }
     public interface IMenuInterractionActions
     {
+    }
+    public interface IPauseActions
+    {
+        void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IOnboardingActions
+    {
+        void OnDRight(InputAction.CallbackContext context);
+        void OnDLeft(InputAction.CallbackContext context);
     }
 }

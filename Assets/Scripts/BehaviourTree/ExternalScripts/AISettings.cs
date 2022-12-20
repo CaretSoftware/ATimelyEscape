@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class AISettings : MonoBehaviour
 {
-    
-    
     private EnemyAI[] scientists;
     private PatrolNavAgent[] roombas;
 
@@ -32,11 +30,5 @@ public class AISettings : MonoBehaviour
     {
         foreach (var roomba in roombas)
             roomba.MovementSpeed = speed;
-    }
-
-    public void ScientistIdleTime(float timer)
-    {
-        foreach (var scientist in scientists)
-            scientist.IdleActivityTime = timer;
     }
 }
