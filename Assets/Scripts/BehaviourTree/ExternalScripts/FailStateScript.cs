@@ -1,12 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using CallbackSystem;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.UI;
-using Event = CallbackSystem.Event;
 
 public class FailStateScript : MonoBehaviour
 {
@@ -33,7 +25,7 @@ public class FailStateScript : MonoBehaviour
     private void Start()
     {
         //TODO Gretas test scen 
-        //player = GameObject.FindObjectOfType<NewCharacterController>().transform;
+        player = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
         hyperDriveAnimator = GetComponent<Animator>();
         imageFunctionality = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
     }
@@ -41,15 +33,17 @@ public class FailStateScript : MonoBehaviour
     //Call on when player dies.
     public void PlayDeathVisualization(Transform checkpoint, Transform goTransform = null)
     {
-        if(goTransform.tag.Equals("Scientist")){}
-            //Play Scientist Event
-        else if(goTransform.tag.Equals("Roomba")){}
-            //Play Roomba Event
-            
-        //TODO @August Unsubscribe from events
-        
-        // catch the rat
-        //NewCharacterController.caughtEvent?.Invoke(true);
+        if (goTransform.tag.Equals("Scientist"))
+        {
+            //OnboardingHandler.ScientistDiscovered = true;
+        }
+
+        else if (goTransform.tag.Equals("Roomba"))
+        {
+            //OnboardingHandler.VacuumCleanerDiscovered = true;  
+        }
+
+        NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
         this.checkpoint = checkpoint;
         hyperDriveAnimator.gameObject.SetActive(true);
         hyperDriveAnimator.SetTrigger("DeathAnimTrigger");
@@ -61,8 +55,7 @@ public class FailStateScript : MonoBehaviour
     public void FadeBack()
     {
         player.position = checkpoint.position;
-        // release the rat
-        //NewCharacterController.caughtEvent?.Invoke(false);
+        NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(false);
         imageFunctionality.RunFadeBack();
         hyperDriveAnimator.gameObject.SetActive(false);
     }
