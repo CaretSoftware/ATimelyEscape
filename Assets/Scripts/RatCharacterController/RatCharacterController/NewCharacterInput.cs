@@ -7,6 +7,12 @@ using UnityEngine.InputSystem;
 
 namespace NewRatCharacterController {
 	public class NewCharacterInput : MonoBehaviour {
+		public delegate void DPadRightPressed();
+		public static DPadRightPressed dPadRightPressed;
+		
+		public delegate void DPadLeftPressed();
+		public static DPadLeftPressed dPadLeftPressed;
+
 		private PlayerInputActions _playerInputActions;
 		private NewRatCharacterController _newRatCharacterController;
 		private NewRatCameraController _camController;
@@ -15,10 +21,10 @@ namespace NewRatCharacterController {
 
 		// Time Travel
 		public bool CanTimeTravel { get; set; }
-
-		public bool CantTimeTravelPast { get; set; } = true;
-		public bool CantTimeTravelPresent { get; set; } = true;
-		public bool CantTimeTravelFuture { get; set; } = true;
+		public bool CanTimeTravelPast { get; set; } = true;
+		public bool CanTimeTravelPresent { get; set; } = true;
+		public bool CanTimeTravelFuture { get; set; } = true;
+		
 
 		private void Start() {
 			PauseMenuBehaviour.pauseDelegate += Paused;
@@ -32,6 +38,9 @@ namespace NewRatCharacterController {
 			_playerInputActions.CharacterMovement.Enable();
 			_playerInputActions.Interact.Enable();
 			_playerInputActions.Pause.Enable();
+			_playerInputActions.Onboarding.Enable();
+			_playerInputActions.Onboarding.DLeft.started += DPadLeft;
+			_playerInputActions.Onboarding.DRight.started += DPadRight;
 			_playerInputActions.CharacterMovement.Jump.started += Jump;
 			_playerInputActions.CharacterMovement.Jump.canceled += JumpReleased;
 			_playerInputActions.Pause.Pause.performed += Pause;
@@ -43,6 +52,16 @@ namespace NewRatCharacterController {
 		}
 
 		private void Paused(bool paused) => _paused = paused;
+
+		private void DPadRight(InputAction.CallbackContext context) {
+			//Debug.Log(nameof(NewCharacterInput.DPadRight));
+			dPadRightPressed?.Invoke();
+		}
+
+		private void DPadLeft(InputAction.CallbackContext context) {
+			//Debug.Log(nameof(NewCharacterInput.DPadLeft));
+			dPadLeftPressed?.Invoke();
+		}
 
 		private void Update() {
 			if (_paused) return;
@@ -90,7 +109,7 @@ namespace NewRatCharacterController {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
-			if (CanTimeTravel)
+			if (CanTimeTravel && CanTimeTravelPast)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Past);
 		}
 
@@ -99,7 +118,7 @@ namespace NewRatCharacterController {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
-			if (CanTimeTravel) // TODO use the booleans!
+			if (CanTimeTravel && CanTimeTravelPresent) // TODO use the booleans!
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
 		}
 
@@ -108,7 +127,7 @@ namespace NewRatCharacterController {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
-			if (CanTimeTravel)
+			if (CanTimeTravel && CanTimeTravelFuture)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
 		}
 
@@ -117,6 +136,8 @@ namespace NewRatCharacterController {
 		private void Unsubscribe() {
 			PauseMenuBehaviour.pauseDelegate -= Paused;
 			
+			_playerInputActions.Onboarding.DLeft.started -= DPadLeft;
+			_playerInputActions.Onboarding.DRight.started -= DPadRight;
 			_playerInputActions.CharacterMovement.Jump.started -= Jump;
 			_playerInputActions.CharacterMovement.Jump.canceled -= JumpReleased;
 			_playerInputActions.Pause.Pause.performed -= Pause;

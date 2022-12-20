@@ -554,6 +554,54 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Onboarding"",
+            ""id"": ""60844a0f-68df-488f-8c42-c5f34a7ec646"",
+            ""actions"": [
+                {
+                    ""name"": ""DRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""92305ec1-51bb-4034-a842-a807e82a31a8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""e3ba9e78-99be-4e07-83af-4561264003a3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""eefcddaa-4f36-45c6-9149-092a1e65108d"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08c66380-fe30-4b5f-899f-23dd6bf35329"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -580,6 +628,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // Pause
         m_Pause = asset.FindActionMap("Pause", throwIfNotFound: true);
         m_Pause_Pause = m_Pause.FindAction("Pause", throwIfNotFound: true);
+        // Onboarding
+        m_Onboarding = asset.FindActionMap("Onboarding", throwIfNotFound: true);
+        m_Onboarding_DRight = m_Onboarding.FindAction("DRight", throwIfNotFound: true);
+        m_Onboarding_DLeft = m_Onboarding.FindAction("DLeft", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -865,6 +917,47 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public PauseActions @Pause => new PauseActions(this);
+
+    // Onboarding
+    private readonly InputActionMap m_Onboarding;
+    private IOnboardingActions m_OnboardingActionsCallbackInterface;
+    private readonly InputAction m_Onboarding_DRight;
+    private readonly InputAction m_Onboarding_DLeft;
+    public struct OnboardingActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public OnboardingActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @DRight => m_Wrapper.m_Onboarding_DRight;
+        public InputAction @DLeft => m_Wrapper.m_Onboarding_DLeft;
+        public InputActionMap Get() { return m_Wrapper.m_Onboarding; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(OnboardingActions set) { return set.Get(); }
+        public void SetCallbacks(IOnboardingActions instance)
+        {
+            if (m_Wrapper.m_OnboardingActionsCallbackInterface != null)
+            {
+                @DRight.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
+                @DRight.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
+                @DRight.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
+                @DLeft.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
+                @DLeft.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
+                @DLeft.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
+            }
+            m_Wrapper.m_OnboardingActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @DRight.started += instance.OnDRight;
+                @DRight.performed += instance.OnDRight;
+                @DRight.canceled += instance.OnDRight;
+                @DLeft.started += instance.OnDLeft;
+                @DLeft.performed += instance.OnDLeft;
+                @DLeft.canceled += instance.OnDLeft;
+            }
+        }
+    }
+    public OnboardingActions @Onboarding => new OnboardingActions(this);
     public interface ICameraControlsActions
     {
         void OnCameraThumbstick(InputAction.CallbackContext context);
@@ -892,5 +985,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     public interface IPauseActions
     {
         void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IOnboardingActions
+    {
+        void OnDRight(InputAction.CallbackContext context);
+        void OnDLeft(InputAction.CallbackContext context);
     }
 }
