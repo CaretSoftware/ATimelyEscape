@@ -41,9 +41,6 @@ public class NewRatCameraController : MonoBehaviour {
 	[HideInInspector]
 	public float smoothDampMaxVal;
 	
-	[SerializeField]
-	private bool _firstPerson;
-
 	[SerializeField] 
 	private LayerMask _collisionMask;
 	
@@ -135,11 +132,6 @@ public class NewRatCameraController : MonoBehaviour {
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 
 		_cam.cullingMask = _firstPerson ? ~(1 << 1) : -1; // TODO What is this for?
-		
-		if (_firstPerson) {
-			_camera.localPosition = _cameraGimble.localPosition;
-			return;
-		}
 
 		_cameraPos = Vector3.SmoothDamp(_cameraPos, transform.position, ref _smoothDampCurrentVelocityLateral, _smoothCameraPosTime);
 		
