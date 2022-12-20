@@ -7,8 +7,10 @@ public class TimerScript : MonoBehaviour
 {
     [SerializeField] private float timeLeft;
     [SerializeField] private TextMeshProUGUI[] timerTexts;
+    [SerializeField] private Transform checkpoint; 
     private bool firstOn;
     private bool secondOn;
+
 
     // Update is called once per frame
     void Update()
@@ -25,10 +27,11 @@ public class TimerScript : MonoBehaviour
                 timeLeft = 0;
                 firstOn = false;
                 secondOn = false;
-                //Lägg in checkpointkoden
+                FailStateScript.Instance.PlayDeathVisualization(checkpoint);
             }
         }
     }
+
     private void UpdateTimer(float currentTime)
     {
         currentTime += 1;
