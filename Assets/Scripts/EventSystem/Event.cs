@@ -79,4 +79,9 @@ namespace CallbackSystem {
         public GameObject whatToOpen;
         public Open open;
     }
+
+    public class PauseEvent : DebugEvent
+    {
+        public bool paused;
+    }
 }
