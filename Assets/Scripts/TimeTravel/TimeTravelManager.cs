@@ -15,6 +15,7 @@ public class TimeTravelManager : MonoBehaviour {
     public static TimeTravelPeriod desiredPeriod;
     public static HashSet<Rigidbody> MovableObjects = new HashSet<Rigidbody>();
     public static Transform playerTransform;
+    public static bool SimulatePhysics { get; set; }
 
     public static readonly Dictionary<TimeTravelPeriod, Type> PeriodStates = new Dictionary<TimeTravelPeriod, Type>() {
         { TimeTravelPeriod.Past, typeof(PastState) },
@@ -32,8 +33,8 @@ public class TimeTravelManager : MonoBehaviour {
                 new PresentState() { thisPeriod = TimeTravelPeriod.Present },
                 new FutureState() { thisPeriod = TimeTravelPeriod.Future }
             });
-        currentPeriod = TimeTravelPeriod.Dummy;
-        desiredPeriod = startPeriod;
+        currentPeriod = startPeriod;
+        ReloadCurrentTimeTravelPeriod();
         TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimeTravel);
     }
 
@@ -42,13 +43,19 @@ public class TimeTravelManager : MonoBehaviour {
 
     public static bool DesiredTimePeriod(TimeTravelPeriod desired) {
         if (desired == currentPeriod) return false;
-
         desiredPeriod = desired;
-
         return true;
     }
 
+    public static void ReloadCurrentTimeTravelPeriod() {
+        if (currentPeriod == TimeTravelPeriod.Dummy) return;
+        TimePeriodChanged e = new TimePeriodChanged() { from = TimeTravelPeriod.Dummy, to = currentPeriod, IsReload = true };
+        Debug.Log($"Reloading current time period: {currentPeriod}");
+        e.Invoke();
+    }
+
     public static void SimulateMovableObjectPhysics(int maxIterations) {
+        if (!SimulatePhysics) return;
         Physics.autoSimulation = false;
 
         for (int i = 0; i < maxIterations; i++) {
@@ -63,7 +70,7 @@ public class TimeTravelManager : MonoBehaviour {
         var beforeSim = new DebugEvent { DebugText = "BeforeSimulation" };
         beforeSim.Invoke();
 
-        SimulateMovableObjectPhysics(1000);
+        SimulateMovableObjectPhysics(50);
         var simulationComplete = new PhysicsSimulationComplete { from = e.from, to = e.to };
         simulationComplete.Invoke();
 
@@ -94,7 +101,12 @@ namespace StateMachines {
         private TimeTravelPeriod travellingTo;
         public TimeTravelPeriod thisPeriod;
 
+        public class Dummy : MonoBehaviour { }
+        private Dummy coroutineRunner;
+        private GameObject runnerObject = new GameObject("RunnerObject");
+
         public override void Run() {
+
             if (TimeTravelManager.currentPeriod != TimeTravelManager.desiredPeriod) {
 
                 LayerMask mask = 0;
@@ -129,10 +141,19 @@ namespace StateMachines {
         }
 
         public override void Exit() {
+            if (!coroutineRunner) coroutineRunner = runnerObject.AddComponent<Dummy>();
+
             var travelEvent = new TimePeriodChanged() { from = thisPeriod, to = travellingTo };
             travelEvent.Invoke();
             Debug.Log("Travelled to: " + travellingTo);
             TimeTravelManager.currentPeriod = travellingTo;
+            coroutineRunner.StartCoroutine(DisableTimeTravelDuringEffect());
+        }
+
+        private IEnumerator<WaitForSecondsRealtime> DisableTimeTravelDuringEffect() {
+            TimeTravelManager.FindObjectOfType<CharacterInput>().CanTimeTravel = false;
+            yield return new WaitForSecondsRealtime(0.4f);
+            TimeTravelManager.FindObjectOfType<CharacterInput>().CanTimeTravel = true;
         }
     }
 
