@@ -12,16 +12,21 @@ public class WatchPickup : MonoBehaviour {
 		transform.position += Vector3.up * .1f;
 		Rigidbody _rb = GetComponent<Rigidbody>();
 		if (_rb != null) {
-			Destroy(_rb);
+			_rb.isKinematic = true;
 		}
 	}
 
-	private void OnTriggerEnter(Collider other) {
+	private void OnTriggerEnter(Collider other)
+	{
+		Debug.Log("PICKUP TRIGGER");
 		if (other.CompareTag("Player")) {
+			Debug.Log("PICKUP TRIGGER");
+
 			if (instructions != null)
 				instructions.text = "NOW USE \"1\"-KEY TO TIME TRAVEL ONE YEAR BACK";
-			FindObjectOfType<RatCharacterController.CharacterInput>().CanTimeTravel = true;
+			FindObjectOfType<NewRatCharacterController.NewCharacterInput>().CanTimeTravel = true;
 			Destroy(this.gameObject);
+			Debug.Log("PICKUP TRIGGER");
 		}
 	}
 
