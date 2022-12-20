@@ -16,6 +16,7 @@ public class DialogueManager : MonoBehaviour
     private Queue<AudioClip> audioClips;
     private AudioSource audioSource;
 
+    [HideInInspector]
     public bool dialogueStarted;
 
     void Awake()
