@@ -58,7 +58,7 @@ public class PlateButton : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Cube" && puzzleIncubator.PlateButtonInteractable)
+        if (other.gameObject.tag == "Cube")
         {
             platePuzzle2.SetActive(true);
             ButtonOn();
