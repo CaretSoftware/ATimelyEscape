@@ -40,6 +40,7 @@ namespace CallbackSystem {
     public class TimePeriodChanged : DebugEvent {
         public TimeTravelPeriod from;
         public TimeTravelPeriod to;
+        public bool IsReload; 
     }
 
     // this looks feels very redundant, looking into alternative solutions.
@@ -48,7 +49,9 @@ namespace CallbackSystem {
         public TimeTravelPeriod to;
     }
 
-    public class TimeDisplacementComplete : DebugEvent { }
+    public class PlayerEnterRoom : DebugEvent {
+        public int sceneIndex;
+    }
 
     public class CheckpointEvent : Event {
         public Transform respawnPoint;
@@ -72,9 +75,8 @@ namespace CallbackSystem {
             Debug.Log(vignette);
         }
     }
-    public class ButtonEvent : Event
-    {
+    public class ButtonEvent : Event {
         public GameObject whatToOpen;
-        public Open open; 
+        public Open open;
     }
 }
