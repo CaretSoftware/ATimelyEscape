@@ -5,7 +5,7 @@ namespace NewRatCharacterController {
 
 		private const float AntiFloatForce = 25.0f;
 
-		private const string State = "AirState";
+		private const string State = nameof(AirState);
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
 			NewRatCharacter.AnimationController.Fall();
@@ -27,6 +27,9 @@ namespace NewRatCharacterController {
 
 			if (WallRunState.Requirement(NewRatCharacter))
 				stateMachine.TransitionTo<WallRunState>();
+			
+			if (NewRatCharacter.Caught)
+				stateMachine.TransitionTo<CaughtState>();
 		}
 
 		private void AddGravityForce() {

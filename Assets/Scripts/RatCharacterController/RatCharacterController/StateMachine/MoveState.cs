@@ -5,7 +5,7 @@ namespace NewRatCharacterController {
 
         private float _maxSlopeAngle = 40;
         
-        private const string State = "MoveState";
+        private const string State = nameof(MoveState);
         public override void Enter() {
             StateChange.stateUpdate?.Invoke(State);
             NewRatCharacter._jumpedOnce = false;
@@ -22,14 +22,23 @@ namespace NewRatCharacterController {
                 ApplyStaticFriction();
             else
                 AddGravityForce();
-            
-            //NewRatCharacter.AnimationController.Vector(NewRatCharacter._velocity.ToVector2());
+
+            NewRatCharacter.AnimationController.RotateCharacterMesh();
+
+            if (CubePushState.Requirement(NewRatCharacter))
+                stateMachine.TransitionTo<CubePushState>();
             
             if (NewRatCharacter.Jumped)
                 stateMachine.TransitionTo<JumpState>();
 
+            if (NewRatCharacter.Jumped && LedgeJumpState.Requirement(NewRatCharacter))
+                stateMachine.TransitionTo<LedgeJumpState>();
+            
             if (!NewRatCharacter.Grounded)
                 stateMachine.TransitionTo<AirState>();
+            
+            if (NewRatCharacter.Caught)
+                stateMachine.TransitionTo<CaughtState>();
         }
 
         private void StepUp() {
