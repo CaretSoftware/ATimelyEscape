@@ -13,7 +13,13 @@ public class PatrolNavAgent : MonoBehaviour
     private NavMeshAgent agent;
     private int targetIndex = 0;
     private int prevIndex;
-    
+
+    public float MovementSpeed
+    {
+        get { return speed; }
+        set { speed = value; }
+    }
+
     private System.Random random = new();
     private void Start()
     {

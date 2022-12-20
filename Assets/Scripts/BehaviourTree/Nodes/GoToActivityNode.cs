@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class GoToActivityNode : Node
 {
     private static DummyBehaviour Instance;
-    private const float DestinationOffset = 0.7f;
+    private const float DestinationOffset = 0.3f;
 
     private System.Random random = new System.Random();
     private GameObject GO = new GameObject();
@@ -74,9 +74,9 @@ public class GoToActivityNode : Node
     {
         isCoroutineRunning = true;
         animator.SetBool("move", false);
-        Debug.Log("Timer started");
+        //Debug.Log("Timer started");
         yield return new WaitForSeconds(idleTimer);
-        Debug.Log("Done");
+        //Debug.Log("Done");
         animator.SetBool("move", true);
         isCoroutineRunning = false;
         isTimerDone = true;

@@ -52,4 +52,9 @@ public class ConvecyorBelt : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeMachineOff);
+    }
+
 }

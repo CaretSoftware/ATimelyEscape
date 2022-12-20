@@ -13,7 +13,7 @@ public class RobotArm : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "AnimObj")
         {
             animatorParent.SetBool("On", true);
         }

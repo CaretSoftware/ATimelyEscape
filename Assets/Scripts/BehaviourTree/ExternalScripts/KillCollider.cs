@@ -1,28 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Net.NetworkInformation;
 using UnityEngine;
-
-[RequireComponent(typeof(BoxCollider))]
 public class KillCollider : MonoBehaviour
 {
     [SerializeField] private Transform checkpoint;
-    private BoxCollider boxCollider;
+    private CapsuleCollider collider;
 
     private void Start()
     {
-        boxCollider = GetComponent<BoxCollider>();
-        boxCollider.isTrigger = true;
+        collider = GetComponent<CapsuleCollider>();
+        collider.isTrigger = true;
     }
 
     private void OnTriggerEnter(Collider collider)
     {
-        print("collision");
+        print("Collision detected");
         if (collider.transform.tag.Equals("Player"))
-        {
-            print("collision with player detected");
             FailStateScript.Instance.PlayDeathVisualization(checkpoint);
-        }
     }
 }
