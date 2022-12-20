@@ -45,6 +45,8 @@ public class FailStateScript : MonoBehaviour
         else if(goTransform.tag.Equals("Roomba")){}
             //Play Roomba Event
             
+        //TODO @August Unsubscribe from events
+        
         // catch the rat
         //NewCharacterController.caughtEvent?.Invoke(true);
         this.checkpoint = checkpoint;
