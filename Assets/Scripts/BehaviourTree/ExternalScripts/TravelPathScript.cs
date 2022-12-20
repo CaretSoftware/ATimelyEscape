@@ -49,6 +49,8 @@ public class TravelPathScript : MonoBehaviour
         {
             this.teleportingObject.gameObject.SetActive(false);
             playerParent.transform.Find("Rat").gameObject.SetActive(false);
+            playerParent.LetGoOfCube = true;
+
         }
             
         
@@ -67,7 +69,6 @@ public class TravelPathScript : MonoBehaviour
         objectToMove.transform.position = Vector3.MoveTowards(objectToMove.transform.position, pos[index], speed * Time.deltaTime);
         if (objectToMove.transform.position == pos[index])
         {
-            //playerParent.letGoOffCube = true;
             playerParent.transform.position = objectToMove.transform.position;
             index = pathFromFirstIndexPad ? ++index : --index; 
             iterations++;
