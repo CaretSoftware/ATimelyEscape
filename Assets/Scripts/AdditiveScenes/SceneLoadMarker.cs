@@ -12,7 +12,7 @@ public class SceneLoadMarker : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            enterRoomEvent.roomIndex = sceneIndex;
+            enterRoomEvent.sceneIndex = sceneIndex;
             enterRoomEvent.Invoke();
             readyToLoad = false;
             StartCoroutine(LoadCooldown());

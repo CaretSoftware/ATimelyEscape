@@ -40,6 +40,7 @@ namespace CallbackSystem {
     public class TimePeriodChanged : DebugEvent {
         public TimeTravelPeriod from;
         public TimeTravelPeriod to;
+        public bool IsReload; 
     }
 
     // this looks feels very redundant, looking into alternative solutions.
@@ -49,7 +50,7 @@ namespace CallbackSystem {
     }
 
     public class PlayerEnterRoom : DebugEvent {
-        public int roomIndex;
+        public int sceneIndex;
     }
 
     public class CheckpointEvent : Event {
