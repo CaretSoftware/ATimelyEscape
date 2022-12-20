@@ -34,8 +34,8 @@ public class TimeTravelManager : MonoBehaviour {
                 new FutureState() { thisPeriod = TimeTravelPeriod.Future }
             });
         currentPeriod = startPeriod;
-        ReloadCurrentTimeTravelPeriod();
         TimePeriodChanged.AddListener<TimePeriodChanged>(OnTimeTravel);
+        ReloadCurrentTimeTravelPeriod();
     }
 
     // Update is called once per frame
@@ -74,17 +74,17 @@ public class TimeTravelManager : MonoBehaviour {
         var simulationComplete = new PhysicsSimulationComplete { from = e.from, to = e.to };
         simulationComplete.Invoke();
 
-        /*switch (e.to) {
-            case TimeTravelPeriod.Past:
-                timeText.text = "Current Time Period: Past";
-                break;
-            case TimeTravelPeriod.Present:
-                timeText.text = "Current Time Period: Present";
-                break;
-            case TimeTravelPeriod.Future:
-                timeText.text = "Current Time Period: Future";
-                break;
-        }*/
+        /*         switch (e.to) {
+                    case TimeTravelPeriod.Past:
+                        timeText.text = "Current Time Period: Past";
+                        break;
+                    case TimeTravelPeriod.Present:
+                        timeText.text = "Current Time Period: Present";
+                        break;
+                    case TimeTravelPeriod.Future:
+                        timeText.text = "Current Time Period: Future";
+                        break;
+                } */
     }
 }
 
