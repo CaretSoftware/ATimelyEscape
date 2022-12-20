@@ -91,7 +91,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = GameObject.FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
+        playerTransform = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
         agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
         chainIKConstraint.weight = 0;
         defaultIKTarget = handIKTarget;

@@ -123,7 +123,7 @@ public class ScripableSlider : MonoBehaviour
 
     private StringBuilder DataEnd()
     {
-        return new StringBuilder().Append(TimeToString(timer)).Append(": Total Time: ").Append(TimeToString(timer - previusTime));
+        return new StringBuilder().Append(TimeToString(timer)).Append(": Total Time: ").Append(TimeToString(timer - previusTime)).Append(",");
     }
 
     private static void EnsureDirectoryExists(string filePath)
