@@ -36,26 +36,19 @@ public class TravelPathScript : MonoBehaviour
     {
         this.teleportingObject = teleportingObject;
         pathFromFirstIndexPad = pathReg;
+        location = arrivalLocation;
         index = pathReg ? 0 : pos.Length - 1;
         iterations = 0;
 
-        //Debug.Log($"Telport tag{teleportingObject.tag}");
-
-        this.teleportingObject.SetActive(false);
-        /* NavMesh.SamplePosition(arrivalLocation, out hit, 1, NavMesh.AllAreas);
-         teleportingObject.transform.position = hit.position;*/
-        teleportingObject.transform.position = arrivalLocation;
-
+        this.teleportingObject.transform.Find("Rat").gameObject.SetActive(false);
+        if (this.teleportingObject.tag.Equals("Cube"))
+            this.teleportingObject.gameObject.SetActive(false);
+        
         objectToMove.SetActive(true);
-        /*
-        if(teleportingObject.tag == "Cube")
-        {
-            teleportingObject.GetComponent<Rigidbody>().AddForce(Vector3.forward, ForceMode.Impulse);
-        }
-        */
         objectToMove.transform.position = pos[index];
     }
 
+    private Vector3 location;
     private Vector3[] GetLinePointsInWorldSpace()
     {
         line.GetPositions(positions);
@@ -67,13 +60,18 @@ public class TravelPathScript : MonoBehaviour
         objectToMove.transform.position = Vector3.MoveTowards(objectToMove.transform.position, pos[index], speed * Time.deltaTime);
         if (objectToMove.transform.position == pos[index])
         {
+            teleportingObject.transform.position = objectToMove.transform.position;
             index = pathFromFirstIndexPad ? ++index : --index; 
             iterations++;
         }
         if (iterations == positions.Length)
         {
+            teleportingObject.transform.position = location;
             objectToMove.SetActive(false);
-            teleportingObject.SetActive(true);
+            teleportingObject.transform.Find("Rat").gameObject.SetActive(true);
+            if (teleportingObject.tag.Equals("Cube"))
+                teleportingObject.gameObject.SetActive(true);
+            
         }
     }
 }
