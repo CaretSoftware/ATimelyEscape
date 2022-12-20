@@ -1487,6 +1487,7 @@ MonoBehaviour:
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 0
+  displaceOnTimeTravel: 1
   past: {fileID: 1193439532}
   present: {fileID: 1170563244}
   future: {fileID: 721726145}
@@ -5519,6 +5520,51 @@ Transform:
   m_Father: {fileID: 1403405763}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1595551383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595551385}
+  - component: {fileID: 1595551384}
+  m_Layer: 0
+  m_Name: SceneLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1595551384
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595551383}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.864552, y: 1, z: 1.6612291}
+  m_Center: {x: -0.06772399, y: 0, z: -0.040165782}
+--- !u!4 &1595551385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595551383}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.224, y: 0.408, z: 0.619}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1600874461
 GameObject:
   m_ObjectHideFlags: 0
@@ -5882,6 +5928,7 @@ MonoBehaviour:
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 0
+  displaceOnTimeTravel: 1
   past: {fileID: 1612414788}
   present: {fileID: 1609350959}
   future: {fileID: 1874846961}
@@ -8682,6 +8729,7 @@ MonoBehaviour:
   previewBoxScale: 1
   previewBoxMinShowDistance: 1
   canCollideOnTimeTravel: 0
+  displaceOnTimeTravel: 1
   past: {fileID: 8632428476634107881}
   present: {fileID: 8632428477761007797}
   future: {fileID: 8632428476825330430}
