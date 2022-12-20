@@ -346,7 +346,8 @@ public class NewRatCharacterController : MonoBehaviour
 			_point2Transform.position,
 			CharCollider.radius,
 			_overlapCollidersNonAlloc,
-			_collisionMask);
+			_collisionMask,
+			QueryTriggerInteraction.Ignore);
 
 		while (_count > 0 && _exit++ < 10) {
 
@@ -372,7 +373,8 @@ public class NewRatCharacterController : MonoBehaviour
 				_point2Transform.position,
 				CharCollider.radius,
 				_overlapCollidersNonAlloc,
-				_collisionMask);
+				_collisionMask,
+				QueryTriggerInteraction.Ignore);
 			_exit++;
 		}
 
@@ -412,7 +414,8 @@ public class NewRatCharacterController : MonoBehaviour
 			direction, 
 			out var hit, 
 			distance, 
-			_collisionMask);
+			_collisionMask,
+			QueryTriggerInteraction.Ignore);
 		return hit;
 	}
 
