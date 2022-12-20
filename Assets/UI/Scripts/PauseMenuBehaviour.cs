@@ -143,8 +143,10 @@ public class PauseMenuBehaviour : MonoBehaviour {
     public void SelectScene(int sceneIndex) {
         if (sceneIndex < 0 || sceneIndex > SceneManager.sceneCount) {
             Debug.Log("Error: Not valid SceneIndex: " + sceneIndex);
-        } else {
-            SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
+        }
+        else
+        {
+            //SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
         }
     }
 
