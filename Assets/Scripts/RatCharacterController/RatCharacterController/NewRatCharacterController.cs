@@ -12,6 +12,8 @@ public class NewRatCharacterController : MonoBehaviour
 
 	public bool Caught;// { get; set; }
 	
+	public bool LetGoOfCube { get; set; }
+	
 	// State Machine
 	private StateMachine _stateMachine;
 	private List<BaseState> _states = new List<BaseState> { 
