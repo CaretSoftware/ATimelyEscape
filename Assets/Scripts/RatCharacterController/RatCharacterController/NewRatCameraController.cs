@@ -47,11 +47,11 @@ public class NewRatCameraController : MonoBehaviour {
 	[SerializeField]
 	private Transform _camera;
 	
-	[SerializeField] [Range(1.0f, 10.0f)]
-	private float mouseSensitivityX = 1.0f;
+	// [SerializeField] [Range(1.0f, 10.0f)]
+	// private float mouseSensitivityX = 1.0f;
 	
-	[SerializeField] [Range(1.0f, 10.0f)]
-	private float mouseSensitivityY = 1.0f;
+	// [SerializeField] [Range(1.0f, 10.0f)]
+	// private float mouseSensitivityY = 1.0f;
 		
 	[SerializeField] [Range(0.0f, 2.0f)]
 	private float _cameraCollisionRadius;
@@ -69,7 +69,9 @@ public class NewRatCameraController : MonoBehaviour {
 
 	public float MouseSensitivity { get; set; } = .2f;
 
-	private void Awake() {
+	private void Awake()
+	{
+		Debug.Log("AWAKE");
 		_cameraPos = transform.position;
 		_cam = Camera.main;
 	}
@@ -131,7 +133,7 @@ public class NewRatCameraController : MonoBehaviour {
 		
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 
-		_cam.cullingMask = _firstPerson ? ~(1 << 1) : -1; // TODO What is this for?
+		//_cam.cullingMask = _firstPerson ? ~(1 << 1) : -1; // TODO What is this for?
 
 		_cameraPos = Vector3.SmoothDamp(_cameraPos, transform.position, ref _smoothDampCurrentVelocityLateral, _smoothCameraPosTime);
 		

@@ -99,7 +99,7 @@ namespace NewRatCharacterController {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
-			if (CanTimeTravel)
+			if (CanTimeTravel) // TODO use the booleans!
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
 		}
 
