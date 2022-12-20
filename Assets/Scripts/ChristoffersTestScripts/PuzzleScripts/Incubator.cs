@@ -13,8 +13,8 @@ public class Incubator : MonoBehaviour {
     [SerializeField] private GameObject bigHatch;
     [SerializeField] private GameObject smallHatch;
     [SerializeField] private GameObject cubePuzzle;
-    [SerializeField] private GameObject platePuzzle;
-    [SerializeField] private GameObject platePuzzle2;
+    [SerializeField] private GameObject PlatePuzzle;
+    [SerializeField] private GameObject PlatePuzzle2;
     [SerializeField] private GameObject triggerRed;
     [SerializeField] private GameObject triggerRed2;
     [SerializeField] private GameObject triggerGreen;
@@ -43,13 +43,11 @@ public class Incubator : MonoBehaviour {
     private bool puzzleFourDone;
     public bool puzzleFiveDone;
     private bool puzzleFiveStarted;
-    public bool PlateButtonInteractable { get; private set; }
 
 
     // Start is called before the first frame update
     void Start() {
-        platePuzzle.SetActive(false);
-        platePuzzle2.SetActive(false);
+        PlatePuzzle2.SetActive(false);
         cubeManager2.SetActive(false);
         spotlight.intensity = 0;
         spotlight2.intensity = 0;
@@ -58,8 +56,8 @@ public class Incubator : MonoBehaviour {
         signMr = sign.GetComponent<MeshRenderer>();
         bigHatchAnim = bigHatch.GetComponent<Animator>();
         cubePuzzleAnim = cubePuzzle.GetComponent<Animator>();
-        platePuzzleAnim = platePuzzle.GetComponent<Animator>();
-        platePuzzle2Anim = platePuzzle2.GetComponent<Animator>();
+        platePuzzleAnim = PlatePuzzle.GetComponent<Animator>();
+        platePuzzle2Anim = PlatePuzzle2.GetComponent<Animator>();
         triggerRedAnim = triggerRed.GetComponent<Animator>();
         triggerGreenAnim = triggerGreen.GetComponent<Animator>();
         triggerGreen2Anim = triggerGreen2.GetComponent<Animator>();
@@ -135,8 +133,6 @@ public class Incubator : MonoBehaviour {
             puzzleFourDone = true;
             bigHatchAnim.SetBool("OpenAgain", true);
             platePuzzleAnim.SetBool("Open", true);
-            PlateButtonInteractable = true;
-
             StartCoroutine(Delay());
             Debug.Log("STEP12");
 
@@ -167,7 +163,6 @@ public class Incubator : MonoBehaviour {
     }
     private void PuzzleTwoDone() {
         StartCoroutine(Delay());
-        platePuzzle.SetActive(true);
         puzzleFloor.SetActive(true);
         bigHatchAnim.SetBool("Open", true);
         cubePuzzleAnim.SetBool("Open", false);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,18 +6,25 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using RatCharacterController;
 
-public class PauseMenuBehaviour : MonoBehaviour
-{
+public class PauseMenuBehaviour : MonoBehaviour {
+    // This is a delegate. It can be Invoked when needed (Done currently in the Input class)
+    // all methods that subscribe to the delegate gets called when Invoked.
+    // In this class the method PausePressed() is subscribed to it.
+    public delegate void PauseDelegate(bool paused);
+    public static PauseDelegate pauseDelegate;
+    
     private IEnumerator currentCoroutine;
 
-    private bool paused;
+    // private bool paused;
 
     private Animator pauseMenyAnimator;
 
-    [SerializeField] private Slider slider;
+    // [SerializeField] private Slider slider;
 
     private void Start()
-    {
+    { 
+        pauseDelegate += PausePressed;
+        
         Time.timeScale = 1;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -25,34 +33,42 @@ public class PauseMenuBehaviour : MonoBehaviour
         pauseMenyAnimator = gameObject.GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) && !paused)
-        {
-            PauseGame();
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && paused)
-        {
-            UnPauseGame();
-        }
+    private void OnDestroy() {
+        pauseDelegate -= PausePressed;
     }
 
-    public void PauseGame()
-    {
+    private void PausePressed(bool paused) {
         if (paused)
-        {
-            Debug.Log("Error: Is Already Paused");
-            return;
-        }
+            PauseGame();
+        else
+            UnPauseGame();
+    }
 
-        CharacterInput.IsPaused(true);
+    // private void Update()
+    // {
+        // if (Input.GetKeyDown(KeyCode.Escape) && !paused)
+        // {
+        // }
+        // else if (Input.GetKeyDown(KeyCode.Escape) && paused)
+        // {
+        // }
+    // }
+
+    public void PauseGame() {
+        // if (paused)
+        // {
+        //     Debug.Log("Error: Is Already Paused");
+        //     return;
+        // }
+
+        // CharacterInput.IsPaused(true);
 
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
 
         pauseMenyAnimator.Play("Pause");
 
-        paused = true;
+        // paused = true;
 
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
@@ -61,16 +77,16 @@ public class PauseMenuBehaviour : MonoBehaviour
 
         StartCoroutine(currentCoroutine);
 
-        if (slider == null)
-            slider = GetComponentInChildren<Slider>();
+        // if (slider == null)
+        //     slider = GetComponentInChildren<Slider>();
 
-        if (slider != null && CameraController.Instance != null)
-            slider.value = CameraController.Instance.MouseSensitivity;
+        // if (slider != null && CameraController.Instance != null)
+        //     slider.value = CameraController.Instance.MouseSensitivity;
     }
 
     private float pauseDelay = 1f;
 
-    // To Slow down gamepspeed with unscaledDeltaTime
+    // To Slow down game speed with unscaledDeltaTime
     private IEnumerator PauseTime()
     {
         float time = 0;
@@ -92,9 +108,9 @@ public class PauseMenuBehaviour : MonoBehaviour
 
         pauseMenyAnimator.Play("UnPause");
 
-        paused = false;
+        // paused = false;
 
-        CharacterInput.IsPaused(false);
+        // CharacterInput.IsPaused(false);
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -107,7 +123,7 @@ public class PauseMenuBehaviour : MonoBehaviour
         StartCoroutine(currentCoroutine);
     }
 
-    // To speed up gamepspeed with unscaledDeltaTime 
+    // To speed up game speed with unscaledDeltaTime 
     private IEnumerator UnPauseTime()
     {
         float time = 0;
@@ -144,8 +160,8 @@ public class PauseMenuBehaviour : MonoBehaviour
         Application.Quit();
     }
 
-    public bool isPaused()
-    {
-        return paused;
-    }
+    // public bool isPaused()
+    // {
+    //     // return paused;
+    // }
 }
