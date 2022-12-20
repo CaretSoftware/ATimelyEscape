@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class AISettings : MonoBehaviour
 {
-    
-    
     private EnemyAI[] scientists;
     private PatrolNavAgent[] roombas;
 
