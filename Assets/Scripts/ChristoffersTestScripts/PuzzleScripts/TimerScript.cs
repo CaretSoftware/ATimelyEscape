@@ -5,12 +5,17 @@ using TMPro;
 
 public class TimerScript : MonoBehaviour
 {
-    [SerializeField] private float timeLeft;
+    [SerializeField] private float timer; 
     [SerializeField] private TextMeshProUGUI[] timerTexts;
     [SerializeField] private Transform checkpoint; 
+    private float timeLeft;
     private bool firstOn;
     private bool secondOn;
 
+    private void Start()
+    {
+        timeLeft = timer; 
+    }
 
     // Update is called once per frame
     void Update()
@@ -42,6 +47,12 @@ public class TimerScript : MonoBehaviour
         timerTexts[0].text = string.Format("{0:00}:{1:00}", minutes, seconds);
         timerTexts[1].text = string.Format("{0:00}:{1:00}", minutes, seconds);
         timerTexts[2].text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+    private void RestartTimer()
+    {
+        timeLeft = timer;
+        firstOn = true;
+        secondOn = true;
     }
 
     public void FirstButtonOn()
