@@ -11,6 +11,8 @@ public class SettingsMenuController : MonoBehaviour
 
     Resolution[] resolutions;
 
+    public bool shouldPlayTextToSpeach;
+
     private void Start()
     {
         resolutions = Screen.resolutions;
@@ -41,10 +43,14 @@ public class SettingsMenuController : MonoBehaviour
     {
         Screen.fullScreen = isFullscreen;
     }
+    public void SetShouldPlayTextToSpeach(bool shouldPlayTextToSpeach)
+    {
+        MenuButtonBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
+    }
 
     public void SetVolume(float volume)
     {
-        audioMixer.SetFloat("volume", volume);
+        audioMixer.SetFloat("volume", Mathf.Log(volume) * 20);
     }
 
     public void SetResolution(int index)

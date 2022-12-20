@@ -17,7 +17,7 @@ public class FailStateRespawner : MonoBehaviour
 
     private void Respawn(FailStateEvent fail)
     {
-        player = respawnPoint;
+        player.position = respawnPoint.position;
     }
 
     private void NewCheckpoint(CheckpointEvent checkpointEvent)

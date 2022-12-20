@@ -6,8 +6,8 @@ public class SuckUP : MonoBehaviour
 {
     [SerializeField] private Transform suckPosition;
     [SerializeField] private float suckSpeed;
-    private bool buttonOneOn;
-    private bool buttonTwoOn;
+    [SerializeField] private bool buttonOneOn;
+    [SerializeField] private bool buttonTwoOn;
     private bool hasStarted;
     private float spinX;
     private float spinY;
@@ -15,6 +15,7 @@ public class SuckUP : MonoBehaviour
     private Vector3 suckDirection;
     private Animator animator;
     private ParticleSystem ps;
+
     private void Start()
     {
         animator = GetComponentInParent<Animator>();
@@ -31,7 +32,7 @@ public class SuckUP : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Roomba")
         {
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
             suckDirection = suckPosition.position - other.gameObject.transform.position;
@@ -53,13 +54,12 @@ public class SuckUP : MonoBehaviour
     }
     private IEnumerator Suck()
     {
+        Debug.Log("Här");
         yield return new WaitForSeconds(1.3f);
         ps.Play();
-        Debug.Log("suck");
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(4.0f);
         ps.Stop();
-        Debug.Log("stop");
-        animator.SetBool("Stop", true);
+        
     }
 
 
