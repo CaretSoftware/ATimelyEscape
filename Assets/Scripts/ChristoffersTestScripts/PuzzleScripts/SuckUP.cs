@@ -5,10 +5,9 @@ using UnityEngine;
 public class SuckUP : MonoBehaviour
 {
     [SerializeField] private Transform suckPosition;
-    [SerializeField] private GameObject suckArea;
     [SerializeField] private float suckSpeed;
-    private bool buttonOneOn;
-    private bool buttonTwoOn;
+    [SerializeField] private bool buttonOneOn;
+    [SerializeField] private bool buttonTwoOn;
     private bool hasStarted;
     private float spinX;
     private float spinY;
@@ -16,10 +15,7 @@ public class SuckUP : MonoBehaviour
     private Vector3 suckDirection;
     private Animator animator;
     private ParticleSystem ps;
-    private void Awake()
-    {
-        suckArea.SetActive(false);
-    }
+
     private void Start()
     {
         animator = GetComponentInParent<Animator>();
@@ -31,12 +27,12 @@ public class SuckUP : MonoBehaviour
         {
             hasStarted = true;
             animator.SetBool("Start", true);
-            //StartCoroutine(Suck());
+            StartCoroutine(Suck());
         }
     }
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Roomba")
         {
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
             suckDirection = suckPosition.position - other.gameObject.transform.position;
@@ -58,12 +54,12 @@ public class SuckUP : MonoBehaviour
     }
     private IEnumerator Suck()
     {
-        //yield return new WaitForSeconds(1.3f);
+        Debug.Log("Här");
+        yield return new WaitForSeconds(1.3f);
         ps.Play();
-        suckArea.SetActive(true);
         yield return new WaitForSeconds(4.0f);
         ps.Stop();
-        //animator.SetBool("Stop", true);
+        
     }
 
 
