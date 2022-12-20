@@ -53,7 +53,8 @@ public class ScripableSlider : MonoBehaviour
         
         writer = new StreamWriter(fileName);
         Debug.Log(fileName);
-
+        
+        
         value = _slider.value;
 
 
@@ -62,6 +63,7 @@ public class ScripableSlider : MonoBehaviour
         writer.Close();
 
         previusTime = timer;
+
         
 
     }
