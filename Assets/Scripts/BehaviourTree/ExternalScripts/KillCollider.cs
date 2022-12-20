@@ -17,8 +17,7 @@ public class KillCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        print("Collision detected");
         if (collider.transform.tag.Equals("Player"))
-            FailStateScript.Instance.PlayDeathVisualization(checkpoint);
+            FailStateScript.Instance.PlayDeathVisualization(checkpoint, transform);
     }
 }

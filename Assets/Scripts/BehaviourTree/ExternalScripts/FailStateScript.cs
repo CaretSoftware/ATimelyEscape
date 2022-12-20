@@ -1,10 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using CallbackSystem;
 using UnityEngine;
-using UnityEngine.UI;
-using Event = CallbackSystem.Event;
 
 public class FailStateScript : MonoBehaviour
 {
@@ -30,15 +24,26 @@ public class FailStateScript : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Player/Rat Mesh").transform;
+        //TODO Gretas test scen 
+        player = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
         hyperDriveAnimator = GetComponent<Animator>();
         imageFunctionality = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
     }
 
     //Call on when player dies.
-    public void PlayDeathVisualization(Transform checkpoint)
+    public void PlayDeathVisualization(Transform checkpoint, Transform goTransform = null)
     {
-        print($"animations triggered");
+        if (goTransform.tag.Equals("Scientist"))
+        {
+            //OnboardingHandler.ScientistDiscovered = true;
+        }
+
+        else if (goTransform.tag.Equals("Roomba"))
+        {
+            //OnboardingHandler.VacuumCleanerDiscovered = true;  
+        }
+
+        NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
         this.checkpoint = checkpoint;
         hyperDriveAnimator.gameObject.SetActive(true);
         hyperDriveAnimator.SetTrigger("DeathAnimTrigger");
@@ -50,6 +55,7 @@ public class FailStateScript : MonoBehaviour
     public void FadeBack()
     {
         player.position = checkpoint.position;
+        NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(false);
         imageFunctionality.RunFadeBack();
         hyperDriveAnimator.gameObject.SetActive(false);
     }

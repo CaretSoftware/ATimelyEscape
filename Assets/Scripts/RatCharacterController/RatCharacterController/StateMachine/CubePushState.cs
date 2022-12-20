@@ -1,3 +1,4 @@
+using FluffyGroomingTool;
 using UnityEngine;
 
 namespace NewRatCharacterController {
@@ -73,8 +74,9 @@ namespace NewRatCharacterController {
 			}
 
 			float velocityLateralMin = -.1f;
-			if (cubeRB != null && cubeRB.velocity.y < velocityLateralMin) {
+			if (NewRatCharacter.LetGoOfCube || cubeRB != null && cubeRB.velocity.y < velocityLateralMin) {
 				Debug.Log("FALLING");
+				NewRatCharacter.LetGoOfCube = false;
 				stateMachine.TransitionTo<MoveState>();
 			}
 			

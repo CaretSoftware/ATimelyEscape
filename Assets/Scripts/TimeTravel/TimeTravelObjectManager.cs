@@ -202,18 +202,34 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
             foreach (var info in DisplacementsAndRenderers.Values) {
                 if (!displaceOnTimeTravel || info[(int)traveledFrom] == null || info[(int)traveledTo] == null) continue;
-                if (gameObject.activeInHierarchy) info[(int)traveledFrom].renderer.sharedMaterials = displacementMat;
-                if (gameObject.activeInHierarchy) info[(int)traveledTo].renderer.sharedMaterials = displacementMat;
-                if (gameObject.activeInHierarchy) info[(int)traveledFrom].displacement.Displace(info[(int)traveledTo].renderer.transform);
+                if (info[(int)traveledFrom].renderer.gameObject.activeInHierarchy) {
+                    info[(int)traveledFrom].renderer.sharedMaterials = displacementMat;
+                    info[(int)traveledTo].renderer.sharedMaterials = displacementMat;
+                    info[(int)traveledFrom].displacement.Displace(info[(int)traveledTo].renderer.transform);
+                }
             }
         }
 
         if (gameObject.activeInHierarchy) StartCoroutine(DisplacementComplete());
+        else DiscplacementCompleteHelper();
     }
 
     private IEnumerator<WaitForSecondsRealtime> DisplacementComplete() {
         yield return new WaitForSecondsRealtime(!displaceOnTimeTravel ? 0 : 0.4f);
 
+        /*        if ((int)traveledFrom < 3 || (int)traveledTo < 3) {
+                   foreach (var info in DisplacementsAndRenderers.Values) {
+                       for (int i = 0; i < 3; i++) {
+                           if (info[i] == null) continue;
+                           info[i].renderer.sharedMaterials = info[i].originalMaterials;
+                           info[i].renderer.enabled = i == (int)traveledTo ? true : false;
+                       }
+                   }
+               } */
+        DiscplacementCompleteHelper();
+    }
+
+    private void DiscplacementCompleteHelper() {
         if ((int)traveledFrom < 3 || (int)traveledTo < 3) {
             foreach (var info in DisplacementsAndRenderers.Values) {
                 for (int i = 0; i < 3; i++) {

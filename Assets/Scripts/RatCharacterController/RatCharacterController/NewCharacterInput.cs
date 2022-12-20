@@ -118,7 +118,7 @@ namespace NewRatCharacterController {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
-			if (CanTimeTravel && CanTimeTravelPresent) // TODO use the booleans!
+			if (CanTimeTravel && CanTimeTravelPresent)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
 		}
 
@@ -133,7 +133,7 @@ namespace NewRatCharacterController {
 
 		private void OnDestroy() => Unsubscribe();
 		
-		private void Unsubscribe() {
+		private void Unsubscribe() { 
 			PauseMenuBehaviour.pauseDelegate -= Paused;
 			
 			_playerInputActions.Onboarding.DLeft.started -= DPadLeft;

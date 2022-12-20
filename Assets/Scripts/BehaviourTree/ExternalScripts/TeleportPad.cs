@@ -29,9 +29,9 @@ public class TeleportPad : MonoBehaviour
     {
         if (active && !OnCooldown)
             if (target.transform.tag.Equals("Player") || target.transform.tag.Equals("Cube"))
-                Teleport(target.transform);
+        Teleport(target.transform);
     }
-
+    
     private void Teleport(Transform target)
     {
         OnCooldown = true;

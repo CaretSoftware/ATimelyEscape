@@ -8,9 +8,6 @@ public class MouseSensitivityListener : MonoBehaviour {
     private void Start() {
         _slider = GetComponent<Slider>();
         if (_slider == null) return;
-        _cameraController ??= FindObjectOfType<NewRatCameraController>();
-        if (_cameraController != null)
-            _slider.value = _cameraController.MouseSensitivity;
         _slider.onValueChanged.AddListener( SetMouseSensitivity );
     }
 
@@ -19,7 +16,5 @@ public class MouseSensitivityListener : MonoBehaviour {
 
         if (_cameraController != null)
             _cameraController.MouseSensitivity = value;
-        else
-            Debug.Log($"No ${nameof(NewRatCameraController)} listening to slider", this);
     }
 }

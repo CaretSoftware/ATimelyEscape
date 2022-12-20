@@ -12,6 +12,8 @@ public class NewRatCharacterController : MonoBehaviour
 
 	public bool Caught;// { get; set; }
 	
+	public bool LetGoOfCube { get; set; }
+	
 	// State Machine
 	private StateMachine _stateMachine;
 	private List<BaseState> _states = new List<BaseState> { 
@@ -137,10 +139,29 @@ public class NewRatCharacterController : MonoBehaviour
 	[SerializeField]
 	public float pushSpeed = .3f;
 
+	public void SetVelocity(float vel) {
+		_maxVelocity = vel;
+	}
+
+	public void SetJump(float force) {
+		_jumpForce = force;
+	}
+
+	public void SetPushVelocity(float velocity) {
+		pushSpeed = velocity;
+	}
+
+	public void SetAcceleration(float acceleration) {
+		_acceleration = acceleration;
+	}
 	
+	public void SetDeceleration(float acceleration) {
+		_acceleration = acceleration;
+	}
+
 	[ContextMenu("Reset Character Position")]
 	private void ResetCharacterPosition() {
-		_transform.position = Vector3.up;
+		_transform.position = new Vector3(-.292f, -.255f, 4.426f);
 		_velocity = Vector3.zero;
 	}
 
@@ -163,6 +184,7 @@ public class NewRatCharacterController : MonoBehaviour
 
 	private void Start() {
 		_colliderRadius = CharCollider.radius;
+		
 	}
 
 	public float velocityMagnitude;
@@ -346,7 +368,8 @@ public class NewRatCharacterController : MonoBehaviour
 			_point2Transform.position,
 			CharCollider.radius,
 			_overlapCollidersNonAlloc,
-			_collisionMask);
+			_collisionMask,
+			QueryTriggerInteraction.Ignore);
 
 		while (_count > 0 && _exit++ < 10) {
 
@@ -372,7 +395,8 @@ public class NewRatCharacterController : MonoBehaviour
 				_point2Transform.position,
 				CharCollider.radius,
 				_overlapCollidersNonAlloc,
-				_collisionMask);
+				_collisionMask,
+				QueryTriggerInteraction.Ignore);
 			_exit++;
 		}
 
@@ -412,7 +436,8 @@ public class NewRatCharacterController : MonoBehaviour
 			direction, 
 			out var hit, 
 			distance, 
-			_collisionMask);
+			_collisionMask,
+			QueryTriggerInteraction.Ignore);
 		return hit;
 	}
 
