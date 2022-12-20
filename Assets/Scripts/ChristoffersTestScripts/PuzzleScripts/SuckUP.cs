@@ -36,17 +36,18 @@ public class SuckUP : MonoBehaviour
     {
         if (other.gameObject.tag == "Roomba")
         {
-            roombaNav = other.gameObject.GetComponent<NavMeshAgent>();
+          /*  roombaNav = other.gameObject.GetComponent<NavMeshAgent>();
             
             Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
             other.gameObject.GetComponent<PatrolNavAgent>().enabled = false;
-            Invoke("TurnOffNav", 0.5f);
+            //Invoke("TurnOffNav", 0.5f);
             suckDirection = suckPosition.position - other.gameObject.transform.position;
             spinX = Random.Range(50, 100) * Time.deltaTime;
             spinY = Random.Range(20, 150) * Time.deltaTime;
             spinZ = Random.Range(50, 300) * Time.deltaTime;
             other.gameObject.transform.Rotate(spinX, spinY, spinZ, Space.Self);
-            rb.AddForce((suckDirection * suckSpeed) * Time.deltaTime);
+            rb.AddForce((suckDirection * suckSpeed) * Time.deltaTime);*/
+            Destroy(other.gameObject);
         }
     }
 
@@ -67,10 +68,10 @@ public class SuckUP : MonoBehaviour
         ps.Stop();
         
     }
-    private void TurnOffNav()
+ /*   private void TurnOffNav()
     {
         roombaNav.enabled = false;
-    }
+    }*/
 
 
 
