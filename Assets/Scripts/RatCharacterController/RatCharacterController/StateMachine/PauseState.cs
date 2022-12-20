@@ -7,7 +7,7 @@ namespace NewRatCharacterController {
 
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
-			// PauseMenuBehaviour.pauseDelegate?.Invoke(true); // TODO
+			PauseMenuBehaviour.pauseDelegate?.Invoke(true);
 		} 
 
 		public override void Run() {
@@ -16,7 +16,7 @@ namespace NewRatCharacterController {
 		}
 
 		public override void Exit() {
-			// PauseMenuBehaviour.pauseDelegate?.Invoke(false); // TODO 
+			PauseMenuBehaviour.pauseDelegate?.Invoke(false);
 		}
 	}
 }
