@@ -32,6 +32,7 @@ public class FailStateScript : MonoBehaviour
 
     private void Start()
     {
+        //TODO Gretas test scen 
         //player = GameObject.FindObjectOfType<NewCharacterController>().transform;
         hyperDriveAnimator = GetComponent<Animator>();
         imageFunctionality = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
