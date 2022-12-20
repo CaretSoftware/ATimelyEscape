@@ -10,29 +10,58 @@ public class DialogueTrigger : MonoBehaviour
     private void Start()
     {
         dialogueManager = FindObjectOfType<DialogueManager>();
+
+        //NewCharacterInput.dPadRightPressed += WhatHappensOnDpadRightPressed;
+        //NewCharacterInput.dPadLeftPressed += WhatHappensOnDpadLeftPressed;
+    }
+
+
+    private void OnDestroy()
+    {
+        //NewCharacterInput.dPadRightPressed -= WhatHappensOnDpadRightPressed;
+        //NewCharacterInput.dPadLeftPressed -= WhatHappensOnDpadLeftPressed;
+    }
+
+    private void WhatHappensOnDpadRightPressed()
+    {
+        OnNextDialogue();
+    }
+
+    private void WhatHappensOnDpadLeftPressed()
+    {
+        GoBackToGame();
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            if (dialogueManager.dialogueStarted)
-            {
-                dialogueManager.NextPressed();
-            }
-            else
-            {
-                dialogueManager.dialogueStarted = true;
-                dialogueManager.StartDialogue(dialogue);
-            }
+            OnNextDialogue();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //Go back to game
+            GoBackToGame();
         }
     }
 
+    private void OnNextDialogue()
+    {
+        if (dialogueManager.dialogueStarted)
+        {
+            dialogueManager.NextPressed();
+        }
+        else
+        {
+            dialogueManager.dialogueStarted = true;
+            dialogueManager.StartDialogue(dialogue);
+        }
+    }
+
+    private void GoBackToGame()
+    {
+        //Sceneloading here
+    }
 
 
     /*public void TriggerDialogue()

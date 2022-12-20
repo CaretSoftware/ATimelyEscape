@@ -10,6 +10,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private float typingSpeed = 1f;
     [SerializeField] private float timeBetweenSentences = 10f;
+    [SerializeField] private AudioClip startClip;
 
     private Queue<string> sentences;
     private Queue<AudioClip> audioClips;
@@ -22,6 +23,15 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
         audioClips = new Queue<AudioClip>();
         audioSource = FindObjectOfType<AudioSource>();
+    }
+
+    private void Start()
+    {
+        if (startClip)
+        {
+            audioSource.clip = startClip;
+            audioSource.Play();
+        }
     }
 
     public void StartDialogue(Dialogue dialogue)
