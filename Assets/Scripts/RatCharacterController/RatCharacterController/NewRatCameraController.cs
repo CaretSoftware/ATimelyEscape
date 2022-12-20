@@ -65,18 +65,18 @@ public class NewRatCameraController : MonoBehaviour {
 	[SerializeField] [Range(0.0f, 1.0f)] 
 	private float _smoothCameraPosTime = 0.05f;
 	
-	[SerializeField] private Transform _cameraGimble;
+	// [SerializeField] private Transform _cameraGimble;
 
 	public float MouseSensitivity { get; set; } = .2f;
 
 	private void Awake()
 	{
-		Debug.Log("AWAKE");
 		_cameraPos = transform.position;
 		_cam = Camera.main;
 	}
 
 	private void Start() {
+		_camera.parent = null; // TODO fix 
 		// PauseMenuBehaviour.pauseDelegate += Pause; // TODO
 	}
 
