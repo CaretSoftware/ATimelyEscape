@@ -9,6 +9,8 @@ public class SwitchOn : MonoBehaviour
     [SerializeField] private Material onMaterial;
     [SerializeField] private Material offMaterial;
     [SerializeField] private bool isInteractableByPlayer;
+    [SerializeField] private bool isInteractableByPast;
+    [SerializeField] private bool isInteractableByPresent;
     [SerializeField] private UnityEvent switchOn;
     [SerializeField] private UnityEvent switchOff;
     private MeshRenderer meshRenderer;
@@ -29,6 +31,16 @@ public class SwitchOn : MonoBehaviour
             switchOn.Invoke();
             meshRenderer.material = onMaterial;
         }
+/*        else if (switchOn != null && isInteractableByPast && other.gameObject.tag == "CubePast")
+        {
+            switchOn.Invoke();
+            meshRenderer.material = onMaterial;
+        }
+        else if (switchOn != null && isInteractableByPresent && other.gameObject.tag == "CubePresent")
+        {
+            switchOn.Invoke();
+            meshRenderer.material = onMaterial;
+        }*/
     }
     private void OnTriggerExit(Collider other)
     {
@@ -37,6 +49,16 @@ public class SwitchOn : MonoBehaviour
             switchOff.Invoke();
             meshRenderer.material = offMaterial;
         }
+/*        else if (switchOn != null && isInteractableByPast && other.gameObject.tag == "CubePast")
+        {
+            switchOff.Invoke();
+            meshRenderer.material = offMaterial;
+        }
+        else if (switchOn != null && isInteractableByPresent && other.gameObject.tag == "CubePresent")
+        {
+            switchOff.Invoke();
+            meshRenderer.material = offMaterial;
+        }*/
     }
 
 }
