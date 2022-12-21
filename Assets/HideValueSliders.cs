@@ -7,6 +7,10 @@ public class HideValueSliders : MonoBehaviour
     // Start is called before the first frame update
     public Canvas canvas;
 
+    private void Start() {
+        canvas.enabled = false;
+    }
+
     // Update is called once per frame
     void Update()
     {

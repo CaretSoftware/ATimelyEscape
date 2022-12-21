@@ -23,6 +23,18 @@ public class ActivateBridge : MonoBehaviour
             if (bridge2 != null)
             {
                 bridge2.SetActive(true);
+            } else if(other.gameObject.tag == "CubePast")
+            {
+                bridge.SetActive(true);
+                if (bridge2 != null) {
+                    bridge2.SetActive(true);
+                }
+            }
+            else if (other.gameObject.tag == "CubePresent") {
+                bridge.SetActive(true);
+                if (bridge2 != null) {
+                    bridge2.SetActive(true);
+                }
             }
         }
     }

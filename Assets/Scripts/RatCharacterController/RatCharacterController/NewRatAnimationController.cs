@@ -16,6 +16,7 @@ namespace NewRatCharacterController {
 		private static readonly int Falling = Animator.StringToHash("Falling");
 		private static readonly int LedgeJump = Animator.StringToHash("JumpToLedge");
 		private static readonly int Caught = Animator.StringToHash("Caught");
+		[SerializeField] Animator anim;  
 
 		private Vector2 _blendVector;
 		
@@ -47,7 +48,8 @@ namespace NewRatCharacterController {
 		// private Vector3 
 		
 		private void Awake() {
-			_animator = GetComponent<Animator>();
+
+			_animator = anim; //GetComponent<Animator>();
 			// int numHookAnimations = 5;
 			// for (int i = 0; i < numHookAnimations; ++i) {
 			// 	_animator[i].Play("mySuperCoolHookAnimation", 0, 1.0f / numHookAnimations * i);
@@ -115,8 +117,13 @@ namespace NewRatCharacterController {
 
 		public void Push(bool pushing) => _animator.SetBool(Pushing, pushing);
 
-		public void SetGrounded(bool grounded) => _animator.SetBool(Grounded, grounded);
-
+		public void SetGrounded(bool grounded) {
+			if (_animator != null) {
+				_animator.SetBool(Grounded, grounded);
+			} else {
+				_animator = GetComponent<Animator>();
+			}
+		}
 		public void SetLedgeJump() => _animator.SetTrigger(LedgeJump);
 
 		public void SetCaught(bool caught) => _animator.SetBool(Caught, caught);

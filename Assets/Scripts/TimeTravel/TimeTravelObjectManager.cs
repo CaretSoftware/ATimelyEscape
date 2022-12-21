@@ -131,7 +131,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
             TimeTravelDisplacement displacement = currentTransform.gameObject.GetOrAddComponent<TimeTravelDisplacement>();
             info.displacement = displacement;
             info.renderer = subRenderer;
-            info.originalMaterials = subRenderer.materials;
+            info.originalMaterials = subRenderer.sharedMaterials;
 
             string[] splitName = currentTransform.name.Split('[');
 
@@ -202,9 +202,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
             foreach (var info in DisplacementsAndRenderers.Values) {
                 if (!displaceOnTimeTravel || info[(int)traveledFrom] == null || info[(int)traveledTo] == null) continue;
-                if (info[(int)traveledFrom].renderer.gameObject.activeInHierarchy) {
-                    info[(int)traveledFrom].renderer.sharedMaterials = displacementMat;
+          info[(int)traveledFrom].renderer.sharedMaterials = displacementMat;
                     info[(int)traveledTo].renderer.sharedMaterials = displacementMat;
+                if (info[(int)traveledFrom].renderer.gameObject.activeInHierarchy) {
+          
                     info[(int)traveledFrom].displacement.Displace(info[(int)traveledTo].renderer.transform);
                 }
             }

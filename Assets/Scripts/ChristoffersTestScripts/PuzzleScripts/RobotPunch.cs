@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RobotPunch : MonoBehaviour
 {
+    [SerializeField] private GameObject glassWall;
     private Animator animator;
     private bool pastOn;
     private bool presentOn;
@@ -12,6 +13,7 @@ public class RobotPunch : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        glassWall.SetActive(false);
         animator = GetComponent<Animator>();
     }
     private void Update()
@@ -19,7 +21,7 @@ public class RobotPunch : MonoBehaviour
         if(pastOn && presentOn && futureOn)
         {
             animator.SetBool("On", true);
-        }
+            glassWall.SetActive(true);        }
     }
 
     public void PastIsOn()
