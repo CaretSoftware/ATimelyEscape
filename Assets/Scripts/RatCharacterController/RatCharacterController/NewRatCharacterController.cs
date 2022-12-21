@@ -214,6 +214,8 @@ public class NewRatCharacterController : MonoBehaviour
 	public bool PressedJump { get; set; }
 	public bool HoldingJump { get; set; }
 
+	public Vector3 ConveyorForce { get; set; }
+
 	private void Input() {
 		
 		AnimationController.SetInputVector(InputVector);
@@ -223,6 +225,9 @@ public class NewRatCharacterController : MonoBehaviour
 		if (_inputMovement.magnitude > 1.0f) // > 1.0f to keep thumbstick input from being normalized
 			_inputMovement.Normalize();
 
+		_inputMovement += ConveyorForce;
+		ConveyorForce = Vector3.zero;
+		
 		_pressedJumpMoment = PressedJump ? Time.time : _pressedJumpMoment;
 
 		Jumped = !_jumpedOnce && 
