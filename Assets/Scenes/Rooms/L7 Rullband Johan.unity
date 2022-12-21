@@ -2332,6 +2332,10 @@ PrefabInstance:
       propertyPath: spawnThis.Array.data[2]
       value: 
       objectReference: {fileID: 7009233920927566438, guid: 547b70c2df3cb48458b9d5604c56418e, type: 3}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: characterSpeed
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 9201061428745601086, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: m_Size.x
       value: 0.8173794
@@ -7252,6 +7256,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2acf0326cd0fece4f89d21d771dc2ddb, type: 3}
+--- !u!1 &1259131850 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9201061428152227086, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+  m_PrefabInstance: {fileID: 420330332}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1259131856
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259131850}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!4 &1260258941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2968322423270174764, guid: cd3e4720c35ebf5479ee47b9a8ef06b2, type: 3}
@@ -8033,7 +8058,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: TTO_ConveyorBase
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5754931519167916153, guid: b63ca9184532701408f45b6b19584e2c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b63ca9184532701408f45b6b19584e2c, type: 3}
 --- !u!4 &1380212514 stripped
 Transform:
@@ -8231,7 +8257,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: TTO_ConveyorBelt
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2432814297565164116, guid: d44028892abe25845bf872983e62ff6a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d44028892abe25845bf872983e62ff6a, type: 3}
 --- !u!4 &1415516995 stripped
 Transform:
