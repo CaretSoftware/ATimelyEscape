@@ -19,7 +19,7 @@ public class TeleportPad : MonoBehaviour
         pads = transform.parent.GetComponentsInChildren<TeleportPad>();
         cable = transform.parent.GetComponentInChildren<TravelPathScript>();
         linkedPad = pads[0] != this ? pads[0] : pads[1];
-        indicatorMaterial = new Material(Shader.Find("Unlit/Color"));
+        indicatorMaterial = Resources.Load("TeleportMat") as Material; //= new Material(Shader.Find("Unlit/Color"));
         mr = transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>();
         mr.material = indicatorMaterial;
         UpdateIndicatorColor();

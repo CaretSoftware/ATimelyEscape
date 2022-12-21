@@ -15,6 +15,7 @@ public class ConveyorForce : MonoBehaviour {
     [SerializeField] private Transform[] waypoints;
     [SerializeField] private Dictionary<int, float> wayPointSpeeds = new Dictionary<int, float>();
     [SerializeField] private wayPointSpeedInfo[] speedInfo;
+    [SerializeField] private float cubeMaxHeigt; 
     private MaterialPropertyBlock _matPropBlock;
     private float cubeSpeedMultiplyer = 150f;
 
@@ -65,7 +66,7 @@ public class ConveyorForce : MonoBehaviour {
     private NewRatCharacterController.NewRatCharacterController ratCharacter;
     private void Update() {
         foreach (var cube in cubeDict) {
-            if (cube.Key == null) {
+            if (cube.Key == null || cube.Key.transform.position.y < cubeMaxHeigt) {
                 removedCubes.Add(cube.Key);
                 continue;
             }
