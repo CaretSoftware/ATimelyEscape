@@ -23,7 +23,7 @@ public class ScripableSlider : MonoBehaviour
     private int seconds;
     private int milliseconds;
 
-    private string path = "Assets/TestData/";
+    private string path;
     private string fileName;
 
    
@@ -32,7 +32,7 @@ public class ScripableSlider : MonoBehaviour
 
     void Start()
     {
-        
+        path = Application.persistentDataPath + "/";
         _slider = GetComponent<Slider>();
         if (myUnityEvent == null)
             myUnityEvent = new TestSlider();
@@ -52,8 +52,7 @@ public class ScripableSlider : MonoBehaviour
         fileName= temfil.ToString();    
         
         writer = new StreamWriter(fileName);
-        Debug.Log(fileName);
-        
+    
         
         value = _slider.value;
 
@@ -131,11 +130,10 @@ public class ScripableSlider : MonoBehaviour
     private static void EnsureDirectoryExists(string filePath)
     {
         FileInfo fi = new FileInfo(filePath);
-        Debug.Log(!fi.Directory.Exists);
         if (!fi.Directory.Exists)
         {
             Directory.CreateDirectory(fi.DirectoryName);
-            Debug.Log(!fi.Directory.Exists);
+            
         }
     }
 

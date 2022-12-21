@@ -19,12 +19,13 @@ public class ScenTimer : MonoBehaviour
     private int seconds;
     private int milliseconds;
 
-    private string fileName = "Assets/TestData/TimeInScens";
+    private string fileName;
 
     StreamWriter writer;
 
     private void Start()
     {
+        fileName = Application.persistentDataPath + "/TimeInScens";
         timer = 0f; previusTime = 0f;
         currentScen = runtimeSceneManager.GetCurrentSceneIndex();
         previusScen = currentScen;
@@ -36,7 +37,6 @@ public class ScenTimer : MonoBehaviour
         StringBuilder temfil = new StringBuilder();
         temfil.Append(fileName).Append(string.Format("{0:D2}", counter)).Append(".txt");
         fileName = temfil.ToString();
-
         writer = new StreamWriter(fileName);
 
         writer.Write(DataStart());
