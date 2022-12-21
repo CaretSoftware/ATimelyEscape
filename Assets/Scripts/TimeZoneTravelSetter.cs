@@ -13,6 +13,7 @@ public class TimeZoneTravelSetter : MonoBehaviour {
 	private bool PresentOn;
 	[SerializeField]
 	private bool FutureOn;
+	[SerializeField] private TimeTravelPeriod travelToThisPeriod = TimeTravelPeriod.Dummy;
 
 	private void Awake() {
 		Rigidbody rb = GetComponent<Rigidbody>();
@@ -24,12 +25,15 @@ public class TimeZoneTravelSetter : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag("Player")) {
+			print("Collision");
 			NewRatCharacterController.NewCharacterInput rat =
 				other.GetComponent<NewRatCharacterController.NewCharacterInput>();
 
 			rat.CanTimeTravelPast = PastOn;
 			rat.CanTimeTravelPresent = PresentOn;
 			rat.CanTimeTravelFuture = FutureOn;
+
+			if (travelToThisPeriod != TimeTravelPeriod.Dummy) { TimeTravelManager.DesiredTimePeriod(travelToThisPeriod); print(TimeTravelManager.currentPeriod); }
 		}
 	}
 }
