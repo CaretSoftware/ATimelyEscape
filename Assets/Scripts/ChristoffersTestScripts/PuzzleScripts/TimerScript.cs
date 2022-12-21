@@ -15,7 +15,8 @@ public class TimerScript : MonoBehaviour
 
     private void Start()
     {
-        timeLeft = timer; 
+        timeLeft = timer;
+        
     }
 
     // Update is called once per frame
@@ -34,7 +35,8 @@ public class TimerScript : MonoBehaviour
                 firstOn = false;
                 secondOn = false;
                 Invoke("RestartTimer", 1);
-                FailStateScript.Instance.PlayDeathVisualization(checkpoint);
+                
+                FailStateScript.Instance.PlayDeathVisualization(checkpoint.transform, transform);
             }
         }
     }
