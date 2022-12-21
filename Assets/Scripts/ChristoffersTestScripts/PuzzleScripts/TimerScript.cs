@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class TimerScript : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class TimerScript : MonoBehaviour
 
     private void Start()
     {
-        timeLeft = timer; 
+        timeLeft = timer;
+        
     }
 
     // Update is called once per frame
@@ -33,7 +35,8 @@ public class TimerScript : MonoBehaviour
                 firstOn = false;
                 secondOn = false;
                 Invoke("RestartTimer", 1);
-                FailStateScript.Instance.PlayDeathVisualization(checkpoint);
+                
+                FailStateScript.Instance.PlayDeathVisualization(checkpoint.transform, transform);
             }
         }
     }
@@ -67,6 +70,6 @@ public class TimerScript : MonoBehaviour
 
     public void FinnishGame()
     {
-        //kod för sclutscen
+        SceneManager.LoadScene(0);
     }
 }
