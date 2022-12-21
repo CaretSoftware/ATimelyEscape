@@ -52,7 +52,7 @@ public class ScenTimer : MonoBehaviour
         currentScen = runtimeSceneManager.GetCurrentSceneIndex();
         if(currentScen != previusScen)
         {
-            currentScen= previusScen;
+            previusScen = currentScen;
             writer = File.AppendText(fileName);
 
             writer.WriteLine(DataEnd());
@@ -60,7 +60,7 @@ public class ScenTimer : MonoBehaviour
             writer.Write(DataStart());
             writer.Close();
 
-            previusTime= timer;
+            previusTime = timer;
         }
     }
 
