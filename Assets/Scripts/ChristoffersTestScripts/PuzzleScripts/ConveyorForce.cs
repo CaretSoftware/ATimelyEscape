@@ -29,7 +29,7 @@ public class ConveyorForce : MonoBehaviour
         {
             if (other.gameObject.tag == "Player")
             {
-                other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * speed) * Time.deltaTime, ForceMode.Impulse);
+                other.gameObject.GetComponent<NewRatCharacterController.NewRatCharacterController>()._velocity = transform.forward  * speed * Time.deltaTime;
             }
             else if (other.gameObject.tag == "Cube")
             {
