@@ -1,0 +1,35 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody))]
+public class TimeZoneTravelSetter : MonoBehaviour {
+
+	[Header("Timezones on")]
+	[SerializeField]
+	private bool PastOn;
+	[SerializeField]
+	private bool PresentOn;
+	[SerializeField]
+	private bool FutureOn;
+
+	private void Awake() {
+		Rigidbody rb = GetComponent<Rigidbody>();
+		GetComponent<MeshRenderer>().enabled = false; 
+
+		rb.isKinematic = true;
+		rb.useGravity = false;
+	}
+
+	private void OnTriggerEnter(Collider other) {
+		if (other.gameObject.CompareTag("Player")) {
+			NewRatCharacterController.NewCharacterInput rat =
+				other.GetComponent<NewRatCharacterController.NewCharacterInput>();
+
+			rat.CanTimeTravelPast = PastOn;
+			rat.CanTimeTravelPresent = PresentOn;
+			rat.CanTimeTravelFuture = FutureOn;
+		}
+	}
+}
