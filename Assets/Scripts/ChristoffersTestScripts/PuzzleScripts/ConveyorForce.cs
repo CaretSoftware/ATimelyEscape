@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,14 +8,16 @@ public class ConveyorForce : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float speedMultiplier;
+    [SerializeField] private float characterSpeed = 25f;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private MeshRenderer meshRenderer2;
     private MaterialPropertyBlock _matPropBlock;
     private float cubeSpeedMultiplyer = 150f;
+    
     private bool isOn;
 
-    void Awake()
-    {
+    void Awake() {
+        Debug.Log("hej", this);
         _matPropBlock = new MaterialPropertyBlock();
     }
 
@@ -23,15 +26,38 @@ public class ConveyorForce : MonoBehaviour
         isOn = true;
         TimePeriodChanged.AddListener<TimePeriodChanged>(TimeMachineOff);
     }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Player") {
+            ratCharacter = other.GetComponent<NewRatCharacterController.NewRatCharacterController>();
+            // other.gameObject.GetComponent<NewRatCharacterController.NewRatCharacterController>().ConveyorForce = transform.forward  * speed * Time.deltaTime;
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.gameObject.tag == "Player") {
+            ratCharacter = null;
+            //other.gameObject.GetComponent<NewRatCharacterController.NewRatCharacterController>().ConveyorForce = transform.forward  * speed * Time.deltaTime;
+        }
+    }
+
+    private NewRatCharacterController.NewRatCharacterController ratCharacter;
+    private void Update() {
+        if (ratCharacter == null || !isOn) return;
+        
+        ratCharacter.ConveyorForce = transform.forward * characterSpeed * Time.deltaTime;
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (isOn)
         {
-            if (other.gameObject.tag == "Player")
-            {
-                other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * speed) * Time.deltaTime, ForceMode.Impulse);
-            }
-            else if (other.gameObject.tag == "Cube")
+            // if (other.gameObject.tag == "Player")
+            // {
+            //     other.gameObject.GetComponent<NewRatCharacterController.NewRatCharacterController>().ConveyorForce = transform.forward  * speed * Time.deltaTime;
+            // }
+            // else 
+            if (other.gameObject.tag == "Cube")
             {
                 other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * ((speed * speedMultiplier) * cubeSpeedMultiplyer)) * Time.deltaTime, ForceMode.Impulse);
             }
