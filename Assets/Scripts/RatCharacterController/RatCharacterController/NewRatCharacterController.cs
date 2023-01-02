@@ -26,6 +26,7 @@ public class NewRatCharacterController : MonoBehaviour
 		new PauseState(),
 		new CubePushState(),
 		new CaughtState(),
+		new KeypadState(),
 	};
 	
 	public Vector3 halfHeight = new Vector3(0, .05f, 0);
@@ -137,8 +138,8 @@ public class NewRatCharacterController : MonoBehaviour
 	public float _kineticFrictionCoefficient = 0.2f; 
 
 	[SerializeField]
-	public float pushSpeed = .3f;
-
+	public float pushSpeed = 1.75f;
+	
 	public void SetVelocity(float vel) {
 		_maxVelocity = vel;
 	}
@@ -186,8 +187,7 @@ public class NewRatCharacterController : MonoBehaviour
 		_colliderRadius = CharCollider.radius;
 		
 	}
-
-	public float velocityMagnitude;
+	
 	private void Update() {
 		
 		_inputMovement = Vector3.zero;
@@ -217,6 +217,8 @@ public class NewRatCharacterController : MonoBehaviour
 	public Vector3 ConveyorForce { get; set; }
 
 	private void Input() {
+		if (UnityEngine.Input.GetKeyDown(KeyCode.O))
+			KeypadInteraction = !KeypadInteraction;
 		
 		AnimationController.SetInputVector(InputVector);
 		
@@ -420,7 +422,6 @@ public class NewRatCharacterController : MonoBehaviour
 	}
 	
 	public void AirControl() {
-		
 		float airControlPercentage = Mathf.InverseLerp(1, 0, airTime / airControlTime);
 		float airControl = Mathf.Lerp( 0, maxAirControl, airControlPercentage);
 		airTime += Time.deltaTime;
@@ -434,7 +435,6 @@ public class NewRatCharacterController : MonoBehaviour
 	} 
 
 	private RaycastHit CapsuleCasts(Vector3 direction, Vector3 position, float distance = float.PositiveInfinity) {
-		
 		Physics.CapsuleCast( _point1Transform.position, 
 			_point2Transform.position, 
 			_colliderRadius, 
@@ -454,7 +454,6 @@ public class NewRatCharacterController : MonoBehaviour
 	}
 
 	private void RotateTransform() {
-		
 		Vector3	lookDirection = Vector3.ProjectOnPlane(_camera.forward, Vector3.up);
 		
 		_transform.rotation = Quaternion.LookRotation(lookDirection);
@@ -475,7 +474,12 @@ public class NewRatCharacterController : MonoBehaviour
 		Vector3 pos = RatMesh.position + halfHeight;
 		Ray ray = new Ray(pos, fwd);
 
-		if (Physics.Raycast(pos, fwd, out RaycastHit hitInfo, maxLength, cubeLayerMask, QueryTriggerInteraction.Ignore)) {
+		if (Physics.Raycast(pos, 
+			    fwd, 
+			    out RaycastHit hitInfo, 
+			    maxLength, 
+			    cubeLayerMask, 
+			    QueryTriggerInteraction.Ignore)) {
 			cubeHitPosition = hitInfo.point;
 			cubeHitInverseNormal = -hitInfo.normal;
 			cubeTransform = hitInfo.transform;
@@ -484,6 +488,8 @@ public class NewRatCharacterController : MonoBehaviour
 
 		return false;
 	}
+
+	public bool KeypadInteraction { get; set; }
 
 	public Vector3 cubeHitPosition;
 	public Vector3 cubeHitInverseNormal;

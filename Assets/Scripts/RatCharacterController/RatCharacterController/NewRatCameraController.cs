@@ -5,12 +5,8 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 public class NewRatCameraController : MonoBehaviour {
-	//
-	// private const string MouseX = "Mouse X";
-	// private const string MouseY = "Mouse Y";
-	// private const float LookOffset = 90;
-	//
-	private Camera _cam;
+
+	private NewRatCharacterController.NewRatCharacterController _ratCharacterController;
 	
 	private RaycastHit _hit;
 	
@@ -47,12 +43,6 @@ public class NewRatCameraController : MonoBehaviour {
 	[SerializeField]
 	private Transform _camera;
 	
-	// [SerializeField] [Range(1.0f, 10.0f)]
-	// private float mouseSensitivityX = 1.0f;
-	
-	// [SerializeField] [Range(1.0f, 10.0f)]
-	// private float mouseSensitivityY = 1.0f;
-		
 	[SerializeField] [Range(0.0f, 2.0f)]
 	private float _cameraCollisionRadius;
 
@@ -69,13 +59,12 @@ public class NewRatCameraController : MonoBehaviour {
 
 	public float MouseSensitivity { get; set; } = .2f;
 
-	private void Awake()
-	{
+	private void Awake() {
 		_cameraPos = transform.position;
-		_cam = Camera.main;
 	}
 
 	private void Start() {
+		_ratCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
 		_camera.parent = null; // TODO fix 
 		PauseMenuBehaviour.pauseDelegate += Pause;
 	}
@@ -86,24 +75,12 @@ public class NewRatCameraController : MonoBehaviour {
 
 	private void Pause(bool paused) => _paused = paused;
 
-	// private void Update() {
-	// 	if (_paused) return;
-	// 	
-		// Input();
-	// }
-
 	private void LateUpdate() {
-		if (_paused) return;
+		if (_paused || _ratCharacterController.KeypadInteraction) return;
 
 		ClampCameraTilt();
 		MoveCamera();
 	}
-
-	// private void Input() {
-	// 	_mouseMovement.x += UnityEngine.Input.GetAxisRaw(MouseX) * MouseSensitivity * 50f;
-	// 	_mouseMovement.y -= UnityEngine.Input.GetAxisRaw(MouseY) * MouseSensitivity * 50f;
-	// 	_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, ClampLookupMax - LookOffset, ClampLookupMin - LookOffset);
-	// }
 	
 	public void MouseInput(Vector2 mouseDelta) {
 		const float mouseSensitivity = 25f;
@@ -158,25 +135,4 @@ public class NewRatCameraController : MonoBehaviour {
 
 		_camera.position = _abovePlayer + _camera.rotation * _lerpOffset;
 	}
-
-	// private void OnDrawGizmos() {
-	// 	
-	// 	Gizmos.color = _debugHit ? Color.white : Color.black;
-	// 	
-	// 	Gizmos.DrawWireSphere(_camera.position, _cameraCollisionRadius);
-	//
-	// 	Gizmos.color = Color.white;
-	//
-	// 	Gizmos.matrix = Matrix4x4.TRS( 
-	// 		_camera.position,
-	// 		_camera.rotation, 
-	// 		new Vector3(1.0f, 1.0f, 1.0f) );
-	//
-	// 	Gizmos.DrawFrustum(
-	// 		Vector3.zero,
-	// 		Camera.main.fieldOfView, 
-	// 		12.0f, 
-	// 		.3f, 
-	// 		Camera.main.aspect);
-	// }
 }

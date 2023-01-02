@@ -49,15 +49,8 @@ namespace NewRatCharacterController {
 		
 		private void Awake() {
 
-			_animator = anim; //GetComponent<Animator>();
-			// int numHookAnimations = 5;
-			// for (int i = 0; i < numHookAnimations; ++i) {
-			// 	_animator[i].Play("mySuperCoolHookAnimation", 0, 1.0f / numHookAnimations * i);
-			// }
+			_animator = anim;
 		}
-
-			// if (_vector.sqrMagnitude > minEpsilon)
-			// 	_lookDirection = Vector3.SmoothDamp(_lookDirection, _vector.normalized.ProjectOnPlane(), ref _currentVelocity, _smoothTime);
 
 		private void Update() {
 			// RotateCharacterMesh();
