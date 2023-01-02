@@ -217,9 +217,6 @@ public class NewRatCharacterController : MonoBehaviour
 	public Vector3 ConveyorForce { get; set; }
 
 	private void Input() {
-		if (UnityEngine.Input.GetKeyDown(KeyCode.O))
-			KeypadInteraction = !KeypadInteraction;
-		
 		AnimationController.SetInputVector(InputVector);
 		
 		_inputMovement = Quaternion.Euler(0, _camera.rotation.y,0)  * InputVector;
