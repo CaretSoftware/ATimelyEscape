@@ -7,6 +7,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class RuntimeSceneManager : MonoBehaviour {
+
+    [SerializeField] private StartRoom startRoom = StartRoom.room1;
+    private Transform playerTransform;
+
     private static readonly HashSet<int> Room0 = new HashSet<int>() { 1, 2, 3, 5, 10 };    // cage room
     private static readonly HashSet<int> Room1 = new HashSet<int> { 2, 3, 4, 5, 10 };      // Incubator
     private static readonly HashSet<int> Room2 = new HashSet<int> { 2, 3, 4, 5, 10 };      // Office
@@ -31,6 +35,46 @@ public class RuntimeSceneManager : MonoBehaviour {
 
     */
 
+    public enum StartRoom {
+        dummyDontUse,
+        room1,
+        room2,
+        room3,
+        room4,
+        room5,
+        room6,
+        room7,
+        room8,
+        room9,
+        room10
+    }
+
+    private static readonly Vector3[] startPositions = new Vector3[]{
+        new Vector3(-0.291999996f,-0.254999995f,4.42600012f),
+        new Vector3(-2.09899998f,0.239999995f,0.850000024f),
+        new Vector3(-4.37599993f,0.175999999f,1.95500004f),
+        new Vector3(-5.81074095f,-0.68900001f,2.9472518f),
+        new Vector3(-7.31883526f,0.504999995f,-0.995308697f),
+        new Vector3(2.7809999f,-0.460999995f,-1.41499996f),
+        new Vector3(3.86899996f,2.86100006f,-7.13800001f),
+        new Vector3(-0.56099999f,3.30599999f,-14.4390001f),
+        new Vector3(-3.39680004f,2.81800008f,-21.3059998f),
+        new Vector3(-4.28200006f,2.25869989f,-12.9075003f)
+    };
+
+    private static readonly TimeTravelPeriod[] startPeriods = new TimeTravelPeriod[]{
+        TimeTravelPeriod.Present,
+        TimeTravelPeriod.Present,
+        TimeTravelPeriod.Present,
+        TimeTravelPeriod.Present,
+        TimeTravelPeriod.Present,
+        TimeTravelPeriod.Future,
+        TimeTravelPeriod.Future,
+        TimeTravelPeriod.Past,
+        TimeTravelPeriod.Past,
+        TimeTravelPeriod.Future
+    };
+
     private static readonly HashSet<int>[] Rooms = new HashSet<int>[] {
         new HashSet<int>(),
         Room0,
@@ -53,10 +97,13 @@ public class RuntimeSceneManager : MonoBehaviour {
     private void Start() {
         /*     TimeTravelManager.SimulatePhysics = false;
             Physics.autoSimulation = false; */
+        FindObjectOfType<TimeTravelManager>().startPeriod = startPeriods[(int)startRoom - 1];
+        playerTransform = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnLoaded;
         PlayerEnterRoom.AddListener<PlayerEnterRoom>(OnPlayerEnterRoom);
-        PlayerEnterRoom e = new PlayerEnterRoom() { sceneIndex = 1 };
+        playerTransform.transform.position = startPositions[(int)startRoom - 1];
+        PlayerEnterRoom e = new PlayerEnterRoom() { sceneIndex = (int)startRoom };
         e.Invoke();
     }
 
