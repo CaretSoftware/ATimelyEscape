@@ -5146,11 +5146,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: speedInfo.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: waypoints.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: minDistanceToWayPoint
@@ -8999,6 +8999,7 @@ GameObject:
   - component: {fileID: 475256247}
   - component: {fileID: 475256246}
   - component: {fileID: 475256248}
+  - component: {fileID: 475256249}
   m_Layer: 0
   m_Name: BeltTrigger (2)
   m_TagString: Untagged
@@ -9047,6 +9048,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpeed: 50
+--- !u!114 &475256249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475256245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d171c9dfc6b05c428b7c2a8439006d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1.5
+  minDistanceToWayPoint: 0.25
+  cubeSpeed: 0.02
+  speedMultiplier: 0
+  meshRenderer: {fileID: 0}
+  meshRenderer2: {fileID: 0}
+  waypoints:
+  - {fileID: 1906532148}
+  speedInfo: []
+  cubeMaxHeigt: 0
 --- !u!1001 &479107916
 PrefabInstance:
   m_ObjectHideFlags: 0
