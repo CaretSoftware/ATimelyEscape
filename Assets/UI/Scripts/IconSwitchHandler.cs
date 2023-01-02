@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IconSwitchHandler : MonoBehaviour
 {
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -12,8 +12,11 @@ public class IconSwitchHandler : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void SetAnimatorBool(bool isCharged)
+    public void ChangeAnimatorCharge(bool isCharged)
     {
-        animator.SetBool("IsCharged", isCharged);
+        if (isCharged)
+            animator.SetTrigger("Light");
+        else
+            animator.SetTrigger("Heavy");
     }
 }

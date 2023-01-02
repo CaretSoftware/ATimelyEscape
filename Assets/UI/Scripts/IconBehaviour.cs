@@ -20,7 +20,7 @@ public class IconBehaviour : MonoBehaviour
         maxDistance = GetComponent<SphereCollider>().radius * transform.parent.localScale.x;
         cubePush = transform.parent.GetComponent<CubePush>();
 
-        if(canvasGroup == null)
+        if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
         canvasGroup.alpha = 0;
@@ -36,13 +36,18 @@ public class IconBehaviour : MonoBehaviour
         {
             canvasGroup.alpha = 0;
         }
+
+        if (cubePush.enabled)
+            IsCharged(cubePush.Pushable());
+        else
+            IsCharged(false);
     }
 
     public void IsCharged(bool isCharged)
-    {
-        for (int i = 0; sides.Length > i; i++)
+    {  
+        for (int i = 0; i < sides.Length; i++)
         {
-            sides[i].SetAnimatorBool(isCharged);
+            sides[i].ChangeAnimatorCharge(isCharged);
         }
     }
     
