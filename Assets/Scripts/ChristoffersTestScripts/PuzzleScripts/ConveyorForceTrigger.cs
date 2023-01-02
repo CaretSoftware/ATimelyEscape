@@ -6,12 +6,16 @@ using CallbackSystem;
 public class ConveyorForceTrigger : MonoBehaviour
 {
     [SerializeField] private float characterSpeed = 25f;
+    [SerializeField] private MeshRenderer meshRenderer;
+    [SerializeField] private MeshRenderer meshRenderer2;
     private NewRatCharacterController.NewRatCharacterController ratCharacter;
     private AudioSource audioSource;
+    private MaterialPropertyBlock _matPropBlock;
     private bool isOn;
     private void Awake()
     {
         audioSource = gameObject.GetComponent<AudioSource>();
+        _matPropBlock = new MaterialPropertyBlock();
     }
     // Start is called before the first frame update
     void Start()
@@ -75,6 +79,32 @@ public class ConveyorForceTrigger : MonoBehaviour
             if (audioSource != null)
             {
                 audioSource.Play();
+            }
+        }
+    }
+
+    public void TurnOff()
+    {
+        isOn = false;
+
+        if (_matPropBlock != null)
+        {
+            _matPropBlock.SetFloat("_Scrolling_Time_X", 0f);
+
+            // Apply the edited values to the renderer.
+            if (meshRenderer != null)
+            {
+                meshRenderer.SetPropertyBlock(_matPropBlock);
+            }
+        }
+        if (_matPropBlock != null)
+        {
+            _matPropBlock.SetFloat("_Scrolling_Time_X", 0f);
+
+            // Apply the edited values to the renderer.
+            if (meshRenderer2 != null)
+            {
+                meshRenderer2.SetPropertyBlock(_matPropBlock);
             }
         }
     }
