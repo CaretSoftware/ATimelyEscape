@@ -11,7 +11,7 @@ public class ConveyorForceTrigger : MonoBehaviour
     private bool isOn;
     private void Awake()
     {
-        //audioSource = gameObject.GetComponent<AudioSource>();
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
     // Start is called before the first frame update
     void Start()
