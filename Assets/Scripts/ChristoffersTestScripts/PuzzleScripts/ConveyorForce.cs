@@ -17,7 +17,7 @@ public class ConveyorForce : MonoBehaviour {
     [SerializeField] private wayPointSpeedInfo[] speedInfo;
     [SerializeField] private float cubeMaxHeigt; 
     private MaterialPropertyBlock _matPropBlock;
-    private float cubeSpeedMultiplyer = 150f;
+    //private float cubeSpeedMultiplyer = 150f;
     //private NewRatCharacterController.NewRatCharacterController ratCharacter;
 
     [Serializable]

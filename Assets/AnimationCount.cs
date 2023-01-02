@@ -10,7 +10,7 @@ public class AnimationCount : MonoBehaviour
     private void Start()
     {
         animators = GetComponentsInChildren<Animator>();
-        for (int i = 0; i < numHookAnimations; ++i)
+        for (int i = 0; i < animators.Length; ++i)
         {
             animators[i].Play(animationName, 0, 1.0f / numHookAnimations * i);
         }
