@@ -9,7 +9,7 @@ public class ConveyorForce : MonoBehaviour {
     [SerializeField] private float minDistanceToWayPoint = 0.1f;
     [SerializeField] private float cubeSpeed;
     [SerializeField] private float speedMultiplier;
-    [SerializeField] private float characterSpeed = 25f;
+    //[SerializeField] private float characterSpeed = 25f;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private MeshRenderer meshRenderer2;
     [SerializeField] private Transform[] waypoints;
@@ -18,6 +18,7 @@ public class ConveyorForce : MonoBehaviour {
     [SerializeField] private float cubeMaxHeigt; 
     private MaterialPropertyBlock _matPropBlock;
     private float cubeSpeedMultiplyer = 150f;
+    //private NewRatCharacterController.NewRatCharacterController ratCharacter;
 
     [Serializable]
     private class wayPointSpeedInfo {
@@ -45,25 +46,23 @@ public class ConveyorForce : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Player") {
+/*        if (other.gameObject.tag == "Player") {
             ratCharacter = other.GetComponent<NewRatCharacterController.NewRatCharacterController>();
             // other.gameObject.GetComponent<NewRatCharacterController.NewRatCharacterController>().ConveyorForce = transform.forward  * speed * Time.deltaTime;
-        }
-        else if (other.gameObject.tag == "Cube") {
-            Debug.Log("iasdsadsads");
+        }*/
+        if (other.gameObject.tag == "Cube") {
             if (!cubeDict.ContainsKey(other.gameObject))
                 cubeDict.Add(other.gameObject, 0);
         }
     }
 
-    private void OnTriggerExit(Collider other) {
+/*    private void OnTriggerExit(Collider other) {
         if (other.gameObject.tag == "Player") {
             ratCharacter = null;
             //other.gameObject.GetComponent<NewRatCharacterController.NewRatCharacterController>().ConveyorForce = transform.forward  * speed * Time.deltaTime;
         }
-    }
+    }*/
 
-    private NewRatCharacterController.NewRatCharacterController ratCharacter;
     private void Update() {
         foreach (var cube in cubeDict) {
             if (cube.Key == null || cube.Key.transform.position.y < cubeMaxHeigt) {
@@ -86,12 +85,11 @@ public class ConveyorForce : MonoBehaviour {
         }
         removedCubes.Clear();
 
-        if (ratCharacter == null || !isOn) return;
+/*        if (ratCharacter == null || !isOn) return;
 
-        ratCharacter.ConveyorForce = transform.forward * characterSpeed * Time.deltaTime;
+        ratCharacter.ConveyorForce = transform.forward * characterSpeed * Time.deltaTime;*/
 
     }
-
 
 
     /*private void OnTriggerStay(Collider other)
