@@ -12,7 +12,7 @@ public class KillZone : MonoBehaviour
         {
             other.transform.position = checkPoint.transform.position;
         }
-        else
+        else if(other.CompareTag("Cube"))
         {
             Destroy(other.gameObject);
         }

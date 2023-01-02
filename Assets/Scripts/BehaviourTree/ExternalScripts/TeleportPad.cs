@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class TeleportPad : MonoBehaviour
 {
+    [SerializeField] private float coolDownTime = 5f; 
     private TravelPathScript cable;
     private TeleportPad linkedPad;
     private TeleportPad[] pads;
@@ -19,7 +20,7 @@ public class TeleportPad : MonoBehaviour
         pads = transform.parent.GetComponentsInChildren<TeleportPad>();
         cable = transform.parent.GetComponentInChildren<TravelPathScript>();
         linkedPad = pads[0] != this ? pads[0] : pads[1];
-        indicatorMaterial = new Material(Shader.Find("Unlit/Color"));
+        indicatorMaterial = Resources.Load("TeleportMat") as Material; //= new Material(Shader.Find("Unlit/Color"));
         mr = transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>();
         mr.material = indicatorMaterial;
         UpdateIndicatorColor();
@@ -56,7 +57,7 @@ public class TeleportPad : MonoBehaviour
     {
         indicatorMaterial.color = Color.cyan;
         synchronizeLinkedPad();
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(coolDownTime);
         UpdateIndicatorColor();
         OnCooldown = false;
         synchronizeLinkedPad();

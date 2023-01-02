@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class TimeTravelManager : MonoBehaviour {
     private StateMachine stateMachine;
-    [SerializeField] private TimeTravelPeriod startPeriod;
+    public TimeTravelPeriod startPeriod = TimeTravelPeriod.Present;
     [SerializeField] private TextMeshProUGUI timeText;
     public static TimeTravelPeriod currentPeriod;
     public static TimeTravelPeriod desiredPeriod;
