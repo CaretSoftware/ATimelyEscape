@@ -20,11 +20,8 @@ public class TimeTravelAnimation : MonoBehaviour
     [SerializeField] private float watchTransparency = 0.5f;
     [SerializeField] private float swirlSpeed = 1f;
 
-    //private Transform playerTransform;
     private SkinnedMeshRenderer meshRenderer;
     private Material[] defaultMaterials;
-    private MaterialPropertyBlock _matPropBlock; 
-    private MaterialPropertyBlock _watchEffectMatPropBlock;
     private List<ParticleSystem> particleSystems;
     private float initialDistance;
     private float initialAmount;
@@ -37,13 +34,11 @@ public class TimeTravelAnimation : MonoBehaviour
 
     private void Start()
     {
-        //playerTransform = FindObjectOfType<CharacterInput>().transform;
         meshRenderer = transform.parent.transform.GetComponentInChildren<SkinnedMeshRenderer>();
+        watchEffectRenderer.material.CopyPropertiesFromMaterial(watchEffectMaterial);
         defaultMaterials = meshRenderer.materials;
         LoadMaterialProperties();
         LoadParticleSystems();
-        _matPropBlock = new MaterialPropertyBlock();
-        _watchEffectMatPropBlock = new MaterialPropertyBlock();
         TimePeriodChanged.AddListener<TimePeriodChanged>(PlayTimeTravelEffect);
     }
 
@@ -56,8 +51,8 @@ public class TimeTravelAnimation : MonoBehaviour
 
         if (watchEffectMaterial)
         {
-            initialTransparency = watchEffectMaterial.GetFloat("_Transparency");
-            initialSwirlSpeed = watchEffectMaterial.GetFloat("_SwirlSpeed");
+            initialTransparency = watchEffectRenderer.material.GetFloat("_Transparency");
+            initialSwirlSpeed = watchEffectRenderer.material.GetFloat("_SwirlSpeed");
         }
     }
 
@@ -74,10 +69,9 @@ public class TimeTravelAnimation : MonoBehaviour
         }
     }
 
-
     private void PlayTimeTravelEffect(TimePeriodChanged e)
     {
-        if(e.IsReload) return; 
+        if (e.IsReload) return;
 
         if (playing)
         {
@@ -95,13 +89,8 @@ public class TimeTravelAnimation : MonoBehaviour
         while (elapsedTime < watchStartDuration)
         {
             elapsedTime += Time.deltaTime;
-            if(_watchEffectMatPropBlock != null && watchEffectRenderer != null && watchEffectMaterial != null)
-            {
-                watchEffectMaterial.SetFloat("_Transparency", Ease.EaseInOutSine(Mathf.Lerp(initialTransparency, watchTransparency, elapsedTime / watchStartDuration)));
-                watchEffectMaterial.SetFloat("_SwirlSpeed", Ease.EaseInOutSine(Mathf.Lerp(initialSwirlSpeed, swirlSpeed, elapsedTime / watchStartDuration)));
-
-                watchEffectRenderer.SetPropertyBlock(_watchEffectMatPropBlock);           
-            }
+            watchEffectRenderer.material.SetFloat("_Transparency", Ease.EaseInOutSine(Mathf.Lerp(initialTransparency, watchTransparency, elapsedTime / watchStartDuration)));
+            watchEffectRenderer.material.SetFloat("_SwirlSpeed", Ease.EaseInOutSine(Mathf.Lerp(initialSwirlSpeed, swirlSpeed, elapsedTime / watchStartDuration)));
             yield return null;
         }
 
@@ -110,15 +99,10 @@ public class TimeTravelAnimation : MonoBehaviour
         while (elapsedTime < startDuration)
         {
             elapsedTime += Time.deltaTime;
-            if (_matPropBlock != null)
-            {
-                timeTravelMaterial.SetFloat("_Distance", Ease.EaseInBack(Mathf.Lerp(initialDistance, distance, elapsedTime / startDuration)));
-                timeTravelMaterial.SetFloat("_Amount", Ease.EaseInOutSine(Mathf.Lerp(initialAmount, amount, elapsedTime / startDuration)));
-                timeTravelMaterial.SetFloat("_FresnelPower", Ease.EaseOutCubic(Mathf.Lerp(initialFresnelPower, fresnelPower, elapsedTime / startDuration)));
-                timeTravelMaterial.SetFloat("_WobbleSpeed", Ease.EaseInBack(Mathf.Lerp(initialWobbleSpeed, wobbleSpeed, elapsedTime / startDuration)));
-
-                meshRenderer.SetPropertyBlock(_matPropBlock);
-            }
+            timeTravelMaterial.SetFloat("_Distance", Ease.EaseInBack(Mathf.Lerp(initialDistance, distance, elapsedTime / startDuration)));
+            timeTravelMaterial.SetFloat("_Amount", Ease.EaseInOutSine(Mathf.Lerp(initialAmount, amount, elapsedTime / startDuration)));
+            timeTravelMaterial.SetFloat("_FresnelPower", Ease.EaseOutCubic(Mathf.Lerp(initialFresnelPower, fresnelPower, elapsedTime / startDuration)));
+            timeTravelMaterial.SetFloat("_WobbleSpeed", Ease.EaseInBack(Mathf.Lerp(initialWobbleSpeed, wobbleSpeed, elapsedTime / startDuration)));
             yield return null;
         }
 
@@ -126,36 +110,20 @@ public class TimeTravelAnimation : MonoBehaviour
         while (elapsedTime < endDuration)
         {
             elapsedTime += Time.deltaTime;
-            if (_matPropBlock != null)
-            {
-                timeTravelMaterial.SetFloat("_Distance", Ease.EaseInSine(Mathf.Lerp(distance, 0f, elapsedTime / endDuration)));
-                timeTravelMaterial.SetFloat("_Amount", Ease.EaseInSine(Mathf.Lerp(amount, 0f, elapsedTime / endDuration)));
-                timeTravelMaterial.SetFloat("_FresnelPower", Ease.EaseInSine(Mathf.Lerp(fresnelPower, 0f, elapsedTime / endDuration)));
-                timeTravelMaterial.SetFloat("_WobbleSpeed", Ease.EaseInSine(Mathf.Lerp(wobbleSpeed, 0f, elapsedTime / endDuration)));
-
-                meshRenderer.SetPropertyBlock(_matPropBlock);
-            }
+            timeTravelMaterial.SetFloat("_Distance", Ease.EaseInSine(Mathf.Lerp(distance, 0f, elapsedTime / endDuration)));
+            timeTravelMaterial.SetFloat("_Amount", Ease.EaseInSine(Mathf.Lerp(amount, 0f, elapsedTime / endDuration)));
+            timeTravelMaterial.SetFloat("_FresnelPower", Ease.EaseInSine(Mathf.Lerp(fresnelPower, 0f, elapsedTime / endDuration)));
+            timeTravelMaterial.SetFloat("_WobbleSpeed", Ease.EaseInSine(Mathf.Lerp(wobbleSpeed, 0f, elapsedTime / endDuration)));
             yield return null;
         }
 
-        if (_matPropBlock != null)
-        {
-            timeTravelMaterial.SetFloat("_Distance", 0f);
-            timeTravelMaterial.SetFloat("_Amount", 0f);
-            timeTravelMaterial.SetFloat("_FresnelPower", 0f);
-            timeTravelMaterial.SetFloat("_WobbleSpeed", 0f);
+        timeTravelMaterial.SetFloat("_Distance", 0f);
+        timeTravelMaterial.SetFloat("_Amount", 0f);
+        timeTravelMaterial.SetFloat("_FresnelPower", 0f);
+        timeTravelMaterial.SetFloat("_WobbleSpeed", 0f);
 
-            meshRenderer.SetPropertyBlock(_matPropBlock);
-        }
-
-        if (_watchEffectMatPropBlock != null && watchEffectRenderer != null && watchEffectMaterial != null)
-        {
-            watchEffectMaterial.SetFloat("_Transparency", 0f);
-            watchEffectMaterial.SetFloat("_SwirlSpeed", 0.2f);
-
-            watchEffectRenderer.SetPropertyBlock(_watchEffectMatPropBlock);
-        }
-
+        watchEffectRenderer.material.SetFloat("_Transparency", 0f);
+        watchEffectRenderer.material.SetFloat("_SwirlSpeed", 0.2f);
 
         SetTimeTravelMaterial(true);
         PlayParticles(false);
@@ -164,13 +132,8 @@ public class TimeTravelAnimation : MonoBehaviour
         while (elapsedTime < watchEndDuration)
         {
             elapsedTime += Time.deltaTime;
-            if (_watchEffectMatPropBlock != null && watchEffectRenderer != null && watchEffectMaterial != null)
-            {
-                watchEffectMaterial.SetFloat("_Transparency", Ease.EaseInSine(Mathf.Lerp(watchTransparency, 0f, elapsedTime / watchEndDuration)));
-                watchEffectMaterial.SetFloat("_SwirlSpeed", Ease.EaseInSine(Mathf.Lerp(swirlSpeed, 0.2f, elapsedTime / watchEndDuration)));
-
-                watchEffectRenderer.SetPropertyBlock(_watchEffectMatPropBlock);
-            }
+            watchEffectRenderer.material.SetFloat("_Transparency", Ease.EaseInSine(Mathf.Lerp(watchTransparency, 0f, elapsedTime / watchEndDuration)));
+            watchEffectRenderer.material.SetFloat("_SwirlSpeed", Ease.EaseInSine(Mathf.Lerp(swirlSpeed, 0.2f, elapsedTime / watchEndDuration)));
             yield return null;
         }
 
@@ -179,7 +142,6 @@ public class TimeTravelAnimation : MonoBehaviour
 
     private void SetTimeTravelMaterial(bool reset)
     {
-        
         Material[] mats = meshRenderer.materials;
 
         for (int i = 0; i < defaultMaterials.Length; ++i)
@@ -192,18 +154,28 @@ public class TimeTravelAnimation : MonoBehaviour
 
     private void PlayParticles(bool play)
     {
-        if(particleSystems != null && particleSystems.Count > 0)
+        if (particleSystems != null && particleSystems.Count > 0)
         {
-            for(int i = 0; i < particleSystems.Count; ++i)
+            for (int i = 0; i < particleSystems.Count; ++i)
             {
                 if (play)
                 {
                     particleSystems[i].Play();
-                }else
+                }
+                else
                 {
                     particleSystems[i].Stop();
                 }
             }
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        SetTimeTravelMaterial(true);
+        timeTravelMaterial.SetFloat("_Distance", 0f);
+        timeTravelMaterial.SetFloat("_Amount", 0f);
+        timeTravelMaterial.SetFloat("_FresnelPower", 0f);
+        timeTravelMaterial.SetFloat("_WobbleSpeed", 0f);
     }
 }
