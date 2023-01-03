@@ -28,6 +28,9 @@ namespace NewRatCharacterController {
             if (CubePushState.Requirement(NewRatCharacter))
                 stateMachine.TransitionTo<CubePushState>();
             
+            if (NewRatCharacter.KeypadInteraction)
+                stateMachine.TransitionTo<KeypadState>();
+            
             if (NewRatCharacter.Jumped)
                 stateMachine.TransitionTo<JumpState>();
 

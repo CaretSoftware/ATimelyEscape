@@ -51,16 +51,18 @@ namespace NewRatCharacterController {
 			Vector3 input = NewRatCharacter.InputToCameraProjection( NewRatCharacter.InputVector );
 			// move cubes rigidbody with that input
 
+			float velocity = NewRatCharacter.pushSpeed;
+			
 			Ray ray = new Ray(
 				NewRatCharacter.transform.position + NewRatCharacter.halfHeight,
 				NewRatCharacter.RatMesh.forward);
-			
+
 			OffsetPlayerPosition();
 			RotatePlayerToSurface();
 
 			void OffsetPlayerPosition() {
 				if (cube != null) {
-					cube.Push(input);
+					cube.Push(input * velocity);
 					NewRatCharacter.transform.position = cube.transform.position + _pushedCubeOffset;
 				}
 			}
