@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414738, b: 0.12107852, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414736, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -275,6 +275,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8473738343553818661, guid: 5d368fa7e29b97648933bc154c9e0918, type: 3}
+      propertyPath: m_CameraType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8473738343553818661, guid: 5d368fa7e29b97648933bc154c9e0918, type: 3}
+      propertyPath: m_ClearDepth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8473738343553818661, guid: 5d368fa7e29b97648933bc154c9e0918, type: 3}
+      propertyPath: m_RenderShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8473738343553818663, guid: 5d368fa7e29b97648933bc154c9e0918, type: 3}
       propertyPath: m_Depth
       value: 100
@@ -362,7 +374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c97deca26315f141ad26d3a37fbb8dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startRoom: 8
+  startRoom: 5
 --- !u!4 &352095361
 Transform:
   m_ObjectHideFlags: 0
@@ -665,6 +677,11 @@ PrefabInstance:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3398390766729623960, guid: 654c304990f2040499d477608b0a0276, type: 3}
   m_PrefabInstance: {fileID: 435593690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &610798635 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8473738343553818663, guid: 5d368fa7e29b97648933bc154c9e0918, type: 3}
+  m_PrefabInstance: {fileID: 307345796}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &617091215 stripped
 MonoBehaviour:
@@ -1224,6 +1241,18 @@ PrefabInstance:
       propertyPath: postProcesingVolume
       value: 
       objectReference: {fileID: 617091215}
+    - target: {fileID: 4770257074904037963, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+      propertyPath: m_Cameras.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770257074904037963, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+      propertyPath: m_Cameras.Array.data[0]
+      value: 
+      objectReference: {fileID: 610798635}
+    - target: {fileID: 4770257075950780103, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+      propertyPath: _collisionMask.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4770257075950780104, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -1270,7 +1299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4770257075950780106, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
       propertyPath: pushSpeed
-      value: 2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4770257075950780107, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
       propertyPath: m_Name
