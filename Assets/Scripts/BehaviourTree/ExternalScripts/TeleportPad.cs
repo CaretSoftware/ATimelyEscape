@@ -15,15 +15,16 @@ public class TeleportPad : MonoBehaviour
 
     [HideInInspector] public Material indicatorMaterial;
     [HideInInspector] public bool OnCooldown;
+
+    //TODO Dubbelkolla material-lösningen med Wessman.
     private void Start()
     {
         pads = transform.parent.GetComponentsInChildren<TeleportPad>();
         cable = transform.parent.GetComponentInChildren<TravelPathScript>();
         linkedPad = pads[0] != this ? pads[0] : pads[1];
-        indicatorMaterial = Resources.Load("TeleportMatGreen") as Material; //= new Material(Shader.Find("Unlit/Color"));
         mr = transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>();
-        mr.material = indicatorMaterial;
-        UpdateIndicatorColor();
+        mr.material = Resources.Load("TeleportMatGreen") as Material; //= new Material(Shader.Find("Unlit/Color"));
+        UpdateMaterial();
     }
 
     private void OnTriggerEnter(Collider target)
@@ -51,12 +52,12 @@ public class TeleportPad : MonoBehaviour
         mr.material = Resources.Load("TeleportMatCyan") as Material;
         synchronizeLinkedPad();
         yield return new WaitForSeconds(coolDownTime);
-        UpdateIndicatorColor();
+        UpdateMaterial();
         OnCooldown = false;
         synchronizeLinkedPad();
     }
 
-    private void UpdateIndicatorColor()
+    private void UpdateMaterial()
     {
         mr.material = active ? 
             Resources.Load("TeleportMatGreen") as Material : 
@@ -66,7 +67,8 @@ public class TeleportPad : MonoBehaviour
 
     private void synchronizeLinkedPad()
     {
-        //if (linkedPad.mr.material == null)
+        if (linkedPad.mr == null)
+            linkedPad.mr = mr;
             linkedPad.mr.material = mr.material;
         //linkedPad.indicatorMaterial.color = indicatorMaterial.color;
         linkedPad.OnCooldown = OnCooldown;
@@ -74,11 +76,11 @@ public class TeleportPad : MonoBehaviour
     public void TeleportOn()
     {
         active = true;
-        UpdateIndicatorColor();
+        UpdateMaterial();
     }
     public void TeleportOff()
     {
         active = false;
-        UpdateIndicatorColor();
+        UpdateMaterial();
     }
 }
