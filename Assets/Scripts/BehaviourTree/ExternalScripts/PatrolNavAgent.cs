@@ -7,7 +7,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class PatrolNavAgent : MonoBehaviour
 {
-    private const float distCheck = 0.1f;
+    private const float distCheck = 0.2f;
     [SerializeField] private Transform[] patrolPoints;
     [Range(0, 10)][SerializeField] private float speed;
     private NavMeshAgent agent;
