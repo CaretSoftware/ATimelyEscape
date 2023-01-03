@@ -20,7 +20,7 @@ public class TeleportPad : MonoBehaviour
         pads = transform.parent.GetComponentsInChildren<TeleportPad>();
         cable = transform.parent.GetComponentInChildren<TravelPathScript>();
         linkedPad = pads[0] != this ? pads[0] : pads[1];
-        indicatorMaterial = Resources.Load("TeleportMat") as Material; //= new Material(Shader.Find("Unlit/Color"));
+        indicatorMaterial = Resources.Load("TeleportMatGreen") as Material; //= new Material(Shader.Find("Unlit/Color"));
         mr = transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>();
         mr.material = indicatorMaterial;
         UpdateIndicatorColor();
@@ -30,7 +30,7 @@ public class TeleportPad : MonoBehaviour
     {
         if (active && !OnCooldown)
             if (target.transform.tag.Equals("Player") || target.transform.tag.Equals("Cube"))
-        Teleport(target.transform);
+                Teleport(target.transform);
     }
     
     private void Teleport(Transform target)
@@ -42,20 +42,13 @@ public class TeleportPad : MonoBehaviour
         //if linkedPad is equal to the second object in the hierachy then teleportation occurred 
         //from the first pad, else from second pad.
         //true = first pad, false = second pad.
-        cable.TravelPath(linkedPad == pads[1] ? true : false, target.gameObject, 
-            linkedPad.transform.position);
-        //Alternatively if NavMesh is not used:
-        //target.transform.position = linkedPad.transform.position; (+ potential offset on y-axis)
-        //NavMesh.SamplePosition(linkedPad.transform.position, out hit, 1, NavMesh.AllAreas);
-        //target.transform.position = hit.position;
-
-        //target.gameObject.SetActive(true);
+        cable.TravelPath(linkedPad == pads[1], target.gameObject, linkedPad.transform.position);
         StartCoroutine(CoolDownTimer());
     }
 
     public IEnumerator CoolDownTimer()
     {
-        indicatorMaterial.color = Color.cyan;
+        mr.material = Resources.Load("TeleportMatCyan") as Material;
         synchronizeLinkedPad();
         yield return new WaitForSeconds(coolDownTime);
         UpdateIndicatorColor();
@@ -65,15 +58,17 @@ public class TeleportPad : MonoBehaviour
 
     private void UpdateIndicatorColor()
     {
-        indicatorMaterial.color = active ? Color.green : Color.red;
+        mr.material = active ? 
+            Resources.Load("TeleportMatGreen") as Material : 
+            Resources.Load("TeleportMatRed") as Material;
         synchronizeLinkedPad();
     }
 
     private void synchronizeLinkedPad()
     {
-        if (linkedPad.indicatorMaterial == null)
-            linkedPad.indicatorMaterial = indicatorMaterial;
-        linkedPad.indicatorMaterial.color = indicatorMaterial.color;
+        //if (linkedPad.mr.material == null)
+            linkedPad.mr.material = mr.material;
+        //linkedPad.indicatorMaterial.color = indicatorMaterial.color;
         linkedPad.OnCooldown = OnCooldown;
     }
     public void TeleportOn()
