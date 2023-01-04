@@ -65,6 +65,7 @@ public class NewRatCameraController : MonoBehaviour {
 		_cameraPos = transform.position;
 	}
 
+	
 	private void Start() {
 		_ratCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
 		_camera.parent = null; // TODO fix 
