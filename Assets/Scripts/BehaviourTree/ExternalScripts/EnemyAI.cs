@@ -26,13 +26,13 @@ public class EnemyAI : MonoBehaviour
     [HideInInspector] public bool activeAI;
 
     private ChainIKConstraint chainIKConstraint;
-    private GameObject fullBodyRig;
+    [SerializeField] private GameObject fullBodyRig;
     private EnemyFOV enemyFOV;
     private NavMeshHit hit;
     private Node topNode;
 
     private Transform playerTransform;
-    private Transform agentCenterTransform;
+    [SerializeField] private Transform agentCenterTransform;
     private Transform defaultIKTarget;
     private Vector3 worldDeltaPosition;
     private Vector3 rootPosition;
@@ -72,8 +72,7 @@ public class EnemyAI : MonoBehaviour
 
     public Transform AgentCenterTransform
     {
-        get { return agentCenterTransform; } 
-        private set { agentCenterTransform = value; }
+        get { return agentCenterTransform; }
     }
 
     private void Awake()
@@ -82,7 +81,6 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         enemyFOV = GetComponent<EnemyFOV>();
-        fullBodyRig = GameObject.Find("FullBodyRig").transform.GetChild(0).gameObject;
         chainIKConstraint = fullBodyRig.GetComponent<ChainIKConstraint>();
         animator.applyRootMotion = true;
         agent.updatePosition = false;
@@ -92,7 +90,6 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         playerTransform = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
-        agentCenterTransform = GameObject.Find($"{gameObject.name}/AgentCenterTransform").transform;
         chainIKConstraint.weight = 0;
         defaultIKTarget = handIKTarget;
         chaseRange = enemyFOV.ChaseRadius;
