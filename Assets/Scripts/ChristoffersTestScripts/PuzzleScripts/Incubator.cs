@@ -64,6 +64,7 @@ public class Incubator : MonoBehaviour {
         triggerGreenAnim = triggerGreen.GetComponent<Animator>();
         triggerGreen2Anim = triggerGreen2.GetComponent<Animator>();
         signMr.material = notDone;
+        sign.SetActive(false);
     }
 
 
@@ -176,6 +177,10 @@ public class Incubator : MonoBehaviour {
     }
     private void RemoveFloor() {
         puzzleFloor.SetActive(false);
+    }
+    public void StartSign()
+    {
+        sign.SetActive(true);
     }
 
 }
