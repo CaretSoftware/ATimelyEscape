@@ -45,6 +45,7 @@ public class TimeTravelUIButton : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
+		if (EventSystem.Current == null) return;
 		CallHintAnimation.RemoveListener<CallHintAnimation>(Blocked);
 		DebugEvent.RemoveListener<TimePeriodChanged>(TimePeriodChanged);
 	}
