@@ -48,7 +48,6 @@ public class NewRatCharacterController : MonoBehaviour
 		get => ratMesh;
 		private set { }
 	}
-
 	
 	// Collider
 	public CapsuleCollider CharCollider { get; private set; }
@@ -213,7 +212,6 @@ public class NewRatCharacterController : MonoBehaviour
 	public Vector3 InputVector { get; set; }
 	public bool PressedJump { get; set; }
 	public bool HoldingJump { get; set; }
-
 	public Vector3 ConveyorForce { get; set; }
 
 	private void Input() {
