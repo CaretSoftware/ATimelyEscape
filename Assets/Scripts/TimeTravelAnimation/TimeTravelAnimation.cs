@@ -178,4 +178,8 @@ public class TimeTravelAnimation : MonoBehaviour
         timeTravelMaterial.SetFloat("_FresnelPower", 0f);
         timeTravelMaterial.SetFloat("_WobbleSpeed", 0f);
     }
+
+    private void OnDestroy() {
+        if(EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(PlayTimeTravelEffect);
+    }
 }

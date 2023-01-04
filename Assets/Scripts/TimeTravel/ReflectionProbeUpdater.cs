@@ -20,4 +20,8 @@ public class ReflectionProbeUpdater : MonoBehaviour
         if (e.IsReload) return;
         probe.RenderProbe();
     }
+
+    private void OnDestroy() {
+        if(EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(UpdateProbe);
+    }
 }
