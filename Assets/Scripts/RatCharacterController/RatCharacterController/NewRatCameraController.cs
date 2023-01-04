@@ -59,7 +59,7 @@ public class NewRatCameraController : MonoBehaviour {
 
 	public float MouseSensitivity { get; set; } = .2f;
 
-	public bool Accessibility { get; set; } = true;
+	public bool Accessibility { get; set; } = false;
 
 	private void Awake() {
 		_cameraPos = transform.position;
