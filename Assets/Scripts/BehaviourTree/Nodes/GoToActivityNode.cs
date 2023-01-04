@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -82,5 +84,11 @@ public class GoToActivityNode : Node
         isTimerDone = true;
     }
 
-    private class DummyBehaviour : MonoBehaviour { }
+    private class DummyBehaviour : MonoBehaviour
+    {
+        private void OnDestroy()
+        {
+            StopAllCoroutines();
+        }
+    }
 }
