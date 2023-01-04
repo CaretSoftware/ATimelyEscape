@@ -59,6 +59,8 @@ public class NewRatCameraController : MonoBehaviour {
 
 	public float MouseSensitivity { get; set; } = .2f;
 
+	public bool Accessibility { get; set; } = true;
+
 	private void Awake() {
 		_cameraPos = transform.position;
 	}
@@ -79,9 +81,12 @@ public class NewRatCameraController : MonoBehaviour {
 		if (_paused || _ratCharacterController.KeypadInteraction) return;
 
 		ClampCameraTilt();
-		MoveCamera();
+		if (!Accessibility)
+			MoveCamera();
+		else
+			MoveAccessibleCamera();
 	}
-	
+
 	public void MouseInput(Vector2 mouseDelta) {
 		const float mouseSensitivity = 25f;
 		if (_paused) return;
@@ -134,5 +139,17 @@ public class NewRatCameraController : MonoBehaviour {
 		_lerpOffset = Vector3.SmoothDamp(_lerpOffset, _offset, ref _smoothDampCurrentVelocity, _smoothDollyTime);
 
 		_camera.position = _abovePlayer + _camera.rotation * _lerpOffset;
+	}
+	
+	
+	private void MoveAccessibleCamera()
+	{
+		float distance = _camera3rdPersonOffset.magnitude;
+		Vector3 abovePlayer = transform.position + Vector3.up * _headHeight;
+		Vector3 direction = (_camera.position - abovePlayer).normalized;
+		_offsetTarget = abovePlayer + direction * distance;
+
+		_camera.position = _offsetTarget;
+		_camera.LookAt(abovePlayer, Vector3.up);
 	}
 }
