@@ -64,6 +64,7 @@ public class Incubator : MonoBehaviour {
         triggerGreenAnim = triggerGreen.GetComponent<Animator>();
         triggerGreen2Anim = triggerGreen2.GetComponent<Animator>();
         signMr.material = notDone;
+        sign.SetActive(false);
     }
 
 
@@ -94,7 +95,7 @@ public class Incubator : MonoBehaviour {
         }
         if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && incubateTriggerRed.twoHalfDone && !puzzleThreeHalfDone) {
             triggerGreenAnim.SetBool("Open", true);
-            instructions.text = "PUSH THIS PAST VERSION OF THE SAME CUBE TO THE GREEN LIGHT TO CHANGE THE DESTINY OF THE FUTURE VERSION OF THE CUBE";
+            instructions.text = "PUSH THIS PAST VERSION OF THE SAME CUBE TO THE GREEN LIGHT. THIS WILL CHANGE THE DESTINY OF THE FUTURE VERSION OF THE CUBE";
             spotlight.intensity = 0;
             spotlight2.intensity = 5;
             Debug.Log("STEP5");
@@ -122,7 +123,7 @@ public class Incubator : MonoBehaviour {
         yield return new WaitForSeconds(3.2f);
         if (!puzzleOneDone) {
             signMr.material = notDone;
-            instructions.text = "NOW PRESS \"2\"-KEY TO TIMETRAVEL ONE YEAR AHEAD";
+            instructions.text = "NOW PRESS THE \"Y\"-KEY TO TIMETRAVEL ONE YEAR AHEAD";
             Invoke("SpotlightON", 2f);
             puzzleOneDone = true;
             puzzleFloor.SetActive(false);
@@ -176,6 +177,10 @@ public class Incubator : MonoBehaviour {
     }
     private void RemoveFloor() {
         puzzleFloor.SetActive(false);
+    }
+    public void StartSign()
+    {
+        sign.SetActive(true);
     }
 
 }
