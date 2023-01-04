@@ -35,7 +35,7 @@ public class ObjectiveHolder : MonoBehaviour
     //when triggered, update the questlog.
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             for (int i = 0; i < objectives.Count; i++)
                 objectives[i].AddObjective();

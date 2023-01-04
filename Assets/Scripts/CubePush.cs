@@ -10,7 +10,7 @@ using UnityEngine;
 public class CubePush : MonoBehaviour {
 
 	private Rigidbody rb;
-	[SerializeField] private float pushSpeed = 1.5f;
+	//[SerializeField] private float pushSpeed = 1.5f;
 	public static CubePush closestCube;
 	[SerializeField] private bool pushable;
 	private Transform _camera;
@@ -36,7 +36,7 @@ public class CubePush : MonoBehaviour {
 	{
 		if (!pushable) return;
 		direction.y = rb.velocity.y;
-		Vector3 velocity = direction * pushSpeed;
+		Vector3 velocity = direction;
 		desiredVelocity = velocity;
 		//RotateCube(velocity);
 		OnboardingHandler.CubeInteractionsDiscovered = true;
@@ -49,6 +49,7 @@ public class CubePush : MonoBehaviour {
 		desiredVelocity = Vector3.zero;
 	}
 
+	/*
 	private void RotateCube(Vector3 velocity) {
 		float magnitude = velocity.magnitude;
 
@@ -63,7 +64,8 @@ public class CubePush : MonoBehaviour {
 		rb.AddTorque(vectorDelta);
 		// cube.rotation = Quaternion.Slerp(current, desired, Time.deltaTime);
 	}
-
+	*/
+	
 	public void SetPushable(bool pushable) => this.pushable = pushable;
 
 	public bool Pushable() => pushable;
