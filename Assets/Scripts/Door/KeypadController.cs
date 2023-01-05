@@ -63,10 +63,13 @@ public class KeypadController : DeviceController
     private bool usingKeyboardDigits = true;
     */
     private Animator keyPadAnimator;
+    private NewRatCharacterController.NewRatCharacterController newRatCharacterController;
 
     private void Start()
     {
         keyPadAnimator = GetComponent<Animator>();
+
+        newRatCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
 
         trigger = gameObject.transform.GetComponentInParent<BoxCollider>();
 
@@ -117,6 +120,8 @@ public class KeypadController : DeviceController
                 device.TurnedOn(true);
             else
                 Debug.Log("Error: Missing device component");
+
+            newRatCharacterController.KeypadInteraction = false;
 
         }
         else
