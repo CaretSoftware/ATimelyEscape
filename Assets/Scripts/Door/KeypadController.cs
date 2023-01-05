@@ -17,6 +17,7 @@ public class KeypadController : DeviceController
 
     [Header("UI Components")]
     [SerializeField] private TextMeshProUGUI screen;
+    [SerializeField] private Collider trigger;
     //[SerializeField] private UnityEngine.UI.Button[] keypadKeys;
     //[SerializeField] private int keypadColumns = 3;
 
@@ -29,8 +30,6 @@ public class KeypadController : DeviceController
 
     [Header("Door to Open")]
     [SerializeField] private Door2 door;
-
-    private Collider trigger;
 
     /*
     private KeyCode[] keyCodes = {
@@ -71,7 +70,7 @@ public class KeypadController : DeviceController
 
         newRatCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
 
-        trigger = gameObject.transform.GetComponentInParent<BoxCollider>();
+        //trigger = gameObject.transform.GetComponentInParent<BoxCollider>();
 
         lockClosed.SetActive(true);
         lockOpen.SetActive(false);
