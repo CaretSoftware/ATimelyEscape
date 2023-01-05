@@ -6,16 +6,8 @@ using UnityEditor;
 
 public class TimezoneChangeEditor : EditorWindow
 {
-    /*public enum Timezone
-    {
-        past,
-        present,
-        future
-    }*/
-
     public static TimeTravelPeriod currentTimezone;
     public static bool editorIsEnabled;
-    private static Dictionary<GameObject, TimeTravelPeriod> ttosInScene;
 
     [MenuItem("Tools/EnableTimezoneOption")]
     public static void Enable()
@@ -72,11 +64,9 @@ public class TimezoneChangeEditor : EditorWindow
         EditorPrefs.SetInt("TimezoneChangeEditor_currentTimezone", currentTimezone);
     }
 
-
     private static void DuringSceneGUI(SceneView sceneview)
     {
         Handles.BeginGUI();
-
         EditorGUI.BeginChangeCheck();
         currentTimezone = (TimeTravelPeriod)EditorGUI.EnumPopup(new Rect(5, 10, 67, 15), currentTimezone);
         if (EditorGUI.EndChangeCheck())
@@ -87,69 +77,18 @@ public class TimezoneChangeEditor : EditorWindow
         Handles.EndGUI();
     }
 
-    /*private static void ChangeTimezone()
-    {
-        switch (currentTimezone)
-        {
-            case TimeTravelPeriod.Past:
-                Debug.Log("Changed to past");
-                break;
-            case TimeTravelPeriod.Present:
-                Debug.Log("Changed to present");
-                break;
-            case TimeTravelPeriod.Future:
-                Debug.Log("Changed to future");
-                break;
-        }
-    }*/
-
-
-    /*private static void InitializeTTOManagers()
-    {
-        TimeTravelObjectManager[] ttoManagers = FindObjectsOfType<TimeTravelObjectManager>();
-        for (var i = 0; i < ttoManagers.Length; ++i)
-        {
-            ttoManagers[i].Awake();
-        }
-    }*/
-
-    /*public static void ActivateTimezone()
-    {
-        ActivateObjectsByTimezone();
-
-        foreach (KeyValuePair<GameObject, TimeTravelPeriod> tto in ttosInScene)
-        {
-            if (currentTimezone == TimeTravelPeriod.Dummy)
-            {
-                tto.Key.SetActive(true);
-            }
-            else
-            {
-                if (tto.Value == currentTimezone)
-                {
-                    tto.Key.SetActive(true);
-                }
-                else
-                {
-                    tto.Key.SetActive(false);
-                }
-            }
-        }
-    }*/
-
-
     public static void ActivateObjectsByTimezone()
     {
         TimeTravelObjectManager[] timeTravelManagers = Resources.FindObjectsOfTypeAll<TimeTravelObjectManager>();
 
         if (timeTravelManagers.Length > 0)
-
+        {
             for (var i = 0; i < timeTravelManagers.Length; ++i)
             {
                 ActivateObjects(timeTravelManagers[i]);
             }
+        }
     }
-
 
     private static void ActivateObjects(TimeTravelObjectManager ttoManager)
     {
@@ -236,10 +175,4 @@ public class TimezoneChangeEditor : EditorWindow
         }
     }
 
-
-    public static void AddTTOToDictionary(GameObject go, TimeTravelPeriod timezone)
-    {
-        // implement
-        ttosInScene.Add(go, timezone);
-    }
 }
