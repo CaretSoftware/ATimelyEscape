@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NewRatCharacterController;
 
 public class KeypadHandler : MonoBehaviour
 {
     [SerializeField] private GameObject keypadUI;
 
+    private NewRatCharacterController.NewRatCharacterController newRatCharacterController;
     // Start is called before the first frame update
     void Start()
     {
+        newRatCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
         keypadUI = gameObject.transform.GetChild(0).gameObject;
     }
 
@@ -17,6 +18,8 @@ public class KeypadHandler : MonoBehaviour
     {
         //Cursor.visible = true;
         //Cursor.lockState = CursorLockMode.Confined;
+
+        newRatCharacterController.KeypadInteraction = true;
         keypadUI.GetComponent<Animator>().Play("Open");
         //CharacterInput.IsPaused(true);
     }
@@ -25,7 +28,7 @@ public class KeypadHandler : MonoBehaviour
     {
         //Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
-
+        newRatCharacterController.KeypadInteraction = false;
         keypadUI.GetComponent<Animator>().Play("Close");
         //CharacterInput.IsPaused(false);
     }
@@ -35,10 +38,12 @@ public class KeypadHandler : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
             OpenKeypad();
     }
+
+    /*
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
             CloseKeypad();
     }
-
+    */
 }
