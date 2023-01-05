@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using RatCharacterController;
+using NewRatCharacterController;
 
 public class KeypadHandler : MonoBehaviour
 {
@@ -15,27 +15,30 @@ public class KeypadHandler : MonoBehaviour
 
     public void OpenKeypad()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.Confined;
         keypadUI.GetComponent<Animator>().Play("Open");
-        CharacterInput.IsPaused(true);
+        //CharacterInput.IsPaused(true);
     }
 
     public void CloseKeypad()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+
         keypadUI.GetComponent<Animator>().Play("Close");
-        CharacterInput.IsPaused(false);
+        //CharacterInput.IsPaused(false);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        OpenKeypad();
+        if(other.gameObject.CompareTag("Player"))
+            OpenKeypad();
     }
     private void OnTriggerExit(Collider other)
     {
-        CloseKeypad();
+        if (other.gameObject.CompareTag("Player"))
+            CloseKeypad();
     }
 
 }
