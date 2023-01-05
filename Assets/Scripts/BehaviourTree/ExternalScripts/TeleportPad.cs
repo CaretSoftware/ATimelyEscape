@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public class TeleportPad : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class TeleportPad : MonoBehaviour
     private TravelPathScript cable;
     private TeleportPad linkedPad;
     private TeleportPad[] pads;
-    private MeshRenderer mr;
+    [FormerlySerializedAs("mr")] [SerializeField] private MeshRenderer lightIndicator;
     private NavMeshHit hit;
     [SerializeField ]private bool active;
 
@@ -22,8 +23,7 @@ public class TeleportPad : MonoBehaviour
         pads = transform.parent.GetComponentsInChildren<TeleportPad>();
         cable = transform.parent.GetComponentInChildren<TravelPathScript>();
         linkedPad = pads[0] != this ? pads[0] : pads[1];
-        mr = transform.GetChild(0).GetChild(0).GetComponent<MeshRenderer>();
-        mr.material = Resources.Load("TeleportMatGreen") as Material; //= new Material(Shader.Find("Unlit/Color"));
+        lightIndicator.material = Resources.Load("TeleportMatGreen") as Material; //= new Material(Shader.Find("Unlit/Color"));
         UpdateMaterial();
     }
 
@@ -49,7 +49,7 @@ public class TeleportPad : MonoBehaviour
 
     public IEnumerator CoolDownTimer()
     {
-        mr.material = Resources.Load("TeleportMatCyan") as Material;
+        lightIndicator.material = Resources.Load("TeleportMatCyan") as Material;
         synchronizeLinkedPad();
         yield return new WaitForSeconds(coolDownTime);
         UpdateMaterial();
@@ -59,7 +59,7 @@ public class TeleportPad : MonoBehaviour
 
     private void UpdateMaterial()
     {
-        mr.material = active ? 
+        lightIndicator.material = active ? 
             Resources.Load("TeleportMatGreen") as Material : 
             Resources.Load("TeleportMatRed") as Material;
         synchronizeLinkedPad();
@@ -67,9 +67,9 @@ public class TeleportPad : MonoBehaviour
 
     private void synchronizeLinkedPad()
     {
-        if (linkedPad.mr == null)
-            linkedPad.mr = mr;
-            linkedPad.mr.material = mr.material;
+        if (linkedPad.lightIndicator == null)
+            linkedPad.lightIndicator = lightIndicator;
+            linkedPad.lightIndicator.material = lightIndicator.material;
         //linkedPad.indicatorMaterial.color = indicatorMaterial.color;
         linkedPad.OnCooldown = OnCooldown;
     }
