@@ -90,7 +90,7 @@ public class NewIncubator : MonoBehaviour
             }
             if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && puzzleOneDone && !puzzleTwoDone)
             {
-                instructions.text = " Good.";
+                instructions.text = "Good.";
                 signMr.material = done;
                 Invoke("Step4", 3.5f);
                 //StartCoroutine(Delay());
@@ -98,7 +98,7 @@ public class NewIncubator : MonoBehaviour
             }
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
-                instructions.text = " Good.";
+                instructions.text = "Good.";
                 puzzleThreeDone = true;
                 signMr.material = done;
                 Invoke("Step5", 2f);
@@ -127,7 +127,7 @@ public class NewIncubator : MonoBehaviour
     private void Step2()
     {
         signMr.material = notDone;
-        instructions.text = " Push the cube to change its position in both this time and the future. ";
+        instructions.text = "Push the cube to change its position in both this time and the future.";
         puzzleFloor.SetActive(false);
         bigHatchAnim.SetBool("Open", false);
         Debug.Log("STEP2");
@@ -141,7 +141,7 @@ public class NewIncubator : MonoBehaviour
     private void Step4()
     {
         signMr.material = notDone;
-        instructions.text = " Now push the cube again.";
+        instructions.text = "Now push the cube again.";
         Debug.Log("STEP4");
         Invoke("Step4AndHalf", 4f);
     }
