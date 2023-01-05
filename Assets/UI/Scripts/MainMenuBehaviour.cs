@@ -49,7 +49,7 @@ public class MainMenuBehaviour : MonoBehaviour
         }
         else
         {
-            startMenyAnimator.Play("Outro");
+            startMenyAnimator.Play("PlayGame");
             //StartCoroutine(LoadSceneAsync(sceneIndex)); It is activated in Animation StartMenuOutro
         }
     }
