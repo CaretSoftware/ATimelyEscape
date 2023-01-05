@@ -264,6 +264,41 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 654c304990f2040499d477608b0a0276, type: 3}
+--- !u!114 &190160630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03d03218291443188389da726693c34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBrushMenuExpanded: 1
+  brushSize: 0.1
+  brushFalloff: 0.05
+  brushOpacity: 0.5
+  brushFalloffPercentOfBrushSize: 0.5
+  isNormalIgnored: 0
+  isSelectionLocked: 0
+  isMirrorMode: 0
+  mirrorAxisTab: 0
+  type: 8
+  painterMagnitudeIntensity: 0.217
+  clumpMaskIntensity: 0
+  maskErase: 1
+  isClumpTwistSelected: 0
+  twistAmount: 1
+  twistSpread: 0.3
+  overrideColor: {r: 0, g: 0, b: 0, a: 1}
+  overrideIntensity: 1
+  resetWidthAmount: 0.5
+  resetLengthAmount: 0.5
+  resetBendAmount: 0.5
+  resetOrientAmount: 0.5
+  isGroomAllLayerAtOnce: 0
 --- !u!1001 &307345796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -374,7 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c97deca26315f141ad26d3a37fbb8dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startRoom: 10
+  startRoom: 6
 --- !u!4 &352095361
 Transform:
   m_ObjectHideFlags: 0
@@ -678,6 +713,358 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3398390766729623960, guid: 654c304990f2040499d477608b0a0276, type: 3}
   m_PrefabInstance: {fileID: 435593690}
   m_PrefabAsset: {fileID: 0}
+--- !u!21 &527232239
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: URPDefaultFurStrands(Clone)
+  m_Shader: {fileID: 4800000, guid: 7c7b470c60314422fa1c95c12b60523b, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _DISABLE_SSR_TRANSPARENT
+  - _DOUBLESIDED_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    MotionVector: User
+  disabledShaderPasses:
+  - RayTracingPrepass
+  - MOTIONVECTORS
+  - TransparentDepthPrepass
+  - TransparentDepthPostpass
+  - TransparentBackface
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - ColorTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Normal:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_189C8E90:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_6C0DA6CC:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_6EBEE4B7:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_9D58E1D1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_D1322537:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_e737b3af75b4467094ba52daa14dbc3a:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AnisotropyMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BaseColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BentNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BentNormalMapOS:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CoatMaskMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortionVectorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissiveColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _IridescenceMaskMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _IridescenceThicknessMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainColorTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: ba602c7cbf6016849a4f7ed2e55f0e3a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMapOS:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecularColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SubsurfaceMaskMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TangentMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TangentMapOS:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ThicknessMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TransmittanceColorMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - Ambient_Light_Contribution: 0.547
+    - Boolean_F987B642: 0
+    - Distortion: 3.01
+    - Higlight_Range_End: 1
+    - Higlight_Range_Start: 0.9
+    - Power: 1.6
+    - Randomize_Strand_Normal: 0
+    - Scale: 2.79
+    - Secondary_Smoothness: 0.506
+    - Shadow_Range_End: 0.1
+    - Shadow_Range_Start: 0
+    - Smoothness1: 0.782
+    - Strand_Nomal_Randomness: 0.173
+    - Vector1_53EF6B78: 0.8
+    - Vector1_7D9AC3D3: 0.13
+    - Vector1_901E5FC2: 1
+    - Vector1_BA97981F: 0
+    - _AORemapMax: 1
+    - _AORemapMin: 0
+    - _ATDistance: 1
+    - _AddPrecomputedVelocity: 0
+    - _AlbedoAffectEmissive: 0
+    - _AlphaCutoff: 0
+    - _AlphaCutoffEnable: 0
+    - _AlphaCutoffPostpass: 0.2
+    - _AlphaCutoffPrepass: 0
+    - _AlphaCutoffShadow: 0.5
+    - _AlphaCutoffShadows: 0
+    - _AlphaDstBlend: 0
+    - _AlphaSrcBlend: 1
+    - _AlphaToMask: 0
+    - _AlphaToMaskInspectorValue: 0
+    - _AmbientLightIntensity: 1
+    - _AmbientLightIntensity1: 1
+    - _Anisotropy: 0
+    - _BlendMode: 0
+    - _CoatMask: 0
+    - _CullMode: 0
+    - _CullModeForward: 0
+    - _Cutoff: 0
+    - _DepthOffsetEnable: 0
+    - _DetailAlbedoScale: 1
+    - _DetailNormalScale: 1
+    - _DetailSmoothnessScale: 1
+    - _DiffusionProfile: 0
+    - _DiffusionProfileHash: 0
+    - _DisplacementLockObjectScale: 1
+    - _DisplacementLockTilingScale: 1
+    - _DisplacementMode: 0
+    - _DistortionBlendMode: 0
+    - _DistortionBlurBlendMode: 0
+    - _DistortionBlurDstBlend: 1
+    - _DistortionBlurRemapMax: 1
+    - _DistortionBlurRemapMin: 0
+    - _DistortionBlurScale: 1
+    - _DistortionBlurSrcBlend: 1
+    - _DistortionDepthTest: 1
+    - _DistortionDstBlend: 1
+    - _DistortionEnable: 0
+    - _DistortionScale: 1
+    - _DistortionSrcBlend: 1
+    - _DistortionVectorBias: -1
+    - _DistortionVectorScale: 2
+    - _DoubleSidedEnable: 1
+    - _DoubleSidedNormalMode: 2
+    - _DstBlend: 0
+    - _EmissiveColorMode: 1
+    - _EmissiveExposureWeight: 1
+    - _EmissiveIntensity: 1
+    - _EmissiveIntensityUnit: 0
+    - _EnableBlendModePreserveSpecularLighting: 1
+    - _EnableFogOnTransparent: 1
+    - _EnableGeometricSpecularAA: 0
+    - _EnergyConservingSpecularColor: 1
+    - _HeightAmplitude: 0.02
+    - _HeightCenter: 0.5
+    - _HeightMapParametrization: 0
+    - _HeightMax: 1
+    - _HeightMin: -1
+    - _HeightOffset: 0
+    - _HeightPoMAmplitude: 2
+    - _HeightTessAmplitude: 2
+    - _HeightTessCenter: 0.5
+    - _Intensity: 0
+    - _InvTilingScale: 1
+    - _Ior: 1.5
+    - _IridescenceMask: 1
+    - _IridescenceThickness: 1
+    - _LinkDetailsWithBase: 1
+    - _MaterialID: 1
+    - _MaxPainterColorOverride: 1
+    - _Metallic: 0
+    - _MetallicRemapMax: 1
+    - _MetallicRemapMin: 0
+    - _NormalMapSpace: 0
+    - _NormalScale: 1.56
+    - _OpaqueCullMode: 2
+    - _PPDLodThreshold: 5
+    - _PPDMaxSamples: 15
+    - _PPDMinSamples: 5
+    - _PPDPrimitiveLength: 1
+    - _PPDPrimitiveWidth: 1
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    - _RayTracing: 0
+    - _ReceivesSSR: 1
+    - _ReceivesSSRTransparent: 0
+    - _RefractionModel: 0
+    - _RenderQueueType: 1
+    - _RequireSplitLighting: 0
+    - _SecondarySmoothness: 0.541
+    - _SecondarySpecularIntensity: 0.98
+    - _SecondarySpecularMultiplier: 0.5
+    - _SecondarySpecularShift: -0.139
+    - _Smoothness: 0.819
+    - _Smoothness1: 0
+    - _SmoothnessRemapMax: 1
+    - _SmoothnessRemapMin: 0.394
+    - _SpecIntensity1: 1.151
+    - _SpecIntensity1_1: 2
+    - _SpecularAAScreenSpaceVariance: 0.1
+    - _SpecularAAThreshold: 0.2
+    - _SpecularMultiplier: 0.5
+    - _SpecularOcclusionMode: 1
+    - _SpecularShift: 0.125
+    - _SpeculatInensity: 0.122
+    - _SrcBlend: 1
+    - _StencilRef: 0
+    - _StencilRefDepth: 8
+    - _StencilRefDistortionVec: 4
+    - _StencilRefGBuffer: 10
+    - _StencilRefMV: 40
+    - _StencilWriteMask: 6
+    - _StencilWriteMaskDepth: 8
+    - _StencilWriteMaskDistortionVec: 4
+    - _StencilWriteMaskGBuffer: 14
+    - _StencilWriteMaskMV: 40
+    - _SubsurfaceMask: 1
+    - _SupportDecals: 1
+    - _SurfaceType: 0
+    - _TexWorldScale: 1
+    - _TexWorldScaleEmissive: 1
+    - _Thickness: 1
+    - _TransmissionEnable: 1
+    - _TransparentBackfaceEnable: 0
+    - _TransparentCullMode: 2
+    - _TransparentDepthPostpassEnable: 0
+    - _TransparentDepthPrepassEnable: 0
+    - _TransparentSortPriority: 0
+    - _TransparentWritingMotionVec: 0
+    - _TransparentZWrite: 0
+    - _UVBase: 0
+    - _UVDetail: 0
+    - _UVEmissive: 0
+    - _UseEmissiveIntensity: 0
+    - _UseShadowThreshold: 0
+    - _ZTestDepthEqualForOpaque: 3
+    - _ZTestGBuffer: 4
+    - _ZTestModeDistortion: 4
+    - _ZTestTransparent: 4
+    - _ZWrite: 1
+    m_Colors:
+    - Color_275365AA: {r: 0.1886792, g: 0.05553227, b: 0.0367865, a: 0}
+    - Color_6FC6C3A4: {r: 0.2830189, g: 0.19984618, b: 0.16998932, a: 1}
+    - Color_6ab4f73700d64987ac15e63eedeb7e5a: {r: 1, g: 1, b: 1, a: 1}
+    - Color_D654D5FD: {r: 0.7830189, g: 0.2527985, b: 0.1748249, a: 0}
+    - Color_DCB138E9: {r: 0.08490568, g: 0.02252376, b: 0.01334994, a: 0}
+    - SubsurfaceColor: {r: 0.9716981, g: 0.8510802, b: 0.6661326, a: 1}
+    - _BackLightingColor: {r: 0.972549, g: 0.74233764, b: 0.6666667, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 0.59607846, g: 0.4392157, b: 0.2901961, a: 1}
+    - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
+    - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissiveColorLDR: {r: 0, g: 0, b: 0, a: 1}
+    - _InvPrimScale: {r: 1, g: 1, b: 0, a: 0}
+    - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
+    - _MainColor: {r: 0.27358475, g: 0.21227434, b: 0.13292086, a: 0.54509807}
+    - _SpecularColor: {r: 1, g: 0.866791, b: 0.85534585, a: 1}
+    - _SpecularColor1: {r: 1, g: 0.8003144, b: 0.60062885, a: 1}
+    - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
+    - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
+    - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
+    - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
+    - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
+    - _uvBaseMask: {r: 1, g: 0, b: 0, a: 0}
+    - _uvBaseST: {r: 1, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
 --- !u!20 &610798635 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 8473738343553818663, guid: 5d368fa7e29b97648933bc154c9e0918, type: 3}
@@ -694,6 +1081,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &725983838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2522656960160410690, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &790899986
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,6 +1154,99 @@ MonoBehaviour:
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
   m_ForceModuleActive: 0
+--- !u!4 &1017808358 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1023419028349994181, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1111057397 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6589762666823174373, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1111057399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111057397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 301a92326dc4a094a9b1328d98a6b82d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lodCamera: {fileID: 0}
+  material: {fileID: 527232239}
+  drawWindContribution: 0
+  computeShader: {fileID: 1582968252}
+  furContainer: {fileID: 11400000, guid: 5b7b87361361f054a98d484422445cf3, type: 2}
+  furRendererSettings:
+    sourceMeshNormalToStrandNormalPercent: 0
+    isAlphaSortingEnabled: 0
+    isFrustumCullingEnabled: 0
+    isOcclusionCullingEnabled: 0
+    enableLod: 1
+    enableLodInEditMode: 0
+    windProperties:
+      gustFrequency: 0.2
+      windStrength: 0.002
+      windDirectionDegree: 90
+      windTex: {fileID: 2800000, guid: d45c82fb1b5ac084eb8267d9dcedbe46, type: 3}
+    verletSimulationSettings:
+      enableMovement: 1
+      constraintIterations: 5
+      gravity: {x: 0, y: -0.008, z: 0}
+      drag: 0.03
+      stiffnessRoot: 10
+      stiffnessTip: 2
+      collideWithSourceMesh: 0
+      colliderSkinWidth: 0.01
+      sdfColliderResolution: 15
+      gridAllocationMultiplier: 1
+      extraPaddingInCells: 0.9
+      useForwardCollision: 1
+      isFirstNodeFixed: 0
+      keepShapeStrength: 0
+      isUnsupportedSDFPlatform: 0
+    runPhysicsInFixedUpdate: 0
+    perLayerMotionSettings: 0
+    perLayerNormals: 0
+  motionVectors: 1
+  headerExpanded:
+    isMainExpanded: 1
+    isMovementExpanded: 1
+    isNormalExpanded: 0
+    isStrandShapeExpanded: 0
+    isWindExpanded: 0
+    isColliderExpanded: 0
+    isLodExpanded: 0
+  instanceID: 34454
+  materialPostfix: Strands
+  isHdrp: 0
+  isUrp: 1
+  activeLodCameraName: SceneCamera
+  activeLodName: LOD 1
+  sphereColliders: []
+  capsuleColliders: []
+  sdfColliders: []
+--- !u!114 &1111057400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111057397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b4b82c07a7cd844af1c8810ebde715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groomContainer: {fileID: 11400000, guid: 7080b332210e7444ab722a2894d6870c, type: 2}
+  undoRecorder:
+    undoIndex: 26
+  painterProperties: {fileID: 190160630}
+  needsUpdate: 0
 --- !u!1001 &1137618446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1225,6 +1710,1501 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 856553742c6df4e4fb44af835c73f880, type: 3}
+--- !u!1 &1501540956 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 940613371533887807, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1501540959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501540956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9ac8d30c6a0d9642a11e5be4c440740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Root: {fileID: 1831612760}
+  m_Roots: []
+  m_UpdateRate: 60
+  m_UpdateMode: 3
+  m_Damping: 0.2
+  m_DampingDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Elasticity: 0.06
+  m_ElasticityDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Stiffness: 0.06
+  m_StiffnessDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Inert: 0.2
+  m_InertDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Friction: 0
+  m_FrictionDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Radius: 0
+  m_RadiusDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_EndLength: 0
+  m_EndOffset: {x: 0, y: 0, z: 0}
+  m_Gravity: {x: 0, y: 0, z: 0}
+  m_Force: {x: 0, y: 0, z: 0}
+  m_BlendWeight: 1
+  m_Colliders: []
+  m_Exclusions: []
+  m_FreezeAxis: 0
+  m_DistantDisable: 0
+  m_ReferenceObject: {fileID: 0}
+  m_DistanceToObject: 20
+  m_Multithread: 1
+--- !u!114 &1501540960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501540956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9ac8d30c6a0d9642a11e5be4c440740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Root: {fileID: 725983838}
+  m_Roots: []
+  m_UpdateRate: 60
+  m_UpdateMode: 3
+  m_Damping: 0.2
+  m_DampingDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Elasticity: 0.08
+  m_ElasticityDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Stiffness: 0.08
+  m_StiffnessDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Inert: 0
+  m_InertDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Friction: 0
+  m_FrictionDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Radius: 0
+  m_RadiusDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_EndLength: 0
+  m_EndOffset: {x: 0, y: 0, z: 0}
+  m_Gravity: {x: 0, y: 0, z: 0}
+  m_Force: {x: 0, y: 0, z: 0}
+  m_BlendWeight: 1
+  m_Colliders: []
+  m_Exclusions: []
+  m_FreezeAxis: 0
+  m_DistantDisable: 0
+  m_ReferenceObject: {fileID: 0}
+  m_DistanceToObject: 20
+  m_Multithread: 1
+--- !u!114 &1501540961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501540956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9ac8d30c6a0d9642a11e5be4c440740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Root: {fileID: 1017808358}
+  m_Roots: []
+  m_UpdateRate: 60
+  m_UpdateMode: 3
+  m_Damping: 0.2
+  m_DampingDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Elasticity: 0.08
+  m_ElasticityDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Stiffness: 0.08
+  m_StiffnessDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Inert: 0
+  m_InertDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Friction: 0
+  m_FrictionDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Radius: 0
+  m_RadiusDistrib:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_EndLength: 0
+  m_EndOffset: {x: 0, y: 0, z: 0}
+  m_Gravity: {x: 0, y: 0, z: 0}
+  m_Force: {x: 0, y: 0, z: 0}
+  m_BlendWeight: 1
+  m_Colliders: []
+  m_Exclusions: []
+  m_FreezeAxis: 0
+  m_DistantDisable: 0
+  m_ReferenceObject: {fileID: 0}
+  m_DistanceToObject: 20
+  m_Multithread: 1
+--- !u!72 &1582968252
+ComputeShader:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ProceduralFurSetup(Clone)
+  variants:
+  - serializedVersion: 2
+    targetRenderer: 2
+    targetLevel: 0
+    kernels:
+    - serializedVersion: 2
+      name: UpdateFurMeshKernel
+      variantMap:
+        HAS_CLUMPS HAS_COLLIDERS IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          isCompiled: 0
+        HAS_COLLIDERS VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        INIT_VERLET:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - INIT_VERLET
+          isCompiled: 0
+        HAS_CLUMPS INIT_VERLET IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        INIT_VERLET IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          isCompiled: 0
+        HAS_COLLIDERS:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          isCompiled: 0
+        HAS_CLUMPS INIT_VERLET VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - INIT_VERLET
+          - VERLET_ENABLED
+          isCompiled: 0
+        :
+          serializedVersion: 2
+          cbVariantIndices: 00000000
+          cbs:
+          - name: $Globals
+            generatedName: 
+            bindPoint: 0
+            samplerBindPoint: -1
+            texDimension: -1
+          textures: []
+          builtinSamplers: []
+          inBuffers:
+          - name: hairStrandsBuffer
+            generatedName: 
+            bindPoint: 0
+            samplerBindPoint: -1
+            texDimension: -1
+          - name: sourceMesh
+            generatedName: 
+            bindPoint: 1
+            samplerBindPoint: -1
+            texDimension: -1
+          - name: cardMesh
+            generatedName: 
+            bindPoint: 2
+            samplerBindPoint: -1
+            texDimension: -1
+          outBuffers:
+          - name: furMeshBuffer
+            generatedName: 
+            bindPoint: 0
+            samplerBindPoint: -1
+            texDimension: -1
+          code: 44584243a91b64453baa986ca8cfe5b8bc2a0b7401000000241d0000030000002c0000003c0000004c0000004953474e0800000000000000080000004f53474e08000000000000000800000053484558d01c000050000500340700006a08000159000004468e2000000000000d000000a20000040070100000000000e4000000a2000004007010000100000028000000a20000040070100002000000400000009d00000300e01100000000005f0000021200020068000002190000009b0000040001000001000000010000002100000712001000000000000a0002003a802000000000000c0000001f0004030a001000000000003e000001150000014e000008120010000000000000d000000a0002000a802000000000000b0000005600000582001000000000000a001000000000001b00000512001000010000003a001000000000002300000a22001000010000000a00108041000000010000000a802000000000000b0000000a0002001e00000742001000010000000a0002001a802000000000000b000000a700008b020302808399190072001000020000001a0010000100000001400000000000004672100002000000a700008b020302808399190082001000010000001a0010000100000001400000280000000670100002000000a700008b020302808399190032001000030000001a0010000100000001400000380000004670100002000000a700008b022307808399190012001000040000000a0010000100000001400000000000000670100000000000a700008b0223078083991900f2001000050000000a001000010000000140000008000000467e100000000000a700008b022307808399190032001000060000000a0010000100000001400000180000004670100000000000a700008b0223078083991900f2001000070000000a001000010000000140000020000000467e100000000000a700008b0223078083991900f2001000080000000a001000010000000140000030000000467e100000000000a700008b022307808399190072001000090000000a0010000100000001400000500000004672100000000000a700008b0223078083991900720010000a0000000a0010000100000001400000600000004672100000000000a700008b0223078083991900720010000b0000000a0010000100000001400000700000004672100000000000a700008b0223078083991900b20010000c0000000a0010000100000001400000800000004678100000000000a700008b0223078083991900f20010000d0000000a001000010000000140000090000000467e100000000000a700008b0223078083991900f20010000e0000000a0010000100000001400000a0000000467e100000000000a700008b0223078083991900c2001000030000000a0010000100000001400000b00000000674100000000000a700008b022307808399190022001000010000000a0010000100000001400000c40000000670100000000000a700008b022307808399190042001000040000000a0010000100000001400000cc0000000670100000000000a700008b0223078083991900f20010000f0000000a0010000100000001400000d4000000467e1000000000001b000005720010000e000000460210000e000000a700008b0243018083991900f2001000100000000a0010000e00000001400000000000003679100001000000a700008b0243018083991900f2001000110000000a0010000e0000000140000010000000467e100001000000a700008b024301808399190032001000120000000a0010000e00000001400000200000004670100001000000a700008b0243018083991900f2001000130000001a0010000e00000001400000000000003679100001000000a700008b0243018083991900f2001000140000001a0010000e0000000140000010000000467e100001000000a700008b024301808399190032001000150000001a0010000e00000001400000200000004670100001000000a700008b0243018083991900f2001000160000002a0010000e00000001400000000000003679100001000000a700008b0243018083991900f2001000170000002a0010000e0000000140000010000000467e100001000000a700008b024301808399190032001000180000002a0010000e0000000140000020000000467010000100000038000007720010000e000000a60a100003000000960710001300000032000009720010000e0000009607100010000000f60f10000e000000460210000e00000032000009720010000e0000009607100016000000f60f100003000000460210000e00000036000005620010001000000006011000110000003600000562001000130000000601100014000000380000077200100013000000a60a10000300000046021000130000003200000972001000100000004602100010000000f60f10000e000000460210001300000036000005620010001600000006011000170000003200000972001000100000004602100016000000f60f100003000000460210001000000036000005c200100012000000a60e10001100000036000005c200100015000000a60e10001400000038000007f200100011000000a60a100003000000e60410001500000032000009f200100011000000e604100012000000f60f10000e000000460e10001100000036000005c200100018000000a60e10001700000032000009f200100011000000e604100018000000f60f100003000000460e100011000000100000071200100001000000460210001000000046021000100000004400000512001000010000000a0010000100000038000007720010001200000006001000010000004602100010000000100000071200100001000000460210001100000046021000110000004400000512001000010000000a0010000100000038000007720010001300000006001000010000002609100011000000380000077200100014000000460210001200000046021000130000003200000a720010001200000026091000120000009604100013000000460210804100000014000000100000074200100003000000460210001200000046021000120000004400000542001000030000002a00100003000000380000077200100014000000a60a1000030000004602100012000000380000077200100015000000460210001300000046021000140000003200000a72001000150000002609100013000000960410001400000046021080410000001500000032000009c200100013000000a602100012000000a60a10000300000056011000150000003200000982001000030000002a001000110000000a001000010000002a0010001300000031000007820010000400000001400000000000003a001000030000000000000782001000030000003a00100003000000014000000000803f4b00000582001000030000003a001000030000003800000782001000160000003a00100003000000014000000000003f0e0000078200100003000000014000000000003f3a001000030000003200000a82001000090000001a00108041000000110000000a001000010000002a001000150000003800000712001000160000003a001000030000003a001000090000003200000a820010000a0000000a001000110000000a001000010000001a00108041000000140000003800000722001000160000003a001000030000003a0010000a0000003200000a820010000b0000000a001000120000002a001000030000000a00108041000000150000003800000742001000160000003a001000030000003a0010000b0000001d00000782001000030000002a001000140000001a001000150000001d000007820010000e0000002a001000140000000a001000130000000100000782001000030000003a001000030000003a0010000e00000032000009820010000e0000002a001000120000002a00100003000000014000000000803f00000008820010000e0000001a00108041000000150000003a0010000e0000003200000a820010000e0000002a00108041000000110000000a001000010000003a0010000e0000004b000005820010000e0000003a0010000e0000000e0000078200100010000000014000000000003f3a0010000e0000003800000712001000140000003a0010000e000000014000000000003f3800000722001000140000003a001000100000003a0010001300000032000009820010000e0000001a001000120000002a001000030000001a001000130000003800000742001000140000003a001000100000003a0010000e0000003800000782001000140000003a001000090000003a001000100000003100000782001000090000000a001000130000001a001000150000000000000782001000100000001a00100015000000014000000000803f3200000a82001000100000002a00108041000000120000002a001000030000003a001000100000003200000a82001000100000002a00108041000000110000000a001000010000003a001000100000004b00000582001000100000003a001000100000000e0000071200100012000000014000000000003f3a001000100000003800000712001000130000000a001000120000003a001000130000003800000722001000130000003a00100010000000014000000000003f3200000982001000100000001a001000110000000a001000010000002a001000150000003800000742001000130000000a001000120000003a001000100000003800000782001000130000003a0010000a0000000a001000120000003200000912001000010000002a001000110000000a00100001000000014000000000803f3200000a12001000010000002a00108041000000120000002a001000030000000a001000010000000000000812001000010000001a00108041000000150000000a001000010000004b00000512001000010000000a001000010000000e0000074200100003000000014000000000003f0a001000010000003800000712001000120000002a001000030000003a0010000e0000003800000722001000120000002a001000030000003a001000100000003800000742001000120000000a00100001000000014000000000003f3800000782001000120000002a001000030000003a0010000b00000037000009f200100012000000f60f100009000000460e100013000000460e10001200000037000009f200100012000000f60f100003000000460e100014000000460e10001200000037000009f200100012000000f60f100004000000460e100016000000460e10001200000000000007f200100013000000a604100012000000a60410001200000038000007c2001000030000000604100012000000a60e10001300000038000007f200100014000000960f100012000000460e1000130000003800000712001000010000003a001000120000001a001000130000003200000972001000150000001604100012000000760e100013000000d6051000140000003200000a22001000160000000a001000120000003a001000130000000a00108041000000010000003200000912001000170000000a001000120000003a001000130000000a001000010000000000000842001000170000002a0010804100000015000000014000000000803f3200000a82001000170000001a001000120000000a001000130000002a00108041000000140000003200000a12001000120000000a001000120000001a001000130000003a00108041000000140000000000000722001000120000002a001000140000000a001000140000000000000712001000010000003a001000030000002a001000030000000000000842001000120000000a0010804100000001000000014000000000803f3800000842001000020000002a001000020000002a802000000000000b000000360000058200100002000000014000000000803f36000005c200100006000000a60e100005000000110000071200100006000000e604100002000000460e100006000000110000072200100006000000460e100002000000460e100007000000110000074200100006000000460e100002000000460e1000080000003800000722001000020000002a00100004000000014000000000803e3800000712001000010000003a001000010000001a001000010000003800000712001000010000000a001000010000000140000020a504424d000007120010000100000012001000070000000a001000010000000000000822001000010000000a0010804100000007000000014000000000803f360000051200100002000000014000000000803f0f0000074200100002000000460010000200000046001000020000004400000542001000020000002a00100002000000380000073200100002000000a60a10000200000046001000020000003800000742001000020000001a001000010000001a001000020000003800000742001000080000000a001000020000002a001000020000003200000912001000080000002a001000020000001a001000020000000a001000070000003800000742001000020000000a001000020000000a001000020000003200000912001000130000002a001000020000001a001000010000000a00100007000000380000073200100002000000060010000100000046001000020000003600000622001000130000001a00108041000000020000003600000582001000080000000a00100002000000100000071200100014000000860310000800000046021000060000003600000582001000130000002a00100008000000100000072200100014000000360d10001300000046021000060000003600000642001000020000000a00108041000000020000003600000582001000020000000a00100007000000100000074200100014000000660b10000200000046021000060000003800000712001000010000003a001000010000001a001000050000003800000712001000010000000a0010000100000001400000db0fc93f4d000007120010000100000012001000020000000a001000010000000000000822001000010000000a0010804100000002000000014000000000803f3600000522001000040000000a001000050000000f0000078200100001000000460010000400000046001000040000004400000582001000010000003a00100001000000380000076200100002000000f60f10000100000006011000040000003800000782001000010000001a001000020000001a001000020000003200000912001000040000003a001000010000001a001000010000000a001000020000003800000732001000050000000600100001000000660a1000020000003800000712001000010000001a001000010000002a001000020000003600000622001000040000000a00108041000000050000003800000782001000040000001a001000020000000a001000010000003200000942001000060000000a001000010000002a001000020000000a00100002000000100000071200100007000000460310000400000046021000140000003600000542001000050000000a001000020000003600000682001000050000001a0010804100000005000000100000072200100007000000860310000500000046021000140000003600000512001000060000003a001000040000003600000522001000060000001a00100005000000100000074200100007000000460210000600000046021000140000003600000512001000020000000a001000090000003600000522001000020000000a0010000a0000003600000542001000020000000a0010000b0000003600000582001000020000000a0010000c000000360000058200100007000000014000000000803f110000071200100002000000460e100002000000460e1000070000003600000512001000040000001a001000090000003600000522001000040000001a0010000a0000003600000542001000040000001a0010000b0000003600000582001000040000001a0010000c000000110000072200100002000000460e100004000000460e10000700000036000005120010000c0000002a0010000900000036000005220010000c0000002a0010000a00000036000005420010000c0000002a0010000b000000110000074200100002000000460e10000c000000460e1000070000003200000f5200100016000000060110001500000002400000000080bf000000000000803f00000000024000000000803f00000000000000000000000010000007120010000400000046021000160000004602100002000000100000072200100004000000860310001700000046021000020000001000000742001000040000004602100012000000460210000200000000000007b200100001000000460810000e000000460810000400000038000008720010000200000056051000010000004682200000000000060000003200000a7200100002000000468220000000000005000000060010000100000046021000020000003200000ab200100001000000468820000000000007000000f60f100001000000460810000200000000000008b200100001000000460c1000010000004688200000000000080000002600000900d0000012001000020000002a001000010000000a8020000000000000000000a5000089c20200808399190072001000000000000a0010000200000046e21100000000000100000722001000020000002a0010000100000001400000010000001f0000031a0010000200000038000008e20010000200000056051000100000000689200000000000020000003200000ae2001000020000000689200000000000010000000600100010000000560e1000020000003200000ae200100002000000068920000000000003000000a60a100010000000560e10000200000000000008e200100002000000560e1000020000000689200000000000040000001e00000ac200100003000000a60a10000100000002400000000000000000000002000000010000002600000900d0000042001000030000002a001000030000000a8020000000000000000000a5000089c20200808399190072001000040000002a0010000300000046e2110000000000000000087200100004000000d604108041000000010000009604100004000000100000074200100003000000460210000400000046021000040000004400000542001000030000002a00100003000000380000077200100004000000a60a10000300000046021000040000003800000a7200100005000000460210000400000002400000000000000000803f00000000000000003200000d72001000050000002609100004000000024000000000803f0000000000000000000000004602108041000000050000000f0000074200100003000000460010000500000046001000050000004400000542001000030000002a00100003000000380000077200100005000000a60a1000030000004602100005000000380000077200100006000000460210000400000046021000050000003200000a72001000040000002609100005000000960410000400000046021080410000000600000000000008720010000400000096071080410000000200000046021000040000003200000ae2001000020000005685200000000000000000000609100004000000560e1000020000002300000a42001000030000002a001000010000000a8020000000000000000000014000000c000000a600000772e01100000000002a0010000300000096071000020000002300000a42001000030000003a001000030000000a8020000000000000000000014000000c000000a600000772e01100000000002a00100003000000960710000200000015000001a600000772e01100000000000a0010000200000046031000010000002300000df200100001000000a60a1000010000000680200000000000000000000240000018000000280000003800000048000000a6000007f2e01100000000000a00100001000000460e100011000000a6000007f2e01100000000001a00100001000000460e10000f00000000000007c20010000d0000000604100003000000a60e10000d000000a6000007f2e01100000000002a00100001000000460e10000d000000a6000007f2e01100000000003a00100001000000460e1000000000003e000001
+          threadGroupSize: 000100000100000001000000
+          requirements: 16385
+          keywords: []
+          isCompiled: 1
+        HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS INIT_VERLET:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - INIT_VERLET
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - VERLET_ENABLED
+          isCompiled: 0
+        IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_COLLIDERS IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        INIT_VERLET VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - INIT_VERLET
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_COLLIDERS INIT_VERLET:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_CLUMPS IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_COLLIDERS INIT_VERLET VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          isCompiled: 0
+        HAS_CLUMPS VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_COLLIDERS IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - VERLET_ENABLED
+          isCompiled: 0
+      globalKeywords:
+      - HAS_COLLIDERS
+      - VERLET_ENABLED
+      - INIT_VERLET
+      - HAS_CLUMPS
+      - IS_CHILD_CLUMP
+      localKeywords: []
+    - serializedVersion: 2
+      name: UpdateClumpsPositionKernel
+      variantMap:
+        HAS_CLUMPS HAS_COLLIDERS IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          isCompiled: 0
+        HAS_COLLIDERS VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        INIT_VERLET:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - INIT_VERLET
+          isCompiled: 0
+        HAS_CLUMPS INIT_VERLET IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        INIT_VERLET IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          isCompiled: 0
+        HAS_COLLIDERS:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          isCompiled: 0
+        HAS_CLUMPS INIT_VERLET VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - INIT_VERLET
+          - VERLET_ENABLED
+          isCompiled: 0
+        :
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords: []
+          isCompiled: 0
+        HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS INIT_VERLET:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - INIT_VERLET
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - VERLET_ENABLED
+          isCompiled: 0
+        IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_COLLIDERS IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        INIT_VERLET VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - INIT_VERLET
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_COLLIDERS INIT_VERLET:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_CLUMPS IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - IS_CHILD_CLUMP
+          isCompiled: 0
+        HAS_COLLIDERS INIT_VERLET VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - HAS_COLLIDERS
+          - INIT_VERLET
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_CLUMPS:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          isCompiled: 0
+        HAS_CLUMPS VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_CLUMPS
+          - VERLET_ENABLED
+          isCompiled: 0
+        HAS_COLLIDERS IS_CHILD_CLUMP VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - HAS_COLLIDERS
+          - IS_CHILD_CLUMP
+          - VERLET_ENABLED
+          isCompiled: 0
+        VERLET_ENABLED:
+          serializedVersion: 2
+          cbVariantIndices: 
+          cbs: []
+          textures: []
+          builtinSamplers: []
+          inBuffers: []
+          outBuffers: []
+          code: 
+          threadGroupSize: 000000000000000000000000
+          requirements: 16385
+          keywords:
+          - VERLET_ENABLED
+          isCompiled: 0
+      globalKeywords:
+      - HAS_COLLIDERS
+      - VERLET_ENABLED
+      - INIT_VERLET
+      - HAS_CLUMPS
+      - IS_CHILD_CLUMP
+      localKeywords: []
+    constantBuffers:
+    - name: $Globals
+      byteSize: 224
+      params:
+      - name: furMeshBufferStride
+        type: 5
+        offset: 0
+        arraySize: 0
+        rowCount: 1
+        colCount: 1
+      - name: sourceMeshNormalToStrandNormalPercent
+        type: 0
+        offset: 4
+        arraySize: 0
+        rowCount: 1
+        colCount: 1
+      - name: objectRotationMatrix
+        type: 0
+        offset: 16
+        arraySize: 0
+        rowCount: 4
+        colCount: 4
+      - name: localToWorldMatrix
+        type: 0
+        offset: 80
+        arraySize: 0
+        rowCount: 4
+        colCount: 4
+      - name: cardMeshVerticesCount
+        type: 1
+        offset: 176
+        arraySize: 0
+        rowCount: 1
+        colCount: 1
+      - name: layerVertexStartIndex
+        type: 5
+        offset: 180
+        arraySize: 0
+        rowCount: 1
+        colCount: 1
+      - name: extraScale
+        type: 0
+        offset: 184
+        arraySize: 0
+        rowCount: 1
+        colCount: 1
+      - name: layerVerticesCount
+        type: 1
+        offset: 204
+        arraySize: 0
+        rowCount: 1
+        colCount: 1
+    resourcesResolved: 1
+    compilerPlatform: 4
+    needsReflectionData: 0
+  m_CompilationContext:
+    buildTarget:
+      platform: 19
+      subTarget: 0
+      extendedPlatform: 0
+      isEditor: 0
+    platformGroup: 1
+    sourceFileName: ProceduralFurSetup.compute
+    source: "//ragma kernel UpdateFurMeshKernel\n//ragma kernel UpdateClumpsPositionKernel\n\n//ragma
+      multi_compile __  HAS_COLLIDERS\n//ragma multi_compile __  VERLET_ENABLED\n//ragma
+      multi_compile __  INIT_VERLET\n//ragma multi_compile __  HAS_CLUMPS\n//ragma
+      multi_compile __  IS_CHILD_CLUMP\n\n#include <HLSLSupport.cginc>\n#include
+      \"FurMotionInclude.cginc\"\n#include \"Thread.hlsl\"\n#include \"../NormalHelperInclude.cginc\"\n\nuniform
+      StructuredBuffer<MeshProperties> sourceMesh;\nuniform StructuredBuffer<MeshFullProperties>
+      cardMesh;\n\nint cardMeshVerticesCount;\nuint layerVertexStartIndex;\n\nfloat
+      extraScale = 1;\n\n//START Clumps\nuniform StructuredBuffer<HairStrandStruct>
+      clumpsBuffer;\nuniform StructuredBuffer<float> clumpAttractionCurve;\nuniform
+      RWStructuredBuffer<float4> clumpPointsPosition;\nuniform RWStructuredBuffer<float4>
+      parentClumpPointsPosition;\nint clumpYCoordinates;\n// END Clumps\n\nstatic
+      float CARD_MESH_HEIGHT = 0.12;\nstatic float MAX_TWIST = 1900;\n\nfloat3 skinnedMeshScale;\n\n\nfloat3
+      applyClumping(HairStrandStruct hairStrand, float4 colors, float3 currentPosition,
+      float clumpOffset)\n{\n    float3 positionWithClumping = currentPosition;\n\n   
+      if (hairStrand.clumpIndices >= 0 && hairStrand.clumpMask > 0)\n    {\n       
+      float myScaleY = length(float3(hairStrand.scaleMatrix[0][1], hairStrand.scaleMatrix[1][1],
+      hairStrand.scaleMatrix[2][1]));\n        int clumpRootIndex = hairStrand.clumpIndices
+      * clumpYCoordinates;\n        int strandMeshYIndex = colors.y;\n\n        float
+      clumpScaleY = clumpPointsPosition[clumpRootIndex + strandMeshYIndex].w;\n       
+      float scalePercent = myScaleY / clumpScaleY;\n        float newIndex = scalePercent
+      * (float)strandMeshYIndex;\n        float newIndexLower = min(floor(newIndex),
+      clumpYCoordinates - 1);\n        float newIndexUpper = min(newIndexLower +
+      1, clumpYCoordinates - 1);\n        float lerpAmount = newIndex - newIndexLower;\n\n       
+      float3 clumpPositionLow = clumpPointsPosition[clumpRootIndex + newIndexLower].xyz;\n       
+      float3 clumpPositionHigh = clumpPointsPosition[clumpRootIndex + newIndexUpper].xyz;\n       
+      float3 clumpPosition = lerp(clumpPositionLow, clumpPositionHigh, lerpAmount);\n\n       
+      clumpPosition.z += clumpOffset; //Not the best solution but ok for now. Prevents
+      the strands from disappearing.\n        clumpPosition.x += clumpOffset;\n       
+      float attractionAmountLow = clumpAttractionCurve[(int)newIndexLower];\n       
+      float attractionAmountHigh = clumpAttractionCurve[(int)newIndexUpper];\n       
+      float attraction = 1.0 - lerp(attractionAmountLow, attractionAmountHigh, lerpAmount);\n       
+      positionWithClumping = lerp(currentPosition, clumpPosition, clamp(0, 1, attraction)
+      * hairStrand.clumpMask);\n        // normal = normalize(currentPosition - clumpPosition);\n   
+      }\n    return positionWithClumping;\n}\n\nuniform int layerVerticesCount;\n\nMeshProperties
+      getBarycentricMeshData(float3 indices, float3 barycentricCoord)\n{\n    MeshProperties
+      triangle1 = sourceMesh[(int)indices.x];\n    MeshProperties triangle2 = sourceMesh[(int)indices.y];\n   
+      MeshProperties triangle3 = sourceMesh[(int)indices.z];\n    MeshProperties
+      interpolated;\n    interpolated.sourceVertex = Interpolate3(triangle1.sourceVertex,
+      triangle2.sourceVertex, triangle3.sourceVertex, barycentricCoord);\n    interpolated.sourceNormal
+      = Interpolate3(triangle1.sourceNormal, triangle2.sourceNormal, triangle3.sourceNormal,
+      barycentricCoord);\n    interpolated.sourceTangent = Interpolate4(triangle1.sourceTangent,
+      triangle2.sourceTangent, triangle3.sourceTangent, barycentricCoord);\n    return
+      interpolated;\n}\n\n#if defined(VERLET_ENABLED)\n    RWStructuredBuffer<VerletNode>
+      verletNodes; \n    RWStructuredBuffer<VerletRestNode> _RestPositions;\n \n   
+      void setupVerlet(uint proceduralMeshIndex, float3 currentPosition, float vertexMovability,
+      float windContribution, float3 worldSourceMeshNormal)\n    {\n        if(proceduralMeshIndex
+      % 2 == 0)\n        {\n            int verletIndex = proceduralMeshIndex / 2;\n           
+      VerletRestNode restNode = _RestPositions[verletIndex];\n            restNode.position
+      = currentPosition;\n            restNode.worldSourceMeshNormal = worldSourceMeshNormal;\n#if
+      defined(INIT_VERLET)\n            VerletNode node;\n            node.position
+      = currentPosition;\n            node.prevPosition = currentPosition;\n           
+      restNode.vertMoveAbility = vertexMovability;\n            restNode.pinnedAmount
+      = 1 - windContribution;\n            node.isFixed = restNode.vertMoveAbility
+      == 0 || restNode.pinnedAmount == 1;//This means we can't paint wind during
+      play mode.\n            node.tangent = 0;\n            node.rotationDiffFromPrevNode
+      = 0;\n            node.rotationDiffFromPrevNode2 = 0;\n            verletNodes[verletIndex]
+      = node; \n#endif\n            _RestPositions[verletIndex] = restNode;\n           
+      if(vertexMovability == 0)\n            {\n                VerletNode fixedNode
+      = verletNodes[verletIndex];\n                fixedNode.position = currentPosition;\n               
+      fixedNode.prevPosition = currentPosition;\n                verletNodes[verletIndex]
+      = fixedNode;\n            }\n        } \n    }\n#endif\n\nvoid setupNormal(const
+      uint proceduralMeshIndex, const float3 worldSourceMeshNormal, float3 currentPosition,
+      uint furMeshIndex)\n{\n    if (proceduralMeshIndex % 2 == 0)\n    {\n       
+      uint nextStrandPosIndex = ((uint)proceduralMeshIndex + 2) * furMeshBufferStride;\n       
+      uint nextMeshIndex = ((uint)proceduralMeshIndex + 1) * furMeshBufferStride;\n       
+      float3 tangent = normalize(loadSourceVertex(nextStrandPosIndex) - currentPosition);\n       
+      writeNormal(furMeshIndex, nextMeshIndex, worldSourceMeshNormal, tangent);\n   
+      }\n}\n\nTHREAD_SIZE\nvoid UpdateFurMeshKernel(uint3 id : SV_DispatchThreadID)\n{\n   
+      const int i = id.x;\n    if (i >= layerVerticesCount) return;\n    const int
+      hairStrandIndex = floor(id.x / cardMeshVerticesCount);\n    const int cardMeshIndex
+      = i - hairStrandIndex * cardMeshVerticesCount;\n    const uint proceduralMeshIndex
+      = i + layerVertexStartIndex;\n    const MeshFullProperties cardMeshData = cardMesh[cardMeshIndex];\n   
+      float3 cardStaticPosition = cardMeshData.sourceVertex;\n    float3 vertexBasePosition
+      = cardStaticPosition;\n\n    const HairStrandStruct hairStrand = hairStrandsBuffer[hairStrandIndex];\n   
+      const float3 triangles = hairStrand.triangles;\n    const float3 barycentricCoord
+      = hairStrand.barycentricCoordinates;\n\n    MeshProperties meshProperties =
+      getBarycentricMeshData(triangles, barycentricCoord);\n\n    float3 position
+      = meshProperties.sourceVertex;\n    float3 normal = meshProperties.sourceNormal;\n   
+      const float4 tangent = meshProperties.sourceTangent;\n\n    const float4x4
+      rotationFromNormalMatrix = quaternionToMatrix(QuaternionLookRotation(tangent,
+      normal));\n    const float3 worldSourceMeshNormal = mul(objectRotationMatrix,
+      fixed4(normal, 1.0)).xyz;\n    vertexBasePosition.z *= extraScale;\n\n    //Scale  
+      \n    vertexBasePosition = mul(float4(vertexBasePosition, 1), hairStrand.scaleMatrix).xyz;\n   
+      #if defined(HAS_CLUMPS)\n        float clumpOffset = vertexBasePosition.z *
+      objectGlobalScale;\n    #endif\n    float4 colors = cardMeshData.sourceColor;\n   
+      const float vertexMoveAbility = colors.r;\n\n    //Twist\n    vertexBasePosition
+      = Unity_RotateAboutAxis_Degrees(vertexBasePosition, float3(0.25 * hairStrand.twist.z,
+      1, 0),\n                                                       MAX_TWIST *
+      vertexMoveAbility * hairStrand.twist.x);\n    //Bend\n    const float bendAmount
+      = hairStrand.bend.w * 90.0 * vertexMoveAbility;\n    const float3 bendXZ =
+      float3(hairStrand.bend.x, 0, hairStrand.bend.z);\n    vertexBasePosition =
+      Unity_RotateAboutAxis_Degrees(vertexBasePosition, bendXZ, bendAmount);\n\n   
+      //Root rotation Y and Orientation  \n    vertexBasePosition = mul(hairStrand.rootAndOrientationMatrix,
+      float4(vertexBasePosition, 1)).xyz;\n    vertexBasePosition = mul(rotationFromNormalMatrix,
+      float4(vertexBasePosition, 1)).xyz;\n\n    //Source mesh position\n    vertexBasePosition
+      += position;\n\n    //Apply the localToWorldMatrix\n    float3 currentPosition
+      = mul(localToWorldMatrix, float4(vertexBasePosition, 1.0)).xyz;\n\n    uint
+      furMeshIndex = (uint)proceduralMeshIndex * furMeshBufferStride;\n    //Add
+      clumping\n    #if defined(HAS_CLUMPS)\n        currentPosition = applyClumping(hairStrand,
+      colors, currentPosition, clumpOffset);\n    #else\n    #endif\n    const float3
+      oldPosition = loadSourceVertex(furMeshIndex);\n    //Our strand vertex is setup,
+      now let's append the same shenanigans as for the regular move kernels \n   
+      #if defined(VERLET_ENABLED)\n        setupVerlet(proceduralMeshIndex, currentPosition,
+      vertexMoveAbility, hairStrand.windContribution, worldSourceMeshNormal);\n   
+      #else\n    //NORMAL\n    setupNormal(proceduralMeshIndex, worldSourceMeshNormal,
+      currentPosition, furMeshIndex);\n    #endif\n    //VERTEX\n    writeVector3(furMeshIndex,
+      0, currentPosition);\n    //TANGENT\n    writeVector4(furMeshIndex, SIZEOF_FLOAT3
+      * 2, tangent); //Should this use the same logic as the normals? \n    //OVERRIDE
+      COLOR \n    writeVector4(furMeshIndex, SIZEOF_FLOAT3 * 2 + SIZEOF_FLOAT4, hairStrand.overrideColor);\n   
+      //SOURCE MESH UV\n    writeVector2(furMeshIndex, SIZEOF_FLOAT3 * 2 + SIZEOF_FLOAT4
+      * 2, hairStrand.uv);\n    //CARD UV\n    writeVector2(furMeshIndex, SIZEOF_FLOAT3
+      * 2 + SIZEOF_FLOAT4 * 2 + SIZEOF_FLOAT2, cardMeshData.sourceUV + hairStrand.uvOffset);\n   
+      //We store the previous position in uv3-4 for motion vectors\n    //OLD POS
+      XY Can we use a separate buffer here instead? Maybe use drawPocedural? \n   
+      writeVector2(furMeshIndex, SIZEOF_FLOAT3 * 2 + SIZEOF_FLOAT4 * 2 + SIZEOF_FLOAT2
+      * 2, float2(oldPosition.x, oldPosition.y));\n    //OLD POS Z and HAIR_STRAND_INDEX\n   
+      writeVector2(furMeshIndex, SIZEOF_FLOAT3 * 2 + SIZEOF_FLOAT4 * 2 + SIZEOF_FLOAT2
+      * 3, float2(oldPosition.z, (float)hairStrandIndex));\n}\n\nuniform float clumpPointsCount;\n\nTHREAD_SIZE\nvoid
+      UpdateClumpsPositionKernel(uint3 id : SV_DispatchThreadID)\n{\n    int i =
+      id.x;\n    if (i >= clumpPointsCount)return;\n    const int clumpIndex = floor((float)i
+      / (float)clumpYCoordinates);\n    const int clumpPointIndex = i - clumpIndex
+      * clumpYCoordinates;\n    const float yPercent = (float)(clumpPointIndex +
+      1) / (float)clumpYCoordinates;\n    const HairStrandStruct clump = clumpsBuffer[clumpIndex];\n\n   
+      MeshProperties meshProperties = getBarycentricMeshData(clump.triangles, clump.barycentricCoordinates);\n\n   
+      float3 clumpPos = meshProperties.sourceVertex;\n    float3 normal = meshProperties.sourceNormal;\n   
+      const float4 tangent = meshProperties.sourceTangent;\n    float3 vertexBasePosition
+      = float3(0, yPercent * CARD_MESH_HEIGHT, 0);\n\n    const float4x4 rotationFromNormalMatrix
+      = quaternionToMatrix(QuaternionLookRotation(tangent, normal));\n\n    //Scale  
+      \n    vertexBasePosition = mul(float4(vertexBasePosition, 1), clump.scaleMatrix).xyz;\n\n   
+      //Bend\n    #ifndef IS_CHILD_CLUMP\n    vertexBasePosition = Unity_RotateAboutAxis_Degrees(\n       
+      vertexBasePosition,\n        float3(0.25 * clump.twist.w, 1, 0),\n        MAX_TWIST
+      * (1 - yPercent) * clump.twist.y);\n    #endif\n    const float bendAmount
+      = clump.bend.w * 90.0 * yPercent;\n    const float3 bendXZ = float3(clump.bend.x,
+      0, clump.bend.z);\n    vertexBasePosition = Unity_RotateAboutAxis_Degrees(vertexBasePosition,
+      bendXZ, bendAmount);\n\n    //Root rotation Y and Orientation TODO: Should
+      look at cam? \n    vertexBasePosition = mul(clump.rootAndOrientationMatrix,
+      float4(vertexBasePosition, 1)).xyz;\n    vertexBasePosition = mul(rotationFromNormalMatrix,
+      float4(vertexBasePosition, 1)).xyz;\n    vertexBasePosition += clumpPos;\n   
+      float clumpScale = length(float3(clump.scaleMatrix[0][1], clump.scaleMatrix[1][1],
+      clump.scaleMatrix[2][1]));\n    vertexBasePosition.xyz = mul(localToWorldMatrix,
+      float4(vertexBasePosition, 1.0)).xyz;\n\n    #if defined(IS_CHILD_CLUMP)\n       
+      int clumpRootIndex = clump.clumpIndices * clumpYCoordinates;\n        float3
+      parentClumpPointPosition = parentClumpPointsPosition[clumpRootIndex + clumpPointIndex];\n       
+      float attraction = clumpAttractionCurve[clumpPointIndex];\n        vertexBasePosition.xyz
+      = lerp(parentClumpPointPosition, vertexBasePosition.xyz, attraction);\n   
+      #endif\n\n    clumpPointsPosition[i] = float4(vertexBasePosition.xyz, clumpScale);\n}\n"
+    sourceFile: Assets/FluffyGroomingTool/Shaders/Resources/ProceduralFurSetup.compute
+    kernels:
+    - UpdateFurMeshKernel
+    - UpdateClumpsPositionKernel
+    kernelMacros:
+    - []
+    - []
+    compilationFlags: 0
+    supportedAPIs: 4294967295
+    useDxcAPIs: 0
+    neverUseDxcAPIs: 0
+    includeHash0: 3132019983
+    includeHash1: 4185264385
+    includeHash2: 1743707524
+    includeHash3: 4253705536
+  errors: []
+  m_PreprocessorOverride: 0
+--- !u!4 &1831612760 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3190101579960111890, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1911777256
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1243,6 +3223,18 @@ PrefabInstance:
     - target: {fileID: 4770257075950780104, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
       propertyPath: m_RootOrder
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770257075950780104, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770257075950780104, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770257075950780104, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4770257075950780104, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1283,6 +3275,10 @@ PrefabInstance:
     - target: {fileID: 4770257075950780104, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770257075950780106, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+      propertyPath: _collisionMask.m_Bits
+      value: 1073741889
       objectReference: {fileID: 0}
     - target: {fileID: 4770257075950780107, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
       propertyPath: m_Name

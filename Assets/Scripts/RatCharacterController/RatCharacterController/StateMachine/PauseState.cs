@@ -7,6 +7,7 @@ namespace NewRatCharacterController {
 
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
+			NewRatCharacter.NewCharacterInput.CanTimeTravel = false;
 			PauseMenuBehaviour.pauseDelegate?.Invoke(true);
 		} 
 
@@ -17,6 +18,7 @@ namespace NewRatCharacterController {
 
 		public override void Exit() {
 			PauseMenuBehaviour.pauseDelegate?.Invoke(false);
+			NewRatCharacter.NewCharacterInput.CanTimeTravel = true;
 		}
 	}
 }
