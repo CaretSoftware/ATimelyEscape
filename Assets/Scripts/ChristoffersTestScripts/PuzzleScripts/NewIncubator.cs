@@ -38,7 +38,7 @@ public class NewIncubator : MonoBehaviour
     private bool puzzleFiveDone;
     private bool cubeButtonOn;
     private bool ratButtonOn;
-    private bool charging; 
+    private bool charging;
 
     private bool isON;
 
@@ -65,10 +65,6 @@ public class NewIncubator : MonoBehaviour
     {
         if (cubeButtonOn && ratButtonOn && !puzzleFourDone)
         {
-            sign.SetActive(true);
-            signMr.material = done;
-            sign2.SetActive(false);
-            sign3.SetActive(false);
             Step8();
             puzzleFourDone = true;
             Debug.Log("STEP7");
@@ -120,6 +116,11 @@ public class NewIncubator : MonoBehaviour
                 Debug.Log("STEP11");
             }
         }
+        if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleFiveDone)
+        {
+            signMr.material = notDone;
+        }
+
 
     }
     private void Step2()
@@ -169,6 +170,9 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step8()
     {
+        sign.SetActive(true);
+        sign2.SetActive(false);
+        sign3.SetActive(false);
         puzzleFloor.SetActive(true);
         signMr.material = notDone;
         bigHatchAnim.SetBool("OpenThird", true);
@@ -179,6 +183,8 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step9()
     {
+        sign2.SetActive(false);
+        sign3.SetActive(false);
         step3.SetActive(true);
         step2.SetActive(false);
         bigHatchAnim.SetBool("OpenLast", true);
@@ -192,7 +198,7 @@ public class NewIncubator : MonoBehaviour
         instructions.text = "This is a charger. You can charge a future cube by putting the past cube on the charger";
         Debug.Log("STEP10");
     }
-    
+
     public void PickUp()
     {
         instructions.text = "Good. Now Use X-button to time travel one year to the past";
@@ -222,7 +228,7 @@ public class NewIncubator : MonoBehaviour
     }
     public void IsOn()
     {
-        isON = true; 
+        isON = true;
     }
 
 }
