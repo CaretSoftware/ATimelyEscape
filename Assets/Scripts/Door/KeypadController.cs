@@ -131,6 +131,8 @@ public class KeypadController : DeviceController
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        Destroy(gameObject);
     }
 
     private void SwitchState()

@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 6166757383061851356}
   - component: {fileID: 6166757383061851355}
   - component: {fileID: 6166757383061851354}
-  - component: {fileID: 5988404040676388843}
+  - component: {fileID: 4134458292484750258}
   - component: {fileID: 6051646127864622692}
+  - component: {fileID: 4099680476896461855}
   m_Layer: 5
   m_Name: Keypad_Button
   m_TagString: Untagged
@@ -124,10 +125,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Keypad, Assembly-CSharp
-        m_MethodName: KeypadDigitInput
-        m_Mode: 3
+      - m_Target: {fileID: 4134458292484750258}
+        m_TargetAssemblyTypeName: ButtonSoundBehaviour, Assembly-CSharp
+        m_MethodName: PlayClickClip
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -136,7 +137,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5988404040676388843
+--- !u!114 &4134458292484750258
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,15 +146,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6166757383061851352}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38df533f290bf0c4b962ff72d6d72ee9, type: 3}
+  m_Script: {fileID: 11500000, guid: 70e0e8ebd5e302f4d8cc7d5470ca7f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speach: {fileID: 0}
-  click: {fileID: 0}
-  hover: {fileID: 0}
-  neutral: {fileID: 21300000, guid: 108cd21904aeeea4a9140fcc96a0c3f2, type: 3}
-  pressed: {fileID: 21300000, guid: 589338ea0911018468d388e466b3e689, type: 3}
-  selected: {fileID: 21300000, guid: 096275abc5b21c24a8f00d8ce9745d48, type: 3}
+  click: {fileID: 8300000, guid: 4a0be8b3160fc7e48b927982ff60eac2, type: 3}
+  hover: {fileID: 8300000, guid: dcf1f0f787052ab4c998d8df47865a19, type: 3}
 --- !u!95 &6051646127864622692
 Animator:
   serializedVersion: 4
@@ -174,6 +172,102 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!82 &4099680476896461855
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6166757383061851352}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6166757383663172602
 GameObject:
   m_ObjectHideFlags: 0
