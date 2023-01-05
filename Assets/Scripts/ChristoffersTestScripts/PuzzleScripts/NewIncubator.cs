@@ -170,11 +170,7 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step8()
     {
-        sign.SetActive(true);
-        sign2.SetActive(false);
-        sign3.SetActive(false);
         puzzleFloor.SetActive(true);
-        signMr.material = notDone;
         bigHatchAnim.SetBool("OpenThird", true);
         step2Anim.SetBool("Open", false);
         Invoke("Step9", 3.5f);
@@ -183,6 +179,8 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step9()
     {
+        sign.SetActive(true);
+        signMr.material = notDone;
         sign2.SetActive(false);
         sign3.SetActive(false);
         step3.SetActive(true);
@@ -221,11 +219,11 @@ public class NewIncubator : MonoBehaviour
         charging = true;
         Debug.Log("Charging");
     }
-    public void DontCharge()
+/*    public void DontCharge()
     {
         charging = false;
         Debug.Log("StoppedCharge");
-    }
+    }*/
     public void IsOn()
     {
         isON = true;
