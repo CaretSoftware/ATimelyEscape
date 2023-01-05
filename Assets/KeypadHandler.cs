@@ -39,11 +39,11 @@ public class KeypadHandler : MonoBehaviour
             OpenKeypad();
     }
 
-    
+    /*
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
             CloseKeypad();
     }
-    
+    */
 }
