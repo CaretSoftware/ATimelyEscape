@@ -9,6 +9,8 @@ public class NewRatCharacterController : MonoBehaviour
 {
 	public delegate void CaughtEvent(bool caught);
 	public static CaughtEvent caughtEvent;
+	
+	public NewCharacterInput NewCharacterInput { get; set; }
 
 	public bool Caught;// { get; set; }
 	
