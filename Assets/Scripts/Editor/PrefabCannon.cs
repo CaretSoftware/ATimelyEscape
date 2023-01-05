@@ -406,6 +406,10 @@ public class PrefabCannon : EditorWindow
         Handles.DrawAAPolyLine(ringPoints);
     }
 
+    
+    // Added simple functionality for removing created objects since this version
+    // of unity crashes when using "Undo". Removed call to Undo.RecordObject at
+    // object creation.
     private void RemoveLastCreated()
     {
         if (_objectsToRemove != null && _objectsToRemove.Count > 0)
