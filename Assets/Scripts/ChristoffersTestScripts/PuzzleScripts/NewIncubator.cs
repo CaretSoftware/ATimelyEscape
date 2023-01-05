@@ -201,7 +201,7 @@ public class NewIncubator : MonoBehaviour
 
     public void PickUp()
     {
-        instructions.text = "Good. Now Use X-button to time travel one year to the past";
+        instructions.text = "Good. Now Use <sprite name=\"X\" color=#55FF55FF> to time travel one year to the past";
         Debug.Log("STEP0");
     }
     public void CubeButton()
