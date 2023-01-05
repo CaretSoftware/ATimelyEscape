@@ -6,8 +6,6 @@ using UnityEngine.Events;
 public class SwitchOn : MonoBehaviour
 {
 
-    [SerializeField] private Material onMaterial;
-    [SerializeField] private Material offMaterial;
     [SerializeField] private bool isInteractableByPlayer;
 /*    [SerializeField] private bool isInteractableByPast;
     [SerializeField] private bool isInteractableByPresent;*/
@@ -15,10 +13,15 @@ public class SwitchOn : MonoBehaviour
     [SerializeField] private UnityEvent switchOff;
     private MeshRenderer meshRenderer;
     private bool isOn;
+    private Animator animator;
     private void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
         isOn = true;
+        if (isInteractableByPlayer)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,15 +32,14 @@ public class SwitchOn : MonoBehaviour
             {
                 switchOn.Invoke();
             }
-            meshRenderer.material = onMaterial;
         }
         else if (switchOn != null && isInteractableByPlayer && other.gameObject.tag == "Player")
         {
             if (isOn)
             {
                 switchOn.Invoke();
+                animator.SetBool("On", true);
             }
-            meshRenderer.material = onMaterial;
         }
         /*        else if (switchOn != null && isInteractableByPast && other.gameObject.tag == "CubePast")
                 {
@@ -58,7 +60,6 @@ public class SwitchOn : MonoBehaviour
             {
                 switchOff.Invoke();
             }
-            meshRenderer.material = offMaterial;
         }
         /*        else if (switchOn != null && isInteractableByPast && other.gameObject.tag == "CubePast")
                 {
