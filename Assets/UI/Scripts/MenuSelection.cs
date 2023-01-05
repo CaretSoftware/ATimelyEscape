@@ -7,7 +7,7 @@ public class MenuSelection : MonoBehaviour
 {
     [SerializeField] private GameObject firstSelectedButton;
 
-    void Awake()
+    public void Awake()
     {
         if (transform.Find("Continue") && transform.Find("Continue").gameObject.activeSelf)
         {
