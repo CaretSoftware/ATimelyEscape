@@ -63,6 +63,8 @@ public class NewRatCameraController : MonoBehaviour {
 
 	private void Awake() {
 		_cameraPos = transform.position;
+		Vector3 initialCameraVector = transform.rotation.eulerAngles;
+		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
 	}
 
 	
