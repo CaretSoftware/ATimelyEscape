@@ -6,31 +6,23 @@ public class RobotPunch : MonoBehaviour {
     [SerializeField] private GameObject glassWall;
     [SerializeField] private GameObject notCrackedglassWall;
     private Animator animator;
-    private bool pastOn;
-    private bool presentOn;
-    private bool futureOn;
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start() {
+        audioSource = GetComponent<AudioSource>();
         glassWall.SetActive(false);
         animator = GetComponent<Animator>();
     }
-    private void Update() {
-        if (pastOn && presentOn && futureOn) {
-            animator.SetBool("On", true);
-            glassWall.SetActive(true);
-            notCrackedglassWall.SetActive(false);
-        }
-    }
 
-    public void PastIsOn() {
-        pastOn = true;
+    public void IsOn() {
+        animator.SetBool("On", true);
+        Invoke("CrackGlass", 1.19f);
     }
-    public void PresentIsOn() {
-        presentOn = true;
+    private void CrackGlass()
+    {
+        Debug.Log("Pang");
+        glassWall.SetActive(true);
+        notCrackedglassWall.SetActive(false);
     }
-    public void FutureIsOn() {
-        futureOn = true;
-    }
-
 }
