@@ -75,8 +75,8 @@ public class TravelPathScript : MonoBehaviour
         }
         if (iterations == positions.Length)
         {
-            objectToMove.SetActive(false);
             NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(false);
+            objectToMove.SetActive(false);
             teleportingObject.transform.position = location;
             if(teleportingObject.tag.Equals("Player"))
                 teleportingObject.transform.Find("Rat").gameObject.SetActive(true);
