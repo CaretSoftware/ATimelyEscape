@@ -6,6 +6,7 @@ namespace NewRatCharacterController
 
         public override void Enter() {
             StateChange.stateUpdate?.Invoke(State);
+            NewRatCharacter.NewCharacterInput.CanTimeTravel = false;
             NewRatCharacter._velocity = Vector3.zero;
             NewRatCharacter.AnimationController.SetCaught(true);
         }
@@ -16,6 +17,7 @@ namespace NewRatCharacterController
         }
 
         public override void Exit() {
+            NewRatCharacter.NewCharacterInput.CanTimeTravel = true;
             NewRatCharacter.AnimationController.SetCaught(false);
         }
     }

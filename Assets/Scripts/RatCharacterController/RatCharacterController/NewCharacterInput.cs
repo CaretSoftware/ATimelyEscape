@@ -72,6 +72,7 @@ namespace NewRatCharacterController {
 			_camController = GetComponent<NewRatCameraController>();
 			
 			_newRatCharacterController = GetComponent<NewRatCharacterController>();
+			_newRatCharacterController.NewCharacterInput = this;
 			
 			_playerInputActions = new PlayerInputActions();
 			_playerInputActions.CameraControls.Enable();
