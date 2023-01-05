@@ -23,7 +23,7 @@ public class WatchPickup : MonoBehaviour {
 			Debug.Log("PICKUP TRIGGER");
 
 			if (instructions != null)
-				instructions.text = "NOW USE \"1\"-KEY TO TIME TRAVEL ONE YEAR BACK";
+				instructions.text = "Good. Now use the X button to timetravel one year to the past";
 			FindObjectOfType<NewRatCharacterController.NewCharacterInput>().CanTimeTravel = true;
 			Destroy(this.gameObject);
 			Debug.Log("PICKUP TRIGGER");
