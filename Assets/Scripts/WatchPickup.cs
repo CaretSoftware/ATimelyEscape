@@ -6,6 +6,7 @@ public class WatchPickup : MonoBehaviour {
 	
 	[SerializeField] private float rotationSpeed = 25.0f;
 	[SerializeField] private TextMeshProUGUI instructions;
+	private NewRatCharacterController.NewCharacterInput characterInput;
 
 	private void Awake() {
 		GetComponent<SphereCollider>().isTrigger = true;
@@ -14,6 +15,7 @@ public class WatchPickup : MonoBehaviour {
 		if (_rb != null) {
 			_rb.isKinematic = true;
 		}
+		characterInput = FindObjectOfType<NewRatCharacterController.NewCharacterInput>();
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -23,8 +25,10 @@ public class WatchPickup : MonoBehaviour {
 			Debug.Log("PICKUP TRIGGER");
 
 			if (instructions != null)
-				instructions.text = "Good. Now use the X button to timetravel one year to the past";
-			FindObjectOfType<NewRatCharacterController.NewCharacterInput>().CanTimeTravel = true;
+				instructions.text = "Good. Now use <sprite name=\"X\"> to timetravel one year to the past";
+			characterInput.CanTimeTravel = true;
+			characterInput.CanTimeTravelPresent = false;
+			characterInput.CanTimeTravelFuture = false;
 			Destroy(this.gameObject);
 			Debug.Log("PICKUP TRIGGER");
 		}

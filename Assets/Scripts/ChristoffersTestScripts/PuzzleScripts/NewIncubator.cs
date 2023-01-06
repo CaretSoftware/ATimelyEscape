@@ -61,6 +61,7 @@ public class NewIncubator : MonoBehaviour
         signMr = sign.GetComponent<MeshRenderer>();
         sign2Mr = sign2.GetComponent<MeshRenderer>();
         sign3Mr = sign3.GetComponent<MeshRenderer>();
+        characterInput = FindObjectOfType<NewRatCharacterController.NewCharacterInput>();
 
     }
     private void Update()
@@ -99,6 +100,7 @@ public class NewIncubator : MonoBehaviour
             }
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
+                characterInput.CanTimeTravelPresent = true; 
                 instructions.text = "Good.";
                 puzzleThreeDone = true;
                 signMr.material = done;
@@ -126,6 +128,7 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step2()
     {
+        characterInput.CanTimeTravelPast = false;
         signMr.material = notDone;
         instructions.text = "Moving a cube changes its destiny in the future. Move the cube.";
         puzzleFloor.SetActive(false);
@@ -136,10 +139,12 @@ public class NewIncubator : MonoBehaviour
     private void Step2AndHalf()
     {
         instructions.text = "Timetravel forwards in time <sprite name=\"Y\">";
+        characterInput.CanTimeTravelPresent = true; 
         puzzleOneDone = true;
     }
     private void Step4()
     {
+        characterInput.CanTimeTravelPresent = false;
         signMr.material = notDone;
         instructions.text = "Move the cube in this time.";
         Debug.Log("STEP4");
@@ -147,6 +152,7 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step4AndHalf()
     {
+        characterInput.CanTimeTravelPast = true; 
         instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
         puzzleTwoDone = true;
     }
