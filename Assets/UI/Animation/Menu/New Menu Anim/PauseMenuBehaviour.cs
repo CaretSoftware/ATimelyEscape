@@ -91,8 +91,8 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
     public void UnPauseGame() {
 
-        CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = false };
-        pauseEvent.Invoke();
+        //CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = false };
+        //pauseEvent.Invoke();
 
         pauseMenyAnimator.Play("UnPause");
 
