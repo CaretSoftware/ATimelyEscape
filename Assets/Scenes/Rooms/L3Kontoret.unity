@@ -107,8 +107,8 @@ NavMeshSettings:
     serializedVersion: 2
     agentTypeID: 0
     agentRadius: 0.1
-    agentHeight: 1.8
-    agentSlope: 0
+    agentHeight: 0.5
+    agentSlope: 25
     agentClimb: 0.1
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
@@ -946,6 +946,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7974168101928993028, guid: 631a2e23ef9ef254895161fef176ad85, type: 3}
   m_PrefabInstance: {fileID: 134829401}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &139994133
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 139994134}
+  - component: {fileID: 139994135}
+  m_Layer: 0
+  m_Name: Waypoint (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &139994134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139994133}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.355, y: 0, z: 0.287}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 501001546}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &139994135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139994133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdc5e06546c4a4e46b1c9905c0311f23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gizmoRadius: 0.05
 --- !u!1001 &149839354
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2883,9 +2928,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2769505107896692015, guid: 504109d92373b5b4d862cdfffd653536, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4485150221970168481, guid: 504109d92373b5b4d862cdfffd653536, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5833385819023209976, guid: 504109d92373b5b4d862cdfffd653536, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8798481398379724206, guid: 504109d92373b5b4d862cdfffd653536, type: 3}
       propertyPath: m_Name
       value: TTO_Wall_200x230x10_Adapters_Var2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8798481398379724206, guid: 504109d92373b5b4d862cdfffd653536, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 504109d92373b5b4d862cdfffd653536, type: 3}
@@ -3862,6 +3923,7 @@ Transform:
   - {fileID: 643602377}
   - {fileID: 640952730}
   - {fileID: 1159734189}
+  - {fileID: 139994134}
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4598,7 +4660,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 776518821288246537, guid: aa1a3b8fae44e39409b86118244c7d45, type: 3}
       propertyPath: patrolPoints.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 776518821288246537, guid: aa1a3b8fae44e39409b86118244c7d45, type: 3}
       propertyPath: patrolPoints.Array.data[0]
@@ -4612,6 +4674,10 @@ PrefabInstance:
       propertyPath: patrolPoints.Array.data[2]
       value: 
       objectReference: {fileID: 1159734189}
+    - target: {fileID: 776518821288246537, guid: aa1a3b8fae44e39409b86118244c7d45, type: 3}
+      propertyPath: patrolPoints.Array.data[3]
+      value: 
+      objectReference: {fileID: 139994134}
     - target: {fileID: 3747240468971131881, guid: aa1a3b8fae44e39409b86118244c7d45, type: 3}
       propertyPath: checkpoint
       value: 
@@ -7403,8 +7469,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: TTO_Door (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1274783112518703994, guid: 06b848aff9473014e8647807c3cabf23, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4110429193799692802, guid: 06b848aff9473014e8647807c3cabf23, type: 3}
       propertyPath: displaceOnTimeTravel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6721412836620518189, guid: 06b848aff9473014e8647807c3cabf23, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6722079031322157682, guid: 06b848aff9473014e8647807c3cabf23, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6934684531247906191, guid: 06b848aff9473014e8647807c3cabf23, type: 3}
+      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -8492,6 +8574,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 769824962}
     m_Modifications:
+    - target: {fileID: 1797666812196952264, guid: 3be422afd598f88488006293822b2ba8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 2205873595185933569, guid: 3be422afd598f88488006293822b2ba8, type: 3}
       propertyPath: m_RootOrder
       value: 20
@@ -8536,9 +8622,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3143414101897396178, guid: 3be422afd598f88488006293822b2ba8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5522631655713103056, guid: 3be422afd598f88488006293822b2ba8, type: 3}
       propertyPath: m_Name
       value: TTO_WallWithHole_200x230x10_USETHIS
+      objectReference: {fileID: 0}
+    - target: {fileID: 5522631655713103056, guid: 3be422afd598f88488006293822b2ba8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7407792776580801943, guid: 3be422afd598f88488006293822b2ba8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3be422afd598f88488006293822b2ba8, type: 3}
