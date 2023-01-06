@@ -30,6 +30,7 @@ public class NewIncubator : MonoBehaviour
     private MeshRenderer signMr;
     private MeshRenderer sign2Mr;
     private MeshRenderer sign3Mr;
+    private NewRatCharacterController.NewCharacterInput characterInput;
 
     private bool puzzleOneDone;
     private bool puzzleTwoDone;
@@ -60,6 +61,7 @@ public class NewIncubator : MonoBehaviour
         signMr = sign.GetComponent<MeshRenderer>();
         sign2Mr = sign2.GetComponent<MeshRenderer>();
         sign3Mr = sign3.GetComponent<MeshRenderer>();
+        characterInput = FindObjectOfType<NewRatCharacterController.NewCharacterInput>();
 
     }
     private void Update()
@@ -98,11 +100,11 @@ public class NewIncubator : MonoBehaviour
             }
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
+                characterInput.CanTimeTravelPresent = true; 
                 instructions.text = "Good.";
                 puzzleThreeDone = true;
                 signMr.material = done;
                 Invoke("Step5", 2f);
-                Invoke("Step6", 5.5f);
                 //StartCoroutine(Delay());
                 Debug.Log("STEP5");
             }
@@ -126,8 +128,9 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step2()
     {
+        characterInput.CanTimeTravelPast = false;
         signMr.material = notDone;
-        instructions.text = "Push the cube to change its position in both this time and the future.";
+        instructions.text = "Moving a cube changes its destiny in the future. Move the cube.";
         puzzleFloor.SetActive(false);
         bigHatchAnim.SetBool("Open", false);
         Debug.Log("STEP2");
@@ -135,19 +138,22 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step2AndHalf()
     {
-        instructions.text = "Then press Y-button to travel one year ahead in time to and see that the cube is in the same spot";
+        instructions.text = "Timetravel forwards in time <sprite name=\"Y\">";
+        characterInput.CanTimeTravelPresent = true; 
         puzzleOneDone = true;
     }
     private void Step4()
     {
+        characterInput.CanTimeTravelPresent = false;
         signMr.material = notDone;
-        instructions.text = "Now push the cube again.";
+        instructions.text = "Move the cube in this time.";
         Debug.Log("STEP4");
         Invoke("Step4AndHalf", 4f);
     }
     private void Step4AndHalf()
     {
-        instructions.text = "Then use the X-button to travel back in time to see that the cube is in its original spot in this time";
+        characterInput.CanTimeTravelPast = true; 
+        instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
         puzzleTwoDone = true;
     }
     private void Step5()
@@ -155,6 +161,7 @@ public class NewIncubator : MonoBehaviour
         puzzleFloor.SetActive(true);
         bigHatchAnim.SetBool("OpenAgain", true);
         step1Anim.SetBool("Open", false);
+        Invoke("Step6", 3.5f);
     }
     private void Step6()
     {
@@ -172,8 +179,7 @@ public class NewIncubator : MonoBehaviour
     private void InstructionsStep8()
     {
         puzzleFloor.SetActive(false);
-        instructions.text = " To the left is a cubebutton that interacts with cubes. +" +
-            "To the right is a button that you can interact with";
+        instructions.text = " Some buttons react to cubes. Some buttons must be manually pressed";
     }
     private void Step8()
     {
@@ -200,15 +206,10 @@ public class NewIncubator : MonoBehaviour
     private void Step10Instructions()
     {
         puzzleFloor.SetActive(false);
-        instructions.text = "This is a charger. You can charge a future cube by putting the past cube on the charger";
+        instructions.text = "Charge this cube on the chargepad. It holds charge for a long time";
         Debug.Log("STEP10");
     }
 
-    public void PickUp()
-    {
-        instructions.text = "Good. Now Use <sprite name=\"X\" color=#55FF55FF> to time travel one year to the past";
-        Debug.Log("STEP0");
-    }
     public void CubeButton()
     {
         cubeButtonOn = true;
@@ -236,7 +237,7 @@ public class NewIncubator : MonoBehaviour
     {
         if (!welcome)
         {
-            instructions.text = "Welcome subject R@. Please step forward";
+            instructions.text = "Subject R@, welcome! Please step forward";
             welcome = true;
         }
     }
