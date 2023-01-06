@@ -3,8 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CallbackSystem;
+using Unity.VisualScripting;
 
 public class TimeTravelUIButton : MonoBehaviour {
+	
+	public delegate void PulseButtonDelegate(TimeTravelPeriod timeTravelPeriod, bool pulse);
+	public static PulseButtonDelegate pulseButtonEvent;
+	
 	[SerializeField] private ParticleSystem particleSystem;
 	[SerializeField] private MeshRenderer meshRenderer;
 	[SerializeField] private TimeTravelPeriod timeTravelPeriod;
@@ -30,6 +35,7 @@ public class TimeTravelUIButton : MonoBehaviour {
 	private MaterialPropertyBlock _mpb;
 	
 	private bool _blocked;
+	private bool _pulse;
 
 	private void Awake() {
 		_mpb = new MaterialPropertyBlock();
@@ -40,24 +46,60 @@ public class TimeTravelUIButton : MonoBehaviour {
 	}
 
 	private void Start() {
+		pulseButtonEvent += PulseButton;
 		CallHintAnimation.AddListener<CallHintAnimation>(Blocked);
 		DebugEvent.AddListener<TimePeriodChanged>(TimePeriodChanged);
 	}
 
 	private void OnDestroy() {
+		pulseButtonEvent -= PulseButton;
 		if (EventSystem.Current == null) return;
 		CallHintAnimation.RemoveListener<CallHintAnimation>(Blocked);
 		DebugEvent.RemoveListener<TimePeriodChanged>(TimePeriodChanged);
 	}
 
-	
+	private void PulseButton(TimeTravelPeriod timeTravelPeriod, bool pulse) {
+		_pulse = pulse;
+
+		if (this.timeTravelPeriod != timeTravelPeriod) {
+			_pulse = false;
+			_buttonTransform.localScale = _localScale;
+			return;
+		}
+		
+		StartCoroutine(PulseButtonAnimation());
+	}
+
+	private IEnumerator PulseButtonAnimation() {
+		float pulseSize = 1.5f;
+		Vector3 pulseScale = _localScale * pulseSize;
+		float speed = 3f;
+		float sinOffset = Time.unscaledTime;
+		while (_pulse) {
+			float sin = Mathf.Abs(Mathf.Sin(((Time.unscaledTime - sinOffset) * speed)));
+			float sin01 = Mathf.InverseLerp(-1f, 1f, sin);
+			float e = Ease.EaseInBack(sin);
+			_buttonTransform.localScale = Vector3.LerpUnclamped(_localScale, pulseScale, e);
+			yield return null;
+		}
+		_buttonTransform.localScale = _localScale;
+	}
+
 	private void Update() {
 		if (TimeTravelManager.currentPeriod == timeTravelPeriod) {
 			_mpb.SetFloat(AlphaClippingPropertyID, _defaultAlphaClipping);
 			meshRenderer.SetPropertyBlock(_mpb);
 			return;
 		}
-			
+
+		// Debug
+		/*
+		if (Input.GetKeyDown(KeyCode.N))
+			pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, true);
+		if (Input.GetKeyDown(KeyCode.M))
+			pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, false);
+		*/
+		
 		float t = Mathf.Sin(Time.unscaledTime * Mathf.PI * 2f) * .5f + .5f;
 		float pulse = Mathf.Lerp(_defaultAlphaClipping, _pulseAlphaClipping, t);
 		_mpb.SetFloat(AlphaClippingPropertyID, pulse);
@@ -89,9 +131,8 @@ public class TimeTravelUIButton : MonoBehaviour {
 			float sin = Mathf.Sin(Ease.EaseInQuart(1f - t) * Mathf.PI);
 			_buttonTransform.localPosition = 
 				_localStartPosition 
-				+ _buttonTransform.InverseTransformDirection(_buttonTransform.right) 
-				* (shakeMagnitude * sin) 
-				* Mathf.Sin(t * shakeFrequency);
+				+ _buttonTransform.InverseTransformDirection(_buttonTransform.right) *
+				(shakeMagnitude * sin * Mathf.Sin(t * shakeFrequency));
 
 			t += Time.unscaledDeltaTime * (1f / shakeButtonAnimationTime);
 			yield return null;
