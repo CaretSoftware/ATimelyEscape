@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace NewRatCharacterController {
 	public class CubePushState : BaseState {
+		public delegate void PushCubeEvent(Transform cube);
+		public static PushCubeEvent pushCubeEvent;
+		
 		private const string State = nameof(CubePushState);
 
 		private CubePush cube;
@@ -12,7 +15,7 @@ namespace NewRatCharacterController {
 		private Vector3 _pushedCubeOffset;
 		private Quaternion worldRotation;
 		private Rigidbody cubeRB;
-
+		
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
 			// are we pressing interact? are we in front of cube?
 			return newRatCharacter.Interacting && newRatCharacter.InFrontOfCube();
@@ -41,9 +44,12 @@ namespace NewRatCharacterController {
 			position.y = NewRatCharacter.transform.position.y;
 			NewRatCharacter.RatMesh.rotation = rotation;
 			ratTransform.position = position + rotation * NewRatCharacter.pushOffset;
-			_pushedCubeOffset = ratTransform.position - NewRatCharacter.cubeTransform.position;
-			cube = NewRatCharacter.cubeTransform.GetComponent<CubePush>();
-			cubeRB = NewRatCharacter.cubeTransform.GetComponent<Rigidbody>();
+			Transform cubeTransform = NewRatCharacter.cubeTransform;
+			_pushedCubeOffset = ratTransform.position - cubeTransform.position;
+			cube = cubeTransform.GetComponent<CubePush>();
+			cubeRB = cubeTransform.GetComponent<Rigidbody>();
+			
+			pushCubeEvent?.Invoke(NewRatCharacter.cubeTransform);
 		}
 
 		public override void Run() {
