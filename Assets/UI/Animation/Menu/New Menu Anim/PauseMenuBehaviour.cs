@@ -18,10 +18,15 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
     private Animator pauseMenyAnimator;
 
-    // [SerializeField] private Slider slider;
+    private NewRatCharacterController.NewRatCharacterController newRatCharacterController;
+    
+
+    [SerializeField] private MenuSelection menuSelection;
+    [SerializeField] private GameObject buttonToSelected;
 
     private void Start()
     {
+        newRatCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
 
         pauseDelegate += PausePressed;
         
@@ -59,6 +64,10 @@ public class PauseMenuBehaviour : MonoBehaviour {
         //Cursor.lockState = CursorLockMode.Confined;
         //Cursor.visible = true;
 
+        newRatCharacterController.paused = true;
+
+        menuSelection.SelectButton(buttonToSelected);
+
         CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = true };
         pauseMenyAnimator.Play("Pause");
 
@@ -93,6 +102,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
         //CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = false };
         //pauseEvent.Invoke();
+        newRatCharacterController.paused = false;
 
         pauseMenyAnimator.Play("UnPause");
 
