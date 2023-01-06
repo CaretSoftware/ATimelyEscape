@@ -53,7 +53,7 @@ public class TravelPathScript : MonoBehaviour
 
         }
             
-        
+        NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
         objectToMove.SetActive(true);
         objectToMove.transform.position = pos[index];
     }
@@ -75,6 +75,7 @@ public class TravelPathScript : MonoBehaviour
         }
         if (iterations == positions.Length)
         {
+            NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(false);
             objectToMove.SetActive(false);
             teleportingObject.transform.position = location;
             if(teleportingObject.tag.Equals("Player"))

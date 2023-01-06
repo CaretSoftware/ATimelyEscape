@@ -15,6 +15,7 @@ public class EnemyAI : MonoBehaviour
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
     [SerializeField] private Transform checkpoint;
+    [SerializeField] private LayerMask obstacleMask;
     [Tooltip("Assigning the same waypoints to multiple enemies may result in unwanted behaviour.")]
     [SerializeField] private Transform[] activityWaypoints;
 
@@ -144,7 +145,7 @@ public class EnemyAI : MonoBehaviour
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this);
+        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, obstacleMask);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
         Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode });
