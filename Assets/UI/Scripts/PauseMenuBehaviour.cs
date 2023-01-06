@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using RatCharacterController;
 
 public class PauseMenuBehaviour : MonoBehaviour {
     // This is a delegate. It can be Invoked when needed (Done currently in the Input class)
@@ -22,7 +21,8 @@ public class PauseMenuBehaviour : MonoBehaviour {
     // [SerializeField] private Slider slider;
 
     private void Start()
-    { 
+    {
+
         pauseDelegate += PausePressed;
         
         Time.timeScale = 1;
@@ -56,9 +56,10 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
     public void PauseGame() {
 
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.visible = true;
 
+        CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = true };
         pauseMenyAnimator.Play("Pause");
 
         // paused = true;
@@ -95,9 +96,6 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
         pauseMenyAnimator.Play("UnPause");
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
 
@@ -128,7 +126,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
         }
         else
         {
-            //SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
+            SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
         }
     }
 
