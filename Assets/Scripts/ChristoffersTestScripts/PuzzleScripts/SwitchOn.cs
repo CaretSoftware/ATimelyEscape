@@ -76,5 +76,9 @@ public class SwitchOn : MonoBehaviour
     {
         isOn = false;
     }
+    public void ButtonOn()
+    {
+        isOn = true;
+    }
 
 }

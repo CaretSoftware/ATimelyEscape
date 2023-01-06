@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using RatCharacterController;
 
 public class PauseMenuBehaviour : MonoBehaviour {
     // This is a delegate. It can be Invoked when needed (Done currently in the Input class)
@@ -19,10 +18,16 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
     private Animator pauseMenyAnimator;
 
-    // [SerializeField] private Slider slider;
+    private NewRatCharacterController.NewRatCharacterController newRatCharacterController;
+    
+
+    [SerializeField] private MenuSelection menuSelection;
+    [SerializeField] private GameObject buttonToSelected;
 
     private void Start()
-    { 
+    {
+        newRatCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
+
         pauseDelegate += PausePressed;
         
         Time.timeScale = 1;
@@ -56,9 +61,14 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
     public void PauseGame() {
 
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.visible = true;
 
+        newRatCharacterController.paused = true;
+
+        menuSelection.SelectButton(buttonToSelected);
+
+        CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = true };
         pauseMenyAnimator.Play("Pause");
 
         // paused = true;
@@ -90,13 +100,11 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
     public void UnPauseGame() {
 
-        CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = false };
-        pauseEvent.Invoke();
+        //CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = false };
+        //pauseEvent.Invoke();
+        newRatCharacterController.paused = false;
 
         pauseMenyAnimator.Play("UnPause");
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
 
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
@@ -128,7 +136,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
         }
         else
         {
-            //SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
+            SceneManager.LoadScene(sceneIndex); // Later program LoadSceneAsync() for imporved loading experience with loadingScreen
         }
     }
 

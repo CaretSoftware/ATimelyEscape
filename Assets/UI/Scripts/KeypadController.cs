@@ -17,6 +17,7 @@ public class KeypadController : DeviceController
 
     [Header("UI Components")]
     [SerializeField] private TextMeshProUGUI screen;
+    [SerializeField] private Collider trigger;
     //[SerializeField] private UnityEngine.UI.Button[] keypadKeys;
     //[SerializeField] private int keypadColumns = 3;
 
@@ -29,8 +30,6 @@ public class KeypadController : DeviceController
 
     [Header("Door to Open")]
     [SerializeField] private Door2 door;
-
-    private Collider trigger;
 
     /*
     private KeyCode[] keyCodes = {
@@ -63,12 +62,15 @@ public class KeypadController : DeviceController
     private bool usingKeyboardDigits = true;
     */
     private Animator keyPadAnimator;
+    private NewRatCharacterController.NewRatCharacterController newRatCharacterController;
 
     private void Start()
     {
         keyPadAnimator = GetComponent<Animator>();
 
-        trigger = gameObject.transform.GetComponentInParent<BoxCollider>();
+        newRatCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
+
+        //trigger = gameObject.transform.GetComponentInParent<BoxCollider>();
 
         lockClosed.SetActive(true);
         lockOpen.SetActive(false);
@@ -118,6 +120,8 @@ public class KeypadController : DeviceController
             else
                 Debug.Log("Error: Missing device component");
 
+            newRatCharacterController.KeypadInteraction = false;
+
         }
         else
         {
@@ -131,6 +135,8 @@ public class KeypadController : DeviceController
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        Destroy(gameObject);
     }
 
     private void SwitchState()

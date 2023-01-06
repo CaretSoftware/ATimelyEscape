@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,24 +8,36 @@ using UnityEngine.Serialization;
 public class TeleportPad : MonoBehaviour
 {
     [SerializeField] private float coolDownTime = 5f; 
-    private TravelPathScript cable;
-    private TeleportPad linkedPad;
-    private TeleportPad[] pads;
-    [FormerlySerializedAs("mr")] [SerializeField] private MeshRenderer lightIndicator;
+    [SerializeField] private TravelPathScript cable;
+    [SerializeField] private TeleportPad linkedPad;
+
+    [SerializeField] private TeleportPad firstPad;
+    //private TeleportPad[] pads;
+    [SerializeField] private MeshRenderer lightIndicator;
     private NavMeshHit hit;
     [SerializeField ]private bool active;
 
     [HideInInspector] public Material indicatorMaterial;
     [HideInInspector] public bool OnCooldown;
 
+    private bool instantiate;
+    
     //TODO Dubbelkolla material-lösningen med Wessman.
     private void Start()
     {
-        pads = transform.parent.GetComponentsInChildren<TeleportPad>();
-        cable = transform.parent.GetComponentInChildren<TravelPathScript>();
-        linkedPad = pads[0] != this ? pads[0] : pads[1];
-        lightIndicator.material = Resources.Load("TeleportMatGreen") as Material; //= new Material(Shader.Find("Unlit/Color"));
-        UpdateMaterial();
+        //pads = transform.parent.GetComponentsInChildren<TeleportPad>();
+        //cable = transform.parent.GetComponentInChildren<TravelPathScript>();
+        //linkedPad = pads[0] != this ? pads[0] : pads[1];
+        //lightIndicator.material = Resources.Load("TeleportMatGreen") as Material; //= new Material(Shader.Find("Unlit/Color"));
+    }
+
+    private void Update()
+    {
+        if (!instantiate)
+        {
+            UpdateMaterial();
+            instantiate = true;
+        }
     }
 
     private void OnTriggerEnter(Collider target)
@@ -43,7 +56,7 @@ public class TeleportPad : MonoBehaviour
         //if linkedPad is equal to the second object in the hierachy then teleportation occurred 
         //from the first pad, else from second pad.
         //true = first pad, false = second pad.
-        cable.TravelPath(linkedPad == pads[1], target.gameObject, linkedPad.transform.position);
+        cable.TravelPath(linkedPad != firstPad, target.gameObject, linkedPad.transform.position);
         StartCoroutine(CoolDownTimer());
     }
 
@@ -52,9 +65,8 @@ public class TeleportPad : MonoBehaviour
         lightIndicator.material = Resources.Load("TeleportMatCyan") as Material;
         synchronizeLinkedPad();
         yield return new WaitForSeconds(coolDownTime);
-        UpdateMaterial();
         OnCooldown = false;
-        synchronizeLinkedPad();
+        UpdateMaterial();
     }
 
     private void UpdateMaterial()
@@ -67,10 +79,7 @@ public class TeleportPad : MonoBehaviour
 
     private void synchronizeLinkedPad()
     {
-        if (linkedPad.lightIndicator == null)
-            linkedPad.lightIndicator = lightIndicator;
-            linkedPad.lightIndicator.material = lightIndicator.material;
-        //linkedPad.indicatorMaterial.color = indicatorMaterial.color;
+        linkedPad.lightIndicator.material = lightIndicator.material;
         linkedPad.OnCooldown = OnCooldown;
     }
     public void TeleportOn()
