@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &3938354 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6945941892885086834, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
+  m_PrefabInstance: {fileID: 1750517932}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1224015672e75f4a98e5c37ebdbe4b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &24971308
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -945,24 +956,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 571015515}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &652387219 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6945941892568348268, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
-  m_PrefabInstance: {fileID: 1750517932}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &652387223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 652387219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1224015672e75f4a98e5c37ebdbe4b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  firstSelectedButton: {fileID: 2052210441}
 --- !u!1001 &814352897
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1959,6 +1952,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1510960574 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6945941893780846267, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
+  m_PrefabInstance: {fileID: 1750517932}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 159b31be1d2a48b4bac0326c8ca285a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1534882398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2433,6 +2437,30 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3873819366785303345, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1510960574}
+    - target: {fileID: 3873819366785303345, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 3938354}
+    - target: {fileID: 3873819366785303345, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: UnPauseGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 3873819366785303345, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: DeselectButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 3873819366785303345, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PauseMenuBehaviour, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3873819366785303345, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: MenuSelection, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6945941892568348268, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -2533,6 +2561,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6945941893780846267, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
+      propertyPath: menuSelection
+      value: 
+      objectReference: {fileID: 3938354}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
 --- !u!1 &1797940208
@@ -3218,11 +3250,6 @@ Transform:
   m_Father: {fileID: 1499022374}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2052210441 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3873819366785303346, guid: e58e63ee7b42ae94e93e0277f43d4553, type: 3}
-  m_PrefabInstance: {fileID: 1750517932}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2055050609
 PrefabInstance:
   m_ObjectHideFlags: 0
