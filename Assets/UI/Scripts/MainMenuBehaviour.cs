@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class StartMenuBehaviour : MonoBehaviour
+public class MainMenuBehaviour : MonoBehaviour
 {
     private Animator startMenyAnimator;
     private bool hasStartUp = false;
@@ -49,7 +49,7 @@ public class StartMenuBehaviour : MonoBehaviour
         }
         else
         {
-            startMenyAnimator.Play("Outro");
+            startMenyAnimator.Play("PlayGame");
             //StartCoroutine(LoadSceneAsync(sceneIndex)); It is activated in Animation StartMenuOutro
         }
     }
