@@ -6,7 +6,6 @@ public class FlickerLightControl : MonoBehaviour
 {
     // Start is called before the first frame update
     [Header("Values")]
-    public bool isFlickering = false;
     public float timeDelay;
     public int flickeringDivision = 2;
 
@@ -16,7 +15,9 @@ public class FlickerLightControl : MonoBehaviour
 
     private float originalSpotIntensity;
     private float originalPointIntensity;
-    private AudioSource audioSource; 
+    private AudioSource audioSource;
+
+    private bool isFlickering = false;
 
     private void Start()
     {
