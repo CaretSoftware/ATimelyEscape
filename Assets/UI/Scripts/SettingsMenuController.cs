@@ -45,7 +45,7 @@ public class SettingsMenuController : MonoBehaviour
     }
     public void SetShouldPlayTextToSpeach(bool shouldPlayTextToSpeach)
     {
-        MenuButtonBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
+        ButtonSoundBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
     }
 
     public void SetVolume(float volume)

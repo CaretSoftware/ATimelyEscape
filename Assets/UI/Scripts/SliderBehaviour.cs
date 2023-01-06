@@ -13,6 +13,9 @@ public class SliderBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(slider == null)
+            slider = gameObject.GetComponent<Slider>();
+
         slider.onValueChanged.AddListener((currentValue) =>
         {
             //float newValue = (1 - (currentValue / slider.minValue)) * 100;

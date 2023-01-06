@@ -17,8 +17,9 @@ public class KeypadController : DeviceController
 
     [Header("UI Components")]
     [SerializeField] private TextMeshProUGUI screen;
-    [SerializeField] private UnityEngine.UI.Button[] keypadKeys;
-    [SerializeField] private int keypadColumns = 3;
+    [SerializeField] private Collider trigger;
+    //[SerializeField] private UnityEngine.UI.Button[] keypadKeys;
+    //[SerializeField] private int keypadColumns = 3;
 
     [Header("LockIcons")]
     [SerializeField] private GameObject lockClosed;
@@ -30,8 +31,7 @@ public class KeypadController : DeviceController
     [Header("Door to Open")]
     [SerializeField] private Door2 door;
 
-    private Collider trigger;
-
+    /*
     private KeyCode[] keyCodes = {
         KeyCode.Alpha0,
         KeyCode.Alpha1,
@@ -54,19 +54,23 @@ public class KeypadController : DeviceController
         KeyCode.Keypad8,
         KeyCode.Keypad9,
      };
+
     private const int keyAmount = 10;
    
     private int currentKeypadKeysIndex;
     private int previousKeypadIndex;
     private bool usingKeyboardDigits = true;
-
+    */
     private Animator keyPadAnimator;
+    private NewRatCharacterController.NewRatCharacterController newRatCharacterController;
 
     private void Start()
     {
         keyPadAnimator = GetComponent<Animator>();
 
-        trigger = gameObject.transform.GetComponentInParent<BoxCollider>();
+        newRatCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
+
+        //trigger = gameObject.transform.GetComponentInParent<BoxCollider>();
 
         lockClosed.SetActive(true);
         lockOpen.SetActive(false);
@@ -116,6 +120,8 @@ public class KeypadController : DeviceController
             else
                 Debug.Log("Error: Missing device component");
 
+            newRatCharacterController.KeypadInteraction = false;
+
         }
         else
         {
@@ -129,6 +135,8 @@ public class KeypadController : DeviceController
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        Destroy(gameObject);
     }
 
     private void SwitchState()
@@ -137,6 +145,7 @@ public class KeypadController : DeviceController
         stateClosed.SetActive(!stateClosed.activeInHierarchy);
     }
 
+    /*
     private void Update()
     {
         for (int i = 0; i < keyCodes.Length; i++)
@@ -214,4 +223,5 @@ public class KeypadController : DeviceController
             EventSystem.current.SetSelectedGameObject(null);
         }
     }
+    */
 }

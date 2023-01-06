@@ -39,6 +39,7 @@ public class NewIncubator : MonoBehaviour
     private bool cubeButtonOn;
     private bool ratButtonOn;
     private bool charging;
+    private bool welcome;
 
     private bool isON;
 
@@ -89,7 +90,7 @@ public class NewIncubator : MonoBehaviour
             }
             if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && puzzleOneDone && !puzzleTwoDone)
             {
-                instructions.text = " Good.";
+                instructions.text = "Good.";
                 signMr.material = done;
                 Invoke("Step4", 3.5f);
                 //StartCoroutine(Delay());
@@ -97,7 +98,7 @@ public class NewIncubator : MonoBehaviour
             }
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
-                instructions.text = " Good.";
+                instructions.text = "Good.";
                 puzzleThreeDone = true;
                 signMr.material = done;
                 Invoke("Step5", 2f);
@@ -126,21 +127,27 @@ public class NewIncubator : MonoBehaviour
     private void Step2()
     {
         signMr.material = notDone;
-        instructions.text = " Push the cube to change its position in both this time and the future. " +
-            //skapa ett pushcube event här:
-            "Then press Y-button to travel one year ahead in time to and see that the cube is in the same spot";
+        instructions.text = "Push the cube to change its position in both this time and the future.";
         puzzleFloor.SetActive(false);
         bigHatchAnim.SetBool("Open", false);
         Debug.Log("STEP2");
+        Invoke("Step2AndHalf", 4f);
+    }
+    private void Step2AndHalf()
+    {
+        instructions.text = "Then press Y-button to travel one year ahead in time to and see that the cube is in the same spot";
         puzzleOneDone = true;
     }
     private void Step4()
     {
         signMr.material = notDone;
-        instructions.text = " Now push the cube again." +
-            //cubepushevent
-            "Then use the X-button to travel back in time to see that the cube is in its original spot in this time";
+        instructions.text = "Now push the cube again.";
         Debug.Log("STEP4");
+        Invoke("Step4AndHalf", 4f);
+    }
+    private void Step4AndHalf()
+    {
+        instructions.text = "Then use the X-button to travel back in time to see that the cube is in its original spot in this time";
         puzzleTwoDone = true;
     }
     private void Step5()
@@ -170,11 +177,7 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step8()
     {
-        sign.SetActive(true);
-        sign2.SetActive(false);
-        sign3.SetActive(false);
         puzzleFloor.SetActive(true);
-        signMr.material = notDone;
         bigHatchAnim.SetBool("OpenThird", true);
         step2Anim.SetBool("Open", false);
         Invoke("Step9", 3.5f);
@@ -183,6 +186,8 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step9()
     {
+        sign.SetActive(true);
+        signMr.material = notDone;
         sign2.SetActive(false);
         sign3.SetActive(false);
         step3.SetActive(true);
@@ -221,10 +226,19 @@ public class NewIncubator : MonoBehaviour
         charging = true;
         Debug.Log("Charging");
     }
-    public void DontCharge()
+    /*    public void DontCharge()
+        {
+            charging = false;
+            Debug.Log("StoppedCharge");
+        }*/
+
+    public void StartText()
     {
-        charging = false;
-        Debug.Log("StoppedCharge");
+        if (!welcome)
+        {
+            instructions.text = "Welcome subject R@. Please step forward";
+            welcome = true;
+        }
     }
     public void IsOn()
     {

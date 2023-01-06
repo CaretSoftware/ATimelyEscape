@@ -55,13 +55,6 @@ public class PauseMenuBehaviour : MonoBehaviour {
     // }
 
     public void PauseGame() {
-        // if (paused)
-        // {
-        //     Debug.Log("Error: Is Already Paused");
-        //     return;
-        // }
-
-        // CharacterInput.IsPaused(true);
 
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
@@ -76,12 +69,6 @@ public class PauseMenuBehaviour : MonoBehaviour {
         currentCoroutine = PauseTime();
 
         StartCoroutine(currentCoroutine);
-
-        // if (slider == null)
-        //     slider = GetComponentInChildren<Slider>();
-
-        // if (slider != null && CameraController.Instance != null)
-        //     slider.value = CameraController.Instance.MouseSensitivity;
     }
 
     private float pauseDelay = 1f;
@@ -102,16 +89,11 @@ public class PauseMenuBehaviour : MonoBehaviour {
     }
 
     public void UnPauseGame() {
-        //Debug.Log("Info: Unpaused Game");
 
         CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = false };
         pauseEvent.Invoke();
 
         pauseMenyAnimator.Play("UnPause");
-
-        // paused = false;
-
-        // CharacterInput.IsPaused(false);
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -153,12 +135,6 @@ public class PauseMenuBehaviour : MonoBehaviour {
     // Method to quit the application anytime
     public void QuitGame() {
         Debug.Log("Info: Quit button has been Pressed");
-
         Application.Quit();
     }
-
-    // public bool isPaused()
-    // {
-    //     // return paused;
-    // }
 }
