@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using NewRatCharacterController;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,6 +11,7 @@ public class TravelPathScript : MonoBehaviour
     private LineRenderer line;
     private GameObject teleportingObject;
     private NavMeshHit hit;
+    private Transform cubeTransform;
 
     private Vector3[] positions;
     private Vector3[] pos;
@@ -21,12 +24,23 @@ public class TravelPathScript : MonoBehaviour
 
     private void Start()
     {
+        CubePushState.pushCubeEvent += CubePushed;
         line = GetComponent<LineRenderer>();
         positions = new Vector3[line.positionCount];
         pos = GetLinePointsInWorldSpace();
         objectToMove.SetActive(false);
         playerParent = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
 
+    }
+
+    private void OnDestroy()
+    {
+        CubePushState.pushCubeEvent -= CubePushed;
+    }
+
+    private void CubePushed(Transform cube)
+    {
+        cubeTransform = cube;
     }
 
     private void Update()
@@ -37,6 +51,7 @@ public class TravelPathScript : MonoBehaviour
 
     public void TravelPath(bool pathReg, GameObject teleportingObject, Vector3 arrivalLocation)
     {
+        if(teleportingObject.tag.Equals("Cube") && teleportingObject.transform != cubeTransform) return;
         this.teleportingObject = teleportingObject;
         pathFromFirstIndexPad = pathReg;
         location = arrivalLocation;
@@ -53,7 +68,7 @@ public class TravelPathScript : MonoBehaviour
 
         }
             
-        
+        NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
         objectToMove.SetActive(true);
         objectToMove.transform.position = pos[index];
     }
@@ -75,6 +90,7 @@ public class TravelPathScript : MonoBehaviour
         }
         if (iterations == positions.Length)
         {
+            NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(false);
             objectToMove.SetActive(false);
             teleportingObject.transform.position = location;
             if(teleportingObject.tag.Equals("Player"))
