@@ -15,28 +15,36 @@ public class SettingsMenuController : MonoBehaviour
 
     private void Start()
     {
-        resolutions = Screen.resolutions;
 
-        resolutionDropdown.ClearOptions();
-
-        List<string> options = new List<string>();
-
-        int currentResolutionIndex = 0;
-
-        for(int i = 0; i < resolutions.Length; i++)
+        if (resolutionDropdown != null)
         {
-            string option = resolutions[i].width + "x" + resolutions[i].height;
-            options.Add(option);
+            resolutions = Screen.resolutions;
 
-            if(resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+            resolutionDropdown.ClearOptions();
+
+            List<string> options = new List<string>();
+
+            int currentResolutionIndex = 0;
+
+            for (int i = 0; i < resolutions.Length; i++)
             {
-                currentResolutionIndex = i;
-            }
-        }
+                string option = resolutions[i].width + "x" + resolutions[i].height;
+                options.Add(option);
 
-        resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex;
-        resolutionDropdown.RefreshShownValue();
+                if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+                {
+                    currentResolutionIndex = i;
+                }
+            }
+
+            resolutionDropdown.AddOptions(options);
+            resolutionDropdown.value = currentResolutionIndex;
+            resolutionDropdown.RefreshShownValue();
+        }
+        else
+        {
+            Debug.Log("Message: Settings Menu is missing Dropdown for resolution");
+        }
     }
 
     public void SetFullscreen(bool isFullscreen)
@@ -45,7 +53,7 @@ public class SettingsMenuController : MonoBehaviour
     }
     public void SetShouldPlayTextToSpeach(bool shouldPlayTextToSpeach)
     {
-        MenuButtonBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
+        ButtonSoundBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
     }
 
     public void SetVolume(float volume)
