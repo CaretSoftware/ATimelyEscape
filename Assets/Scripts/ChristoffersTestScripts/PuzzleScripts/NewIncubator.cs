@@ -30,6 +30,7 @@ public class NewIncubator : MonoBehaviour
     private MeshRenderer signMr;
     private MeshRenderer sign2Mr;
     private MeshRenderer sign3Mr;
+    private NewRatCharacterController.NewCharacterInput characterInput;
 
     private bool puzzleOneDone;
     private bool puzzleTwoDone;
@@ -39,6 +40,7 @@ public class NewIncubator : MonoBehaviour
     private bool cubeButtonOn;
     private bool ratButtonOn;
     private bool charging;
+    private bool welcome;
 
     private bool isON;
 
@@ -89,7 +91,7 @@ public class NewIncubator : MonoBehaviour
             }
             if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && puzzleOneDone && !puzzleTwoDone)
             {
-                instructions.text = " Good.";
+                instructions.text = "Good.";
                 signMr.material = done;
                 Invoke("Step4", 3.5f);
                 //StartCoroutine(Delay());
@@ -97,11 +99,10 @@ public class NewIncubator : MonoBehaviour
             }
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
-                instructions.text = " Good.";
+                instructions.text = "Good.";
                 puzzleThreeDone = true;
                 signMr.material = done;
                 Invoke("Step5", 2f);
-                Invoke("Step6", 5.5f);
                 //StartCoroutine(Delay());
                 Debug.Log("STEP5");
             }
@@ -126,21 +127,27 @@ public class NewIncubator : MonoBehaviour
     private void Step2()
     {
         signMr.material = notDone;
-        instructions.text = " Push the cube to change its position in both this time and the future. " +
-            //skapa ett pushcube event här:
-            "Then press Y-button to travel one year ahead in time to and see that the cube is in the same spot";
+        instructions.text = "Moving a cube changes its destiny in the future. Move the cube.";
         puzzleFloor.SetActive(false);
         bigHatchAnim.SetBool("Open", false);
         Debug.Log("STEP2");
+        Invoke("Step2AndHalf", 4f);
+    }
+    private void Step2AndHalf()
+    {
+        instructions.text = "Timetravel forwards in time <sprite name=\"Y\">";
         puzzleOneDone = true;
     }
     private void Step4()
     {
         signMr.material = notDone;
-        instructions.text = " Now push the cube again." +
-            //cubepushevent
-            "Then use the X-button to travel back in time to see that the cube is in its original spot in this time";
+        instructions.text = "Move the cube in this time.";
         Debug.Log("STEP4");
+        Invoke("Step4AndHalf", 4f);
+    }
+    private void Step4AndHalf()
+    {
+        instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
         puzzleTwoDone = true;
     }
     private void Step5()
@@ -148,6 +155,7 @@ public class NewIncubator : MonoBehaviour
         puzzleFloor.SetActive(true);
         bigHatchAnim.SetBool("OpenAgain", true);
         step1Anim.SetBool("Open", false);
+        Invoke("Step6", 3.5f);
     }
     private void Step6()
     {
@@ -165,16 +173,11 @@ public class NewIncubator : MonoBehaviour
     private void InstructionsStep8()
     {
         puzzleFloor.SetActive(false);
-        instructions.text = " To the left is a cubebutton that interacts with cubes. +" +
-            "To the right is a button that you can interact with";
+        instructions.text = " Some buttons react to cubes. Some buttons must be manually pressed";
     }
     private void Step8()
     {
-        sign.SetActive(true);
-        sign2.SetActive(false);
-        sign3.SetActive(false);
         puzzleFloor.SetActive(true);
-        signMr.material = notDone;
         bigHatchAnim.SetBool("OpenThird", true);
         step2Anim.SetBool("Open", false);
         Invoke("Step9", 3.5f);
@@ -183,6 +186,8 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step9()
     {
+        sign.SetActive(true);
+        signMr.material = notDone;
         sign2.SetActive(false);
         sign3.SetActive(false);
         step3.SetActive(true);
@@ -195,15 +200,10 @@ public class NewIncubator : MonoBehaviour
     private void Step10Instructions()
     {
         puzzleFloor.SetActive(false);
-        instructions.text = "This is a charger. You can charge a future cube by putting the past cube on the charger";
+        instructions.text = "Charge this cube on the chargepad. It holds charge for a long time";
         Debug.Log("STEP10");
     }
 
-    public void PickUp()
-    {
-        instructions.text = "Good. Now Use <sprite name=\"X\" color=#55FF55FF> to time travel one year to the past";
-        Debug.Log("STEP0");
-    }
     public void CubeButton()
     {
         cubeButtonOn = true;
@@ -221,10 +221,19 @@ public class NewIncubator : MonoBehaviour
         charging = true;
         Debug.Log("Charging");
     }
-    public void DontCharge()
+    /*    public void DontCharge()
+        {
+            charging = false;
+            Debug.Log("StoppedCharge");
+        }*/
+
+    public void StartText()
     {
-        charging = false;
-        Debug.Log("StoppedCharge");
+        if (!welcome)
+        {
+            instructions.text = "Subject R@, welcome! Please step forward";
+            welcome = true;
+        }
     }
     public void IsOn()
     {

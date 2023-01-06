@@ -63,12 +63,16 @@ public class NewRatCameraController : MonoBehaviour {
 
 	private void Awake() {
 		_cameraPos = transform.position;
+		
 	}
 
 	
 	private void Start() {
 		_ratCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
 		_camera.parent = null; // TODO fix 
+		
+		Vector3 initialCameraVector = transform.rotation.eulerAngles;
+		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
 		PauseMenuBehaviour.pauseDelegate += Pause;
 	}
 
