@@ -76,9 +76,7 @@ public class GoToActivityNode : Node
     {
         isCoroutineRunning = true;
         animator.SetBool("move", false);
-        //Debug.Log("Timer started");
         yield return new WaitForSeconds(idleTimer);
-        //Debug.Log("Done");
         animator.SetBool("move", true);
         isCoroutineRunning = false;
         isTimerDone = true;

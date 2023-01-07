@@ -10,17 +10,19 @@ public class CaptureNode : Node
     private NavMeshAgent agent;
     private Animator animator;
     private EnemyAI ai;
+    private IKControl ikControl;
+    
     private Transform agentCenterTransform;
     private Transform handIKTarget;
     private Transform player;
+    private Vector3 losPos;
 
     private float captureDistance;
     private float destinationDistance;
     private bool recentlyCaught;
 
-
     public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform agentCenterTransform,
-        Animator animator, EnemyAI ai, LayerMask obstacleMask)
+        Animator animator, EnemyAI ai, LayerMask obstacleMask, IKControl ikControl)
     {
         this.agent = agent;
         this.player = player;
@@ -29,18 +31,24 @@ public class CaptureNode : Node
         this.animator = animator;
         this.ai = ai;
         this.obstacleMask = obstacleMask;
+        this.ikControl = ikControl;
+        losPos = agentCenterTransform.localPosition + Vector3.up * 0.8f;
     }
 
     //TODO raycasta mot spelaren, om default träffad gå vidare, annars fånga spelaren.
     private RaycastHit hit;
     public override NodeState Evaluate()
     {
-        destinationDistance = Vector3.Distance(player.position, agentCenterTransform.transform.position);
-        //hit = Physics.Raycast();
-            return NodeState.RUNNING;
-        if (destinationDistance < captureDistance && !ai.IsCapturing && !recentlyCaught)
+        destinationDistance = Vector3.Distance(player.position, agentCenterTransform.transform.position);   
+        
+        Physics.Raycast(losPos, (player.position - losPos).normalized,
+            out hit, Mathf.Infinity, obstacleMask, QueryTriggerInteraction.Ignore);
+        //Debug.Log($"hit: {hit.transform.gameObject.name},  layer: {hit.transform.gameObject.layer}, player layer: {player.gameObject.layer}");
+        if (hit.collider.gameObject.layer == player.gameObject.layer && 
+            destinationDistance < captureDistance && !ai.IsCapturing && !recentlyCaught)
         {
-            
+            //animator.SetLookAtWeight(1);
+            //animator.SetLookAtPosition(player.position);
             animator.SetTrigger("GrabAction");
             agent.isStopped = true;
             ai.IsCapturing = true;

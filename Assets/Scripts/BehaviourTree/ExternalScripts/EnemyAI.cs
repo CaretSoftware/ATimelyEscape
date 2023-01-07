@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Serialization;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -15,12 +16,14 @@ public class EnemyAI : MonoBehaviour
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
     [SerializeField] private Transform checkpoint;
-    [SerializeField] private LayerMask obstacleMask;
+    [FormerlySerializedAs("obstacleMask")] [SerializeField] private LayerMask playerLayerMask;
     [Tooltip("Assigning the same waypoints to multiple enemies may result in unwanted behaviour.")]
     [SerializeField] private Transform[] activityWaypoints;
 
     [Header("Rig Setup")]
     [SerializeField] private Transform handIKTarget;
+
+    [SerializeField] private IKControl ikControl;
 
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
@@ -145,7 +148,8 @@ public class EnemyAI : MonoBehaviour
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, obstacleMask);
+        LOSNode losNode = new LOSNode(playerTransform, agentCenterTransform, playerLayerMask);
+        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
         Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode });
