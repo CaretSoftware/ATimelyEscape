@@ -25,7 +25,6 @@ public class TimeZoneTravelSetter : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.gameObject.CompareTag("Player")) {
-			print("Collision");
 			NewRatCharacterController.NewCharacterInput rat =
 				other.GetComponent<NewRatCharacterController.NewCharacterInput>();
 
