@@ -2,9 +2,9 @@ using System;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class NewRatCameraController : MonoBehaviour {
+	[SerializeField] private Transform keypadTransform;
 
 	private NewRatCharacterController.NewRatCharacterController _ratCharacterController;
 	
@@ -82,7 +82,14 @@ public class NewRatCameraController : MonoBehaviour {
 
 	private void Pause(bool paused) => _paused = paused;
 
+	
 	private void LateUpdate() {
+		if (keypadTransform != null)
+		{
+			MoveCameraToViewPoint(keypadTransform);
+			return;
+		}
+			
 		if (_paused || _ratCharacterController.KeypadInteraction) return;
 
 		ClampCameraTilt();
@@ -148,7 +155,10 @@ public class NewRatCameraController : MonoBehaviour {
 	
 	private void MoveCameraToViewPoint(Transform lookAtTransform) {
 		Quaternion rotation = Quaternion.Euler(45, 45, 0);
-		
+		_camera.rotation = Quaternion.Euler(rotation * lookAtTransform.right);
+		_camera.position =  lookAtTransform.position;
+
+
 	}
 	
 	
