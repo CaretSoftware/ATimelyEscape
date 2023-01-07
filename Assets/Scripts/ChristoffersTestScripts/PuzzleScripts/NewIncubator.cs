@@ -138,7 +138,7 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step2AndHalf()
     {
-        instructions.text = "Timetravel forwards in time <sprite name=\"Y\">";
+        instructions.text = "Timetravel forward in time <sprite name=\"Y\">";
         characterInput.CanTimeTravelPresent = true; 
         puzzleOneDone = true;
     }
