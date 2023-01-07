@@ -146,6 +146,11 @@ public class NewRatCameraController : MonoBehaviour {
 		_camera.position = _abovePlayer + _camera.rotation * _lerpOffset;
 	}
 	
+	private void MoveCameraToViewPoint(Transform lookAtTransform) {
+		Quaternion rotation = Quaternion.Euler(45, 45, 0);
+		
+	}
+	
 	
 	private void MoveAccessibleCamera()
 	{
