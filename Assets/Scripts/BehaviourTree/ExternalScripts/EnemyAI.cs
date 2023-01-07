@@ -99,6 +99,8 @@ public class EnemyAI : MonoBehaviour
         chaseRange = enemyFOV.ChaseRadius;
         captureRange = enemyFOV.CatchRadius;
         ConstructBehaviourTreePersonnel();
+        defaultFeetPos = feetPos.localPosition;
+        defaultHipPos = hipPos.localPosition;
     }
 
     private void Update()
@@ -148,7 +150,6 @@ public class EnemyAI : MonoBehaviour
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
-        LOSNode losNode = new LOSNode(playerTransform, agentCenterTransform, playerLayerMask);
         CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
@@ -204,5 +205,28 @@ public class EnemyAI : MonoBehaviour
     {
         get { return isCapturing; }
         set { isCapturing = value; }
+    }
+
+    [SerializeField] private Transform feetPos;
+    [SerializeField] private Transform hipPos;
+    private float feet_t, hip_t, t_speed;
+    private Vector3 defaultFeetPos;
+    private Vector3 defaultHipPos;
+    private Vector3 middlePos;
+
+    public void BendTheKnee()
+    {
+        if (playerTransform.position.y <= 0.5f)
+        {
+            middlePos = (hipPos.localPosition + feetPos.localPosition) / 2;
+            feetPos.localPosition = middlePos;
+            hipPos.localPosition = middlePos;
+        }
+    }
+
+    public void RestoreAfterKneeling()
+    {
+        feetPos.localPosition = defaultFeetPos;
+        hipPos.localPosition = defaultHipPos;
     }
 }
