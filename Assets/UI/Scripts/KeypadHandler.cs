@@ -37,13 +37,19 @@ public class KeypadHandler : MonoBehaviour
 
     public void CloseKeypad()
     {
-        NewRatCameraController.UnlockLookTarget();
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        newRatCharacterController.KeypadInteraction = false;
+        ReleasePlayer();
+        
         keypadUI.GetComponent<Animator>().Play("Close");
         //CharacterInput.IsPaused(false);
+    }
+
+    public void ReleasePlayer() 
+    {
+        Debug.Log("CLOSED KEYPAD");
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        NewRatCameraController.UnlockLookTarget();
+        newRatCharacterController.KeypadInteraction = false;
     }
 
     private void OnTriggerEnter(Collider other) 
