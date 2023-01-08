@@ -74,7 +74,7 @@ public class NewIncubator : MonoBehaviour
             audioManager.Play("3");
             Step8();
             puzzleFourDone = true;
-            Debug.Log("STEP7");
+            //Debug.Log("STEP7");
         }
 
     }
@@ -93,7 +93,7 @@ public class NewIncubator : MonoBehaviour
                 //StartCoroutine(Delay());
                 bigHatchAnim.SetBool("Open", true);
                 step1Anim.SetBool("Open", true);
-                Debug.Log("STEP1");
+                //Debug.Log("STEP1");
             }
             if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && puzzleOneDone && !puzzleTwoDone)
             {
@@ -102,7 +102,7 @@ public class NewIncubator : MonoBehaviour
                 signMr.material = done;
                 Invoke("Step4", 3.5f);
                 //StartCoroutine(Delay());
-                Debug.Log("STEP3");
+                //Debug.Log("STEP3");
             }
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
@@ -113,7 +113,7 @@ public class NewIncubator : MonoBehaviour
                 signMr.material = done;
                 Invoke("Step5", 2f);
                 //StartCoroutine(Delay());
-                Debug.Log("STEP5");
+                //Debug.Log("STEP5");
             }
             if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && charging && !puzzleFiveDone)
             {
@@ -124,7 +124,7 @@ public class NewIncubator : MonoBehaviour
                 candyFeederAnim.SetBool("Open", true);
                 puzzleFiveDone = true;
                 isON = false;
-                Debug.Log("STEP11");
+                //Debug.Log("STEP11");
             }
         }
         if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleFiveDone)
@@ -142,7 +142,7 @@ public class NewIncubator : MonoBehaviour
         instructions.text = "Moving a cube changes its destiny in the future. Move the cube.";
         puzzleFloor.SetActive(false);
         bigHatchAnim.SetBool("Open", false);
-        Debug.Log("STEP2");
+        //Debug.Log("STEP2");
         Invoke("Step2AndHalf", 8f);
     }
     private void Step2AndHalf()
@@ -158,7 +158,7 @@ public class NewIncubator : MonoBehaviour
         signMr.material = notDone;
         audioManager.Play("6");
         instructions.text = "Move the cube in this time.";
-        Debug.Log("STEP4");
+        //Debug.Log("STEP4");
         Invoke("Step4AndHalf", 8f);
     }
     private void Step4AndHalf()
@@ -192,7 +192,7 @@ public class NewIncubator : MonoBehaviour
         sign.SetActive(false);
         sign2.SetActive(true);
         sign3.SetActive(true);
-        Debug.Log("STEP6");
+        //Debug.Log("STEP6");
     }
     private void InstructionsStep8()
     {
@@ -207,7 +207,7 @@ public class NewIncubator : MonoBehaviour
         step2Anim.SetBool("Open", false);
         Invoke("Step9", 3.5f);
         //StartCoroutine(Delay());
-        Debug.Log("STEP8");
+        //Debug.Log("STEP8");
     }
     private void Step9()
     {
@@ -220,32 +220,32 @@ public class NewIncubator : MonoBehaviour
         bigHatchAnim.SetBool("OpenLast", true);
         step3Anim.SetBool("Open", true);
         Invoke("Step10Instructions", 3.5f);
-        Debug.Log("STEP9");
+        //Debug.Log("STEP9");
     }
     private void Step10Instructions()
     {
         puzzleFloor.SetActive(false);
         audioManager.Play("8");
         instructions.text = "Charge this cube on the chargepad. It holds charge for a long time";
-        Debug.Log("STEP10");
+        //Debug.Log("STEP10");
     }
 
     public void CubeButton()
     {
         cubeButtonOn = true;
         sign2Mr.material = done;
-        Debug.Log("CUBEON");
+        //Debug.Log("CUBEON");
     }
     public void RatButton()
     {
         ratButtonOn = true;
         sign3Mr.material = done;
-        Debug.Log("RATON");
+        //Debug.Log("RATON");
     }
     public void Charging()
     {
         charging = true;
-        Debug.Log("Charging");
+        //Debug.Log("Charging");
     }
     /*    public void DontCharge()
         {
@@ -261,6 +261,10 @@ public class NewIncubator : MonoBehaviour
             instructions.text = "Subject R@, welcome! Please step forward";
             welcome = true;
         }
+    }
+    public void ClearText()
+    {
+        instructions.text = "";
     }
     public void IsOn()
     {

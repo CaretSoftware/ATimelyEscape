@@ -20,9 +20,9 @@ public class WatchPickup : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("PICKUP TRIGGER");
+		//Debug.Log("PICKUP TRIGGER");
 		if (other.CompareTag("Player")) {
-			Debug.Log("PICKUP TRIGGER");
+			//Debug.Log("PICKUP TRIGGER");
 
 			if (instructions != null)
 				instructions.text = "Use the timetravel device <sprite name=\"X\"> to timetravel one year to the past";
@@ -31,7 +31,7 @@ public class WatchPickup : MonoBehaviour {
 			characterInput.CanTimeTravelPresent = false;
 			characterInput.CanTimeTravelFuture = false;
 			Destroy(this.gameObject);
-			Debug.Log("PICKUP TRIGGER");
+			//Debug.Log("PICKUP TRIGGER");
 		}
 	}
 
