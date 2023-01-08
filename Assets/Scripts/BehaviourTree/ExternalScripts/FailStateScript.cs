@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class FailStateScript : MonoBehaviour
@@ -54,8 +55,8 @@ public class FailStateScript : MonoBehaviour
 
     public void FadeBack()
     {
-        player.position = checkpoint.position;
         NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(false);
+        player.position = checkpoint.position;
         imageFunctionality.RunFadeBack();
         hyperDriveAnimator.gameObject.SetActive(false);
     }

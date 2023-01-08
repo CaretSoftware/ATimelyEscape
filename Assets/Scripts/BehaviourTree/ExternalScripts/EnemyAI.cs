@@ -9,6 +9,8 @@ public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
     private const float NavMeshRadiusOffstep = 20f;
+    private const float AnimationPreviewBasedFeetPos = 0.4f;
+    private const float AnimationPreviewBasedHipPos = 0.5f;
 
     [HideInInspector] public static int IDCounter;
     [HideInInspector] public int ID;
@@ -101,8 +103,10 @@ public class EnemyAI : MonoBehaviour
         ConstructBehaviourTreePersonnel();
         defaultFeetPos = feetPos.localPosition;
         defaultHipPos = hipPos.localPosition;
+        hipPosBent = new Vector3(defaultHipPos.x, AnimationPreviewBasedHipPos ,defaultHipPos.z);
+        feetPosBent = new Vector3(defaultFeetPos.x, AnimationPreviewBasedFeetPos ,defaultFeetPos.z);
     }
-
+    
     private void Update()
     {
         if (activeAI)
@@ -194,6 +198,8 @@ public class EnemyAI : MonoBehaviour
     {
         handIKTarget.position = defaultIKTarget.position;
         isCapturing = false;
+        
+        RestoreAfterKneeling();
     }
     public void SetPlayerTransformToCheckpoint() { FailStateScript.Instance.PlayDeathVisualization(checkpoint, transform); }
     public void ReturnHand() { animator.SetTrigger("ReturnHandAction"); }
@@ -209,24 +215,32 @@ public class EnemyAI : MonoBehaviour
 
     [SerializeField] private Transform feetPos;
     [SerializeField] private Transform hipPos;
-    private float feet_t, hip_t, t_speed;
     private Vector3 defaultFeetPos;
     private Vector3 defaultHipPos;
-    private Vector3 middlePos;
+    private Vector3 feetPosBent;
+    private Vector3 hipPosBent;
 
     public void BendTheKnee()
     {
-        if (playerTransform.position.y <= 0.5f)
+        //print($"BendTheKnee()");
+        //print($"player transform.y: {playerTransform.position.y}");
+        if (playerTransform.position.y < 0.5f)
         {
-            middlePos = (hipPos.localPosition + feetPos.localPosition) / 2;
-            feetPos.localPosition = middlePos;
-            hipPos.localPosition = middlePos;
+            feetPos.localPosition = feetPosBent;
+            hipPos.localPosition = hipPosBent;
+            print($"player below 0.5f");
         }
+        //print($"feetPosLocal: {feetPos.localPosition.y}");
+        //print($"hipPosLocal: {hipPos.localPosition.y}");
+        //print($"\n");
     }
 
-    public void RestoreAfterKneeling()
+    private void RestoreAfterKneeling()
     {
+        //print($"RestoreAfterKneeling()");
         feetPos.localPosition = defaultFeetPos;
         hipPos.localPosition = defaultHipPos;
+        //print($"feetPosLocal: {feetPos.localPosition.y}");
+        //print($"hipPosLocal: {hipPos.localPosition.y}");
     }
 }

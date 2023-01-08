@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
@@ -44,15 +45,19 @@ public class CaptureNode : Node
         Physics.Raycast(losPos, (player.position - losPos).normalized,
             out hit, Mathf.Infinity, obstacleMask, QueryTriggerInteraction.Ignore);
         //Debug.Log($"hit: {hit.transform.gameObject.name},  layer: {hit.transform.gameObject.layer}, player layer: {player.gameObject.layer}");
-        if (hit.collider.gameObject.layer == player.gameObject.layer && 
-            destinationDistance < captureDistance && !ai.IsCapturing && !recentlyCaught)
+        if (destinationDistance < captureDistance)
         {
-            //animator.SetLookAtWeight(1);
-            //animator.SetLookAtPosition(player.position);
-            animator.SetTrigger("GrabAction");
+            Debug.Log($"Within captureDistance");
             agent.isStopped = true;
-            ai.IsCapturing = true;
-            return NodeState.FAILURE;
+            if (hit.collider.gameObject.layer == player.gameObject.layer && !ai.IsCapturing && !recentlyCaught)
+            {
+                animator.SetTrigger("GrabAction");
+                Debug.Log($"GrabAction triggered");
+                //agent.isStopped = true;
+                ai.IsCapturing = true;
+                return NodeState.FAILURE;
+            }
+            return NodeState.RUNNING;
         }
         else
         {
