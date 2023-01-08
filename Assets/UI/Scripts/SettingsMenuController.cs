@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Audio;
 
 public class SettingsMenuController : MonoBehaviour
@@ -12,6 +13,8 @@ public class SettingsMenuController : MonoBehaviour
     Resolution[] resolutions;
 
     public bool shouldPlayTextToSpeach;
+
+    [SerializeField] private Slider volumeSlider;
 
     private void Start()
     {
@@ -45,6 +48,10 @@ public class SettingsMenuController : MonoBehaviour
         {
             Debug.Log("Message: Settings Menu is missing Dropdown for resolution");
         }
+
+        audioMixer.GetFloat("volume", out float value);
+        volumeSlider.value = value;
+
     }
 
     public void SetFullscreen(bool isFullscreen)

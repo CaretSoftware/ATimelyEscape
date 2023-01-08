@@ -12,16 +12,22 @@ public class ReflectionProbeUpdater : MonoBehaviour
     {
         _probe = GetComponent<ReflectionProbe>();
         _probe.RenderProbe();
-        TimePeriodChanged.AddListener<TimePeriodChanged>(UpdateProbe);
+        TimePeriodChanged.AddListener<TimePeriodChanged>(TriggerTimer);
     }
 
-    private void UpdateProbe(TimePeriodChanged e)
+    private void TriggerTimer(TimePeriodChanged e)
     {
         if (e.IsReload) return;
+        UpdateProbe();
+        Invoke(nameof(UpdateProbe), 1f);
+    }
+
+    private void UpdateProbe()
+    {
         _probe.RenderProbe();
     }
 
     private void OnDestroy() {
-        if(EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(UpdateProbe);
+        if(EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TriggerTimer);
     }
 }

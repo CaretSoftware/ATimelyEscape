@@ -61,7 +61,7 @@ public class NewRatCharacterController : MonoBehaviour
 	// Input
 	private Vector3 _inputMovement;
 	public bool paused;
-	public bool Jumped { get; private set; }
+	public bool Jumped { get; set; }
 	public bool Interacting { get; set; }
 	public Vector3 GroundNormal { get; private set; }
 	[HideInInspector] public Vector3 _velocity;
@@ -216,7 +216,8 @@ public class NewRatCharacterController : MonoBehaviour
 	public bool HoldingJump { get; set; }
 	public Vector3 ConveyorForce { get; set; }
 
-	private void Input() {
+	private void Input()
+	{
 		AnimationController.SetInputVector(InputVector);
 		
 		_inputMovement = Quaternion.Euler(0, _camera.rotation.y,0)  * InputVector;
@@ -455,16 +456,7 @@ public class NewRatCharacterController : MonoBehaviour
 		
 		_transform.rotation = Quaternion.LookRotation(lookDirection);
 	}
-
-	public Vector3 point0;
-	public Vector3 point1;
-	private void OnDrawGizmos() {
-		if (!Application.isPlaying) return;
-		
-		Gizmos.DrawWireSphere(point0, _colliderRadius);
-		Gizmos.DrawWireSphere(point1, _colliderRadius);
-	}
-
+	
 	public bool InFrontOfCube() {
 		float maxLength = .1f;
 		Vector3 fwd = RatMesh.forward;
@@ -486,12 +478,26 @@ public class NewRatCharacterController : MonoBehaviour
 		return false;
 	}
 
+	public void EnableCharacterMovement(bool enabled) {
+		NewCharacterInput.EnableCharacterMovement(enabled);
+	}
+
 	public bool KeypadInteraction { get; set; }
 
 	public Vector3 cubeHitPosition;
 	public Vector3 cubeHitInverseNormal;
 	public Transform cubeTransform;
 	public Vector3 pushOffset;
-
+	
+	public Vector3 point0;
+	public Vector3 point1;
+#if UNITY_EDITOR
+	private void OnDrawGizmos() {
+		if (!Application.isPlaying) return;
+		
+		Gizmos.DrawWireSphere(point0, _colliderRadius);
+		Gizmos.DrawWireSphere(point1, _colliderRadius);
+	}
+#endif
 }
 }
