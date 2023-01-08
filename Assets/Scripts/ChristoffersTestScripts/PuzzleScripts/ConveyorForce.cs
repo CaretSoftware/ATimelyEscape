@@ -44,7 +44,7 @@ public class ConveyorForce : MonoBehaviour
 
     private void Start()
     {
-        isOn = true;
+        isOn = false;
         TimePeriodChanged.AddListener<TimePeriodChanged>(TimeMachineOff);
     }
 
@@ -112,26 +112,18 @@ public class ConveyorForce : MonoBehaviour
     }
     private void TimeMachineOff(TimePeriodChanged e)
     {
-        if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present)
+        if (e.from == TimeTravelPeriod.Past)
         {
             isOn = false;
             audioSource.Stop();
         }
-        else if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Future)
-        {
-            isOn = false;
-            audioSource.Stop();
-        }
-        else if (e.from == TimeTravelPeriod.Future && e.to == TimeTravelPeriod.Past)
+
+        else if (e.to == TimeTravelPeriod.Past)
         {
             isOn = true;
             audioSource.Play();
         }
-        else if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past)
-        {
-            isOn = true;
-            audioSource.Play();
-        }
+
     }
     private void OnDestroy()
     {
