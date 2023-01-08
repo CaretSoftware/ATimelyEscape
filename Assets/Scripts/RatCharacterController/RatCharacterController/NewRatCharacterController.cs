@@ -15,10 +15,11 @@ public class NewRatCharacterController : MonoBehaviour
 	public bool Caught;// { get; set; }
 	
 	public bool LetGoOfCube { get; set; }
-	
+
 	// State Machine
 	private StateMachine _stateMachine;
 	private List<BaseState> _states = new List<BaseState> { 
+		new WakeUpState(),
 		new MoveState(), 
 		new JumpState(), 
 		new AirState(), 
@@ -42,6 +43,7 @@ public class NewRatCharacterController : MonoBehaviour
 
 	
 	// Animations
+	public bool Awakened { get; private set; }
 	private NewRatAnimationController _animationController; // TODO remove private ref, keep auto property reference
 	public NewRatAnimationController AnimationController => _animationController;
 
@@ -50,7 +52,7 @@ public class NewRatCharacterController : MonoBehaviour
 		get => ratMesh;
 		private set { }
 	}
-	
+
 	// Collider
 	public CapsuleCollider CharCollider { get; private set; }
 	[HideInInspector] public float _colliderRadius;
@@ -481,6 +483,11 @@ public class NewRatCharacterController : MonoBehaviour
 	public void EnableCharacterMovement(bool enabled) {
 		NewCharacterInput.EnableCharacterMovement(enabled);
 	}
+
+	public void Awoken() {
+		Debug.Log("Rat Character Awakened");
+		Awakened = true;
+	} 
 
 	public bool KeypadInteraction { get; set; }
 

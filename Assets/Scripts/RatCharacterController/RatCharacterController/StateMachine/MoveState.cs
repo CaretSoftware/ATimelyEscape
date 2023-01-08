@@ -42,10 +42,10 @@ namespace NewRatCharacterController {
             
             if (NewRatCharacter.Caught)
                 stateMachine.TransitionTo<CaughtState>();
+            
         }
 
         private void StepUp() {
-
             Vector3 stepHeightVector = Vector3.up * NewRatCharacter.stepHeight;
             Vector3 velocity = Vector3.ProjectOnPlane(NewRatCharacter._velocity, Vector3.up) * Time.deltaTime;
             Vector3 direction = velocity.normalized;
@@ -83,7 +83,6 @@ namespace NewRatCharacterController {
         }
 
         private void ApplyStaticFriction() {
-            
             if (Vector3.ProjectOnPlane(NewRatCharacter._velocity, Vector3.up).magnitude <
                 NewRatCharacter.normalForce.magnitude * NewRatCharacter._staticFrictionCoefficient) {
                 
@@ -92,7 +91,6 @@ namespace NewRatCharacterController {
         }
 
         private void AddGravityForce() {
-
             float gravityMovement = -NewRatCharacter._defaultGravity * Time.deltaTime;
             NewRatCharacter._velocity.y += gravityMovement;
         }
