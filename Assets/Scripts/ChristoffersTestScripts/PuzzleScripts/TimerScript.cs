@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class TimerScript : MonoBehaviour
 {
-    [SerializeField] private float timer; 
+    [SerializeField] private float timer;
     [SerializeField] private TextMeshProUGUI[] timerTexts;
-    [SerializeField] private Transform checkpoint; 
+    [SerializeField] private Transform checkpoint;
     private float timeLeft;
     private bool firstOn;
     private bool secondOn;
@@ -16,7 +16,6 @@ public class TimerScript : MonoBehaviour
     private void Start()
     {
         timeLeft = timer;
-        
     }
 
     // Update is called once per frame
@@ -35,7 +34,7 @@ public class TimerScript : MonoBehaviour
                 firstOn = false;
                 secondOn = false;
                 Invoke("RestartTimer", 1);
-                
+
                 FailStateScript.Instance.PlayDeathVisualization(checkpoint.transform, transform);
             }
         }
@@ -47,7 +46,7 @@ public class TimerScript : MonoBehaviour
 
         float minutes = Mathf.FloorToInt(currentTime / 60);
         float seconds = Mathf.FloorToInt(currentTime % 60);
-  
+
         timerTexts[0].text = string.Format("{0:00}:{1:00}", minutes, seconds);
         timerTexts[1].text = string.Format("{0:00}:{1:00}", minutes, seconds);
         timerTexts[2].text = string.Format("{0:00}:{1:00}", minutes, seconds);
