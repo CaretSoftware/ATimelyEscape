@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
@@ -51,6 +52,9 @@ public class NewRatCameraController : MonoBehaviour {
 	
 	[SerializeField] [Range(0.0f, 2.0f)]
 	private float _cameraCollisionRadius;
+
+	[SerializeField] [Range(0f, 2.0f)] 
+	private float minCollisionZoomDistance;
 
 	[SerializeField] [Range(0.0f, 2.0f)]
 	private float _headHeight = 1.6f;
@@ -139,16 +143,19 @@ public class NewRatCameraController : MonoBehaviour {
 		_abovePlayer = _cameraPos + Vector3.up * _headHeight;
 		_offsetTarget = _abovePlayer + _camera.rotation * _camera3rdPersonOffset;
 		_offsetDirection = _offsetTarget - _abovePlayer;
-
+		
+		debug = _abovePlayer;
+		
 		Physics.SphereCast(_abovePlayer, 
 			_cameraCollisionRadius, 
 			_offsetDirection.normalized, 
 			out _hit, 
 			_offsetDirection.magnitude, 
-			_collisionMask);
+			_collisionMask,
+			QueryTriggerInteraction.Ignore);
 		
 		if (_hit.collider)
-			_offset = _camera3rdPersonOffset.normalized * _hit.distance;
+			_offset = _camera3rdPersonOffset.normalized * Mathf.Max(minCollisionZoomDistance, _hit.distance);
 		else
 			_offset = _camera3rdPersonOffset;
 
@@ -158,33 +165,22 @@ public class NewRatCameraController : MonoBehaviour {
 		_camera.position = _abovePlayer + _camera.rotation * _lerpOffset;
 	}
 
+	private Vector3 debug;
+	private void OnDrawGizmos()
+	{
+		if (!Application.isPlaying) return;
+
+		Debug.Log("Gizmos");
+		Color c = Gizmos.color;
+		Gizmos.color = Color.cyan;
+		Gizmos.DrawSphere(debug, .01f);
+		Gizmos.color = c;
+	}
+
 	[SerializeField] private Vector3 keyPadRotation;
 	[SerializeField] private Vector3 keypadOffset;
 	[SerializeField] private float keypadCenterOffset;
-	
-	// private void MoveCameraToViewPoint() {
-	// 	Quaternion fromRot = _camera.rotation;
-	// 	Vector3 lookAtPosition = _lookAtTransform.position + Vector3.up * keypadCenterOffset;
-	// 	
-	// 	Vector3 fromPos = _camera.position;
-	// 	Vector3 targetPos =  lookAtPosition + _lookAtTransform.TransformDirection(keypadOffset);
-	// 	Vector3 keypadLookDirection = (lookAtPosition - targetPos).normalized;
-	//
-	// 	Vector3 lerpPos = Vector3.Lerp(fromPos, targetPos, _lookAtInterpolation);
-	// 	
-	// 	Vector3 cameraForward = _camera.forward;
-	// 	Vector3 cameraForwardLerp = Vector3.Lerp(cameraForward, keypadLookDirection, _lookAtInterpolation);
-	// 	Quaternion targetRot = Quaternion.LookRotation(cameraForwardLerp, Vector3.up);
-	// 	
-	// 	_camera.SetPositionAndRotation(lerpPos, targetRot);
-	// 	_camera.LookAt(lookAtPosition, Vector3.up);
-	// 	
-	// 	// TODO update mouseMovement with current rotation?
-	// 	SetMouseMovementVectorFromRotation(_camera.rotation.eulerAngles);
-	// 	
-	// 	_lookAtInterpolation += Time.deltaTime * (1f / keypadLerpTime);
-	// }
-	
+
 	private void MoveCameraToViewPoint() {
 		if (_lookAtInterpolation > 1f) {
 			SetMouseMovementVectorFromRotation(_camera.rotation.eulerAngles);
@@ -250,15 +246,4 @@ public class NewRatCameraController : MonoBehaviour {
 
 	public static void UnlockLookTarget() => _instance._lookAtTransform = null;
 	public void UnlockLookTargetInstance() => _instance._lookAtTransform = null;
-	
-
-	[SerializeField] private Transform test;
-	[SerializeField] private Vector3 testVector;
-	[SerializeField] private float testTransDuration;
-	[SerializeField] private float testReturnAfter;
-	
-	[ContextMenu(nameof(Test))]
-	public void Test() {
-		SetLookTarget(test, testVector, testTransDuration, testReturnAfter);
-	}
 }
