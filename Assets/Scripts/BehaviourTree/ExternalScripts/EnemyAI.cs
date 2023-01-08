@@ -165,15 +165,18 @@ public class EnemyAI : MonoBehaviour
     private void ConstructBehaviourTreePersonnel()
     {
         GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, gameObject, idleActivityTimer);
-        RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
+        RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV, animator);
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
-        RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
+        RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV, animator);
         CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
         CaptureBoolNode captureBoolNode = new CaptureBoolNode(playerTransform, agentCenterTransform, this, animator, captureRange);
+        StartReachAnimationNode startReachAnimationNode = new StartReachAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
+        StopReachAnimationNode stopReachAnimationNode = new StopReachAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
-        Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode, captureBoolNode});
-
+        Sequence captureAnimationSequence = new Sequence(new List<Node> { startReachAnimationNode, stopReachAnimationNode });
+        Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode, captureAnimationSequence });
+        
         topNode = new Selector(new List<Node> { captureSequence, chaseSequence, goToActivityNode });
     }
 
@@ -217,6 +220,7 @@ public class EnemyAI : MonoBehaviour
     public void ResetAfterAnimations()
     {
         handIKTarget.position = defaultIKTarget.position;
+        animator.SetBool("GrabActionBool", false);
         isCapturing = false;
         
         RestoreAfterKneeling();

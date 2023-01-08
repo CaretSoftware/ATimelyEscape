@@ -47,12 +47,8 @@ public class CaptureNode : Node
             out hit, Mathf.Infinity, obstacleMask, QueryTriggerInteraction.Ignore);
         
             if (hit.collider.gameObject.layer == player.gameObject.layer && !ai.IsCapturing && !recentlyCaught)
-            {
-                //animator.SetBool(GrabActionBool, true);
-                //animator.SetTrigger("GrabAction");
-                //ai.IsCapturing = true;
                 return NodeState.SUCCESS;
-            }
-            return NodeState.FAILURE;
+            else
+                return NodeState.FAILURE;
     }
 }

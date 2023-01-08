@@ -19,14 +19,15 @@ public class StartReachAnimationNode : Node
 
     public override NodeState Evaluate()
     {
-        if (Vector3.Distance(enemy.position, player.position) > captureDistance)
+        if (Vector3.Distance(enemy.position, player.position) < captureDistance)
         {
-            return NodeState.FAILURE;
+            Debug.Log($"Grabbing player");
+            animator.SetBool("GrabActionBool", true);
+            return NodeState.SUCCESS;
         }
         else
         {
-            animator.SetBool("GrabActionBool", true);
-            return NodeState.SUCCESS;
+            return NodeState.FAILURE;
         }
     }
 }
