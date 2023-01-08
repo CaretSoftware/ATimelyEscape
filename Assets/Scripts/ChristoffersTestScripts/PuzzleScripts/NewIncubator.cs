@@ -100,7 +100,7 @@ public class NewIncubator : MonoBehaviour
                 instructions.text = "Good.";
                 audioManager.Play("3");
                 signMr.material = done;
-                Invoke("Step4", 3.5f);
+                Invoke("Step4", 1.5f);
                 //StartCoroutine(Delay());
                 //Debug.Log("STEP3");
             }
