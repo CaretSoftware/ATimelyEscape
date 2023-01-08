@@ -485,7 +485,6 @@ public class NewRatCharacterController : MonoBehaviour
 	}
 
 	public void Awoken() {
-		Debug.Log("Rat Character Awakened");
 		Awakened = true;
 	} 
 
