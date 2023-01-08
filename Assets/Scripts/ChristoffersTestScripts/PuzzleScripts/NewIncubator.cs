@@ -107,8 +107,8 @@ public class NewIncubator : MonoBehaviour
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
                 characterInput.CanTimeTravelPresent = true; 
-                instructions.text = "Good.";
-                audioManager.Play("3");
+                instructions.text = "You see?";
+                audioManager.Play("11");
                 puzzleThreeDone = true;
                 signMr.material = done;
                 Invoke("Step5", 2f);
@@ -163,10 +163,16 @@ public class NewIncubator : MonoBehaviour
     }
     private void Step4AndHalf()
     {
-        characterInput.CanTimeTravelPast = true;
         audioManager.Play("7");
         instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
+        Invoke("Step4TwoThirds", 5);
+        
+    }
+    private void Step4TwoThirds()
+    {
+        characterInput.CanTimeTravelPast = true;
         puzzleTwoDone = true;
+
     }
     private void Step5()
     {
