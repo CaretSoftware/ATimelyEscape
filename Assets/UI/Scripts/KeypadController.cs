@@ -131,12 +131,20 @@ public class KeypadController : DeviceController
     }
     private void DisableKeypad()
     {
-        CharacterInput.IsPaused(false);
+        ReleasePlayer();
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
         Destroy(gameObject);
+    }
+    
+    public void ReleasePlayer() 
+    {
+        Debug.Log("CLOSED KEYPAD");
+        CharacterInput.IsPaused(false);
+        NewRatCameraController.UnlockLookTarget();
+        newRatCharacterController.KeypadInteraction = false;
     }
 
     private void SwitchState()

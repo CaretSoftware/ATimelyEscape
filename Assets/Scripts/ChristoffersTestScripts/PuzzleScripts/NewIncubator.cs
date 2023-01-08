@@ -30,6 +30,7 @@ public class NewIncubator : MonoBehaviour
     private MeshRenderer signMr;
     private MeshRenderer sign2Mr;
     private MeshRenderer sign3Mr;
+    private AudioManager audioManager;
     private NewRatCharacterController.NewCharacterInput characterInput;
 
     private bool puzzleOneDone;
@@ -62,15 +63,18 @@ public class NewIncubator : MonoBehaviour
         sign2Mr = sign2.GetComponent<MeshRenderer>();
         sign3Mr = sign3.GetComponent<MeshRenderer>();
         characterInput = FindObjectOfType<NewRatCharacterController.NewCharacterInput>();
+        audioManager = FindObjectOfType<AudioManager>();
 
     }
     private void Update()
     {
         if (cubeButtonOn && ratButtonOn && !puzzleFourDone)
         {
+            instructions.text = "Good.";
+            audioManager.Play("3");
             Step8();
             puzzleFourDone = true;
-            Debug.Log("STEP7");
+            //Debug.Log("STEP7");
         }
 
     }
@@ -83,40 +87,44 @@ public class NewIncubator : MonoBehaviour
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && !puzzleOneDone)
             {
                 if (signMr) signMr.material = done;
+                audioManager.Play("3");
                 instructions.text = "Good";
                 Invoke("Step2", 3.5f);
                 //StartCoroutine(Delay());
                 bigHatchAnim.SetBool("Open", true);
                 step1Anim.SetBool("Open", true);
-                Debug.Log("STEP1");
+                //Debug.Log("STEP1");
             }
             if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && puzzleOneDone && !puzzleTwoDone)
             {
                 instructions.text = "Good.";
+                audioManager.Play("3");
                 signMr.material = done;
-                Invoke("Step4", 3.5f);
+                Invoke("Step4", 1.5f);
                 //StartCoroutine(Delay());
-                Debug.Log("STEP3");
+                //Debug.Log("STEP3");
             }
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
                 characterInput.CanTimeTravelPresent = true; 
-                instructions.text = "Good.";
+                instructions.text = "You see?";
+                audioManager.Play("11");
                 puzzleThreeDone = true;
                 signMr.material = done;
                 Invoke("Step5", 2f);
                 //StartCoroutine(Delay());
-                Debug.Log("STEP5");
+                //Debug.Log("STEP5");
             }
             if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && charging && !puzzleFiveDone)
             {
                 signMr.material = done;
-                instructions.text = "Good. All Done";
+                audioManager.Play("10");
+                instructions.text = "Good. All Done. Have some Candy";
                 smallHatchAnim.SetBool("Open", true);
                 candyFeederAnim.SetBool("Open", true);
                 puzzleFiveDone = true;
                 isON = false;
-                Debug.Log("STEP11");
+                //Debug.Log("STEP11");
             }
         }
         if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleFiveDone)
@@ -130,15 +138,17 @@ public class NewIncubator : MonoBehaviour
     {
         characterInput.CanTimeTravelPast = false;
         signMr.material = notDone;
+        audioManager.Play("4");
         instructions.text = "Moving a cube changes its destiny in the future. Move the cube.";
         puzzleFloor.SetActive(false);
         bigHatchAnim.SetBool("Open", false);
-        Debug.Log("STEP2");
-        Invoke("Step2AndHalf", 4f);
+        //Debug.Log("STEP2");
+        Invoke("Step2AndHalf", 8f);
     }
     private void Step2AndHalf()
     {
-        instructions.text = "Timetravel forwards in time <sprite name=\"Y\">";
+        audioManager.Play("5");
+        instructions.text = "Timetravel forward in time <sprite name=\"Y\">";
         characterInput.CanTimeTravelPresent = true; 
         puzzleOneDone = true;
     }
@@ -146,15 +156,23 @@ public class NewIncubator : MonoBehaviour
     {
         characterInput.CanTimeTravelPresent = false;
         signMr.material = notDone;
+        audioManager.Play("6");
         instructions.text = "Move the cube in this time.";
-        Debug.Log("STEP4");
-        Invoke("Step4AndHalf", 4f);
+        //Debug.Log("STEP4");
+        Invoke("Step4AndHalf", 8f);
     }
     private void Step4AndHalf()
     {
-        characterInput.CanTimeTravelPast = true; 
+        audioManager.Play("7");
         instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
+        Invoke("Step4TwoThirds", 5);
+        
+    }
+    private void Step4TwoThirds()
+    {
+        characterInput.CanTimeTravelPast = true;
         puzzleTwoDone = true;
+
     }
     private void Step5()
     {
@@ -174,11 +192,12 @@ public class NewIncubator : MonoBehaviour
         sign.SetActive(false);
         sign2.SetActive(true);
         sign3.SetActive(true);
-        Debug.Log("STEP6");
+        //Debug.Log("STEP6");
     }
     private void InstructionsStep8()
     {
         puzzleFloor.SetActive(false);
+        audioManager.Play("9");
         instructions.text = " Some buttons react to cubes. Some buttons must be manually pressed";
     }
     private void Step8()
@@ -188,7 +207,7 @@ public class NewIncubator : MonoBehaviour
         step2Anim.SetBool("Open", false);
         Invoke("Step9", 3.5f);
         //StartCoroutine(Delay());
-        Debug.Log("STEP8");
+        //Debug.Log("STEP8");
     }
     private void Step9()
     {
@@ -201,31 +220,32 @@ public class NewIncubator : MonoBehaviour
         bigHatchAnim.SetBool("OpenLast", true);
         step3Anim.SetBool("Open", true);
         Invoke("Step10Instructions", 3.5f);
-        Debug.Log("STEP9");
+        //Debug.Log("STEP9");
     }
     private void Step10Instructions()
     {
         puzzleFloor.SetActive(false);
+        audioManager.Play("8");
         instructions.text = "Charge this cube on the chargepad. It holds charge for a long time";
-        Debug.Log("STEP10");
+        //Debug.Log("STEP10");
     }
 
     public void CubeButton()
     {
         cubeButtonOn = true;
         sign2Mr.material = done;
-        Debug.Log("CUBEON");
+        //Debug.Log("CUBEON");
     }
     public void RatButton()
     {
         ratButtonOn = true;
         sign3Mr.material = done;
-        Debug.Log("RATON");
+        //Debug.Log("RATON");
     }
     public void Charging()
     {
         charging = true;
-        Debug.Log("Charging");
+        //Debug.Log("Charging");
     }
     /*    public void DontCharge()
         {
@@ -237,9 +257,14 @@ public class NewIncubator : MonoBehaviour
     {
         if (!welcome)
         {
+            audioManager.Play("1");
             instructions.text = "Subject R@, welcome! Please step forward";
             welcome = true;
         }
+    }
+    public void ClearText()
+    {
+        instructions.text = "";
     }
     public void IsOn()
     {
