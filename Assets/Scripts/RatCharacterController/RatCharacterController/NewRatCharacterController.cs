@@ -188,11 +188,9 @@ public class NewRatCharacterController : MonoBehaviour
 
 	private void Start() {
 		_colliderRadius = CharCollider.radius;
-		
 	}
 	
 	private void Update() {
-		
 		_inputMovement = Vector3.zero;
 		
 		UpdateGrounded();
@@ -218,8 +216,7 @@ public class NewRatCharacterController : MonoBehaviour
 	public bool HoldingJump { get; set; }
 	public Vector3 ConveyorForce { get; set; }
 
-	private void Input()
-	{
+	private void Input() {
 		AnimationController.SetInputVector(InputVector);
 		
 		_inputMovement = Quaternion.Euler(0, _camera.rotation.y,0)  * InputVector;
@@ -248,19 +245,16 @@ public class NewRatCharacterController : MonoBehaviour
 	}
 
 	private bool JumpBuffer() {
-		
 		return Grounded && _pressedJumpMoment + _jumpBuffer > Time.time;
 	}
 	
 	private bool CoyoteTime() {
-		
 		if (Grounded)
 			_lastGroundedMoment = Time.time;
 		return !Grounded && _lastGroundedMoment + _coyoteTime > Time.time;
 	}
 
 	private void UpdateGrounded() {
-		
 		Grounded =
 			Physics.SphereCast(
 				_point2Transform.position, 
