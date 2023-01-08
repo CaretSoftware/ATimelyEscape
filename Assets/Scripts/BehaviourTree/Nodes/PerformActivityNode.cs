@@ -22,12 +22,12 @@ public override NodeState Evaluate()
         if (!timerDone)
         {
             Instance.StartCoroutine(Timer());
-            agent.isStopped = false;
+            agent.isStopped = true;
             return NodeState.RUNNING;
         }
         else
         {
-            agent.isStopped = true;
+            agent.isStopped = false;
             return NodeState.SUCCESS;
         }
     }

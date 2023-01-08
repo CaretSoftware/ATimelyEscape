@@ -165,8 +165,8 @@ public class EnemyAI : MonoBehaviour
     private void ConstructBehaviourTreePersonnel()
     {
         GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, gameObject, idleActivityTimer);
-        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
+        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
         CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
         CaptureBoolNode captureBoolNode = new CaptureBoolNode(playerTransform, agentCenterTransform, this, animator, captureRange);
@@ -206,6 +206,11 @@ public class EnemyAI : MonoBehaviour
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
         }
+        else
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, captureRange);
+        }
     }
 
     //Animation event methods.
@@ -220,7 +225,7 @@ public class EnemyAI : MonoBehaviour
     public void ReturnHand() { animator.SetTrigger("ReturnHandAction"); }
     public void StartReaching()
     {
-        NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
+        //NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
         isCapturing = true;
     } 
     public bool IsCapturing

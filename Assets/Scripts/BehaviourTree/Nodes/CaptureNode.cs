@@ -12,16 +12,16 @@ public class CaptureNode : Node
     private Animator animator;
     private EnemyAI ai;
     private IKControl ikControl;
-    
+
     private Transform agentCenterTransform;
     private Transform handIKTarget;
     private Transform player;
     private Vector3 losPos;
 
     private float captureDistance;
-    private float destinationDistance;
+    private float distanceToPlayer;
     private bool recentlyCaught;
-    
+
     private RaycastHit hit;
     private static readonly int GrabActionBool = Animator.StringToHash("GrabActionBool");
 
@@ -41,14 +41,11 @@ public class CaptureNode : Node
 
     public override NodeState Evaluate()
     {
-        destinationDistance = Vector3.Distance(player.position, agentCenterTransform.transform.position);   
-        
+        //distanceToPlayer = Vector3.Distance(player.position, agentCenterTransform.transform.position);
+
         Physics.Raycast(losPos, (player.position - losPos).normalized,
             out hit, Mathf.Infinity, obstacleMask, QueryTriggerInteraction.Ignore);
-        //Debug.Log($"hit: {hit.transform.gameObject.name},  layer: {hit.transform.gameObject.layer}, player layer: {player.gameObject.layer}");
-        if (destinationDistance < captureDistance)
-        {
-            agent.isStopped = true;
+        
             if (hit.collider.gameObject.layer == player.gameObject.layer && !ai.IsCapturing && !recentlyCaught)
             {
                 //animator.SetBool(GrabActionBool, true);
@@ -56,17 +53,6 @@ public class CaptureNode : Node
                 //ai.IsCapturing = true;
                 return NodeState.SUCCESS;
             }
-            //return NodeState.FAILURE;
-        }
-        agent.isStopped = false;
-        return NodeState.FAILURE;
-        /*else
-        {
-            agent.isStopped = false;
-            animator.SetBool(GrabActionBool, false);
-            agent.SetDestination(player.position);
-            return NodeState.RUNNING;
-        }
-        */
+            return NodeState.FAILURE;
     }
 }

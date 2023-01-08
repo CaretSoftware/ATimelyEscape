@@ -8,30 +8,32 @@ public class CaptureBoolNode : Node
     private Transform enemy;
     private Animator animator;
     private EnemyAI ai;
-    private float range;
+    private float captureRange;
     
     private static readonly int GrabActionBool = Animator.StringToHash("GrabActionBool");
     
-    public CaptureBoolNode(Transform player, Transform enemy, EnemyAI ai,Animator animator, float range)
+    public CaptureBoolNode(Transform player, Transform enemy, EnemyAI ai,Animator animator, float captureRange)
     {
         this.player = player;
         this.enemy = enemy;
         this.animator = animator;
-        this.range = range;
+        this.captureRange = captureRange;
         this.ai = ai;
     }
 
+    private bool withinRange;
+    private float currentDistance;
+
     public override NodeState Evaluate()
     {
-        if (Vector3.Distance(player.position, enemy.position) > range)
-        {
-            animator.SetBool(GrabActionBool, true);
+        currentDistance = Vector3.Distance(player.position, enemy.position);
+        withinRange = currentDistance > captureRange;
+        animator.SetBool(GrabActionBool, withinRange);
+
+        if (withinRange)
             return NodeState.SUCCESS;
-        }
         else
-        {
-            animator.SetBool(GrabActionBool, false);
             return NodeState.FAILURE;
-        }
+        
     }
 }
