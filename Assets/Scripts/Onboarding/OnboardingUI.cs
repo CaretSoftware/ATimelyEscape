@@ -11,39 +11,36 @@ public class OnboardingUI : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI notificationText;
     [SerializeField] private float fadeLength;
     private List<Button> unlockedButtons = new List<Button>();
-
+    private RuntimeSceneManager sceneManager; 
 
     private void Start() {
-        DebugEvent.AddListener<DebugEvent>(ListenForEvent);
-        PauseEvent.AddListener<PauseEvent>(OnPauseOrUnPause);
+        sceneManager = FindObjectOfType<RuntimeSceneManager>();
+        DebugEvent.AddListener<DebugEvent>(OnDiscoveredNewTutorial);
+        PauseMenuBehaviour.pauseDelegate += OnPauseOrUnPause;
     }
 
-    private void ListenForEvent(DebugEvent e) {
+    private void OnDiscoveredNewTutorial(DebugEvent e) {
         if (e.DebugText != null) print(e.DebugText);
 
         switch (e.DebugText) {
             case "interactions":
-                CreateButton(2, "CUBE & CLIMB TUTORIAL");
+                CreateButton(11, "CUBE & CLIMB TUTORIAL");
                 StartCoroutine(FadeNotification(true, "Cubes and climbing Tutorial Unlocked!"));
                 break;
             case "charge":
-                CreateButton(11, "CUBE CHRAGE TUTORIAL");
+                CreateButton(12, "CUBE CHRAGE TUTORIAL");
                 StartCoroutine(FadeNotification(true, "Cube charge Tutorial Unlocked!"));
                 break;
             case "timeTravel":
-                CreateButton(12, "TIME TRAVEL TUTORIAL");
+                CreateButton(13, "TIME TRAVEL TUTORIAL");
                 StartCoroutine(FadeNotification(true, "Time Travel Tutorial Unlocked!"));
                 break;
-            case "timeTravelFuture":
-                CreateButton(12, "FUTURE TUTORIAL");
-                StartCoroutine(FadeNotification(true, "Back to the future Tutorial Unlocked!"));
-                break;
             case "scientist":
-                CreateButton(13, "SCIENTIST TUTORIAL");
+                CreateButton(14, "SCIENTIST TUTORIAL");
                 StartCoroutine(FadeNotification(true, "Scientist Tutorial Unlocked!"));
                 break;
             case "vacuumCleaner":
-                CreateButton(14, "VACUUM CLEANER TUTORIAL");
+                CreateButton(15, "VACUUM CLEANER TUTORIAL");
                 StartCoroutine(FadeNotification(true, "Vacuum Cleaner Tutorial Unlocked!"));
                 break;
         }
@@ -53,8 +50,9 @@ public class OnboardingUI : MonoBehaviour {
         GameObject buttonObject = Instantiate(buttonPrefab, transform) as GameObject;
         Button button = buttonObject.GetComponent<Button>();
         button.onClick.AddListener(delegate {
-            FindObjectOfType<PauseMenuBehaviour>().UnPauseGame();
-            SceneManager.LoadScene(sceneIndex);
+            FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().paused = false;
+            sceneManager.LoadOnboardingRoom(sceneIndex);
+            print("onboard button clicked");
         });
         button.GetComponentInChildren<TextMeshProUGUI>().text = name;
         button.transform.parent = transform;
@@ -80,5 +78,10 @@ public class OnboardingUI : MonoBehaviour {
         if (fadeIn) StartCoroutine(FadeNotification(false));
     }
 
-    private void OnPauseOrUnPause(PauseEvent e) { foreach (var button in unlockedButtons) button.gameObject.SetActive(e.paused); }
+    private void OnPauseOrUnPause(bool paused) { foreach (var button in unlockedButtons) button.gameObject.SetActive(paused); }
+
+    private void OnDestroy(){
+        if(EventSystem.Current != null) DebugEvent.RemoveListener<DebugEvent>(OnDiscoveredNewTutorial);
+        PauseMenuBehaviour.pauseDelegate -= OnPauseOrUnPause;
+    }
 }

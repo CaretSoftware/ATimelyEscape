@@ -155,6 +155,7 @@ public class NewIncubator : MonoBehaviour
         characterInput.CanTimeTravelPast = true; 
         instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
         puzzleTwoDone = true;
+        OnboardingHandler.TimeTravelDiscovered = true;
     }
     private void Step5()
     {
@@ -207,6 +208,7 @@ public class NewIncubator : MonoBehaviour
     {
         puzzleFloor.SetActive(false);
         instructions.text = "Charge this cube on the chargepad. It holds charge for a long time";
+        OnboardingHandler.CubeChargeDiscovered = true; 
         Debug.Log("STEP10");
     }
 
