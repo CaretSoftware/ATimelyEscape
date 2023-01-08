@@ -1,19 +1,35 @@
 using NewRatCharacterController;
 using UnityEngine;
 
-public class WakeUpState : BaseState {
-    public override void Enter()
-    {
-        throw new System.NotImplementedException();
-    }
+namespace NewRatCharacterController
+{
+    public class WakeUpState : BaseState {
+        private const string State = nameof(WakeUpState);
 
-    public override void Run()
-    {
-        throw new System.NotImplementedException();
-    }
+        public override void Enter()
+        {
+            StateChange.stateUpdate?.Invoke(State);
+        }
 
-    public override void Exit()
-    {
-        throw new System.NotImplementedException();
+        public override void Run()
+        {
+            NewRatCharacter.EnableCharacterMovement(false);
+            NewRatCharacter.HandleVelocity();
+            AddGravityForce();
+
+
+            if (NewRatCharacter.Awakened)
+                stateMachine.TransitionTo<MoveState>();
+        }
+
+        public override void Exit()
+        {
+            NewRatCharacter.EnableCharacterMovement(true);
+        }
+        
+        private void AddGravityForce() {
+            float gravityMovement = -NewRatCharacter._defaultGravity * Time.deltaTime;
+            NewRatCharacter._velocity.y += gravityMovement;
+        }
     }
 }
