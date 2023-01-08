@@ -7,8 +7,8 @@ public class SwitchOn : MonoBehaviour
 {
 
     [SerializeField] private bool isInteractableByPlayer;
-/*    [SerializeField] private bool isInteractableByPast;
-    [SerializeField] private bool isInteractableByPresent;*/
+    /*    [SerializeField] private bool isInteractableByPast;
+        [SerializeField] private bool isInteractableByPresent;*/
     [SerializeField] private UnityEvent switchOn;
     [SerializeField] private UnityEvent switchOff;
     private MeshRenderer meshRenderer;
@@ -38,7 +38,10 @@ public class SwitchOn : MonoBehaviour
             if (isOn)
             {
                 switchOn.Invoke();
-                animator.SetBool("On", true);
+                if (animator != null)
+                {
+                    animator.SetBool("On", true);
+                }
             }
         }
         /*        else if (switchOn != null && isInteractableByPast && other.gameObject.tag == "CubePast")

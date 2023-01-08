@@ -20,17 +20,18 @@ public class WatchPickup : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other)
 	{
-		Debug.Log("PICKUP TRIGGER");
+		//Debug.Log("PICKUP TRIGGER");
 		if (other.CompareTag("Player")) {
-			Debug.Log("PICKUP TRIGGER");
+			//Debug.Log("PICKUP TRIGGER");
 
 			if (instructions != null)
-				instructions.text = "Good. Now use <sprite name=\"X\"> to timetravel one year to the past";
+				instructions.text = "Use the timetravel device <sprite name=\"X\"> to timetravel one year to the past";
+			FindObjectOfType<AudioManager>().Play("2");
 			characterInput.CanTimeTravel = true;
 			characterInput.CanTimeTravelPresent = false;
 			characterInput.CanTimeTravelFuture = false;
 			Destroy(this.gameObject);
-			Debug.Log("PICKUP TRIGGER");
+			//Debug.Log("PICKUP TRIGGER");
 		}
 	}
 
