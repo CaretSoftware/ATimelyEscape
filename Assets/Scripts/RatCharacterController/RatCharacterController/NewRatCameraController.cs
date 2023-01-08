@@ -144,8 +144,6 @@ public class NewRatCameraController : MonoBehaviour {
 		_offsetTarget = _abovePlayer + _camera.rotation * _camera3rdPersonOffset;
 		_offsetDirection = _offsetTarget - _abovePlayer;
 		
-		debug = _abovePlayer;
-		
 		Physics.SphereCast(_abovePlayer, 
 			_cameraCollisionRadius, 
 			_offsetDirection.normalized, 
@@ -165,17 +163,16 @@ public class NewRatCameraController : MonoBehaviour {
 		_camera.position = _abovePlayer + _camera.rotation * _lerpOffset;
 	}
 
-	private Vector3 debug;
-	private void OnDrawGizmos()
-	{
-		if (!Application.isPlaying) return;
-
-		Debug.Log("Gizmos");
-		Color c = Gizmos.color;
-		Gizmos.color = Color.cyan;
-		Gizmos.DrawSphere(debug, .01f);
-		Gizmos.color = c;
-	}
+	// private Vector3 debug;
+	// private void OnDrawGizmos()
+	// {
+	// 	if (!Application.isPlaying) return;
+	//
+	// 	Color c = Gizmos.color;
+	// 	Gizmos.color = Color.cyan;
+	// 	Gizmos.DrawSphere(debug, .01f);
+	// 	Gizmos.color = c;
+	// }
 
 	[SerializeField] private Vector3 keyPadRotation;
 	[SerializeField] private Vector3 keypadOffset;
