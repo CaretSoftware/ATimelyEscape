@@ -1,17 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro;
 using CallbackSystem;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class OnboardingUI : MonoBehaviour {
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private TextMeshProUGUI notificationText;
     [SerializeField] private float fadeLength;
     private List<Button> unlockedButtons = new List<Button>();
-    private RuntimeSceneManager sceneManager; 
+    private RuntimeSceneManager sceneManager;
+
+    private TimeTravelPeriod[] startPeriods = new TimeTravelPeriod[]{
+        TimeTravelPeriod.Past,
+        TimeTravelPeriod.Past,
+        TimeTravelPeriod.Past,
+        TimeTravelPeriod.Past,
+        TimeTravelPeriod.Present
+    };
 
     private void Start() {
         sceneManager = FindObjectOfType<RuntimeSceneManager>();
@@ -52,6 +60,8 @@ public class OnboardingUI : MonoBehaviour {
         button.onClick.AddListener(delegate {
             FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().paused = false;
             sceneManager.LoadOnboardingRoom(sceneIndex);
+            TimeTravelManager.currentPeriod = startPeriods[sceneIndex - 11];
+            TimeTravelManager.ReloadCurrentTimeTravelPeriod();
             print("onboard button clicked");
         });
         button.GetComponentInChildren<TextMeshProUGUI>().text = name;
@@ -78,10 +88,13 @@ public class OnboardingUI : MonoBehaviour {
         if (fadeIn) StartCoroutine(FadeNotification(false));
     }
 
-    private void OnPauseOrUnPause(bool paused) { foreach (var button in unlockedButtons) button.gameObject.SetActive(paused); }
+    private void OnPauseOrUnPause(bool paused) {
+        Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
+        foreach (var button in unlockedButtons) button.gameObject.SetActive(paused);
+    }
 
-    private void OnDestroy(){
-        if(EventSystem.Current != null) DebugEvent.RemoveListener<DebugEvent>(OnDiscoveredNewTutorial);
+    private void OnDestroy() {
+        if (EventSystem.Current != null) DebugEvent.RemoveListener<DebugEvent>(OnDiscoveredNewTutorial);
         PauseMenuBehaviour.pauseDelegate -= OnPauseOrUnPause;
     }
 }
