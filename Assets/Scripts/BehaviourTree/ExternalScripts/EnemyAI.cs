@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
@@ -18,13 +19,14 @@ public class EnemyAI : MonoBehaviour
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
     [SerializeField] private Transform checkpoint;
-    [FormerlySerializedAs("obstacleMask")] [SerializeField] private LayerMask playerLayerMask;
+    [SerializeField] private LayerMask playerLayerMask;
+    [SerializeField] private Collider[] collidersToIgnorePlayer;
+
     [Tooltip("Assigning the same waypoints to multiple enemies may result in unwanted behaviour.")]
     [SerializeField] private Transform[] activityWaypoints;
 
     [Header("Rig Setup")]
     [SerializeField] private Transform handIKTarget;
-
     [SerializeField] private IKControl ikControl;
 
     [HideInInspector] public NavMeshAgent agent;
@@ -38,6 +40,8 @@ public class EnemyAI : MonoBehaviour
     private Node topNode;
 
     private Transform playerTransform;
+    private Collider playerCollider;
+
     [SerializeField] private Transform agentCenterTransform;
     private Transform defaultIKTarget;
     private Vector3 worldDeltaPosition;
@@ -96,15 +100,25 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         playerTransform = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
+        playerCollider = playerTransform.GetComponent<Collider>();
+        AssignCollidersIgnore();
+
         chainIKConstraint.weight = 0;
         defaultIKTarget = handIKTarget;
         chaseRange = enemyFOV.ChaseRadius;
         captureRange = enemyFOV.CatchRadius;
         ConstructBehaviourTreePersonnel();
+
         defaultFeetPos = feetPos.localPosition;
         defaultHipPos = hipPos.localPosition;
         hipPosBent = new Vector3(defaultHipPos.x, AnimationPreviewBasedHipPos ,defaultHipPos.z);
         feetPosBent = new Vector3(defaultFeetPos.x, AnimationPreviewBasedFeetPos ,defaultFeetPos.z);
+    }
+
+    private void AssignCollidersIgnore()
+    {
+        for (int i = 0; i < collidersToIgnorePlayer.Length; i++)
+            Physics.IgnoreCollision(playerCollider, collidersToIgnorePlayer[i]);
     }
     
     private void Update()
@@ -155,9 +169,10 @@ public class EnemyAI : MonoBehaviour
         RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
         RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
         CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
+        CaptureBoolNode captureBoolNode = new CaptureBoolNode(playerTransform, agentCenterTransform, this, animator, captureRange);
 
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
-        Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode });
+        Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode, captureBoolNode});
 
         topNode = new Selector(new List<Node> { captureSequence, chaseSequence, goToActivityNode });
     }
@@ -205,6 +220,7 @@ public class EnemyAI : MonoBehaviour
     public void ReturnHand() { animator.SetTrigger("ReturnHandAction"); }
     public void StartReaching()
     {
+        NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
         isCapturing = true;
     } 
     public bool IsCapturing
@@ -222,17 +238,11 @@ public class EnemyAI : MonoBehaviour
 
     public void BendTheKnee()
     {
-        //print($"BendTheKnee()");
-        //print($"player transform.y: {playerTransform.position.y}");
         if (playerTransform.position.y < 0.5f)
         {
             feetPos.localPosition = feetPosBent;
             hipPos.localPosition = hipPosBent;
-            print($"player below 0.5f");
         }
-        //print($"feetPosLocal: {feetPos.localPosition.y}");
-        //print($"hipPosLocal: {hipPos.localPosition.y}");
-        //print($"\n");
     }
 
     private void RestoreAfterKneeling()

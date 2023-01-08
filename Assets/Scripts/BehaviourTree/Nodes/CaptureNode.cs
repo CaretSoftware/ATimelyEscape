@@ -21,6 +21,9 @@ public class CaptureNode : Node
     private float captureDistance;
     private float destinationDistance;
     private bool recentlyCaught;
+    
+    private RaycastHit hit;
+    private static readonly int GrabActionBool = Animator.StringToHash("GrabActionBool");
 
     public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform agentCenterTransform,
         Animator animator, EnemyAI ai, LayerMask obstacleMask, IKControl ikControl)
@@ -36,8 +39,6 @@ public class CaptureNode : Node
         losPos = agentCenterTransform.localPosition + Vector3.up * 0.8f;
     }
 
-    //TODO raycasta mot spelaren, om default träffad gå vidare, annars fånga spelaren.
-    private RaycastHit hit;
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(player.position, agentCenterTransform.transform.position);   
@@ -47,23 +48,25 @@ public class CaptureNode : Node
         //Debug.Log($"hit: {hit.transform.gameObject.name},  layer: {hit.transform.gameObject.layer}, player layer: {player.gameObject.layer}");
         if (destinationDistance < captureDistance)
         {
-            Debug.Log($"Within captureDistance");
             agent.isStopped = true;
             if (hit.collider.gameObject.layer == player.gameObject.layer && !ai.IsCapturing && !recentlyCaught)
             {
-                animator.SetTrigger("GrabAction");
-                Debug.Log($"GrabAction triggered");
-                //agent.isStopped = true;
-                ai.IsCapturing = true;
-                return NodeState.FAILURE;
+                //animator.SetBool(GrabActionBool, true);
+                //animator.SetTrigger("GrabAction");
+                //ai.IsCapturing = true;
+                return NodeState.SUCCESS;
             }
-            return NodeState.RUNNING;
+            //return NodeState.FAILURE;
         }
-        else
+        agent.isStopped = false;
+        return NodeState.FAILURE;
+        /*else
         {
             agent.isStopped = false;
+            animator.SetBool(GrabActionBool, false);
             agent.SetDestination(player.position);
             return NodeState.RUNNING;
         }
+        */
     }
 }
