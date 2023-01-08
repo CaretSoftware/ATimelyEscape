@@ -90,9 +90,14 @@ namespace NewRatCharacterController {
 			_playerInputActions.Interact.Past.performed += TravelToPast;
 			_playerInputActions.Interact.Present.performed += TravelToPresent;
 			_playerInputActions.Interact.Future.performed += TravelToFuture;
+			_playerInputActions.LevelSelect.EnableMenu.performed += EnableLevelSelectMenu;
 		}
 
 		private void Paused(bool paused) => _paused = paused;
+
+		private void EnableLevelSelectMenu(InputAction.CallbackContext context){
+			LevelSelect.Instance.EnableMenu();
+		}
 
 		private void DPadRight(InputAction.CallbackContext context) {
 			//Debug.Log(nameof(NewCharacterInput.DPadRight));
@@ -196,6 +201,7 @@ namespace NewRatCharacterController {
 			_playerInputActions.Interact.Past.performed -= TravelToPast;
 			_playerInputActions.Interact.Present.performed -= TravelToPresent;
 			_playerInputActions.Interact.Future.performed -= TravelToFuture;
+			_playerInputActions.LevelSelect.EnableMenu.performed -= EnableLevelSelectMenu;
 		}
 
 		public void EnableCharacterMovement(bool enable) {

@@ -149,13 +149,17 @@ public class RuntimeSceneManager : MonoBehaviour {
     public void LoadOnboardingRoom(int onboardingSceneIndex) {
         if (onboardingSceneIndex < 11 || currentOnboardingSceneIndex > -1) return; // room was not an onboarding room or an onboarding room was already loaded
         OnboardingHandler.LastSavedPosition = playerTransform.position;
+        OnboardingHandler.LastSavedTimePeriod = TimeTravelManager.currentPeriod; 
         SceneManager.LoadSceneAsync(onboardingSceneIndex, LoadSceneMode.Additive);
         currentOnboardingSceneIndex = onboardingSceneIndex; 
     }
 
     public void UnloadOnboardingRoom(){
         if(currentOnboardingSceneIndex < 0) return; // no onboardingroom was loaded
+        // Reload gamestate prior to starting tutorial
         playerTransform.position = OnboardingHandler.LastSavedPosition;
+        TimeTravelManager.currentPeriod = OnboardingHandler.LastSavedTimePeriod;
+        TimeTravelManager.ReloadCurrentTimeTravelPeriod();
         SceneManager.UnloadSceneAsync(currentOnboardingSceneIndex, UnloadSceneOptions.None);
         currentOnboardingSceneIndex = -1;
     }

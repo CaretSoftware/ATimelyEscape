@@ -12,6 +12,7 @@ public static class OnboardingHandler {
     private static bool vacuumCleanerDiscovered;
 
     public static Vector3 LastSavedPosition { get; set; }
+    public static TimeTravelPeriod LastSavedTimePeriod { get; set; }
 
     //CubePush
     public static bool CubeInteractionsDiscovered {

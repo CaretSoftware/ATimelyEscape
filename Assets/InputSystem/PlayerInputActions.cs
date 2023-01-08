@@ -602,6 +602,45 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""LevelSelect"",
+            ""id"": ""ebd2275d-f8b9-47a6-bbaa-1b2958161091"",
+            ""actions"": [
+                {
+                    ""name"": ""EnableMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""b344ebbb-5e73-4b8f-88c2-7d02334869e5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6da579e4-6abf-41a1-a3ae-9d1d9502919d"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnableMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a75e954b-5b9d-4fc5-a8bf-9c744584a23f"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnableMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -632,6 +671,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Onboarding = asset.FindActionMap("Onboarding", throwIfNotFound: true);
         m_Onboarding_DRight = m_Onboarding.FindAction("DRight", throwIfNotFound: true);
         m_Onboarding_DLeft = m_Onboarding.FindAction("DLeft", throwIfNotFound: true);
+        // LevelSelect
+        m_LevelSelect = asset.FindActionMap("LevelSelect", throwIfNotFound: true);
+        m_LevelSelect_EnableMenu = m_LevelSelect.FindAction("EnableMenu", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -958,6 +1000,39 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public OnboardingActions @Onboarding => new OnboardingActions(this);
+
+    // LevelSelect
+    private readonly InputActionMap m_LevelSelect;
+    private ILevelSelectActions m_LevelSelectActionsCallbackInterface;
+    private readonly InputAction m_LevelSelect_EnableMenu;
+    public struct LevelSelectActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public LevelSelectActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @EnableMenu => m_Wrapper.m_LevelSelect_EnableMenu;
+        public InputActionMap Get() { return m_Wrapper.m_LevelSelect; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(LevelSelectActions set) { return set.Get(); }
+        public void SetCallbacks(ILevelSelectActions instance)
+        {
+            if (m_Wrapper.m_LevelSelectActionsCallbackInterface != null)
+            {
+                @EnableMenu.started -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnEnableMenu;
+                @EnableMenu.performed -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnEnableMenu;
+                @EnableMenu.canceled -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnEnableMenu;
+            }
+            m_Wrapper.m_LevelSelectActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @EnableMenu.started += instance.OnEnableMenu;
+                @EnableMenu.performed += instance.OnEnableMenu;
+                @EnableMenu.canceled += instance.OnEnableMenu;
+            }
+        }
+    }
+    public LevelSelectActions @LevelSelect => new LevelSelectActions(this);
     public interface ICameraControlsActions
     {
         void OnCameraThumbstick(InputAction.CallbackContext context);
@@ -990,5 +1065,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     {
         void OnDRight(InputAction.CallbackContext context);
         void OnDLeft(InputAction.CallbackContext context);
+    }
+    public interface ILevelSelectActions
+    {
+        void OnEnableMenu(InputAction.CallbackContext context);
     }
 }
