@@ -49,16 +49,12 @@ namespace NewRatCharacterController {
 
 		[SerializeField] private Transform _cameraTransform;
 
-		// private Vector3 
-		
 		private void Awake() {
 
 			_animator = anim;
 		}
 
 		private void Update() {
-			// RotateCharacterMesh();
-
 			_blendVector = BlendVector(_inputVector);
 			
 			_animator.SetFloat(VelocityZ, _vector.y);

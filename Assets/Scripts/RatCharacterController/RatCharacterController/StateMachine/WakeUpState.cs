@@ -5,6 +5,8 @@ namespace NewRatCharacterController
 {
     public class WakeUpState : BaseState {
         private const string State = nameof(WakeUpState);
+        private float t;
+        private float _wakeupDuration = 5f;
 
         public override void Enter()
         {
@@ -16,8 +18,7 @@ namespace NewRatCharacterController
             NewRatCharacter.EnableCharacterMovement(false);
             NewRatCharacter.HandleVelocity();
             AddGravityForce();
-
-
+            
             if (NewRatCharacter.Awakened)
                 stateMachine.TransitionTo<MoveState>();
         }
