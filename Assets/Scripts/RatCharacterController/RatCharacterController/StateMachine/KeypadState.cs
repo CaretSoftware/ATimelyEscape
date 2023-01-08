@@ -6,6 +6,7 @@ namespace NewRatCharacterController {
 
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
+			NewRatCharacter.EnableCharacterMovement(false);
 			NewRatCharacter.AnimationController.SetKeypad(true);
 		} 
 
@@ -19,6 +20,8 @@ namespace NewRatCharacterController {
 		public override void Exit() {
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
+
+			NewRatCharacter.EnableCharacterMovement(true);
 			NewRatCharacter.AnimationController.SetKeypad(false);
 		}
 	}

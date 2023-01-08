@@ -10,7 +10,6 @@ public class ConveyorForce : MonoBehaviour
     [SerializeField] private float minDistanceToWayPoint = 0.1f;
     [SerializeField] private float cubeSpeed;
     [SerializeField] private float speedMultiplier;
-    //[SerializeField] private float characterSpeed = 25f;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private MeshRenderer meshRenderer2;
     [SerializeField] private Transform[] waypoints;
@@ -18,8 +17,7 @@ public class ConveyorForce : MonoBehaviour
     [SerializeField] private wayPointSpeedInfo[] speedInfo;
     [SerializeField] private float cubeMaxHeigt;
     private MaterialPropertyBlock _matPropBlock;
-    //private float cubeSpeedMultiplyer = 150f;
-    //private NewRatCharacterController.NewRatCharacterController ratCharacter;
+    private AudioSource audioSource;
 
     [Serializable]
     private class wayPointSpeedInfo
@@ -40,8 +38,8 @@ public class ConveyorForce : MonoBehaviour
         {
             wayPointSpeeds.Add(info.index, info.speed);
         }
-        Debug.Log("hej", this);
         _matPropBlock = new MaterialPropertyBlock();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -52,23 +50,12 @@ public class ConveyorForce : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        /*        if (other.gameObject.tag == "Player") {
-                    ratCharacter = other.GetComponent<NewRatCharacterController.NewRatCharacterController>();
-                    // other.gameObject.GetComponent<NewRatCharacterController.NewRatCharacterController>().ConveyorForce = transform.forward  * speed * Time.deltaTime;
-                }*/
         if (other.gameObject.tag == "Cube")
         {
             if (!cubeDict.ContainsKey(other.gameObject))
                 cubeDict.Add(other.gameObject, 0);
         }
     }
-
-    /*    private void OnTriggerExit(Collider other) {
-            if (other.gameObject.tag == "Player") {
-                ratCharacter = null;
-                //other.gameObject.GetComponent<NewRatCharacterController.NewRatCharacterController>().ConveyorForce = transform.forward  * speed * Time.deltaTime;
-            }
-        }*/
 
     private void Update()
     {
@@ -99,38 +86,15 @@ public class ConveyorForce : MonoBehaviour
             }
             removedCubes.Clear();
 
-            /*        if (ratCharacter == null || !isOn) return;
-
-                    ratCharacter.ConveyorForce = transform.forward * characterSpeed * Time.deltaTime;*/
         }
 
     }
 
 
-    /*private void OnTriggerStay(Collider other)
-    {
-        if (isOn)
-        {
-            // if (other.gameObject.tag == "Player")
-            // {
-            //     other.gameObject.GetComponent<NewRatCharacterController.NewRatCharacterController>().ConveyorForce = transform.forward  * speed * Time.deltaTime;
-            // }
-            // else 
-            if (other.gameObject.tag == "Cube")
-            {
-                other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * ((speed * speedMultiplier) * cubeSpeedMultiplyer)) * Time.deltaTime, ForceMode.Impulse);
-            }
-            else
-            {
-                other.gameObject.GetComponent<Rigidbody>().AddForce((transform.forward * (speed * speedMultiplier)) * Time.deltaTime, ForceMode.Impulse);
-            }
-        }
-    }*/
-
     public void TurnOff()
     {
         isOn = false;
-
+        audioSource.Stop();
         if (_matPropBlock != null)
         {
             _matPropBlock.SetFloat("_Scrolling_Time_X", 0f);
@@ -151,18 +115,22 @@ public class ConveyorForce : MonoBehaviour
         if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present)
         {
             isOn = false;
+            audioSource.Stop();
         }
         else if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Future)
         {
             isOn = false;
+            audioSource.Stop();
         }
         else if (e.from == TimeTravelPeriod.Future && e.to == TimeTravelPeriod.Past)
         {
             isOn = true;
+            audioSource.Play();
         }
         else if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past)
         {
             isOn = true;
+            audioSource.Play();
         }
     }
     private void OnDestroy()

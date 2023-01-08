@@ -198,6 +198,13 @@ namespace NewRatCharacterController {
 			_playerInputActions.Interact.Future.performed -= TravelToFuture;
 		}
 
+		public void EnableCharacterMovement(bool enable) {
+			if (enable)
+				_playerInputActions.CharacterMovement.Enable();
+			else
+				_playerInputActions.CharacterMovement.Disable();
+		}
+		
 		private void DeveloperCheats() {
 #if UNITY_EDITOR
 			// Developer code - Get Time Travel
