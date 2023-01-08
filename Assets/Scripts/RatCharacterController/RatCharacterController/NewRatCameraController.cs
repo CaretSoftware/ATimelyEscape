@@ -235,12 +235,30 @@ public class NewRatCameraController : MonoBehaviour {
 	public static void SetLookTarget(Transform lookAtTransform, Vector3 lookOffsetDirection) => 
 		SetLookTarget(lookAtTransform, _instance.keypadOffset, _instance.lookAtInterpolationTimeDefault);
 	
-	public static void SetLookTarget(Transform lookAtTransform, Vector3 lookOffsetDirection, float duration) {
+	public static void SetLookTarget(Transform lookAtTransform, Vector3 lookOffsetDirection, float transitionDuration) {
 		_instance._lookAtTransform = lookAtTransform;
 		_instance._interpolationStartPosition = _instance._camera.position;
 		_instance._interpolationStartForward = _instance._camera.forward;
 		_instance._lookAtInterpolation = 0f;
 	}
 
+	public static void SetLookTarget(Transform lookAtTransform, Vector3 lookOffsetDirection, float transitionDuration,
+		float returnAfter) {
+		SetLookTarget(lookAtTransform, lookOffsetDirection, transitionDuration);
+		_instance.Invoke(nameof(UnlockLookTargetInstance), transitionDuration + returnAfter);
+	}
+
 	public static void UnlockLookTarget() => _instance._lookAtTransform = null;
+	public void UnlockLookTargetInstance() => _instance._lookAtTransform = null;
+	
+
+	[SerializeField] private Transform test;
+	[SerializeField] private Vector3 testVector;
+	[SerializeField] private float testTransDuration;
+	[SerializeField] private float testReturnAfter;
+	
+	[ContextMenu(nameof(Test))]
+	public void Test() {
+		SetLookTarget(test, testVector, testTransDuration, testReturnAfter);
+	}
 }
