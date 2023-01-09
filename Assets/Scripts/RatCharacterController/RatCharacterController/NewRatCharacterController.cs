@@ -18,8 +18,8 @@ public class NewRatCharacterController : MonoBehaviour {
 	// State Machine
 	private StateMachine _stateMachine;
 	private List<BaseState> _states = new List<BaseState> { 
-		new WakeUpState(),
 		new MoveState(), 
+		new WakeUpState(),
 		new JumpState(), 
 		new AirState(), 
 		new WallRunState(), 

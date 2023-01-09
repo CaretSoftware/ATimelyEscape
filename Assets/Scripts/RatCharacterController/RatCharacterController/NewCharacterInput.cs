@@ -32,14 +32,14 @@ namespace NewRatCharacterController {
 			set {
 				canTimeTravel = value;
 			
-				if (canTimeTravel) {
+				//if (canTimeTravel) {
 					if (canTimeTravelPast)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast);
+						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast && canTimeTravel);
 					if (canTimeTravelPresent)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent);
+						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent && canTimeTravel);
 					if (canTimeTravelFuture)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture);
-				}
+						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture && canTimeTravel);
+				//}
 			}
 		}
 		public bool CanTimeTravelPast {
@@ -47,7 +47,6 @@ namespace NewRatCharacterController {
 			
 			set
 			{
-				Debug.Log("bla");
 				canTimeTravel = true;
 				canTimeTravelPast = value;
 				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
@@ -113,6 +112,27 @@ namespace NewRatCharacterController {
 		private void Update() {
 			if (_paused) return;
 
+			if (UnityEngine.Input.GetKeyDown(KeyCode.U))
+				CanTimeTravel = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.H))
+				CanTimeTravel = false;
+			
+			if (UnityEngine.Input.GetKeyDown(KeyCode.I))
+				CanTimeTravelPast = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.J))
+				CanTimeTravelPast = false;
+			
+			if (UnityEngine.Input.GetKeyDown(KeyCode.O))
+				CanTimeTravelPresent = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.K))
+				CanTimeTravelPresent = false;
+			
+			if (UnityEngine.Input.GetKeyDown(KeyCode.P))
+				CanTimeTravelFuture = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.L))
+				CanTimeTravelFuture = false;
+
+			
 			MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
 			CameraInput();
 			DeveloperCheats();
