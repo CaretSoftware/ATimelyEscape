@@ -30,16 +30,14 @@ namespace NewRatCharacterController {
 			get => canTimeTravel;
 			
 			set {
-				canTimeTravel = value;
-			
-				//if (canTimeTravel) {
-					if (canTimeTravelPast)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast && canTimeTravel);
-					if (canTimeTravelPresent)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent && canTimeTravel);
-					if (canTimeTravelFuture)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture && canTimeTravel);
-				//}
+				canTimeTravel = value; 
+				
+				if (canTimeTravelPast)
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast && canTimeTravel);
+				if (canTimeTravelPresent)
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent && canTimeTravel);
+				if (canTimeTravelFuture)
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture && canTimeTravel);
 			}
 		}
 		public bool CanTimeTravelPast {
