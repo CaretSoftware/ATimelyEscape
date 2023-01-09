@@ -10,9 +10,9 @@ public class LightAndEffectManager : MonoBehaviour
 
     void Start()
     {
-        lightsInRoom = GetComponentsInChildren<Light>();
-        particlesInRoom = GetComponentsInChildren<ParticleSystem>();
-        probesInRoom = FindObjectsOfType<ReflectionProbe>();
+        lightsInRoom = GetComponentsInChildren<Light>(true);
+        particlesInRoom = GetComponentsInChildren<ParticleSystem>(true);
+        probesInRoom = FindObjectsOfType<ReflectionProbe>(true);
 
         ActivateLights(false);
         ActivateParticles(false);
