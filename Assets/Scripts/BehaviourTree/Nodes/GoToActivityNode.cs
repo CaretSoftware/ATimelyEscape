@@ -40,7 +40,7 @@ public class GoToActivityNode : Node
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(waypoints[targetIndex].position, agent.transform.position);
-
+        Debug.Log($"GoToActivityNode");
         if (destinationDistance > DestinationOffset)
         {
             isTimerDone = false;

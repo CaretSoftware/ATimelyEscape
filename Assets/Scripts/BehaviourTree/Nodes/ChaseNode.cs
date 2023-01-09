@@ -12,18 +12,21 @@ public class ChaseNode : Node
 
     private float distanceToPlayer;
     private float captureDistance;
+    private float chaseDistance;
 
-    public ChaseNode(Transform player, NavMeshAgent agent, Transform agentTransform, float captureDistance)
+    public ChaseNode(Transform player, NavMeshAgent agent, Transform agentTransform, float captureDistance, float chaseDistance)
     {
         this.player = player;
         this.agent = agent;
         this.agentTransform = agentTransform;
         this.captureDistance = captureDistance;
+        this.chaseDistance = chaseDistance;
     }
 
     public override NodeState Evaluate()
     {
         distanceToPlayer = Vector3.Distance(player.position, agentTransform.position);
+        Debug.Log($"ChaseNode");
         if(distanceToPlayer > captureDistance)
         {
             agent.isStopped = false;
@@ -31,8 +34,6 @@ public class ChaseNode : Node
             return NodeState.RUNNING;
         }
         else
-        {
-            return NodeState.SUCCESS;
-        }
+            return NodeState.FAILURE;
     }
 }

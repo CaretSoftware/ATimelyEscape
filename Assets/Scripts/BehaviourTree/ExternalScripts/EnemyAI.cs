@@ -165,19 +165,28 @@ public class EnemyAI : MonoBehaviour
     private void ConstructBehaviourTreePersonnel()
     {
         GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, gameObject, idleActivityTimer);
-        RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV, animator);
-        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
-        RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV, animator);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
-        CaptureBoolNode captureBoolNode = new CaptureBoolNode(playerTransform, agentCenterTransform, this, animator, captureRange);
-        StartReachAnimationNode startReachAnimationNode = new StartReachAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
-        StopReachAnimationNode stopReachAnimationNode = new StopReachAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
+        RangeNode chaseRangeNode = new RangeNode(chaseRange, agentCenterTransform, playerTransform, enemyFOV, animator);
+        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange, chaseRange);
+        RangeNode captureRangeNode = new RangeNode(captureRange, agentCenterTransform, playerTransform, enemyFOV, animator);
+        CaptureNode captureAttemptNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
+        CaptureAnimationNode captureAnimationNode = new CaptureAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
+        InvertedRangeNode invertedRangeNode = new InvertedRangeNode(captureRange, agentCenterTransform, playerTransform, animator, this);
+        //StopReachAnimationNode stopReachAnimationNode = new StopReachAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
+        //CaptureBoolNode captureBoolNode = new CaptureBoolNode(playerTransform, agentCenterTransform, this, animator, captureRange);
+        
+        Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureAttemptNode, captureAnimationNode });
+        Sequence chaseSequence = new Sequence(new List<Node> { chaseRangeNode, chaseNode });
+        Selector enemyActivitySelector = new Selector(new List<Node> { chaseSequence, goToActivityNode });
+        Sequence enemyActivityMainSequence = new Sequence(new List<Node> { invertedRangeNode, enemyActivitySelector });
 
+        topNode = new Selector(new List<Node> { enemyActivityMainSequence, captureSequence });
+        /*
         Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
         Sequence captureAnimationSequence = new Sequence(new List<Node> { startReachAnimationNode, stopReachAnimationNode });
         Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode, captureAnimationSequence });
         
         topNode = new Selector(new List<Node> { captureSequence, chaseSequence, goToActivityNode });
+        */
     }
 
     //accounts for offset between the character- and agent component position that occurs each frame.
