@@ -23,9 +23,9 @@ namespace NewRatCharacterController {
 
 		// Time Travel
 		private bool canTimeTravel = false;
-		private bool canTimeTravelPast = false;
-		private bool canTimeTravelPresent = false;
-		private bool canTimeTravelFuture = false;
+		private bool canTimeTravelPast = true;
+		private bool canTimeTravelPresent = true;
+		private bool canTimeTravelFuture = true;
 		public bool CanTimeTravel {
 			get => canTimeTravel;
 			
@@ -46,27 +46,28 @@ namespace NewRatCharacterController {
 			get => canTimeTravelPast;
 			
 			set {
+				canTimeTravel = true;
 				canTimeTravelPast = value;
-				if (canTimeTravel)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
+				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
 			}
 		}
 		public bool CanTimeTravelPresent {
 			get => canTimeTravelPresent;
 			
-			set {
+			set
+			{
+				canTimeTravel = true;
 				canTimeTravelPresent = value;
-				if (canTimeTravel)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
+				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
 			}
 		}
 		public bool CanTimeTravelFuture {
 			get => canTimeTravelFuture;
 			
 			set {
+				canTimeTravel = true;
 				canTimeTravelFuture = value;
-				if (canTimeTravel)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
+				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
 			}
 		}
 		
