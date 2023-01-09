@@ -133,8 +133,8 @@ public class KeypadController : DeviceController
     {
         ReleasePlayer();
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
 
         Destroy(gameObject);
     }
