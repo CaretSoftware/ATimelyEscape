@@ -9,15 +9,7 @@ public class MenuSelection : MonoBehaviour
 
     public void Awake()
     {
-        if (transform.Find("Continue") && transform.Find("Continue").gameObject.activeSelf)
-        {
-            GameObject continueButton = transform.Find("Continue").gameObject;
-            SelectButton(continueButton);
-        }
-        else
-        {
-            SelectButton(firstSelectedButton);
-        }
+        SelectButton(firstSelectedButton);
     }
 
     public void DeselectButton()
