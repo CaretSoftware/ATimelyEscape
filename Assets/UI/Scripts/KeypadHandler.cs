@@ -26,10 +26,8 @@ public class KeypadHandler : MonoBehaviour
 
     private void Paused(bool paused)
     {
-        Debug.Log($"PAUSE DELEGATE KEYPAD HANDLER {paused} {!paused && currentKeypadHandler != null && currentKeypadHandler == this && EventSystem.current != null}");
         if (!paused && currentKeypadHandler != null && currentKeypadHandler == this && EventSystem.current != null)
         {
-            Debug.Log($"Paused Delegate set first selected game object");
             EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
         }
     }
@@ -50,6 +48,7 @@ public class KeypadHandler : MonoBehaviour
 
     public void CloseKeypad()
     {
+        currentKeypadHandler = null;
         ReleasePlayer();
         keypadUI.GetComponent<Animator>().Play("Close");
     }
