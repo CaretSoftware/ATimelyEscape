@@ -109,9 +109,7 @@ public class TimeTravelUIButton : MonoBehaviour {
 	private void TimePeriodChanged(TimePeriodChanged t) {
 		FadeButton(t.to == timeTravelPeriod);
 	}
-
-	// pulsate button Coroutine
-
+	
 	private void Blocked(CallHintAnimation c) {
 		if (c.animationName.Equals("TravelWarning") && _lastPressedPeriod == timeTravelPeriod)
 			AnimateButtonBlocked();
