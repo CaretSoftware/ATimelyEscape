@@ -5,8 +5,7 @@ using UnityEngine.Serialization;
 
 namespace NewRatCharacterController { 
 [RequireComponent(typeof(CapsuleCollider)), DisallowMultipleComponent, SelectionBase]
-public class NewRatCharacterController : MonoBehaviour
-{
+public class NewRatCharacterController : MonoBehaviour {
 	public delegate void CaughtEvent(bool caught);
 	public static CaughtEvent caughtEvent;
 	
