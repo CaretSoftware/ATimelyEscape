@@ -144,7 +144,8 @@ public class TimeTravelUIButton : MonoBehaviour {
 			meshRenderer.enabled = true;
 			StartCoroutine(TurnOnButton());
 		} else {
-			PlayParticleSystem();
+			if (meshRenderer.enabled)
+				PlayParticleSystem();
 			meshRenderer.enabled = false;
 		}
 	}
