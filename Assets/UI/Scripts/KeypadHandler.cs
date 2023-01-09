@@ -10,7 +10,7 @@ public class KeypadHandler : MonoBehaviour
     [SerializeField] private GameObject keypadUI;
     [SerializeField] private GameObject firstSelectedGameObject;
     private NewRatCharacterController.NewRatCharacterController newRatCharacterController;
-    private static KeypadHandler keypadHandler;
+    private static KeypadHandler currentKeypadHandler;
     
     void Start() 
     {
@@ -24,16 +24,18 @@ public class KeypadHandler : MonoBehaviour
         PauseMenuBehaviour.pauseDelegate -= Paused;
     }
 
-    private void Paused(bool paused) {
-        if (!paused && keypadHandler != null && keypadHandler == this && EventSystem.current != null)
+    private void Paused(bool paused)
+    {
+        if (!paused && currentKeypadHandler != null && currentKeypadHandler == this && EventSystem.current != null)
         {
-            Debug.Log($"Paused Delegate set first selected game object");
             EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
         }
     }
 
     public void OpenKeypad()
     {
+        currentKeypadHandler = this;
+        
         if (EventSystem.current != null)
             EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
 
@@ -46,6 +48,7 @@ public class KeypadHandler : MonoBehaviour
 
     public void CloseKeypad()
     {
+        currentKeypadHandler = null;
         ReleasePlayer();
         keypadUI.GetComponent<Animator>().Play("Close");
     }
