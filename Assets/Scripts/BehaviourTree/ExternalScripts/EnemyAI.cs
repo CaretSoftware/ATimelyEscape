@@ -229,13 +229,18 @@ public class EnemyAI : MonoBehaviour
     public void ResetAfterAnimations()
     {
         handIKTarget.position = defaultIKTarget.position;
+        RestoreAfterKneeling();
+
         animator.SetBool("GrabActionBool", false);
         isCapturing = false;
-        
-        RestoreAfterKneeling();
     }
-    public void SetPlayerTransformToCheckpoint() { FailStateScript.Instance.PlayDeathVisualization(checkpoint, transform); }
-    public void ReturnHand() { animator.SetTrigger("ReturnHandAction"); }
+
+    public void SetPlayerTransformToCheckpoint()
+    {
+        
+        FailStateScript.Instance.PlayDeathVisualization(checkpoint, transform);
+        animator.SetBool("DeathVizualisationIsPlaying", true);
+    }
     public void StartReaching()
     {
         //NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
