@@ -171,7 +171,7 @@ public class TimeTravelUIButton : MonoBehaviour {
 		}
 
 		_mpb.SetColor(EmissionColorPropertyID,
-			TimeTravelManager.currentPeriod == timeTravelPeriod ? Color.grey : _emissionColor.gamma);
+			TimeTravelManager.currentPeriod == timeTravelPeriod ? new Color(.5f,.5f,.5f,0f ) : _emissionColor.gamma);
 
 		meshRenderer.SetPropertyBlock(_mpb);
 	}
