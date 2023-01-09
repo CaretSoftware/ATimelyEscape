@@ -19,7 +19,6 @@ public class PauseMenuBehaviour : MonoBehaviour {
     private Animator pauseMenyAnimator;
 
     private NewRatCharacterController.NewRatCharacterController newRatCharacterController;
-    
 
     [SerializeField] private MenuSelection menuSelection;
     [SerializeField] private GameObject buttonToSelected;
