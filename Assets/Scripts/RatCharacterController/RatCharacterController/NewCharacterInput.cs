@@ -45,7 +45,9 @@ namespace NewRatCharacterController {
 		public bool CanTimeTravelPast {
 			get => canTimeTravelPast;
 			
-			set {
+			set
+			{
+				Debug.Log("bla");
 				canTimeTravel = true;
 				canTimeTravelPast = value;
 				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
