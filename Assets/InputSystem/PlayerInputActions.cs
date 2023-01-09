@@ -560,7 +560,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
             ""id"": ""60844a0f-68df-488f-8c42-c5f34a7ec646"",
             ""actions"": [
                 {
-                    ""name"": ""DRight"",
+                    ""name"": ""AdvanceDialogue"",
                     ""type"": ""Button"",
                     ""id"": ""92305ec1-51bb-4034-a842-a807e82a31a8"",
                     ""expectedControlType"": ""Button"",
@@ -569,7 +569,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DLeft"",
+                    ""name"": ""ReturnToGame"",
                     ""type"": ""Button"",
                     ""id"": ""e3ba9e78-99be-4e07-83af-4561264003a3"",
                     ""expectedControlType"": ""Button"",
@@ -586,7 +586,18 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DRight"",
+                    ""action"": ""AdvanceDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf6aa305-b912-48a7-952b-83e49886beef"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AdvanceDialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -597,7 +608,18 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DLeft"",
+                    ""action"": ""ReturnToGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5f8e728-cb37-4aa6-be65-5ab8bc6a26d9"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReturnToGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -621,7 +643,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6da579e4-6abf-41a1-a3ae-9d1d9502919d"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/f3"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -669,8 +691,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Pause_Pause = m_Pause.FindAction("Pause", throwIfNotFound: true);
         // Onboarding
         m_Onboarding = asset.FindActionMap("Onboarding", throwIfNotFound: true);
-        m_Onboarding_DRight = m_Onboarding.FindAction("DRight", throwIfNotFound: true);
-        m_Onboarding_DLeft = m_Onboarding.FindAction("DLeft", throwIfNotFound: true);
+        m_Onboarding_AdvanceDialogue = m_Onboarding.FindAction("AdvanceDialogue", throwIfNotFound: true);
+        m_Onboarding_ReturnToGame = m_Onboarding.FindAction("ReturnToGame", throwIfNotFound: true);
         // LevelSelect
         m_LevelSelect = asset.FindActionMap("LevelSelect", throwIfNotFound: true);
         m_LevelSelect_EnableMenu = m_LevelSelect.FindAction("EnableMenu", throwIfNotFound: true);
@@ -963,14 +985,14 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     // Onboarding
     private readonly InputActionMap m_Onboarding;
     private IOnboardingActions m_OnboardingActionsCallbackInterface;
-    private readonly InputAction m_Onboarding_DRight;
-    private readonly InputAction m_Onboarding_DLeft;
+    private readonly InputAction m_Onboarding_AdvanceDialogue;
+    private readonly InputAction m_Onboarding_ReturnToGame;
     public struct OnboardingActions
     {
         private @PlayerInputActions m_Wrapper;
         public OnboardingActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @DRight => m_Wrapper.m_Onboarding_DRight;
-        public InputAction @DLeft => m_Wrapper.m_Onboarding_DLeft;
+        public InputAction @AdvanceDialogue => m_Wrapper.m_Onboarding_AdvanceDialogue;
+        public InputAction @ReturnToGame => m_Wrapper.m_Onboarding_ReturnToGame;
         public InputActionMap Get() { return m_Wrapper.m_Onboarding; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -980,22 +1002,22 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_OnboardingActionsCallbackInterface != null)
             {
-                @DRight.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
-                @DRight.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
-                @DRight.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
-                @DLeft.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
-                @DLeft.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
-                @DLeft.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
+                @AdvanceDialogue.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnAdvanceDialogue;
+                @AdvanceDialogue.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnAdvanceDialogue;
+                @AdvanceDialogue.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnAdvanceDialogue;
+                @ReturnToGame.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnReturnToGame;
+                @ReturnToGame.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnReturnToGame;
+                @ReturnToGame.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnReturnToGame;
             }
             m_Wrapper.m_OnboardingActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @DRight.started += instance.OnDRight;
-                @DRight.performed += instance.OnDRight;
-                @DRight.canceled += instance.OnDRight;
-                @DLeft.started += instance.OnDLeft;
-                @DLeft.performed += instance.OnDLeft;
-                @DLeft.canceled += instance.OnDLeft;
+                @AdvanceDialogue.started += instance.OnAdvanceDialogue;
+                @AdvanceDialogue.performed += instance.OnAdvanceDialogue;
+                @AdvanceDialogue.canceled += instance.OnAdvanceDialogue;
+                @ReturnToGame.started += instance.OnReturnToGame;
+                @ReturnToGame.performed += instance.OnReturnToGame;
+                @ReturnToGame.canceled += instance.OnReturnToGame;
             }
         }
     }
@@ -1063,8 +1085,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     }
     public interface IOnboardingActions
     {
-        void OnDRight(InputAction.CallbackContext context);
-        void OnDLeft(InputAction.CallbackContext context);
+        void OnAdvanceDialogue(InputAction.CallbackContext context);
+        void OnReturnToGame(InputAction.CallbackContext context);
     }
     public interface ILevelSelectActions
     {
