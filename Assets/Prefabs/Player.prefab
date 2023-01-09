@@ -15392,12 +15392,12 @@ MonoBehaviour:
   _kineticFrictionCoefficient: 0.1
   pushSpeed: 0.5
   ledgeVaultEndPos: {x: 0, y: 0.2, z: 0.05}
-  point0: {x: 0, y: 0, z: 0}
-  point1: {x: 0, y: 0, z: 0}
   cubeHitPosition: {x: 0, y: 0, z: 0}
   cubeHitInverseNormal: {x: 0, y: 0, z: 0}
   cubeTransform: {fileID: 0}
   pushOffset: {x: 0, y: 0, z: -0.085}
+  point0: {x: 0, y: 0, z: 0}
+  point1: {x: 0, y: 0, z: 0}
 --- !u!114 &4770257075950780103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15410,6 +15410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 687c1693ea96e4d49b545ec8faab4cc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lookAtInterpolationTimeDefault: 1.5
   ClampLookupMax: 50
   ClampLookupMin: 175
   smoothDampMinVal: 0.05
@@ -15419,9 +15420,13 @@ MonoBehaviour:
     m_Bits: 1207959553
   _camera: {fileID: 4770257074904037964}
   _cameraCollisionRadius: 0.05
+  minCollisionZoomDistance: 0
   _headHeight: 0.15
   _camera3rdPersonOffset: {x: 0.08, y: 0.1, z: -0.41}
   _smoothCameraPosTime: 0.05
+  keyPadRotation: {x: 0, y: 0, z: 0}
+  keypadOffset: {x: 0, y: 0, z: 0}
+  keypadCenterOffset: 0
 --- !u!114 &7676930236618675767
 MonoBehaviour:
   m_ObjectHideFlags: 0

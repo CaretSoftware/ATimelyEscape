@@ -6,44 +6,41 @@ using UnityEngine.Animations.Rigging;
 
 public class CaptureNode : Node
 {
-    private static DummyBehaviour Instance;
-    
-    private GameObject GO = new GameObject();
-    private GameObject dummyBehaviourParent;
-    
+    private LayerMask obstacleMask;
     private NavMeshAgent agent;
     private Animator animator;
     private EnemyAI ai;
-    private Transform agentTransform;
+    private Transform agentCenterTransform;
     private Transform handIKTarget;
     private Transform player;
 
     private float captureDistance;
     private float destinationDistance;
+    private bool recentlyCaught;
 
 
-    public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform agentTransform, Animator animator, EnemyAI ai)
+    public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform agentCenterTransform,
+        Animator animator, EnemyAI ai, LayerMask obstacleMask)
     {
         this.agent = agent;
         this.player = player;
         this.captureDistance = captureDistance;
-        this.agentTransform = agentTransform;
+        this.agentCenterTransform = agentCenterTransform;
         this.animator = animator;
         this.ai = ai;
-        dummyBehaviourParent = agent.gameObject;
-        Instance = GO.AddComponent<DummyBehaviour>();
-        GO.transform.parent = dummyBehaviourParent.transform;
+        this.obstacleMask = obstacleMask;
     }
 
-    private bool recentlyCaught;
+    //TODO raycasta mot spelaren, om default träffad gå vidare, annars fånga spelaren.
+    private RaycastHit hit;
     public override NodeState Evaluate()
     {
-        destinationDistance = Vector3.Distance(player.position, agentTransform.transform.position);
-        //Debug.Log("Destination distance:" + destinationDistance);
-        
+        destinationDistance = Vector3.Distance(player.position, agentCenterTransform.transform.position);
+        //hit = Physics.Raycast();
+            return NodeState.RUNNING;
         if (destinationDistance < captureDistance && !ai.IsCapturing && !recentlyCaught)
         {
-            //Debug.Log("GrabAction triggered");
+            
             animator.SetTrigger("GrabAction");
             agent.isStopped = true;
             ai.IsCapturing = true;
@@ -56,12 +53,4 @@ public class CaptureNode : Node
             return NodeState.RUNNING;
         }
     }
-
-    private IEnumerator RecentlyCaughtTimer()
-    {
-        recentlyCaught = true;
-        yield return new WaitForSeconds(3f);
-        recentlyCaught = false;
-    }
-    private class DummyBehaviour : MonoBehaviour { }
 }

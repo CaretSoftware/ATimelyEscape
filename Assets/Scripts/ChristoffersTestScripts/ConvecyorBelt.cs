@@ -13,7 +13,7 @@ public class ConvecyorBelt : MonoBehaviour
 
     private void Awake()
     {
-        isOn = true;
+        isOn = false;
     }
     private void Start()
     {

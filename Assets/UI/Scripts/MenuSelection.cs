@@ -20,6 +20,11 @@ public class MenuSelection : MonoBehaviour
         }
     }
 
+    public void DeselectButton()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
     public void SelectButton(GameObject button)
     {
         EventSystem.current.SetSelectedGameObject(null);

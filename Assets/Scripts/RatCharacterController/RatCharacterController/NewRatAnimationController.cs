@@ -16,6 +16,10 @@ namespace NewRatCharacterController {
 		private static readonly int Falling = Animator.StringToHash("Falling");
 		private static readonly int LedgeJump = Animator.StringToHash("JumpToLedge");
 		private static readonly int Caught = Animator.StringToHash("Caught");
+		private static readonly int Keypad = Animator.StringToHash("Keypad");
+		private static readonly int WakeUp = Animator.StringToHash("WakeUp");
+
+		
 		[SerializeField] Animator anim;  
 
 		private Vector2 _blendVector;
@@ -45,16 +49,12 @@ namespace NewRatCharacterController {
 
 		[SerializeField] private Transform _cameraTransform;
 
-		// private Vector3 
-		
 		private void Awake() {
 
 			_animator = anim;
 		}
 
 		private void Update() {
-			// RotateCharacterMesh();
-
 			_blendVector = BlendVector(_inputVector);
 			
 			_animator.SetFloat(VelocityZ, _vector.y);
@@ -120,5 +120,9 @@ namespace NewRatCharacterController {
 		public void SetLedgeJump() => _animator.SetTrigger(LedgeJump);
 
 		public void SetCaught(bool caught) => _animator.SetBool(Caught, caught);
+
+		public void SetKeypad(bool keypad) => _animator.SetBool(Keypad, keypad);
+		
+		public void Wake() => _animator.SetTrigger(WakeUp);
 	}
 }
