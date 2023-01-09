@@ -163,7 +163,7 @@ public class TimeTravelUIButton : MonoBehaviour {
 		float t = 0f;
 
 		while (t < 1.0f && !_blocked) {
-			Color color = Color.Lerp(_emissionColor.gamma, Color.grey, Ease.EaseInQuart(t));
+			Color color = Color.Lerp(_emissionColor.gamma, new Color(.5f,.5f,.5f,.1f ), Ease.EaseInQuart(t));
 			_mpb.SetColor(EmissionColorPropertyID, color.gamma);
 			meshRenderer.SetPropertyBlock(_mpb);
 			t += Time.unscaledDeltaTime * (1f / fadeOutAnimationTime);
@@ -171,7 +171,7 @@ public class TimeTravelUIButton : MonoBehaviour {
 		}
 
 		_mpb.SetColor(EmissionColorPropertyID,
-			TimeTravelManager.currentPeriod == timeTravelPeriod ? Color.grey : _emissionColor.gamma);
+			TimeTravelManager.currentPeriod == timeTravelPeriod ? new Color(.5f,.5f,.5f,.1f ) : _emissionColor.gamma);
 
 		meshRenderer.SetPropertyBlock(_mpb);
 	}

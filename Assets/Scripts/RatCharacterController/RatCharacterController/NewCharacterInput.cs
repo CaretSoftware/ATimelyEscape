@@ -33,11 +33,11 @@ namespace NewRatCharacterController {
 				canTimeTravel = value; 
 				
 				if (canTimeTravelPast)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast && canTimeTravel);
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast );//&& canTimeTravel);
 				if (canTimeTravelPresent)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent && canTimeTravel);
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent );// && canTimeTravel);
 				if (canTimeTravelFuture)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture && canTimeTravel);
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture );// && canTimeTravel);
 			}
 		}
 		public bool CanTimeTravelPast {
@@ -110,6 +110,7 @@ namespace NewRatCharacterController {
 		private void Update() {
 			if (_paused) return;
 
+			/*
 			if (UnityEngine.Input.GetKeyDown(KeyCode.U))
 				CanTimeTravel = true;
 			else if (UnityEngine.Input.GetKeyDown(KeyCode.H))
@@ -129,6 +130,7 @@ namespace NewRatCharacterController {
 				CanTimeTravelFuture = true;
 			else if (UnityEngine.Input.GetKeyDown(KeyCode.L))
 				CanTimeTravelFuture = false;
+			*/
 
 			
 			MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
