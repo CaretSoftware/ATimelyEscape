@@ -1,11 +1,12 @@
 using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class NewRatCameraController : MonoBehaviour {
-
+	private static NewRatCameraController _instance;
 	private NewRatCharacterController.NewRatCharacterController _ratCharacterController;
 	
 	private RaycastHit _hit;
@@ -25,6 +26,12 @@ public class NewRatCameraController : MonoBehaviour {
 	private float _rotationX;
 	private float _rotationY;
 	private float _smoothDollyTime;
+
+	[SerializeField] 
+	private float lookAtInterpolationTimeDefault = 1.5f;
+	private float _lookAtInterpolationTime;
+	private float _lookAtInterpolation;
+	private Transform _lookAtTransform;
 	
 	private bool _paused;
 	
@@ -46,6 +53,9 @@ public class NewRatCameraController : MonoBehaviour {
 	[SerializeField] [Range(0.0f, 2.0f)]
 	private float _cameraCollisionRadius;
 
+	[SerializeField] [Range(0f, 2.0f)] 
+	private float minCollisionZoomDistance;
+
 	[SerializeField] [Range(0.0f, 2.0f)]
 	private float _headHeight = 1.6f;
 
@@ -54,25 +64,25 @@ public class NewRatCameraController : MonoBehaviour {
 
 	[SerializeField] [Range(0.0f, 1.0f)] 
 	private float _smoothCameraPosTime = 0.05f;
-	
-	// [SerializeField] private Transform _cameraGimble;
 
 	public float MouseSensitivity { get; set; } = .2f;
 
 	public bool Accessibility { get; set; } = false;
 
 	private void Awake() {
+		if (_instance != null && _instance != this) 
+			Destroy(this.gameObject);
+		_instance ??= this;
 		_cameraPos = transform.position;
-		
 	}
 
 	
 	private void Start() {
 		_ratCharacterController = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
-		_camera.parent = null; // TODO fix 
+		_camera.parent = null; // TODO fix?
+
+		SetMouseMovementVectorFromRotation(transform.rotation.eulerAngles);
 		
-		Vector3 initialCameraVector = transform.rotation.eulerAngles;
-		_mouseMovement = new Vector2(initialCameraVector.y, initialCameraVector.x);
 		PauseMenuBehaviour.pauseDelegate += Pause;
 	}
 
@@ -82,7 +92,15 @@ public class NewRatCameraController : MonoBehaviour {
 
 	private void Pause(bool paused) => _paused = paused;
 
-	private void LateUpdate() {
+	
+	private void LateUpdate()
+	{
+		// keypadInterpolation = !KeypadTransform ? 0f : keypadInterpolation;
+		if (_lookAtTransform) {
+			MoveCameraToViewPoint();
+			return;
+		}
+
 		if (_paused || _ratCharacterController.KeypadInteraction) return;
 
 		ClampCameraTilt();
@@ -120,23 +138,22 @@ public class NewRatCameraController : MonoBehaviour {
 		
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 
-		//_cam.cullingMask = _firstPerson ? ~(1 << 1) : -1; // TODO What is this for?
-
 		_cameraPos = Vector3.SmoothDamp(_cameraPos, transform.position, ref _smoothDampCurrentVelocityLateral, _smoothCameraPosTime);
 		
 		_abovePlayer = _cameraPos + Vector3.up * _headHeight;
 		_offsetTarget = _abovePlayer + _camera.rotation * _camera3rdPersonOffset;
 		_offsetDirection = _offsetTarget - _abovePlayer;
-
+		
 		Physics.SphereCast(_abovePlayer, 
 			_cameraCollisionRadius, 
 			_offsetDirection.normalized, 
 			out _hit, 
 			_offsetDirection.magnitude, 
-			_collisionMask);
+			_collisionMask,
+			QueryTriggerInteraction.Ignore);
 		
 		if (_hit.collider)
-			_offset = _camera3rdPersonOffset.normalized * _hit.distance;
+			_offset = _camera3rdPersonOffset.normalized * Mathf.Max(minCollisionZoomDistance, _hit.distance);
 		else
 			_offset = _camera3rdPersonOffset;
 
@@ -145,7 +162,36 @@ public class NewRatCameraController : MonoBehaviour {
 
 		_camera.position = _abovePlayer + _camera.rotation * _lerpOffset;
 	}
-	
+
+	[SerializeField] private Vector3 keyPadRotation;
+	[SerializeField] private Vector3 keypadOffset;
+	[SerializeField] private float keypadCenterOffset;
+
+	private void MoveCameraToViewPoint() {
+		if (_lookAtInterpolation > 1f) {
+			SetMouseMovementVectorFromRotation(_camera.rotation.eulerAngles);
+			return;
+		} 
+		
+		Vector3 lookAtPosition = _lookAtTransform.position + Vector3.up * keypadCenterOffset;
+		
+		Vector3 targetPos =  lookAtPosition + _lookAtTransform.TransformDirection(keypadOffset);
+		Vector3 keypadLookDirection = (lookAtPosition - targetPos).normalized;
+
+		Vector3 lerpPos = Vector3.Lerp(_interpolationStartPosition, targetPos, Ease.EaseInOutCubic(_lookAtInterpolation));
+		
+		Vector3 cameraForwardLerp = Vector3.Lerp(_interpolationStartForward, keypadLookDirection, Ease.EaseInOutCubic(_lookAtInterpolation));
+		Quaternion targetRot = Quaternion.LookRotation(cameraForwardLerp, Vector3.up);
+		
+		_camera.SetPositionAndRotation(lerpPos, targetRot);
+		
+		SetMouseMovementVectorFromRotation(_camera.rotation.eulerAngles);
+		
+		_lookAtInterpolation += Time.deltaTime * 
+		                        (1f / (lookAtInterpolationTimeDefault <= 0f 
+			                        ? Mathf.Epsilon 
+			                        : lookAtInterpolationTimeDefault));
+	}
 	
 	private void MoveAccessibleCamera()
 	{
@@ -157,4 +203,33 @@ public class NewRatCameraController : MonoBehaviour {
 		_camera.position = _offsetTarget;
 		_camera.LookAt(abovePlayer, Vector3.up);
 	}
+
+	private void SetMouseMovementVectorFromRotation(Vector3 rotationEulerAngles) {
+		_mouseMovement = new Vector2(rotationEulerAngles.y, rotationEulerAngles.x);
+	}
+
+	private Vector3 _interpolationStartPosition;
+	private Vector3 _interpolationStartForward;
+
+	public static void SetLookTarget(Transform lookAtTransform) => 
+		SetLookTarget(lookAtTransform, _instance.keypadOffset);
+
+	public static void SetLookTarget(Transform lookAtTransform, Vector3 lookOffsetDirection) => 
+		SetLookTarget(lookAtTransform, _instance.keypadOffset, _instance.lookAtInterpolationTimeDefault);
+	
+	public static void SetLookTarget(Transform lookAtTransform, Vector3 lookOffsetDirection, float transitionDuration) {
+		_instance._lookAtTransform = lookAtTransform;
+		_instance._interpolationStartPosition = _instance._camera.position;
+		_instance._interpolationStartForward = _instance._camera.forward;
+		_instance._lookAtInterpolation = 0f;
+	}
+
+	public static void SetLookTarget(Transform lookAtTransform, Vector3 lookOffsetDirection, float transitionDuration,
+		float returnAfter) {
+		SetLookTarget(lookAtTransform, lookOffsetDirection, transitionDuration);
+		_instance.Invoke(nameof(UnlockLookTargetInstance), transitionDuration + returnAfter);
+	}
+
+	public static void UnlockLookTarget() => _instance._lookAtTransform = null;
+	public void UnlockLookTargetInstance() => _instance._lookAtTransform = null;
 }

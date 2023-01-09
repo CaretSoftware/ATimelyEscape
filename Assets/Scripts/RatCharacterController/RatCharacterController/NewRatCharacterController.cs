@@ -15,10 +15,11 @@ public class NewRatCharacterController : MonoBehaviour
 	public bool Caught;// { get; set; }
 	
 	public bool LetGoOfCube { get; set; }
-	
+
 	// State Machine
 	private StateMachine _stateMachine;
 	private List<BaseState> _states = new List<BaseState> { 
+		new WakeUpState(),
 		new MoveState(), 
 		new JumpState(), 
 		new AirState(), 
@@ -42,6 +43,7 @@ public class NewRatCharacterController : MonoBehaviour
 
 	
 	// Animations
+	public bool Awakened { get; private set; }
 	private NewRatAnimationController _animationController; // TODO remove private ref, keep auto property reference
 	public NewRatAnimationController AnimationController => _animationController;
 
@@ -50,7 +52,7 @@ public class NewRatCharacterController : MonoBehaviour
 		get => ratMesh;
 		private set { }
 	}
-	
+
 	// Collider
 	public CapsuleCollider CharCollider { get; private set; }
 	[HideInInspector] public float _colliderRadius;
@@ -61,7 +63,7 @@ public class NewRatCharacterController : MonoBehaviour
 	// Input
 	private Vector3 _inputMovement;
 	public bool paused;
-	public bool Jumped { get; private set; }
+	public bool Jumped { get; set; }
 	public bool Interacting { get; set; }
 	public Vector3 GroundNormal { get; private set; }
 	[HideInInspector] public Vector3 _velocity;
@@ -186,11 +188,9 @@ public class NewRatCharacterController : MonoBehaviour
 
 	private void Start() {
 		_colliderRadius = CharCollider.radius;
-		
 	}
 	
 	private void Update() {
-		
 		_inputMovement = Vector3.zero;
 		
 		UpdateGrounded();
@@ -245,19 +245,16 @@ public class NewRatCharacterController : MonoBehaviour
 	}
 
 	private bool JumpBuffer() {
-		
 		return Grounded && _pressedJumpMoment + _jumpBuffer > Time.time;
 	}
 	
 	private bool CoyoteTime() {
-		
 		if (Grounded)
 			_lastGroundedMoment = Time.time;
 		return !Grounded && _lastGroundedMoment + _coyoteTime > Time.time;
 	}
 
 	private void UpdateGrounded() {
-		
 		Grounded =
 			Physics.SphereCast(
 				_point2Transform.position, 
@@ -455,16 +452,7 @@ public class NewRatCharacterController : MonoBehaviour
 		
 		_transform.rotation = Quaternion.LookRotation(lookDirection);
 	}
-
-	public Vector3 point0;
-	public Vector3 point1;
-	private void OnDrawGizmos() {
-		if (!Application.isPlaying) return;
-		
-		Gizmos.DrawWireSphere(point0, _colliderRadius);
-		Gizmos.DrawWireSphere(point1, _colliderRadius);
-	}
-
+	
 	public bool InFrontOfCube() {
 		float maxLength = .1f;
 		Vector3 fwd = RatMesh.forward;
@@ -486,12 +474,30 @@ public class NewRatCharacterController : MonoBehaviour
 		return false;
 	}
 
+	public void EnableCharacterMovement(bool enabled) {
+		NewCharacterInput.EnableCharacterMovement(enabled);
+	}
+
+	public void Awoken() {
+		Awakened = true;
+	} 
+
 	public bool KeypadInteraction { get; set; }
 
 	public Vector3 cubeHitPosition;
 	public Vector3 cubeHitInverseNormal;
 	public Transform cubeTransform;
 	public Vector3 pushOffset;
-
+	
+	public Vector3 point0;
+	public Vector3 point1;
+#if UNITY_EDITOR
+	private void OnDrawGizmos() {
+		if (!Application.isPlaying) return;
+		
+		Gizmos.DrawWireSphere(point0, _colliderRadius);
+		Gizmos.DrawWireSphere(point1, _colliderRadius);
+	}
+#endif
 }
 }
