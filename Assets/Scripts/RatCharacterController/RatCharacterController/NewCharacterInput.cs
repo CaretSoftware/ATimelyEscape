@@ -23,45 +23,50 @@ namespace NewRatCharacterController {
 
 		// Time Travel
 		private bool canTimeTravel = false;
-		private bool canTimeTravelPast = true;
-		private bool canTimeTravelPresent = true;
-		private bool canTimeTravelFuture = true;
-		public bool CanTimeTravel { 
+		private bool canTimeTravelPast = false;
+		private bool canTimeTravelPresent = false;
+		private bool canTimeTravelFuture = false;
+		public bool CanTimeTravel {
 			get => canTimeTravel;
+			
 			set {
-				if (value) {
-					if (canTimeTravelPast)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, true);
-					if (canTimeTravelPresent)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, true);
-					if (canTimeTravelFuture)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, true);
-				}
 				canTimeTravel = value;
+			
+				if (canTimeTravel) {
+					if (canTimeTravelPast)
+						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast);
+					if (canTimeTravelPresent)
+						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent);
+					if (canTimeTravelFuture)
+						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture);
+				}
 			}
 		}
 		public bool CanTimeTravelPast {
 			get => canTimeTravelPast;
+			
 			set {
+				canTimeTravelPast = value;
 				if (canTimeTravel)
 					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
-				canTimeTravelPast = value;
 			}
 		}
 		public bool CanTimeTravelPresent {
 			get => canTimeTravelPresent;
+			
 			set {
+				canTimeTravelPresent = value;
 				if (canTimeTravel)
 					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
-				canTimeTravelPresent = value;
 			}
 		}
 		public bool CanTimeTravelFuture {
 			get => canTimeTravelFuture;
+			
 			set {
+				canTimeTravelFuture = value;
 				if (canTimeTravel)
 					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
-				canTimeTravelFuture = value;
 			}
 		}
 		
@@ -144,38 +149,42 @@ namespace NewRatCharacterController {
 		}
 
 		private void TravelToPast(InputAction.CallbackContext context) {
+#if UNITY_EDITOR
 			if (FindObjectOfType<TimeTravelManager>() == null) {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
-
-			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Past, TimeTravelManager.currentPeriod, canTimeTravelPast);
+#endif
+			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Past, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelPast);
 			
-			if (CanTimeTravel && CanTimeTravelPast)
+			if (CanTimeTravel && CanTimeTravelPast && !_paused)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Past);
 		}
 
 		private void TravelToPresent(InputAction.CallbackContext context) {
+#if UNITY_EDITOR
 			if (FindObjectOfType<TimeTravelManager>() == null) {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
+#endif			
 			
-			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Present, TimeTravelManager.currentPeriod, canTimeTravelPresent);
+			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Present, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelPresent);
 
-			if (CanTimeTravel && CanTimeTravelPresent)
+			if (CanTimeTravel && CanTimeTravelPresent && !_paused)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
 		}
 
 		private void TravelToFuture(InputAction.CallbackContext context) {
+#if UNITY_EDITOR			
 			if (FindObjectOfType<TimeTravelManager>() == null) {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
-			
-			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Future, TimeTravelManager.currentPeriod, canTimeTravelFuture);
+#endif			
+			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Future, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelFuture);
 
-			if (CanTimeTravel && CanTimeTravelFuture)
+			if (CanTimeTravel && CanTimeTravelFuture && _paused)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
 		}
 

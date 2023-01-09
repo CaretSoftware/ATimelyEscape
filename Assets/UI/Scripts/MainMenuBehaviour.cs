@@ -27,8 +27,8 @@ public class MainMenuBehaviour : MonoBehaviour
         Debug.Log("" + Time.timeScale);
         startMenyAnimator = gameObject.GetComponent<Animator>();
 
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()
