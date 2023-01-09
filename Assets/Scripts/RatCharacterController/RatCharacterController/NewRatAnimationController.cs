@@ -73,6 +73,21 @@ namespace NewRatCharacterController {
 				rat.rotation = Quaternion.LookRotation(_lookDirection);
 		}
 
+		private Vector3 In;
+		private Vector3 Vel;
+
+		public void InD(Vector3 ind) {
+			In = ind;
+		}
+
+		public void VelD(Vector3 vel) {
+			Vel = vel;
+		}
+
+		private void BlendV() {
+			// 
+		}
+
 		private Vector2 BlendVector(Vector3 input) {
 			Vector3 projectedInput = InputToCameraProjection(input);
 			
