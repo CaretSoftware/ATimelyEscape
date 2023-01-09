@@ -95,12 +95,10 @@ namespace NewRatCharacterController {
 		private void Paused(bool paused) => _paused = paused;
 
 		private void DPadRight(InputAction.CallbackContext context) {
-			//Debug.Log(nameof(NewCharacterInput.DPadRight));
 			dPadRightPressed?.Invoke();
 		}
 
 		private void DPadLeft(InputAction.CallbackContext context) {
-			//Debug.Log(nameof(NewCharacterInput.DPadLeft));
 			dPadLeftPressed?.Invoke();
 		}
 

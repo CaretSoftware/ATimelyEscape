@@ -12,7 +12,6 @@ namespace NewRatCharacterController {
 
 		public override void Run() {
 			NewRatCharacter._velocity = Vector3.zero;
-			// aim camera at keypad
 			if (!NewRatCharacter.KeypadInteraction)
 				stateMachine.TransitionTo<MoveState>();
 		}

@@ -17,6 +17,7 @@ public class NewIncubator : MonoBehaviour
     [SerializeField] private GameObject step1;
     [SerializeField] private GameObject step2;
     [SerializeField] private GameObject step3;
+    [SerializeField] private GameObject cords;
     [SerializeField] private Material done;
     [SerializeField] private Material notDone;
     [SerializeField] private TextMeshProUGUI instructions;
@@ -32,7 +33,7 @@ public class NewIncubator : MonoBehaviour
     private MeshRenderer sign3Mr;
     private AudioManager audioManager;
     private NewRatCharacterController.NewCharacterInput characterInput;
-
+    private NewRatCharacterController.NewRatCharacterController charactercontroller;
     private bool puzzleOneDone;
     private bool puzzleTwoDone;
     private bool puzzleThreeDone;
@@ -52,6 +53,7 @@ public class NewIncubator : MonoBehaviour
         step3.SetActive(false);
         sign2.SetActive(false);
         sign3.SetActive(false);
+        cords.SetActive(false);
 
         bigHatchAnim = bigHatch.GetComponent<Animator>();
         smallHatchAnim = smallHatch.GetComponent<Animator>();
@@ -63,6 +65,7 @@ public class NewIncubator : MonoBehaviour
         sign2Mr = sign2.GetComponent<MeshRenderer>();
         sign3Mr = sign3.GetComponent<MeshRenderer>();
         characterInput = FindObjectOfType<NewRatCharacterController.NewCharacterInput>();
+        charactercontroller = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
         audioManager = FindObjectOfType<AudioManager>();
 
     }
@@ -131,8 +134,6 @@ public class NewIncubator : MonoBehaviour
         {
             signMr.material = notDone;
         }
-
-
     }
     private void Step2()
     {
@@ -143,7 +144,7 @@ public class NewIncubator : MonoBehaviour
         puzzleFloor.SetActive(false);
         bigHatchAnim.SetBool("Open", false);
         //Debug.Log("STEP2");
-        Invoke("Step2AndHalf", 8f);
+        Invoke("Step2AndHalf", 7f);
     }
     private void Step2AndHalf()
     {
@@ -159,13 +160,13 @@ public class NewIncubator : MonoBehaviour
         audioManager.Play("6");
         instructions.text = "Move the cube in this time.";
         //Debug.Log("STEP4");
-        Invoke("Step4AndHalf", 8f);
+        Invoke("Step4AndHalf", 6f);
     }
     private void Step4AndHalf()
     {
         audioManager.Play("7");
         instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
-        Invoke("Step4TwoThirds", 5);
+        Invoke("Step4TwoThirds", 5.5f);
         
     }
     private void Step4TwoThirds()
@@ -185,6 +186,7 @@ public class NewIncubator : MonoBehaviour
     {
         signMr.material = notDone;
         step1.SetActive(false);
+        charactercontroller.LetGoOfCube = true; 
         step2.SetActive(true);
         bigHatchAnim.SetBool("OpenFourth", true);
         step2Anim.SetBool("Open", true);
@@ -197,11 +199,13 @@ public class NewIncubator : MonoBehaviour
     private void InstructionsStep8()
     {
         puzzleFloor.SetActive(false);
+        cords.SetActive(true);
         audioManager.Play("9");
         instructions.text = " Some buttons react to cubes. Some buttons must be manually pressed";
     }
     private void Step8()
     {
+        cords.SetActive(false);
         puzzleFloor.SetActive(true);
         bigHatchAnim.SetBool("OpenThird", true);
         step2Anim.SetBool("Open", false);
@@ -217,6 +221,7 @@ public class NewIncubator : MonoBehaviour
         sign3.SetActive(false);
         step3.SetActive(true);
         step2.SetActive(false);
+        charactercontroller.LetGoOfCube = true;
         bigHatchAnim.SetBool("OpenLast", true);
         step3Anim.SetBool("Open", true);
         Invoke("Step10Instructions", 3.5f);
