@@ -9,6 +9,7 @@ public class CaptureNode : Node
 {
     private LayerMask obstacleMask;
     private EnemyAI enemy;
+    private Animator animator;
 
     private Transform handIKTarget;
     private Transform player;
@@ -27,13 +28,11 @@ public class CaptureNode : Node
         this.enemy = enemy;
         this.obstacleMask = obstacleMask;
         losPos = agentCenterTransform.localPosition + Vector3.up * 0.8f;
+        this.animator = animator;
     }
 
     public override NodeState Evaluate()
     {
-        //distanceToPlayer = Vector3.Distance(player.position, agentCenterTransform.transform.position);
-        Debug.Log($"Capture Node");
-
         Physics.Raycast(losPos, (player.position - losPos).normalized,
             out hit, Mathf.Infinity, obstacleMask, QueryTriggerInteraction.Ignore);
         

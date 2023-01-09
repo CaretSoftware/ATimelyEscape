@@ -26,7 +26,6 @@ public class ChaseNode : Node
     public override NodeState Evaluate()
     {
         distanceToPlayer = Vector3.Distance(player.position, agentTransform.position);
-        Debug.Log($"ChaseNode");
         if(distanceToPlayer > captureDistance)
         {
             agent.isStopped = false;

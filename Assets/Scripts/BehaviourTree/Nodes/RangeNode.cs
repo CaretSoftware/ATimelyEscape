@@ -21,7 +21,6 @@ public class RangeNode : Node
     public override NodeState Evaluate()
     {
         distanceToPlayer = Vector3.Distance(enemy.position, player.position);
-        Debug.Log($"RangeNode");
         if (distanceToPlayer <= range || fov.playerDetected)
             return NodeState.SUCCESS;
         else

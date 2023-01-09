@@ -19,10 +19,8 @@ public class CaptureAnimationNode : Node
 
     public override NodeState Evaluate()
     {
-        Debug.Log($"CaptureAnimationNode");
         if (Vector3.Distance(enemy.position, player.position) < captureDistance)
         {
-            Debug.Log($"CaptureAnimationNode");
             animator.SetBool("GrabActionBool", true);
             return NodeState.SUCCESS;
         }

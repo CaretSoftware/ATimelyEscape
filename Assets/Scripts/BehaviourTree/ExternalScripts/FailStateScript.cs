@@ -9,11 +9,13 @@ public class FailStateScript : MonoBehaviour
         get { return _instance; }
     }
     
-    private Animator hyperDriveAnimator; //Place Gameobject with this script as child of main camera.
+    private Animator animator; //Place Gameobject with this script as child of main camera.
     private CanvasGroup blackScreenCanvasGroup; //Place Gameobject as child of Canvas.
     private Transform checkpoint;
     private Transform player;
     private ImageFadeFunctions imageFunctionality;
+    
+    public Animator Animator {get { return animator; } }
 
     private void Awake()
     {
@@ -27,7 +29,7 @@ public class FailStateScript : MonoBehaviour
     {
         //TODO Gretas test scen 
         player = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
-        hyperDriveAnimator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         imageFunctionality = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
     }
 
@@ -46,11 +48,15 @@ public class FailStateScript : MonoBehaviour
 
         NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
         this.checkpoint = checkpoint;
-        hyperDriveAnimator.gameObject.SetActive(true);
-        hyperDriveAnimator.SetTrigger("DeathAnimTrigger");
+        animator.gameObject.SetActive(true);
+        animator.SetTrigger("DeathAnimTrigger");
     }
 
-    public void FadeToBlack() { imageFunctionality.RunFadeToBlack(); }
+    public void FadeToBlack()
+    {
+        imageFunctionality.RunFadeToBlack(); 
+        animator.SetBool("DeathAnimationIsPlaying", true);
+    }
     public void FadeToWhite() { imageFunctionality.RunFadeToWhite(); }
 
     public void FadeBack()
@@ -58,6 +64,7 @@ public class FailStateScript : MonoBehaviour
         NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(false);
         player.position = checkpoint.position;
         imageFunctionality.RunFadeBack();
-        hyperDriveAnimator.gameObject.SetActive(false);
+        animator.gameObject.SetActive(false);
+        animator.SetBool("DeathAnimationIsPlaying", false);
     }
 }

@@ -28,28 +28,34 @@ public class EnemyAI : MonoBehaviour
     [Header("Rig Setup")]
     [SerializeField] private Transform handIKTarget;
     [SerializeField] private IKControl ikControl;
-
+    [SerializeField] private Transform feetPos;
+    [SerializeField] private Transform hipPos;
+    [SerializeField] private Transform agentCenterTransform;
+    [SerializeField] private GameObject fullBodyRig;
+    
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
     [HideInInspector] public bool activeAI;
-
+    
     private ChainIKConstraint chainIKConstraint;
-    [SerializeField] private GameObject fullBodyRig;
-    private EnemyFOV enemyFOV;
-    private NavMeshHit hit;
-    private Node topNode;
-
-    private Transform playerTransform;
     private Collider playerCollider;
-
-    [SerializeField] private Transform agentCenterTransform;
+    private EnemyFOV enemyFOV;
+    private Node topNode;
+    
     private Transform defaultIKTarget;
+    private Transform playerTransform;
+
+    private NavMeshHit hit;
     private Vector3 worldDeltaPosition;
     private Vector3 rootPosition;
     private Vector2 smoothDeltaPosition;
     private Vector2 deltaPosition;
     private Vector2 velocity;
-
+    private Vector3 defaultFeetPos;
+    private Vector3 defaultHipPos;
+    private Vector3 feetPosBent;
+    private Vector3 hipPosBent;
+    
     private float deltaMagnitude;
     private float chaseRange;
     private float captureRange;
@@ -171,22 +177,13 @@ public class EnemyAI : MonoBehaviour
         CaptureNode captureAttemptNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
         CaptureAnimationNode captureAnimationNode = new CaptureAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
         InvertedRangeNode invertedRangeNode = new InvertedRangeNode(captureRange, agentCenterTransform, playerTransform, animator, this);
-        //StopReachAnimationNode stopReachAnimationNode = new StopReachAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
-        //CaptureBoolNode captureBoolNode = new CaptureBoolNode(playerTransform, agentCenterTransform, this, animator, captureRange);
-        
+
         Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureAttemptNode, captureAnimationNode });
         Sequence chaseSequence = new Sequence(new List<Node> { chaseRangeNode, chaseNode });
         Selector enemyActivitySelector = new Selector(new List<Node> { chaseSequence, goToActivityNode });
         Sequence enemyActivityMainSequence = new Sequence(new List<Node> { invertedRangeNode, enemyActivitySelector });
 
         topNode = new Selector(new List<Node> { enemyActivityMainSequence, captureSequence });
-        /*
-        Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
-        Sequence captureAnimationSequence = new Sequence(new List<Node> { startReachAnimationNode, stopReachAnimationNode });
-        Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode, captureAnimationSequence });
-        
-        topNode = new Selector(new List<Node> { captureSequence, chaseSequence, goToActivityNode });
-        */
     }
 
     //accounts for offset between the character- and agent component position that occurs each frame.
@@ -237,27 +234,27 @@ public class EnemyAI : MonoBehaviour
 
     public void SetPlayerTransformToCheckpoint()
     {
-        
+        animator.SetBool("DeathAnimationPlaying", true);
         FailStateScript.Instance.PlayDeathVisualization(checkpoint, transform);
-        animator.SetBool("DeathVizualisationIsPlaying", true);
     }
+    
     public void StartReaching()
     {
-        //NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
         isCapturing = true;
-    } 
+    }
+    
+    public void StopReaching()
+    {
+        animator.SetBool("DeathAnimationPlaying", false);
+    }
+    
     public bool IsCapturing
     {
         get { return isCapturing; }
         set { isCapturing = value; }
     }
 
-    [SerializeField] private Transform feetPos;
-    [SerializeField] private Transform hipPos;
-    private Vector3 defaultFeetPos;
-    private Vector3 defaultHipPos;
-    private Vector3 feetPosBent;
-    private Vector3 hipPosBent;
+    
 
     public void BendTheKnee()
     {
@@ -270,10 +267,8 @@ public class EnemyAI : MonoBehaviour
 
     private void RestoreAfterKneeling()
     {
-        //print($"RestoreAfterKneeling()");
         feetPos.localPosition = defaultFeetPos;
         hipPos.localPosition = defaultHipPos;
-        //print($"feetPosLocal: {feetPos.localPosition.y}");
-        //print($"hipPosLocal: {hipPos.localPosition.y}");
+
     }
 }

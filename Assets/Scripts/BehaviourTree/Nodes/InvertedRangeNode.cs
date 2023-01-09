@@ -24,7 +24,6 @@ public class InvertedRangeNode : Node
         if (distanceToPlayer > catchRange)
         {
             animator.SetBool("GrabActionBool", false);
-            Debug.Log("Stop animation");
             return NodeState.SUCCESS;
         }
         else
