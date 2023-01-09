@@ -13,9 +13,8 @@ public class FailStateScript : MonoBehaviour
     private CanvasGroup blackScreenCanvasGroup; //Place Gameobject as child of Canvas.
     private Transform checkpoint;
     private Transform player;
-    private ImageFadeFunctions imageFunctionality;
-    
-    public Animator Animator {get { return animator; } }
+    private ImageFadeFunctions blackScreenImage;
+    private ImageFadeFunctions messageImage;
 
     private void Awake()
     {
@@ -30,7 +29,9 @@ public class FailStateScript : MonoBehaviour
         //TODO Gretas test scen 
         player = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
         animator = GetComponent<Animator>();
-        imageFunctionality = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
+        blackScreenImage = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
+        messageImage = GameObject.Find("FailStateCanvas/MessageScreen").GetComponent<ImageFadeFunctions>();
+
     }
 
     //Call on when player dies.
@@ -54,17 +55,29 @@ public class FailStateScript : MonoBehaviour
 
     public void FadeToBlack()
     {
-        imageFunctionality.RunFadeToBlack(); 
-        animator.SetBool("DeathAnimationIsPlaying", true);
+        blackScreenImage.RunFadeToBlack();
     }
-    public void FadeToWhite() { imageFunctionality.RunFadeToWhite(); }
+
+    public void FadeMessageIn()
+    {
+        messageImage.RunFadeIn();
+    }
+
+    public void FadeMessageOut()
+    {
+        messageImage.RunFadeOut();
+    }
+
+    public void FadeToWhite()
+    {
+        blackScreenImage.RunFadeToWhite();
+    }
 
     public void FadeBack()
     {
         NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(false);
         player.position = checkpoint.position;
-        imageFunctionality.RunFadeBack();
+        blackScreenImage.RunFadeOut();
         animator.gameObject.SetActive(false);
-        animator.SetBool("DeathAnimationIsPlaying", false);
     }
 }
