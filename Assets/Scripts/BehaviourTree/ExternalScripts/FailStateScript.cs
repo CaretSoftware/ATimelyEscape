@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class FailStateScript : MonoBehaviour
@@ -8,11 +9,12 @@ public class FailStateScript : MonoBehaviour
         get { return _instance; }
     }
     
-    private Animator hyperDriveAnimator; //Place Gameobject with this script as child of main camera.
+    private Animator animator; //Place Gameobject with this script as child of main camera.
     private CanvasGroup blackScreenCanvasGroup; //Place Gameobject as child of Canvas.
     private Transform checkpoint;
     private Transform player;
-    private ImageFadeFunctions imageFunctionality;
+    private ImageFadeFunctions blackScreenImage;
+    private ImageFadeFunctions messageImage;
 
     private void Awake()
     {
@@ -26,8 +28,10 @@ public class FailStateScript : MonoBehaviour
     {
         //TODO Gretas test scen 
         player = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
-        hyperDriveAnimator = GetComponent<Animator>();
-        imageFunctionality = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
+        animator = GetComponent<Animator>();
+        blackScreenImage = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
+        messageImage = GameObject.Find("FailStateCanvas/MessageScreen").GetComponent<ImageFadeFunctions>();
+
     }
 
     //Call on when player dies.
@@ -45,18 +49,35 @@ public class FailStateScript : MonoBehaviour
 
         NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
         this.checkpoint = checkpoint;
-        hyperDriveAnimator.gameObject.SetActive(true);
-        hyperDriveAnimator.SetTrigger("DeathAnimTrigger");
+        animator.gameObject.SetActive(true);
+        animator.SetTrigger("DeathAnimTrigger");
     }
 
-    public void FadeToBlack() { imageFunctionality.RunFadeToBlack(); }
-    public void FadeToWhite() { imageFunctionality.RunFadeToWhite(); }
+    public void FadeToBlack()
+    {
+        blackScreenImage.RunFadeToBlack();
+    }
+
+    public void FadeMessageIn()
+    {
+        messageImage.RunFadeIn();
+    }
+
+    public void FadeMessageOut()
+    {
+        messageImage.RunFadeOut();
+    }
+
+    public void FadeToWhite()
+    {
+        blackScreenImage.RunFadeToWhite();
+    }
 
     public void FadeBack()
     {
-        player.position = checkpoint.position;
         NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(false);
-        imageFunctionality.RunFadeBack();
-        hyperDriveAnimator.gameObject.SetActive(false);
+        player.position = checkpoint.position;
+        blackScreenImage.RunFadeOut();
+        animator.gameObject.SetActive(false);
     }
 }

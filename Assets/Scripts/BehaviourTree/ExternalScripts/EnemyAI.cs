@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.Serialization;
 
 public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
     private const float NavMeshRadiusOffstep = 20f;
+    private const float AnimationPreviewBasedFeetPos = 0.285f;
+    private const float AnimationPreviewBasedHipPos = 0.5f;
 
     [HideInInspector] public static int IDCounter;
     [HideInInspector] public int ID;
@@ -15,32 +19,43 @@ public class EnemyAI : MonoBehaviour
     [Header("AI Behaviour Input")]
     [SerializeField] [Range(0.0f, 10.0f)] private float idleActivityTimer = 5.0f;
     [SerializeField] private Transform checkpoint;
-    [SerializeField] private LayerMask obstacleMask;
+    [SerializeField] private LayerMask playerLayerMask;
+    [SerializeField] private Collider[] collidersToIgnorePlayer;
+
     [Tooltip("Assigning the same waypoints to multiple enemies may result in unwanted behaviour.")]
     [SerializeField] private Transform[] activityWaypoints;
 
     [Header("Rig Setup")]
     [SerializeField] private Transform handIKTarget;
-
+    [SerializeField] private IKControl ikControl;
+    [SerializeField] private Transform feetPos;
+    [SerializeField] private Transform hipPos;
+    [SerializeField] private Transform agentCenterTransform;
+    [SerializeField] private GameObject fullBodyRig;
+    
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
     [HideInInspector] public bool activeAI;
-
+    
     private ChainIKConstraint chainIKConstraint;
-    [SerializeField] private GameObject fullBodyRig;
+    private Collider playerCollider;
     private EnemyFOV enemyFOV;
-    private NavMeshHit hit;
     private Node topNode;
-
-    private Transform playerTransform;
-    [SerializeField] private Transform agentCenterTransform;
+    
     private Transform defaultIKTarget;
+    private Transform playerTransform;
+
+    private NavMeshHit hit;
     private Vector3 worldDeltaPosition;
     private Vector3 rootPosition;
     private Vector2 smoothDeltaPosition;
     private Vector2 deltaPosition;
     private Vector2 velocity;
-
+    private Vector3 defaultFeetPos;
+    private Vector3 defaultHipPos;
+    private Vector3 feetPosBent;
+    private Vector3 hipPosBent;
+    
     private float deltaMagnitude;
     private float chaseRange;
     private float captureRange;
@@ -91,13 +106,27 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         playerTransform = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
+        playerCollider = playerTransform.GetComponent<Collider>();
+        AssignCollidersIgnore();
+
         chainIKConstraint.weight = 0;
         defaultIKTarget = handIKTarget;
         chaseRange = enemyFOV.ChaseRadius;
         captureRange = enemyFOV.CatchRadius;
         ConstructBehaviourTreePersonnel();
+
+        defaultFeetPos = feetPos.localPosition;
+        defaultHipPos = hipPos.localPosition;
+        hipPosBent = new Vector3(defaultHipPos.x, AnimationPreviewBasedHipPos ,defaultHipPos.z);
+        feetPosBent = new Vector3(defaultFeetPos.x, AnimationPreviewBasedFeetPos ,defaultFeetPos.z);
     }
 
+    private void AssignCollidersIgnore()
+    {
+        for (int i = 0; i < collidersToIgnorePlayer.Length; i++)
+            Physics.IgnoreCollision(playerCollider, collidersToIgnorePlayer[i]);
+    }
+    
     private void Update()
     {
         if (activeAI)
@@ -142,15 +171,19 @@ public class EnemyAI : MonoBehaviour
     private void ConstructBehaviourTreePersonnel()
     {
         GoToActivityNode goToActivityNode = new GoToActivityNode(activityWaypoints, agent, animator, gameObject, idleActivityTimer);
-        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange);
-        RangeNode chasingRangeNode = new RangeNode(chaseRange, playerTransform, agentCenterTransform, enemyFOV);
-        RangeNode captureRangeNode = new RangeNode(captureRange, playerTransform, agentCenterTransform, enemyFOV);
-        CaptureNode captureNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, obstacleMask);
+        RangeNode chaseRangeNode = new RangeNode(chaseRange, agentCenterTransform, playerTransform, enemyFOV, animator);
+        ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange, chaseRange);
+        RangeNode captureRangeNode = new RangeNode(captureRange, agentCenterTransform, playerTransform, enemyFOV, animator);
+        CaptureNode captureAttemptNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
+        CaptureAnimationNode captureAnimationNode = new CaptureAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
+        InvertedRangeNode invertedRangeNode = new InvertedRangeNode(captureRange, agentCenterTransform, playerTransform, animator, this);
 
-        Sequence chaseSequence = new Sequence(new List<Node> { chasingRangeNode, chaseNode });
-        Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureNode });
+        Sequence captureSequence = new Sequence(new List<Node> { captureRangeNode, captureAttemptNode, captureAnimationNode });
+        Sequence chaseSequence = new Sequence(new List<Node> { chaseRangeNode, chaseNode });
+        Selector enemyActivitySelector = new Selector(new List<Node> { chaseSequence, goToActivityNode });
+        Sequence enemyActivityMainSequence = new Sequence(new List<Node> { invertedRangeNode, enemyActivitySelector });
 
-        topNode = new Selector(new List<Node> { captureSequence, chaseSequence, goToActivityNode });
+        topNode = new Selector(new List<Node> { enemyActivityMainSequence, captureSequence });
     }
 
     //accounts for offset between the character- and agent component position that occurs each frame.
@@ -182,23 +215,60 @@ public class EnemyAI : MonoBehaviour
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(agentCenterTransform.position, captureRange);
         }
+        else
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, captureRange);
+        }
     }
 
     //Animation event methods.
     public void ResetAfterAnimations()
     {
         handIKTarget.position = defaultIKTarget.position;
+        RestoreAfterKneeling();
+
+        animator.SetBool("GrabActionBool", false);
         isCapturing = false;
     }
-    public void SetPlayerTransformToCheckpoint() { FailStateScript.Instance.PlayDeathVisualization(checkpoint, transform); }
-    public void ReturnHand() { animator.SetTrigger("ReturnHandAction"); }
+
+    public void SetPlayerTransformToCheckpoint()
+    {
+        animator.SetBool("DeathAnimationPlaying", true);
+        FailStateScript.Instance.PlayDeathVisualization(checkpoint, transform);
+    }
+    
     public void StartReaching()
     {
         isCapturing = true;
-    } 
+    }
+    
+    public void StopReaching()
+    {
+        animator.SetBool("DeathAnimationPlaying", false);
+    }
+    
     public bool IsCapturing
     {
         get { return isCapturing; }
         set { isCapturing = value; }
+    }
+
+    
+
+    public void BendTheKnee()
+    {
+        if (playerTransform.position.y < 0.5f)
+        {
+            feetPos.localPosition = feetPosBent;
+            hipPos.localPosition = hipPosBent;
+        }
+    }
+
+    private void RestoreAfterKneeling()
+    {
+        feetPos.localPosition = defaultFeetPos;
+        hipPos.localPosition = defaultHipPos;
+
     }
 }
