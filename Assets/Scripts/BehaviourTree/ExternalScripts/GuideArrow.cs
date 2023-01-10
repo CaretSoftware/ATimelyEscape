@@ -14,11 +14,9 @@ public class GuideArrow : MonoBehaviour
     
     public Transform Target { get { return target; } }
     public Transform Rotator { get { return rotator; } }
-    public Transform Scaler { get { return scaler; } }
 
     [HideInInspector] public float speed;
-    private bool lookAtTarget;
-    
+
     public void SetTarget(Transform target = null)
     {
         this.target = target;
