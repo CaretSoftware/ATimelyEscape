@@ -32,8 +32,8 @@ namespace NewRatCharacterController {
             if (_falling)
                 stateMachine.TransitionTo<AirState>();
 
-            if (WallRunState.Requirement(NewRatCharacter))
-                stateMachine.TransitionTo<WallRunState>();
+            //if (WallRunState.Requirement(NewRatCharacter))
+            //    stateMachine.TransitionTo<WallRunState>();
 
             if (NewRatCharacter.Grounded && NewRatCharacter._velocity.y < float.Epsilon)
                 stateMachine.TransitionTo<MoveState>();
