@@ -6,16 +6,23 @@ using UnityEngine.UI;
 public class RGBSlider : MonoBehaviour
 {
     [SerializeField] Slider rgbSlider;
-    [SerializeField] RawImage crossHaire;
+    [SerializeField] RawImage crossHair;
     // Start is called before the first frame update
     void Start()
     {
         rgbSlider = this.gameObject.GetComponent<Slider>();
     }
-
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
     public void RGBSlide()
     {
         var hue = rgbSlider.value;
-        crossHaire.color = Color.HSVToRGB(hue, 1f, 1f);
+        crossHair.color = Color.HSVToRGB(hue, 1f, 1f);
     }
 }

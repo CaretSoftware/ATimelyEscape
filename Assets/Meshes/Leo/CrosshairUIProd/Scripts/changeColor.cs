@@ -1,23 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class changeColor : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private LayerMask cubeLayerMask;
+    [SerializeField] private LayerMask defaultLayerMask;
+    [SerializeField] RawImage crossHair;
+    [SerializeField] RawImage crossHairRed;
     void Start()
     {
+     
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         RaycastHit hit;
-        if(Physics.Raycast(transform.position, transform.forward, out hit, 100))
+        RaycastHit keyPadHit;
+
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 10, cubeLayerMask) ||
+            (Physics.Raycast(transform.position, transform.forward, out keyPadHit, 10,defaultLayerMask, QueryTriggerInteraction.Ignore) && keyPadHit.collider.CompareTag("Keypad")))
         {
-            Debug.Log(hit.transform.gameObject.CompareTag("Cube"));
-            
+            Debug.Log(true);  
         }
+        else
+        {
+            Debug.Log(false);
+        }
+
     }
 }
