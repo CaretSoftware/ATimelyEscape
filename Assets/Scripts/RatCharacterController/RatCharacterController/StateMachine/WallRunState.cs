@@ -56,8 +56,8 @@ namespace NewRatCharacterController {
 			// if (Player.pressedJump && Player._velocity.y > threshold) 
 			// 	stateMachine.TransitionTo<JumpState>();
 
-			if (NewRatCharacter.PressedJump)
-				stateMachine.TransitionTo<WallJumpState>();
+			//if (NewRatCharacter.PressedJump)
+			//	stateMachine.TransitionTo<WallJumpState>();
 
 			if (!RayCast(NewRatCharacter, NewRatCharacter.transform.right).collider && !RayCast(NewRatCharacter, -NewRatCharacter.transform.right).collider)
 				stateMachine.TransitionTo<AirState>();
