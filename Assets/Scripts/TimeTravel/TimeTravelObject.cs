@@ -7,6 +7,7 @@ using StateMachines;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class TimeTravelObject : MonoBehaviour {
     [HideInInspector] public TimeTravelObject pastSelf;
     private Transform destiny;

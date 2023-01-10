@@ -14,7 +14,14 @@ public class SettingsMenuController : MonoBehaviour
 
     public bool shouldPlayTextToSpeach;
 
-    [SerializeField] private Slider volumeSlider;
+    [SerializeField] private Slider volumeMasterSlider;
+
+    [SerializeField] private Slider volumeMusicSlider;
+    [SerializeField] private Slider volumeEffectsSlider;
+
+    [SerializeField] private float startMasterVolume;
+    [SerializeField] private float startMusicVolume;
+    [SerializeField] private float startEffectsVolume;
 
     private void Start()
     {
@@ -49,8 +56,14 @@ public class SettingsMenuController : MonoBehaviour
             Debug.Log("Message: Settings Menu is missing Dropdown for resolution");
         }
 
-        audioMixer.GetFloat("volume", out float value);
-        volumeSlider.value = value;
+        audioMixer.GetFloat("MasterVolume", out float value);
+        volumeMasterSlider.value = startMasterVolume;
+
+        audioMixer.GetFloat("MusicVolume", out float value1);
+        volumeMusicSlider.value = startMusicVolume;
+
+        audioMixer.GetFloat("EffectsVolume", out float value2);
+        volumeEffectsSlider.value = startEffectsVolume;
 
     }
 
@@ -63,9 +76,17 @@ public class SettingsMenuController : MonoBehaviour
         ButtonSoundBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
     }
 
-    public void SetVolume(float volume)
+    public void SetMasterVolume(float volume)
     {
-        audioMixer.SetFloat("volume", Mathf.Log(volume) * 20);
+        audioMixer.SetFloat("MasterVolume", Mathf.Log(volume) * 20);
+    }
+    public void SetMusicVolume(float volume)
+    {
+        audioMixer.SetFloat("MusicVolume", Mathf.Log(volume) * 20);
+    }
+    public void SetEffectsVolume(float volume)
+    {
+        audioMixer.SetFloat("EffectsVolume", Mathf.Log(volume) * 20);
     }
 
     public void SetResolution(int index)

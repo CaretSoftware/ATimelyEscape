@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using CallbackSystem;
+using UnityEngine;
 
 public static class OnboardingHandler {
     private static bool cubeInteractionsDiscovered;
@@ -10,6 +10,9 @@ public static class OnboardingHandler {
     private static bool timeTravelFutureDiscovered;
     private static bool scientistDiscovered;
     private static bool vacuumCleanerDiscovered;
+
+    public static Vector3 LastSavedPosition { get; set; }
+    public static TimeTravelPeriod LastSavedTimePeriod { get; set; }
 
     //CubePush
     public static bool CubeInteractionsDiscovered {
