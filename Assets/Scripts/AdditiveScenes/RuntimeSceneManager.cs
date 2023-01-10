@@ -22,19 +22,6 @@ public class RuntimeSceneManager : MonoBehaviour {
     private static readonly HashSet<int> Room8 = new HashSet<int> { 8, 9, 10 };    // Garden
     private static readonly HashSet<int> Room9 = new HashSet<int> { 2, 5, 9, 10, };   // Cryo Hall
 
-    /*
-1 Ladda in Kuvös(r2), Kontoret(R3), Korridoren(R4), Stora Labbet(R5) och sista rummet(R10
-2. Ladda ur R1
-3 Ladda in ÖvervakningsrummetR6 och ladda ur Kuvös(r2), Kontoret(R3), Korridoren(R4), Stora Labbet(R5) och sista rummet(R10
-4. Ladda in R7 ladda ur R6
-5 Ladda in R8 
-6 Ladda in R9 och  Ladda ut R7
-7 Ladda in R10, R2Kuvös och R5, Ladda ur R8
-8.Ladda ur R9
-9. Ladda ur R2Kuvös och R5
-
-    */
-
     public enum StartRoom {
         dummyDontUse,
         room1,
@@ -59,7 +46,7 @@ public class RuntimeSceneManager : MonoBehaviour {
         new Vector3(3.86899996f,2.86100006f,-7.13800001f),
         new Vector3(-0.56099999f,3.30599999f,-14.4390001f),
         new Vector3(-3.39680004f,2.81800008f,-21.3059998f),
-        new Vector3(-4.28200006f,2.25869989f,-12.9075003f)
+        new Vector3(-4.28200006f,2.25869989f,-12.9075003f),
     };
 
     private static readonly TimeTravelPeriod[] startPeriods = new TimeTravelPeriod[]{
@@ -72,7 +59,7 @@ public class RuntimeSceneManager : MonoBehaviour {
         TimeTravelPeriod.Future,
         TimeTravelPeriod.Past,
         TimeTravelPeriod.Past,
-        TimeTravelPeriod.Future
+        TimeTravelPeriod.Future,
     };
 
     private static readonly HashSet<int>[] Rooms = new HashSet<int>[] {
@@ -92,6 +79,7 @@ public class RuntimeSceneManager : MonoBehaviour {
     private HashSet<int> activeSceneIndexes = new HashSet<int>();
 
     private int currentSceneIndex = 0;
+    private int currentOnboardingSceneIndex = -1;
     private int loadedScenesCounter = 0;
 
     private void Start() {
@@ -104,25 +92,36 @@ public class RuntimeSceneManager : MonoBehaviour {
         PlayerEnterRoom.AddListener<PlayerEnterRoom>(OnPlayerEnterRoom);
         playerTransform.transform.position = startPositions[(int)startRoom - 1];
         PlayerEnterRoom e = new PlayerEnterRoom() { sceneIndex = (int)startRoom };
+        if ((int)startRoom > 1) FindObjectOfType<NewRatCharacterController.NewCharacterInput>().CanTimeTravel = true;
         e.Invoke();
     }
 
-    public void OnPlayerEnterRoom(PlayerEnterRoom e) {
+    private void OnPlayerEnterRoom(PlayerEnterRoom e) {
         /*      TimeTravelManager.SimulatePhysics = false;
              Physics.autoSimulation = false; */
         LoadAndUnloadNeighbouringRooms(e.sceneIndex);
     }
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         TimeTravelManager.ReloadCurrentTimeTravelPeriod();
         loadedScenesCounter++;
+        GameObject onboardingSpawnMarker = GameObject.FindGameObjectWithTag("OnboardingSpawnMarker");
+        if (onboardingSpawnMarker) {
+            playerTransform.position = onboardingSpawnMarker.transform.position;
+            playerTransform.LookAt(onboardingSpawnMarker.transform, Vector3.back); //= onboardingSpawnMarker.transform.rotation;
+            Camera.main.transform.LookAt(onboardingSpawnMarker.transform, Vector3.forward);
+        }
         /*         if (loadedScenesCounter == activeSceneIndexes.Count) {
                     Physics.autoSimulation = true;
                     TimeTravelManager.SimulatePhysics = true;
                 } */
     }
-    void OnSceneUnLoaded(Scene scene) {
+    private void OnSceneUnLoaded(Scene scene) {
         loadedScenesCounter--;
         Mathf.Clamp(loadedScenesCounter, 0, SceneManager.sceneCount);
+    }
+
+    public void TriggerRoomLoad(int sceneIndex) {
+
     }
 
     private void UnloadRooms(int newSceneIndex) {
@@ -149,6 +148,31 @@ public class RuntimeSceneManager : MonoBehaviour {
             SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
             activeSceneIndexes.Add(sceneToLoad);
         }
+    }
+
+    public void LoadOnboardingRoom(int onboardingSceneIndex) {
+        if (onboardingSceneIndex < 11 || currentOnboardingSceneIndex > -1) return; // room was not an onboarding room or an onboarding room was already loaded
+        OnboardingHandler.LastSavedPosition = playerTransform.position;
+        OnboardingHandler.LastSavedTimePeriod = TimeTravelManager.currentPeriod;
+        SceneManager.LoadSceneAsync(onboardingSceneIndex, LoadSceneMode.Additive);
+        currentOnboardingSceneIndex = onboardingSceneIndex;
+    }
+
+    public void UnloadOnboardingRoom() {
+        if (currentOnboardingSceneIndex < 0) return; // no onboardingroom was loaded
+        // Reload gamestate prior to starting tutorial
+        playerTransform.position = OnboardingHandler.LastSavedPosition;
+        TimeTravelManager.currentPeriod = OnboardingHandler.LastSavedTimePeriod;
+        TimeTravelManager.ReloadCurrentTimeTravelPeriod();
+        SceneManager.UnloadSceneAsync(currentOnboardingSceneIndex, UnloadSceneOptions.None);
+        currentOnboardingSceneIndex = -1;
+    }
+
+    public void UnloadAllRooms() {
+        foreach (int index in activeSceneIndexes) {
+            SceneManager.UnloadSceneAsync(index, UnloadSceneOptions.None);
+        }
+        activeSceneIndexes.Clear();
     }
 
     private void LoadAndUnloadNeighbouringRooms(int newSceneIndex) {

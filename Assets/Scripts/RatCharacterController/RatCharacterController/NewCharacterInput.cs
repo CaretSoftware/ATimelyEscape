@@ -9,11 +9,11 @@ namespace NewRatCharacterController {
 		
 		[SerializeField] private TimeTravelButtonUIManager timeTravelButtonUIManager;
 
-		public delegate void DPadRightPressed();
-		public static DPadRightPressed dPadRightPressed;
+		public delegate void AdvanceDialogueDelegate();
+		public static AdvanceDialogueDelegate advanceDialogueDelegate;
 		
-		public delegate void DPadLeftPressed();
-		public static DPadLeftPressed dPadLeftPressed;
+		public delegate void ReturnToGameDelegate();
+		public static ReturnToGameDelegate returnToGameDelegate;
 
 		private PlayerInputActions _playerInputActions;
 		private NewRatCharacterController _newRatCharacterController;
@@ -85,8 +85,10 @@ namespace NewRatCharacterController {
 			_playerInputActions.Interact.Enable();
 			_playerInputActions.Pause.Enable();
 			_playerInputActions.Onboarding.Enable();
-			_playerInputActions.Onboarding.DLeft.started += DPadLeft;
-			_playerInputActions.Onboarding.DRight.started += DPadRight;
+			_playerInputActions.LevelSelect.Enable();
+            _playerInputActions.LevelSelect.EnableMenu.performed += EnableLevelSelectMenu;
+            _playerInputActions.Onboarding.ReturnToGame.started += ReturnToGame;
+            _playerInputActions.Onboarding.AdvanceDialogue.started += AdvanceDialogue;
 			_playerInputActions.CharacterMovement.Jump.started += Jump;
 			_playerInputActions.CharacterMovement.Jump.canceled += JumpReleased;
 			_playerInputActions.Pause.Pause.performed += Pause;
@@ -99,12 +101,16 @@ namespace NewRatCharacterController {
 
 		private void Paused(bool paused) => _paused = paused;
 
-		private void DPadRight(InputAction.CallbackContext context) {
-			dPadRightPressed?.Invoke();
+        private void EnableLevelSelectMenu(InputAction.CallbackContext context){
+            LevelSelect.Instance.EnableMenu();
+        }
+
+		private void AdvanceDialogue(InputAction.CallbackContext context) {
+			advanceDialogueDelegate?.Invoke();
 		}
 
-		private void DPadLeft(InputAction.CallbackContext context) {
-			dPadLeftPressed?.Invoke();
+		private void ReturnToGame(InputAction.CallbackContext context) {
+			returnToGameDelegate?.Invoke();
 		}
 
 		private void Update() {
@@ -214,18 +220,19 @@ namespace NewRatCharacterController {
 		private void OnDestroy() => Unsubscribe();
 		
 		private void Unsubscribe() { 
-			PauseMenuBehaviour.pauseDelegate -= Paused;
-			
-			_playerInputActions.Onboarding.DLeft.started -= DPadLeft;
-			_playerInputActions.Onboarding.DRight.started -= DPadRight;
-			_playerInputActions.CharacterMovement.Jump.started -= Jump;
-			_playerInputActions.CharacterMovement.Jump.canceled -= JumpReleased;
-			_playerInputActions.Pause.Pause.performed -= Pause;
-			_playerInputActions.Interact.Interact.performed -= Interact;
-			_playerInputActions.Interact.Interact.canceled -= StopInteract;
-			_playerInputActions.Interact.Past.performed -= TravelToPast;
-			_playerInputActions.Interact.Present.performed -= TravelToPresent;
-			_playerInputActions.Interact.Future.performed -= TravelToFuture;
+            PauseMenuBehaviour.pauseDelegate -= Paused;
+
+            _playerInputActions.Onboarding.ReturnToGame.started -= ReturnToGame;
+            _playerInputActions.Onboarding.AdvanceDialogue.started -= AdvanceDialogue;
+            _playerInputActions.CharacterMovement.Jump.started -= Jump;
+            _playerInputActions.CharacterMovement.Jump.canceled -= JumpReleased;
+            _playerInputActions.Pause.Pause.performed -= Pause;
+            _playerInputActions.Interact.Interact.performed -= Interact;
+            _playerInputActions.Interact.Interact.canceled -= StopInteract;
+            _playerInputActions.Interact.Past.performed -= TravelToPast;
+            _playerInputActions.Interact.Present.performed -= TravelToPresent;
+            _playerInputActions.Interact.Future.performed -= TravelToFuture;
+            _playerInputActions.LevelSelect.EnableMenu.performed -= EnableLevelSelectMenu;
 		}
 
 		public void EnableCharacterMovement(bool enable) {

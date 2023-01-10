@@ -37,6 +37,11 @@ namespace CallbackSystem
             timeTravelObject = GetComponent<TimeTravelObject>();
             meshRenderer = GetComponent<MeshRenderer>();
             pingPong = GetComponent<PingPong>();
+            // if (pingPong == null)
+            // {
+            //     Debug.Log("¯\\_(ツ)_/¯ Patrik says the PingPong.cs Script is missing from this cube. He's not sure if it should be here or not, so he adds it anyway.", this);
+            //     pingPong = gameObject.AddComponent<PingPong>(); // TODO SOMETIMES MAYBE GOOD, SOMETIMES MAYBE SHIT!
+            // }
             if (charge > 0)
             {
                 cubePush.SetPushable(true);
@@ -67,8 +72,8 @@ namespace CallbackSystem
                 if (charge > 0)
                 {
                     StartCoroutine(SetMaterial(true));
-                    cubePush.SetPushable(true);
-                    
+                    if (cubePush != null)
+                        cubePush.SetPushable(true);
                 }
                 else
                 {
@@ -76,7 +81,7 @@ namespace CallbackSystem
                 }
                 if (!origin.GetType().Equals(GetType()))
                 {
-                    chargeEvent.Invoke();
+                    chargeEvent?.Invoke();
                 }
             }
         }
@@ -114,13 +119,15 @@ namespace CallbackSystem
                 if (on)
                 {
                     timer += Time.deltaTime / timeToCharge;
-                    pingPong.SetPower(Mathf.Lerp(0f, 1f, timer));
+                    if (pingPong != null)
+                        pingPong.SetPower(Mathf.Lerp(0f, 1f, timer));
                     yield return null;
                 }
                 else
                 {
                     timer += Time.deltaTime / timeToCharge;
-                    pingPong.SetPower(Mathf.Lerp(1f, 0f, timer));
+                    if (pingPong != null)
+                        pingPong.SetPower(Mathf.Lerp(1f, 0f, timer));
                     yield return null;
                 }
             }
