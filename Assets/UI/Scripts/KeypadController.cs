@@ -141,7 +141,6 @@ public class KeypadController : DeviceController
     
     public void ReleasePlayer() 
     {
-        Debug.Log("CLOSED KEYPAD");
         CharacterInput.IsPaused(false);
         NewRatCameraController.UnlockLookTarget();
         newRatCharacterController.KeypadInteraction = false;

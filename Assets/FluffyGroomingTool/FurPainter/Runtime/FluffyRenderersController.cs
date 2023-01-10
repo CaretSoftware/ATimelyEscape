@@ -134,10 +134,18 @@ namespace FluffyGroomingTool {
         }
 
         public void destroy() {
-            Object.DestroyImmediate(hairMeshRendererObject);
-            if (motionVectorRendererObject != null) Object.DestroyImmediate(motionVectorRendererObject);
-            hairMeshBuffer?.Dispose();
-            Object.DestroyImmediate(hairMesh);
+            if (Application.isPlaying)
+            {
+                Object.Destroy(hairMeshRendererObject);
+                if (motionVectorRendererObject != null) Object.Destroy(motionVectorRendererObject);
+                hairMeshBuffer?.Dispose();
+                Object.Destroy(hairMesh);
+            } else {
+                Object.DestroyImmediate(hairMeshRendererObject);
+                if (motionVectorRendererObject != null) Object.DestroyImmediate(motionVectorRendererObject);
+                hairMeshBuffer?.Dispose();
+                Object.DestroyImmediate(hairMesh);
+            }
             hairMeshBuffer = null;
         }
 
