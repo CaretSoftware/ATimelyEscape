@@ -23,9 +23,9 @@ namespace NewRatCharacterController {
 
 		// Time Travel
 		private bool canTimeTravel = false;
-		private bool canTimeTravelPast = false;
-		private bool canTimeTravelPresent = false;
-		private bool canTimeTravelFuture = false;
+		private bool canTimeTravelPast = true;
+		private bool canTimeTravelPresent = true;
+		private bool canTimeTravelFuture = true;
 		public bool CanTimeTravel {
 			get => canTimeTravel;
 			
@@ -45,7 +45,7 @@ namespace NewRatCharacterController {
 			
 			set
 			{
-				canTimeTravel = true;
+				//canTimeTravel = true;
 				canTimeTravelPast = value;
 				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
 			}
@@ -55,7 +55,7 @@ namespace NewRatCharacterController {
 			
 			set
 			{
-				canTimeTravel = true;
+				//canTimeTravel = true;
 				canTimeTravelPresent = value;
 				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
 			}
@@ -64,7 +64,7 @@ namespace NewRatCharacterController {
 			get => canTimeTravelFuture;
 			
 			set {
-				canTimeTravel = true;
+				//canTimeTravel = true;
 				canTimeTravelFuture = value;
 				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
 			}
@@ -207,7 +207,7 @@ namespace NewRatCharacterController {
 #endif			
 			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Future, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelFuture);
 
-			if (CanTimeTravel && CanTimeTravelFuture && _paused)
+			if (CanTimeTravel && CanTimeTravelFuture && !_paused)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
 		}
 
@@ -241,10 +241,12 @@ namespace NewRatCharacterController {
 			if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) ||
 			                                     Input.GetKey(KeyCode.RightControl) ||
 			                                     Input.GetKey(KeyCode.LeftCommand)))) {
-				CanTimeTravel = true;
 				CanTimeTravelPast = true;
 				CanTimeTravelPresent = true;
 				CanTimeTravelFuture = true;
+				
+				CanTimeTravel = true;
+				
 				Debug.Log($"CanTimeTravel {CanTimeTravel}");
 			}
 #endif
