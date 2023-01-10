@@ -45,7 +45,7 @@ namespace NewRatCharacterController {
 			
 			set
 			{
-				canTimeTravel = true;
+				//canTimeTravel = true;
 				canTimeTravelPast = value;
 				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
 			}
@@ -55,7 +55,7 @@ namespace NewRatCharacterController {
 			
 			set
 			{
-				canTimeTravel = true;
+				//canTimeTravel = true;
 				canTimeTravelPresent = value;
 				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
 			}
@@ -64,7 +64,7 @@ namespace NewRatCharacterController {
 			get => canTimeTravelFuture;
 			
 			set {
-				canTimeTravel = true;
+				//canTimeTravel = true;
 				canTimeTravelFuture = value;
 				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
 			}
@@ -207,7 +207,7 @@ namespace NewRatCharacterController {
 #endif			
 			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Future, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelFuture);
 
-			if (CanTimeTravel && CanTimeTravelFuture && _paused)
+			if (CanTimeTravel && CanTimeTravelFuture && !_paused)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
 		}
 
@@ -244,7 +244,9 @@ namespace NewRatCharacterController {
 				CanTimeTravelPast = true;
 				CanTimeTravelPresent = true;
 				CanTimeTravelFuture = true;
+				
 				CanTimeTravel = true;
+				
 				Debug.Log($"CanTimeTravel {CanTimeTravel}");
 			}
 #endif
