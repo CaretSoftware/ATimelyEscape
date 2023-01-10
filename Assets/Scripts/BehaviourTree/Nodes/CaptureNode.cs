@@ -17,8 +17,8 @@ public class CaptureNode : Node
     private LayerMask obstacleMask;
     private RaycastHit hit;
     private Vector3 playerColliderPos;
-    private Vector3 losHeadPos;
-    private Vector3 losKneePos;
+    private Transform losHeadPos;
+    private Transform losKneePos;
 
     public CaptureNode(Transform player, Transform agentCenterTransform, EnemyAI enemy, Vector3 losPos, LayerMask obstacleMask)
     {
@@ -27,11 +27,13 @@ public class CaptureNode : Node
         this.losPos = losPos;
         this.enemy = enemy;
         this.obstacleMask = obstacleMask;
+        losHeadPos = this.enemy.losHeadPos;
+        losKneePos = this.enemy.losKneePos;
     }
 
     public override NodeState Evaluate()
     {
-        losPos = player.position.y > agentCenterTransform.position.y ? losHeadPos : losKneePos; 
+        losPos = player.position.y > agentCenterTransform.position.y ? losHeadPos.position : losKneePos.position; 
         playerColliderPos = player.position + PlayerColliderOffset;
         Physics.Raycast(losPos, (playerColliderPos - losPos).normalized,
             out hit, Mathf.Infinity, obstacleMask, QueryTriggerInteraction.Ignore);
