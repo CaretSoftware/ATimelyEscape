@@ -7,38 +7,36 @@ using UnityEngine.Animations.Rigging;
 
 public class CaptureNode : Node
 {
-    private LayerMask obstacleMask;
-    private EnemyAI enemy;
-    private Animator animator;
-
-    private Transform handIKTarget;
     private Transform player;
+    private EnemyAI enemy;
+
     private Vector3 losPos;
-
-    private float captureDistance;
-    private float distanceToPlayer;
-    private bool recentlyCaught;
-
+    private LayerMask obstacleMask;
     private RaycastHit hit;
 
-    public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform agentCenterTransform,
-        Animator animator, EnemyAI enemy, LayerMask obstacleMask, IKControl ikControl)
+    public CaptureNode(Transform player, EnemyAI enemy, Vector3 losPos, LayerMask obstacleMask)
     {
         this.player = player;
+        this.losPos = losPos;
         this.enemy = enemy;
         this.obstacleMask = obstacleMask;
-        losPos = agentCenterTransform.localPosition + Vector3.up * 0.8f;
-        this.animator = animator;
     }
 
     public override NodeState Evaluate()
     {
         Physics.Raycast(losPos, (player.position - losPos).normalized,
             out hit, Mathf.Infinity, obstacleMask, QueryTriggerInteraction.Ignore);
-        
-            if (hit.collider.gameObject.layer == player.gameObject.layer && !enemy.IsCapturing)
-                return NodeState.SUCCESS;
-            else
-                return NodeState.FAILURE;
+
+        if (hit.collider.gameObject.layer == player.gameObject.layer && !enemy.IsCapturing)
+        {
+            enemy.DrawLOS(true);
+            return NodeState.SUCCESS;
+        }
+        else
+        {
+            
+            enemy.DrawLOS(false);
+            return NodeState.FAILURE;
+        }
     }
 }
