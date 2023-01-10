@@ -95,4 +95,23 @@ public class ScenTimer : MonoBehaviour
             seconds,
             milliseconds);
     }
+
+    private class TimeInRoomX
+    {
+        public int x;
+        public int visited;
+        private float totalTime;
+        private int hours;
+        private int minutes;
+        private int seconds;
+        private int milliseconds;
+
+        public TimeInRoomX(int x) { this.x = x; }
+
+        public void SetTime(float time)
+        {
+            totalTime += time;
+            hours = (int)(totalTime / 3600); minutes = (int)(totalTime / 60); seconds = (int)totalTime; milliseconds = ((int)(totalTime * 1000)) % 1000;
+        }
+    }
 }
