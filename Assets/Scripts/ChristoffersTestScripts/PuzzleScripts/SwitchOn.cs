@@ -26,7 +26,7 @@ public class SwitchOn : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (switchOn != null && other.gameObject.tag == "Cube")
+        if (switchOn != null && !isInteractableByPlayer && other.gameObject.tag == "Cube")
         {
             if (isOn)
             {
