@@ -73,14 +73,23 @@ public class TimeTravelAnimation : MonoBehaviour
     {
         if (e.IsReload) return;
 
-        if (_playing)
-        {
-            StopAllCoroutines();
-        }
+        if (gameObject.activeInHierarchy) {
+            if (_playing)
+            {
+                StopAllCoroutines();
+            }
 
-        _playing = true;
-        PlayParticles(true);
-        StartCoroutine(AnimateTravel());
+            {
+                _playing = true;
+                PlayParticles(true);
+                StartCoroutine(AnimateTravel());
+            }
+        }
+        else
+        {
+            _playing = false;
+            ResetProperties();
+        }
     }
 
     private IEnumerator AnimateTravel()
