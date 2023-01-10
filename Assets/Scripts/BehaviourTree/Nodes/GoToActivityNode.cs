@@ -49,7 +49,7 @@ public class GoToActivityNode : Node
         }
         else if (destinationDistance < DestinationOffset && !isTimerDone)
         {
-                if (!isCoroutineRunning)
+                if (!isCoroutineRunning && Instance != null)
                     Instance.StartCoroutine(Timer());              
             return NodeState.RUNNING;
         }
