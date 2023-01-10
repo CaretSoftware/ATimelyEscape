@@ -14,6 +14,9 @@ namespace NewRatCharacterController {
 			NewRatCharacter._velocity = Vector3.zero;
 			if (!NewRatCharacter.KeypadInteraction)
 				stateMachine.TransitionTo<MoveState>();
+			
+			if (NewRatCharacterController.Locked)
+				stateMachine.TransitionTo<LockState>();
 		}
 
 		public override void Exit() {

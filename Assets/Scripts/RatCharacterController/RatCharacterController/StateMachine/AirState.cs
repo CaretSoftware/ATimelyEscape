@@ -30,6 +30,9 @@ namespace NewRatCharacterController {
 			
 			if (NewRatCharacter.Caught)
 				stateMachine.TransitionTo<CaughtState>();
+			
+			if (NewRatCharacterController.Locked)
+				stateMachine.TransitionTo<LockState>();
 		}
 
 		private void AddGravityForce() {

@@ -40,6 +40,9 @@ namespace NewRatCharacterController {
             
             if (NewRatCharacter.Caught)
                 stateMachine.TransitionTo<CaughtState>();
+            
+            if (NewRatCharacterController.Locked)
+                stateMachine.TransitionTo<LockState>();
         }
 
         public override void Exit() {

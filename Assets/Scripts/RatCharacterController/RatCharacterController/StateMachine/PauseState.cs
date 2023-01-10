@@ -12,6 +12,9 @@ namespace NewRatCharacterController {
 		public override void Run() {
 			if (!NewRatCharacter.paused)
 				stateMachine.TransitionTo<MoveState>();
+			
+			if (NewRatCharacterController.Locked)
+				stateMachine.TransitionTo<LockState>();
 		}
 
 		public override void Exit() {
