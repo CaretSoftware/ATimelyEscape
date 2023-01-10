@@ -11,7 +11,7 @@ public class Objective : MonoBehaviour
     [SerializeField] private Material idleMaterial;
     [SerializeField] private Material completeMaterial;
     private ObjectiveHolder parent;
-    private Transform questlog;
+    [SerializeField] private Transform questlog;
     private BoxCollider boxCollider;
     private TextMeshProUGUI objectiveText;
     private MeshRenderer mr;

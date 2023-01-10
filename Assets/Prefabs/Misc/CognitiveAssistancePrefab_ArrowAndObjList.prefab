@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4561417453474039183}
+  - component: {fileID: 6548193664772033264}
   m_Layer: 0
   m_Name: CognitiveAssistancePrefab_ArrowAndObjList
   m_TagString: Untagged
@@ -33,6 +34,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6548193664772033264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4561417453474039176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d84cc9e3edb41a64b82a90059e2c8f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collider: {fileID: 4561417452919254123}
 --- !u!1001 &3951166119094928721
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40,14 +54,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4561417453474039183}
     m_Modifications:
-    - target: {fileID: 691361534743018798, guid: fb46748265c4c9d43a480be2b685d851, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 691361535128414516, guid: fb46748265c4c9d43a480be2b685d851, type: 3}
-      propertyPath: m_Name
-      value: ObjectiveHolder_Room_1
-      objectReference: {fileID: 0}
     - target: {fileID: 691361535520128472, guid: fb46748265c4c9d43a480be2b685d851, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -96,6 +102,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelObjectiveAssistancePrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 691361535598492457, guid: fb46748265c4c9d43a480be2b685d851, type: 3}
+      propertyPath: m_Name
+      value: ObjectivePosition
+      objectReference: {fileID: 0}
     - target: {fileID: 691361535828806519, guid: fb46748265c4c9d43a480be2b685d851, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -114,6 +124,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb46748265c4c9d43a480be2b685d851, type: 3}
+--- !u!65 &4561417452919254123 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 691361535128414522, guid: fb46748265c4c9d43a480be2b685d851, type: 3}
+  m_PrefabInstance: {fileID: 3951166119094928721}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4561417454390999177 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 691361535520128472, guid: fb46748265c4c9d43a480be2b685d851, type: 3}

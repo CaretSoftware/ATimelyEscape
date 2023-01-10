@@ -58,10 +58,15 @@ public class ObjectiveHolder : MonoBehaviour
                 return;
             }
         }
+        ClearList();
+        GuideArrow.Instance.ToggleGuideArrow(false);
+        
+    }
+
+    private void ClearList()
+    {
         foreach (Objective obj in objectives)
             obj.ClearObjective();
         print("Clear list");
-        GuideArrow.Instance.ToggleGuideArrow(false);
-        
     }
 }
