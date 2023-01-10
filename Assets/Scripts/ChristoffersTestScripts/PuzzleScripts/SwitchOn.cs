@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SwitchOn : MonoBehaviour
-{
+public class SwitchOn : MonoBehaviour {
 
     [SerializeField] private bool isInteractableByPlayer;
     /*    [SerializeField] private bool isInteractableByPast;
@@ -14,32 +13,23 @@ public class SwitchOn : MonoBehaviour
     private MeshRenderer meshRenderer;
     private bool isOn;
     private Animator animator;
-    private void Start()
-    {
+    private void Start() {
         meshRenderer = GetComponent<MeshRenderer>();
         isOn = true;
-        if (isInteractableByPlayer)
-        {
+        if (isInteractableByPlayer) {
             animator = GetComponentInChildren<Animator>();
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (switchOn != null && !isInteractableByPlayer && other.gameObject.tag == "Cube")
-        {
-            if (isOn)
-            {
+    private void OnTriggerEnter(Collider other) {
+        if (switchOn != null && !isInteractableByPlayer && other.gameObject.tag == "Cube") {
+            if (isOn) {
                 switchOn.Invoke();
             }
-        }
-        else if (switchOn != null && isInteractableByPlayer && other.gameObject.tag == "Player")
-        {
-            if (isOn)
-            {
+        } else if (switchOn != null && isInteractableByPlayer && other.gameObject.tag == "Player") {
+            if (isOn) {
                 switchOn.Invoke();
-                if (animator != null)
-                {
+                if (animator != null) {
                     animator.SetBool("On", true);
                 }
             }
@@ -55,12 +45,9 @@ public class SwitchOn : MonoBehaviour
                     meshRenderer.material = onMaterial;
                 }*/
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (switchOff != null && other.gameObject.tag == "Cube")
-        {
-            if (isOn)
-            {
+    private void OnTriggerExit(Collider other) {
+        if (switchOff != null && other.gameObject.tag == "Cube") {
+            if (isOn) {
                 switchOff.Invoke();
             }
         }
@@ -75,12 +62,10 @@ public class SwitchOn : MonoBehaviour
                     meshRenderer.material = offMaterial;
                 }*/
     }
-    public void ButtonOff()
-    {
+    public void ButtonOff() {
         isOn = false;
     }
-    public void ButtonOn()
-    {
+    public void ButtonOn() {
         isOn = true;
     }
 
