@@ -31,7 +31,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform hipPos;
     [SerializeField] private Transform agentCenterTransform;
     [SerializeField] private GameObject fullBodyRig;
-    [SerializeField] private Vector3 losPos;
+    [SerializeField] private Transform losPos;
 
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
@@ -174,7 +174,7 @@ public class EnemyAI : MonoBehaviour
         RangeNode chaseRangeNode = new RangeNode(chaseRange, agentCenterTransform, playerTransform, enemyFOV, animator);
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange, chaseRange);
         RangeNode captureRangeNode = new RangeNode(captureRange, agentCenterTransform, playerTransform, enemyFOV, animator);
-        CaptureNode captureAttemptNode = new CaptureNode(playerTransform, this, losPos, playerLayerMask);
+        CaptureNode captureAttemptNode = new CaptureNode(playerTransform, this, losPos.position, playerLayerMask);
         CaptureAnimationNode captureAnimationNode = new CaptureAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
         InvertedRangeNode invertedRangeNode = new InvertedRangeNode(captureRange, agentCenterTransform, playerTransform, animator, this);
 
@@ -221,16 +221,18 @@ public class EnemyAI : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, captureRange);
         }
 
-        if (drawLOS)
+        if (withinReach)
         {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(losPos, playerTransform.position);
+            Gizmos.color = drawLOS ? Color.blue : Color.red;
+            Gizmos.DrawLine(losPos.position, playerTransform.position);
         }
     }
 
     private bool drawLOS;
+    private bool withinReach;
     public void DrawLOS(bool arg)
     {
+        withinReach = true;
         print($"losPos: {drawLOS}");
         drawLOS = arg;
     }
