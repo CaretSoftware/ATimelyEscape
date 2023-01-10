@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,28 +9,26 @@ public class changeColor : MonoBehaviour
     [SerializeField] private LayerMask cubeLayerMask;
     [SerializeField] private LayerMask defaultLayerMask;
     [SerializeField] private GameObject crosshairRed;
-    void Start()
-    {
-     
-        
+    private Camera cam;
+    private Ray ray;
+    
+    private void Start() {
+        cam = Camera.main;
     }
 
-    void Update()
+    void LateUpdate()
     {
         RaycastHit hit;
         RaycastHit keyPadHit;
+        //Ray ray = new Ray(transform.position, transform.forward);
+        ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 10, cubeLayerMask) ||
-            (Physics.Raycast(transform.position, transform.forward, out keyPadHit, 10,defaultLayerMask, QueryTriggerInteraction.Ignore) && keyPadHit.collider.CompareTag("Keypad")))
-        {
-            Debug.Log(true);
-            crosshairRed.SetActive(true);
-        }
-        else
-        {
-            Debug.Log(false);
-            crosshairRed.SetActive(false);
-        }
-
+        bool cubeHit = Physics.Raycast(ray, out hit, 10, cubeLayerMask, QueryTriggerInteraction.Ignore);
+        bool keypadHit = Physics.Raycast(ray, out keyPadHit, 10, defaultLayerMask, QueryTriggerInteraction.Ignore) 
+                          && keyPadHit.collider.CompareTag("Keypad");
+        
+        bool hitSomething = cubeHit || keypadHit;
+        
+        crosshairRed.SetActive(hitSomething);
     }
 }
