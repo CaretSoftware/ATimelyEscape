@@ -23,9 +23,9 @@ namespace NewRatCharacterController {
 
 		// Time Travel
 		private bool canTimeTravel = false;
-		private bool canTimeTravelPast = false;
-		private bool canTimeTravelPresent = false;
-		private bool canTimeTravelFuture = false;
+		private bool canTimeTravelPast = true;
+		private bool canTimeTravelPresent = true;
+		private bool canTimeTravelFuture = true;
 		public bool CanTimeTravel {
 			get => canTimeTravel;
 			
@@ -241,10 +241,10 @@ namespace NewRatCharacterController {
 			if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) ||
 			                                     Input.GetKey(KeyCode.RightControl) ||
 			                                     Input.GetKey(KeyCode.LeftCommand)))) {
-				CanTimeTravel = true;
 				CanTimeTravelPast = true;
 				CanTimeTravelPresent = true;
 				CanTimeTravelFuture = true;
+				CanTimeTravel = true;
 				Debug.Log($"CanTimeTravel {CanTimeTravel}");
 			}
 #endif
