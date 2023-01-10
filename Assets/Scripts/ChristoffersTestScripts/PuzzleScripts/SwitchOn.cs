@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SwitchOn : MonoBehaviour {
+public class SwitchOn : MonoBehaviour
+{
 
     [SerializeField] private bool isInteractableByPlayer;
+    [SerializeField] private bool isTreePuzzle;
     /*    [SerializeField] private bool isInteractableByPast;
         [SerializeField] private bool isInteractableByPresent;*/
     [SerializeField] private UnityEvent switchOn;
@@ -15,27 +17,38 @@ public class SwitchOn : MonoBehaviour {
     private MeshRenderer meshRenderer;
     private bool isOn;
     private Animator animator;
-    private void Start() {
+    private void Start()
+    {
         onMaterial = Resources.Load("TestButtonOn") as Material;
         offMaterial = Resources.Load("M_CB") as Material;
         meshRenderer = GetComponent<MeshRenderer>();
         isOn = true;
-        if (isInteractableByPlayer) {
+        if (isInteractableByPlayer)
+        {
             animator = GetComponentInChildren<Animator>();
         }
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (switchOn != null && !isInteractableByPlayer && other.gameObject.tag == "Cube") {
-            if (isOn) {
+    private void OnTriggerEnter(Collider other)
+    {
+        if (switchOn != null && !isInteractableByPlayer && other.gameObject.tag == "Cube")
+        {
+            if (isOn)
+            {
                 switchOn.Invoke();
-                meshRenderer.material = onMaterial;
+                if (!isTreePuzzle)
+                {
+                    meshRenderer.material = onMaterial;
+                }
             }
-        } else if (switchOn != null && isInteractableByPlayer && other.gameObject.tag == "Player") {
-            if (isOn) {
+        }
+        else if (switchOn != null && isInteractableByPlayer && other.gameObject.tag == "Player")
+        {
+            if (isOn)
+            {
                 switchOn.Invoke();
-                meshRenderer.material = onMaterial;
-                if (animator != null) {
+                if (animator != null)
+                {
                     animator.SetBool("On", true);
                 }
             }
@@ -51,11 +64,17 @@ public class SwitchOn : MonoBehaviour {
                     meshRenderer.material = onMaterial;
                 }*/
     }
-    private void OnTriggerExit(Collider other) {
-        if (switchOff != null && other.gameObject.tag == "Cube") {
-            if (isOn) {
+    private void OnTriggerExit(Collider other)
+    {
+        if (switchOff != null && other.gameObject.tag == "Cube")
+        {
+            if (isOn)
+            {
                 switchOff.Invoke();
-                meshRenderer.material = offMaterial;
+                if (!isTreePuzzle)
+                {
+                    meshRenderer.material = offMaterial;
+                }
             }
         }
         /*        else if (switchOn != null && isInteractableByPast && other.gameObject.tag == "CubePast")
@@ -69,10 +88,12 @@ public class SwitchOn : MonoBehaviour {
                     meshRenderer.material = offMaterial;
                 }*/
     }
-    public void ButtonOff() {
+    public void ButtonOff()
+    {
         isOn = false;
     }
-    public void ButtonOn() {
+    public void ButtonOn()
+    {
         isOn = true;
     }
 
