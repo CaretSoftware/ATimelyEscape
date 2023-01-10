@@ -33,13 +33,10 @@ public class CaptureNode : Node
         //Debug.Log($"hit layer: {hit.collider.gameObject.layer}");
         if (hit.collider.gameObject.layer == player.gameObject.layer && !enemy.IsCapturing)
         {
-            enemy.DrawLOS(true);
             return NodeState.SUCCESS;
         }
         else
         {
-            
-            enemy.DrawLOS(false);
             return NodeState.FAILURE;
         }
     }

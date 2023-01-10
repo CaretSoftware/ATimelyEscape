@@ -220,22 +220,8 @@ public class EnemyAI : MonoBehaviour
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, captureRange);
         }
-
-        if (withinReach)
-        {
-            Gizmos.color = drawLOS ? Color.blue : Color.red;
-            Gizmos.DrawLine(losPos.position, playerTransform.position);
-        }
     }
-
-    private bool drawLOS;
-    private bool withinReach;
-    public void DrawLOS(bool arg)
-    {
-        withinReach = true;
-        //print($"losPos: {drawLOS}");
-        drawLOS = arg;
-    }
+    
     //Animation event methods.
     public void ResetAfterAnimations()
     {
@@ -272,7 +258,7 @@ public class EnemyAI : MonoBehaviour
 
     public void BendTheKnee()
     {
-        if (playerTransform.position.y < 0.5f)
+        if (playerTransform.position.y < agentCenterTransform.position.y)
         {
             feetPos.localPosition = feetPosBent;
             hipPos.localPosition = hipPosBent;
