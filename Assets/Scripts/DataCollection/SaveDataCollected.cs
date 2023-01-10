@@ -10,27 +10,34 @@ public static class SaveDataCollected
     private static string RomeTimerFolder = Application.persistentDataPath + "/RoomTimer/";
     public static int SaveRoomTimer(RoomTimer roomTimer) 
     {
+        EnsureDirectoryExists(RomeTimerFolder);
         int counter = 0;
         while (File.Exists(RomeTimerFolder + string.Format("{0:D2}", counter) + ".data"))
         {
             counter++;
         }
 
-        SaveRoomTimer(roomTimer, counter);
+        SaveRoomTimer(roomTimer, RomeTimerFolder + string.Format("{0:D2}", counter) + ".data");
         return counter;
     }
 
     public static void SaveRoomTimer(RoomTimer roomTimer, int number)
     {
+        SaveRoomTimer(roomTimer, RomeTimerFolder + string.Format("{0:D2}", number) + ".data");
+    }
+
+    private static void SaveRoomTimer(RoomTimer roomTimer, string path)
+    {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = RomeTimerFolder + string.Format("{0:D2}", number) + ".data";
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        formatter.Serialize(stream, roomTimer);
+        RoomTimerData data = new RoomTimerData(roomTimer);
+
+        formatter.Serialize(stream, data);
         stream.Close();
     }
 
-    public static RoomTimer LoadDataCollected(int number)
+    public static RoomTimerData LoadDataCollected(int number)
     {
         string path = RomeTimerFolder + string.Format("{0:D2}", number) + ".data";
         if (File.Exists(path))
@@ -38,15 +45,26 @@ public static class SaveDataCollected
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
-            RoomTimer roomTimer = formatter.Deserialize(stream) as RoomTimer;
+            RoomTimerData data = formatter.Deserialize(stream) as RoomTimerData;
             stream.Close();
 
-            return roomTimer;
+            return data;
         }
         else
         {
             Debug.LogError("Save file not found in" + path);
             return null;
+        }
+
+
+    }
+    private static void EnsureDirectoryExists(string filePath)
+    {
+        FileInfo fi = new FileInfo(filePath);
+        if (!fi.Directory.Exists)
+        {
+            Directory.CreateDirectory(fi.DirectoryName);
+
         }
     }
 }

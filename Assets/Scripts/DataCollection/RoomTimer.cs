@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class RoomTimer : MonoBehaviour
 {
-    private int saveNumber;
+    [SerializeField] private int saveNumber;
     [SerializeField] private RuntimeSceneManager runtimeSceneManager;
 
     [SerializeField] public List<TimeInRoomX> timeInRooms = new List<TimeInRoomX>();
@@ -20,10 +20,12 @@ public class RoomTimer : MonoBehaviour
 
     private void Start()
     {
+        timeInRooms = new List<TimeInRoomX>();
         currentRoomIndex = runtimeSceneManager.GetCurrentSceneIndex();
         currentRoom = new TimeInRoomX(currentRoomIndex);
         timeInRooms.Add(currentRoom);
         saveNumber = SaveDataCollected.SaveRoomTimer(this);
+        StartCoroutine(Save(saveEvery));
     }
 
     private void Update()
@@ -50,7 +52,7 @@ public class RoomTimer : MonoBehaviour
             }
             
         }
-        currentRoom.SetTime();
+        currentRoom.SetTime(Time.deltaTime);
     }
 
     private IEnumerator Save(int timer)
@@ -63,32 +65,11 @@ public class RoomTimer : MonoBehaviour
     [ContextMenu("Load")]
     private void Load()
     {
-        timeInRooms = SaveDataCollected.LoadDataCollected(saveNumber).timeInRooms;
+        RoomTimerData roomTimerData = SaveDataCollected.LoadDataCollected(saveNumber);
+        if (roomTimerData != null) { timeInRooms = roomTimerData.timeInRooms; }
+        else timeInRooms = new List<TimeInRoomX>();
     }
 
 
-    [Serializable]
-    public class TimeInRoomX
-    {
-        public int room;
-
-        [SerializeField] private int visited;
-
-        private float totalTime;
-
-        [SerializeField] private int hours;
-        [SerializeField] private int minutes;
-        [SerializeField] private int seconds;
-        [SerializeField] private int milliseconds;
-
-        public TimeInRoomX(int x) { this.room = x; visited++; }
-
-        public void SetTime()
-        {
-            totalTime += Time.deltaTime;
-            hours = (int)(totalTime / 3600); minutes = (int)(totalTime / 60); seconds = (int)totalTime; milliseconds = ((int)(totalTime * 1000)) % 1000;
-        }
-
-        public void Visited() { visited++; }
-    }
+    
 }
