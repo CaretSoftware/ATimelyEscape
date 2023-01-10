@@ -23,50 +23,50 @@ namespace NewRatCharacterController {
 
 		// Time Travel
 		private bool canTimeTravel = false;
-		private bool canTimeTravelPast = false;
-		private bool canTimeTravelPresent = false;
-		private bool canTimeTravelFuture = false;
+		private bool canTimeTravelPast = true;
+		private bool canTimeTravelPresent = true;
+		private bool canTimeTravelFuture = true;
 		public bool CanTimeTravel {
 			get => canTimeTravel;
 			
 			set {
-				canTimeTravel = value;
-			
-				if (canTimeTravel) {
-					if (canTimeTravelPast)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast);
-					if (canTimeTravelPresent)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent);
-					if (canTimeTravelFuture)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture);
-				}
+				canTimeTravel = value; 
+				
+				if (canTimeTravelPast)
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast );//&& canTimeTravel);
+				if (canTimeTravelPresent)
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent );// && canTimeTravel);
+				if (canTimeTravelFuture)
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture );// && canTimeTravel);
 			}
 		}
 		public bool CanTimeTravelPast {
 			get => canTimeTravelPast;
 			
-			set {
+			set
+			{
+				//canTimeTravel = true;
 				canTimeTravelPast = value;
-				if (canTimeTravel)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
+				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
 			}
 		}
 		public bool CanTimeTravelPresent {
 			get => canTimeTravelPresent;
 			
-			set {
+			set
+			{
+				//canTimeTravel = true;
 				canTimeTravelPresent = value;
-				if (canTimeTravel)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
+				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
 			}
 		}
 		public bool CanTimeTravelFuture {
 			get => canTimeTravelFuture;
 			
 			set {
+				//canTimeTravel = true;
 				canTimeTravelFuture = value;
-				if (canTimeTravel)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
+				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
 			}
 		}
 		
@@ -116,6 +116,29 @@ namespace NewRatCharacterController {
 		private void Update() {
 			if (_paused) return;
 
+			/*
+			if (UnityEngine.Input.GetKeyDown(KeyCode.U))
+				CanTimeTravel = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.H))
+				CanTimeTravel = false;
+			
+			if (UnityEngine.Input.GetKeyDown(KeyCode.I))
+				CanTimeTravelPast = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.J))
+				CanTimeTravelPast = false;
+			
+			if (UnityEngine.Input.GetKeyDown(KeyCode.O))
+				CanTimeTravelPresent = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.K))
+				CanTimeTravelPresent = false;
+			
+			if (UnityEngine.Input.GetKeyDown(KeyCode.P))
+				CanTimeTravelFuture = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.L))
+				CanTimeTravelFuture = false;
+			*/
+
+			
 			MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
 			CameraInput();
 			DeveloperCheats();
@@ -190,7 +213,7 @@ namespace NewRatCharacterController {
 #endif			
 			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Future, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelFuture);
 
-			if (CanTimeTravel && CanTimeTravelFuture && _paused)
+			if (CanTimeTravel && CanTimeTravelFuture && !_paused)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
 		}
 
@@ -221,11 +244,16 @@ namespace NewRatCharacterController {
 		
 		private void DeveloperCheats() {
 #if UNITY_EDITOR
-			// Developer code - Get Time Travel
+			// Developer Cheat - Get Time Travel
 			if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) ||
 			                                     Input.GetKey(KeyCode.RightControl) ||
 			                                     Input.GetKey(KeyCode.LeftCommand)))) {
+				CanTimeTravelPast = true;
+				CanTimeTravelPresent = true;
+				CanTimeTravelFuture = true;
+				
 				CanTimeTravel = true;
+				
 				Debug.Log($"CanTimeTravel {CanTimeTravel}");
 			}
 #endif

@@ -25,6 +25,9 @@ namespace NewRatCharacterController {
 
             NewRatCharacter.AnimationController.RotateCharacterMesh();
 
+            if (!NewRatCharacter.Awakened)
+                stateMachine.TransitionTo<WakeUpState>();
+            
             if (CubePushState.Requirement(NewRatCharacter))
                 stateMachine.TransitionTo<CubePushState>();
             

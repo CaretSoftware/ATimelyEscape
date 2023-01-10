@@ -40,7 +40,6 @@ public class GoToActivityNode : Node
     public override NodeState Evaluate()
     {
         destinationDistance = Vector3.Distance(waypoints[targetIndex].position, agent.transform.position);
-
         if (destinationDistance > DestinationOffset)
         {
             isTimerDone = false;
@@ -76,9 +75,7 @@ public class GoToActivityNode : Node
     {
         isCoroutineRunning = true;
         animator.SetBool("move", false);
-        //Debug.Log("Timer started");
         yield return new WaitForSeconds(idleTimer);
-        //Debug.Log("Done");
         animator.SetBool("move", true);
         isCoroutineRunning = false;
         isTimerDone = true;

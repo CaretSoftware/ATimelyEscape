@@ -7,33 +7,32 @@ using UnityEngine.Animations.Rigging;
 public class ChaseNode : Node
 {
     private NavMeshAgent agent;
-    private Transform target;
+    private Transform player;
     private Transform agentTransform;
 
-    private float destinationDistance;
-    private float triggerDistance;
+    private float distanceToPlayer;
+    private float captureDistance;
+    private float chaseDistance;
 
-    public ChaseNode(Transform target, NavMeshAgent agent, Transform agentTransform, float triggerDistance)
+    public ChaseNode(Transform player, NavMeshAgent agent, Transform agentTransform, float captureDistance, float chaseDistance)
     {
-        this.target = target;
+        this.player = player;
         this.agent = agent;
         this.agentTransform = agentTransform;
-        this.triggerDistance = triggerDistance;
+        this.captureDistance = captureDistance;
+        this.chaseDistance = chaseDistance;
     }
 
     public override NodeState Evaluate()
     {
-        destinationDistance = Vector3.Distance(target.position, agentTransform.position);
-        if(destinationDistance > triggerDistance)
+        distanceToPlayer = Vector3.Distance(player.position, agentTransform.position);
+        if(distanceToPlayer > captureDistance)
         {
             agent.isStopped = false;
-            agent.SetDestination(target.position);
+            agent.SetDestination(player.position);
             return NodeState.RUNNING;
         }
         else
-        {
-            agent.isStopped = true;
-            return NodeState.SUCCESS;
-        }
+            return NodeState.FAILURE;
     }
 }

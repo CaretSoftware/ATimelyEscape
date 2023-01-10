@@ -9,6 +9,7 @@ public class ImageFadeFunctions : MonoBehaviour
     private CanvasGroup canvasGroup;
 
     private const float fadeDividerVar = 2;
+    private const float messageFadeDividerVar = 0.5f;
     void Start()
     {
         image = GetComponent<Image>();
@@ -36,18 +37,29 @@ public class ImageFadeFunctions : MonoBehaviour
             yield return null;
         }
     }
+    
+    private IEnumerator FadeIn()
+    {
+        while (canvasGroup.alpha < 1)
+        {
+            canvasGroup.alpha += Time.deltaTime / messageFadeDividerVar;
+            yield return null;
+        }
+    }
 
-    private IEnumerator FadeBack()
+    private IEnumerator FadeOut()
     {
         //player.position = checkpoint.position;
         while (canvasGroup.alpha > 0)
         {
-            canvasGroup.alpha -= Time.deltaTime / fadeDividerVar;
+            canvasGroup.alpha -= Time.deltaTime / messageFadeDividerVar;
             yield return null;
         }
     }
 
     public void RunFadeToBlack() { StartCoroutine(FadeToBlack()); }
     public void RunFadeToWhite() { StartCoroutine(FadeToWhite()); }
-    public void RunFadeBack() { StartCoroutine(FadeBack()); }
+    public void RunFadeIn() { StartCoroutine(FadeIn()); }
+    public void RunFadeOut() { StartCoroutine(FadeOut()); }
+    
 }
