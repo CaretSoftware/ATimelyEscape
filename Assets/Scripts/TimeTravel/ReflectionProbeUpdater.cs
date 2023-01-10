@@ -18,6 +18,11 @@ public class ReflectionProbeUpdater : MonoBehaviour
         _probe.RenderProbe();
     }
 
+    private void UpdateProbe()
+    {
+        _probe.RenderProbe();
+    }
+
     
         _probe.RenderProbe();
         TimePeriodChanged.AddListener<TimePeriodChanged>(TriggerTimer);
@@ -30,10 +35,7 @@ public class ReflectionProbeUpdater : MonoBehaviour
         Invoke(nameof(UpdateProbe), 1f);
     }
 
-    private void UpdateProbe()
-    {
-        _probe.RenderProbe();
-    }
+   
 
     private void OnDestroy() {
         if(EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TriggerTimer);
