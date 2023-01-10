@@ -7617,16 +7617,20 @@ PrefabInstance:
       value: 0.004
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: standardSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: characterSpeed
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: speedInfo.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: waypoints.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: minDistanceToWayPoint
@@ -7650,7 +7654,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: speedInfo.Array.data[0].speed
-      value: 0.04
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760689, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: m_Size.x
@@ -7702,7 +7706,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428745601086, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: m_Size.z
-      value: 0.115055755
+      value: 0.17776078
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428745601086, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: m_Center.y
@@ -7710,7 +7714,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428745601086, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: m_Center.z
-      value: -0.7176145
+      value: -0.6862619
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428745601087, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11755,14 +11759,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d171c9dfc6b05c428b7c2a8439006d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.5
+  standardSpeed: 0
   minDistanceToWayPoint: 0.25
-  cubeSpeed: 0.02
-  speedMultiplier: 0
   meshRenderer: {fileID: 1757579294}
   meshRenderer2: {fileID: 1925369130}
-  waypoints:
-  - {fileID: 1906532148}
+  waypoints: []
   speedInfo: []
   cubeMaxHeigt: 0
 --- !u!82 &475256250
@@ -39661,6 +39662,10 @@ PrefabInstance:
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: cubeMaxHeigt
       value: 2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: standardSpeed
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: waypoints.Array.size

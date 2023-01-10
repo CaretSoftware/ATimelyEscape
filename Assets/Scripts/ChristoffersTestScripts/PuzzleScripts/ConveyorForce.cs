@@ -1,15 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using CallbackSystem;
+using UnityEngine;
 
-public class ConveyorForce : MonoBehaviour
-{
-    [SerializeField] private float speed;
+public class ConveyorForce : MonoBehaviour {
+    [SerializeField] private float standardSpeed;
     [SerializeField] private float minDistanceToWayPoint = 0.1f;
-    [SerializeField] private float cubeSpeed;
-    [SerializeField] private float speedMultiplier;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private MeshRenderer meshRenderer2;
     [SerializeField] private Transform[] waypoints;
@@ -19,70 +16,60 @@ public class ConveyorForce : MonoBehaviour
     private MaterialPropertyBlock _matPropBlock;
     private AudioSource audioSource;
 
+
     [Serializable]
-    private class wayPointSpeedInfo
-    {
+    private class wayPointSpeedInfo {
         public int index;
         public float speed;
     }
 
     private HashSet<GameObject> removedCubes = new HashSet<GameObject>();
-
+    private HashSet<GameObject> cubes = new HashSet<GameObject>();
     private Dictionary<GameObject, int> cubeDict = new Dictionary<GameObject, int>();
 
     private bool isOn;
 
-    void Awake()
-    {
-        foreach (var info in speedInfo)
-        {
+    void Awake() {
+        foreach (var info in speedInfo) {
             wayPointSpeeds.Add(info.index, info.speed);
         }
         _matPropBlock = new MaterialPropertyBlock();
         audioSource = GetComponent<AudioSource>();
+        PauseMenuBehaviour.pauseDelegate += TurnOff;
     }
 
-    private void Start()
-    {
+    private void Start() {
         isOn = false;
         TimePeriodChanged.AddListener<TimePeriodChanged>(TimeMachineOff);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Cube")
-        {
+    private void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag == "Cube") {
             if (!cubeDict.ContainsKey(other.gameObject))
                 cubeDict.Add(other.gameObject, 0);
+            cubes.Add(other.gameObject);
         }
     }
 
-    private void Update()
-    {
-        if (isOn)
-        {
+    private void Update() {
+        if (isOn) {
 
-            foreach (var cube in cubeDict)
-            {
-                if (cube.Key == null || cube.Key.transform.position.y < cubeMaxHeigt)
-                {
-                    removedCubes.Add(cube.Key);
+            foreach (var cube in cubes) {
+                if (cube == null || cube.transform.position.y < cubeMaxHeigt) {
+                    removedCubes.Add(cube);
                     continue;
                 }
 
-                float wayPointSpeed = cubeSpeed;
+                float tempSpeed = standardSpeed;
+                if (wayPointSpeeds.ContainsKey(cubeDict[cube])) tempSpeed = wayPointSpeeds[cubeDict[cube]];
 
-                if (wayPointSpeeds.ContainsKey(cubeDict[cube.Key])) wayPointSpeed = wayPointSpeeds[cubeDict[cube.Key]];
-
-                //print("befoe " + cube.Key.transform.position);
-                cube.Key.transform.position = Vector3.MoveTowards(cube.Key.transform.position, waypoints[cube.Value].position, wayPointSpeed);
-                if (Vector3.Distance(cube.Key.transform.position, waypoints[cube.Value].position) < minDistanceToWayPoint) cubeDict[cube.Key] += 1;
-                //print("after " + cube.Key.transform.position);
+                cube.transform.position = Vector3.MoveTowards(cube.transform.position, waypoints[cubeDict[cube]].position, tempSpeed * Time.deltaTime);
+                if (Vector3.Distance(cube.transform.position, waypoints[cubeDict[cube]].position) < minDistanceToWayPoint && cubeDict[cube] < waypoints.Length - 1) cubeDict[cube] += 1;
             }
 
-            foreach (var cube in removedCubes)
-            {
+            foreach (var cube in removedCubes) {
                 cubeDict.Remove(cube);
+                cubes.Remove(cube);
             }
             removedCubes.Clear();
 
@@ -91,43 +78,36 @@ public class ConveyorForce : MonoBehaviour
     }
 
 
-    public void TurnOff()
-    {
+    public void TurnOff(bool turnOff = true) {
+        if (!turnOff) return;
         isOn = false;
         audioSource.Stop();
-        if (_matPropBlock != null)
-        {
+        if (_matPropBlock != null) {
             _matPropBlock.SetFloat("_Scrolling_Time_X", 0f);
 
             // Apply the edited values to the renderer.
             meshRenderer.SetPropertyBlock(_matPropBlock);
         }
-        if (_matPropBlock != null)
-        {
+        if (_matPropBlock != null) {
             _matPropBlock.SetFloat("_Scrolling_Time_X", 0f);
 
             // Apply the edited values to the renderer.
             meshRenderer2.SetPropertyBlock(_matPropBlock);
         }
     }
-    private void TimeMachineOff(TimePeriodChanged e)
-    {
-        if (e.from == TimeTravelPeriod.Past)
-        {
+    private void TimeMachineOff(TimePeriodChanged e) {
+        if (e.from == TimeTravelPeriod.Past) {
             isOn = false;
             audioSource.Stop();
-        }
-
-        else if (e.to == TimeTravelPeriod.Past)
-        {
+        } else if (e.to == TimeTravelPeriod.Past) {
             isOn = true;
             audioSource.Play();
         }
 
     }
-    private void OnDestroy()
-    {
+    private void OnDestroy() {
         if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeMachineOff);
+        PauseMenuBehaviour.pauseDelegate -= TurnOff;
     }
 
 
