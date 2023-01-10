@@ -6,21 +6,18 @@ using CallbackSystem;
 
 public class ReflectionProbeUpdater : MonoBehaviour
 {
-    /*private ReflectionProbe _probe;
+    private ReflectionProbe _probe;
 
     void Start()
     {
         _probe = GetComponent<ReflectionProbe>();
-    }
-
-    private void Update()
-    {
-        _probe.RenderProbe();
-    }
-
-    
-        _probe.RenderProbe();
+        UpdateProbe();
         TimePeriodChanged.AddListener<TimePeriodChanged>(TriggerTimer);
+    }
+
+    public void UpdateProbe()
+    {
+        _probe.RenderProbe(null);
     }
 
     private void TriggerTimer(TimePeriodChanged e)
@@ -30,12 +27,7 @@ public class ReflectionProbeUpdater : MonoBehaviour
         Invoke(nameof(UpdateProbe), 1f);
     }
 
-    private void UpdateProbe()
-    {
-        _probe.RenderProbe();
-    }
-
     private void OnDestroy() {
         if(EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TriggerTimer);
-    }*/
+    }
 }

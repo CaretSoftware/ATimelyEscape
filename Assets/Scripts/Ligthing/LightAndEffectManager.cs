@@ -75,6 +75,11 @@ public class LightAndEffectManager : MonoBehaviour
             for (int i = 0; i < probesInRoom.Length; i++)
             {
                 probesInRoom[i].enabled = activate;
+
+                if (activate)
+                {
+                    probesInRoom[i].GetComponent<ReflectionProbeUpdater>().UpdateProbe();
+                }
             }
         }
     }
