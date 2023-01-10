@@ -5,16 +5,18 @@ using CallbackSystem;
 using UnityEngine;
 
 public class ConveyorForce : MonoBehaviour {
-    [SerializeField] private float standardSpeed;
+    [SerializeField] private float standardConveyorBeltSpeed;
     [SerializeField] private float minDistanceToWayPoint = 0.1f;
-    [SerializeField] private MeshRenderer meshRenderer;
-    [SerializeField] private MeshRenderer meshRenderer2;
+    [SerializeField] private float cubeMaxHeigt;
+    /*     [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private MeshRenderer meshRenderer2; */
+    [SerializeField] private List<MeshRenderer> conveyorBeltRenderers;
     [SerializeField] private Transform[] waypoints;
     [SerializeField] private Dictionary<int, float> wayPointSpeeds = new Dictionary<int, float>();
     [SerializeField] private wayPointSpeedInfo[] speedInfo;
-    [SerializeField] private float cubeMaxHeigt;
-    private MaterialPropertyBlock _matPropBlock;
+    private MaterialPropertyBlock matPropBlockSlow, matPropBlockFast;
     private AudioSource audioSource;
+    private bool conveyorPermanentlyOff;
 
 
     [Serializable]
@@ -33,9 +35,10 @@ public class ConveyorForce : MonoBehaviour {
         foreach (var info in speedInfo) {
             wayPointSpeeds.Add(info.index, info.speed);
         }
-        _matPropBlock = new MaterialPropertyBlock();
+        matPropBlockSlow = new MaterialPropertyBlock();
+        matPropBlockFast = new MaterialPropertyBlock();
         audioSource = GetComponent<AudioSource>();
-        PauseMenuBehaviour.pauseDelegate += TurnOff;
+        PauseMenuBehaviour.pauseDelegate += TurnOffDelegate;
     }
 
     private void Start() {
@@ -60,7 +63,7 @@ public class ConveyorForce : MonoBehaviour {
                     continue;
                 }
 
-                float tempSpeed = standardSpeed;
+                float tempSpeed = standardConveyorBeltSpeed;
                 if (wayPointSpeeds.ContainsKey(cubeDict[cube])) tempSpeed = wayPointSpeeds[cubeDict[cube]];
 
                 cube.transform.position = Vector3.MoveTowards(cube.transform.position, waypoints[cubeDict[cube]].position, tempSpeed * Time.deltaTime);
@@ -72,28 +75,25 @@ public class ConveyorForce : MonoBehaviour {
                 cubes.Remove(cube);
             }
             removedCubes.Clear();
-
         }
-
     }
 
-
-    public void TurnOff(bool turnOff = true) {
-        if (!turnOff) return;
-        isOn = false;
-        audioSource.Stop();
-        if (_matPropBlock != null) {
-            _matPropBlock.SetFloat("_Scrolling_Time_X", 0f);
-
-            // Apply the edited values to the renderer.
-            meshRenderer.SetPropertyBlock(_matPropBlock);
+    private void TurnOffDelegate(bool paused) { TurnOff(paused, false); }
+    public void TurnOffPermanently() { TurnOff(true, true); }
+    private void TurnOff(bool turnOff = true, bool finalTurnOff = false) {
+        if (conveyorPermanentlyOff) return;
+        isOn = turnOff ? false : true;
+        if (turnOff) audioSource.Stop();
+        else if(!turnOff && TimeTravelManager.currentPeriod == TimeTravelPeriod.Past) audioSource.Play();
+        if (matPropBlockSlow != null && matPropBlockFast != null) {
+            matPropBlockSlow.SetFloat("_Scrolling_Time_X", turnOff ? 0f : .2f);
+            matPropBlockFast.SetFloat("_Scrolling_TIme_X", turnOff ? 0f : .4f);
+            foreach (var renderer in conveyorBeltRenderers) {
+                if (!(renderer.materials.Length > 1 && renderer.materials[1].name.Contains("Fast")) || finalTurnOff) renderer.SetPropertyBlock(matPropBlockSlow);
+                else renderer.SetPropertyBlock(matPropBlockFast);
+            }
         }
-        if (_matPropBlock != null) {
-            _matPropBlock.SetFloat("_Scrolling_Time_X", 0f);
-
-            // Apply the edited values to the renderer.
-            meshRenderer2.SetPropertyBlock(_matPropBlock);
-        }
+        if (finalTurnOff) conveyorPermanentlyOff = true;
     }
     private void TimeMachineOff(TimePeriodChanged e) {
         if (e.from == TimeTravelPeriod.Past) {
@@ -107,7 +107,7 @@ public class ConveyorForce : MonoBehaviour {
     }
     private void OnDestroy() {
         if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeMachineOff);
-        PauseMenuBehaviour.pauseDelegate -= TurnOff;
+        PauseMenuBehaviour.pauseDelegate -= TurnOffDelegate;
     }
 
 

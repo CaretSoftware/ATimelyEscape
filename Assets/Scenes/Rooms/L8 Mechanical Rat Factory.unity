@@ -582,11 +582,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abec4256087a71040959930dd5b2965b, type: 3}
---- !u!23 &19093754 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 2591609618402718454, guid: abec4256087a71040959930dd5b2965b, type: 3}
-  m_PrefabInstance: {fileID: 19093753}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &19093755 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3727876492156127641, guid: abec4256087a71040959930dd5b2965b, type: 3}
@@ -5264,8 +5259,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpeed: 200
-  meshRenderer: {fileID: 0}
-  meshRenderer2: {fileID: 0}
 --- !u!65 &140529867
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7649,6 +7642,34 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1906532148}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: meshRenderers.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: standardConveyorBeltSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: meshRenderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 1026846469}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: meshRenderers.Array.data[1]
+      value: 
+      objectReference: {fileID: 8269722224796871544}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: meshRenderers.Array.data[2]
+      value: 
+      objectReference: {fileID: 2014446493}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: meshRenderers.Array.data[3]
+      value: 
+      objectReference: {fileID: 1757579294}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: meshRenderers.Array.data[4]
+      value: 
+      objectReference: {fileID: 1925369130}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: speedInfo.Array.data[0].index
       value: 2
       objectReference: {fileID: 0}
@@ -7656,6 +7677,30 @@ PrefabInstance:
       propertyPath: speedInfo.Array.data[0].speed
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: conveyorBeltRenderers.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: conveyorBeltRenderers.Array.data[0]
+      value: 
+      objectReference: {fileID: 1026846469}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: conveyorBeltRenderers.Array.data[1]
+      value: 
+      objectReference: {fileID: 8269722224796871544}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: conveyorBeltRenderers.Array.data[2]
+      value: 
+      objectReference: {fileID: 2014446493}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: conveyorBeltRenderers.Array.data[3]
+      value: 
+      objectReference: {fileID: 1757579294}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: conveyorBeltRenderers.Array.data[4]
+      value: 
+      objectReference: {fileID: 1925369130}
     - target: {fileID: 9201061428736760689, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: m_Size.x
       value: 0.8995749
@@ -7764,8 +7809,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpeed: 25
-  meshRenderer: {fileID: 0}
-  meshRenderer2: {fileID: 0}
+--- !u!114 &233801033 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+  m_PrefabInstance: {fileID: 233801029}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233801030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d171c9dfc6b05c428b7c2a8439006d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &235548874
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11718,7 +11772,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &475256246
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11759,13 +11813,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d171c9dfc6b05c428b7c2a8439006d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  standardSpeed: 0
+  standardConveyorBeltSpeed: 0
   minDistanceToWayPoint: 0.25
-  meshRenderer: {fileID: 1757579294}
-  meshRenderer2: {fileID: 1925369130}
+  cubeMaxHeigt: 0
+  conveyorBeltRenderers: []
   waypoints: []
   speedInfo: []
-  cubeMaxHeigt: 0
 --- !u!82 &475256250
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12578,8 +12631,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 475256249}
+      - m_Target: {fileID: 233801033}
         m_TargetAssemblyTypeName: ConveyorForce, Assembly-CSharp
+        m_MethodName: TurnOffPermanently
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2058033459}
+        m_TargetAssemblyTypeName: ConveyorForceTrigger, Assembly-CSharp
         m_MethodName: TurnOff
         m_Mode: 1
         m_Arguments:
@@ -12602,7 +12667,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 233801032}
+      - m_Target: {fileID: 1230359123}
         m_TargetAssemblyTypeName: ConveyorForceTrigger, Assembly-CSharp
         m_MethodName: TurnOff
         m_Mode: 1
@@ -12614,7 +12679,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1230359123}
+      - m_Target: {fileID: 233801032}
         m_TargetAssemblyTypeName: ConveyorForceTrigger, Assembly-CSharp
         m_MethodName: TurnOff
         m_Mode: 1
@@ -12689,18 +12754,6 @@ MonoBehaviour:
       - m_Target: {fileID: 2124201768}
         m_TargetAssemblyTypeName: ChangeLineColor, Assembly-CSharp
         m_MethodName: ChangeColor
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2058033459}
-        m_TargetAssemblyTypeName: ConveyorForceTrigger, Assembly-CSharp
-        m_MethodName: TurnOff
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -19859,6 +19912,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pastSelf: {fileID: 0}
+--- !u!23 &1026846469 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5347482903364261808, guid: 139efed21e017bc43a20264887e4778b, type: 3}
+  m_PrefabInstance: {fileID: 1026846465}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1032784169
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24128,8 +24186,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpeed: 25
-  meshRenderer: {fileID: 8269722224796871544}
-  meshRenderer2: {fileID: 2014446493}
 --- !u!82 &1230359124
 AudioSource:
   m_ObjectHideFlags: 0
@@ -28684,8 +28740,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpeed: 25
-  meshRenderer: {fileID: 19093754}
-  meshRenderer2: {fileID: 0}
 --- !u!82 &1537335580
 AudioSource:
   m_ObjectHideFlags: 0
@@ -39661,7 +39715,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: cubeMaxHeigt
-      value: 2.75
+      value: 2.79
       objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: standardSpeed
@@ -39683,6 +39737,10 @@ PrefabInstance:
       propertyPath: waypoints.Array.data[1]
       value: 
       objectReference: {fileID: 1180047638}
+    - target: {fileID: 9201061428736760688, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
+      propertyPath: standardConveyorBeltSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 9201061428736760689, guid: 52454a94f4a61bf44957d38dbf45004c, type: 3}
       propertyPath: m_Size.y
       value: 0.3794632
@@ -39795,8 +39853,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpeed: 25
-  meshRenderer: {fileID: 0}
-  meshRenderer2: {fileID: 0}
 --- !u!1001 &1982127659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41152,8 +41208,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSpeed: 200
-  meshRenderer: {fileID: 0}
-  meshRenderer2: {fileID: 0}
 --- !u!65 &2058033460
 BoxCollider:
   m_ObjectHideFlags: 0
