@@ -10,10 +10,14 @@ public class SwitchOn : MonoBehaviour {
         [SerializeField] private bool isInteractableByPresent;*/
     [SerializeField] private UnityEvent switchOn;
     [SerializeField] private UnityEvent switchOff;
+    private Material onMaterial;
+    private Material offMaterial;
     private MeshRenderer meshRenderer;
     private bool isOn;
     private Animator animator;
     private void Start() {
+        onMaterial = Resources.Load("TestButtonOn") as Material;
+        offMaterial = Resources.Load("M_CB") as Material;
         meshRenderer = GetComponent<MeshRenderer>();
         isOn = true;
         if (isInteractableByPlayer) {
@@ -25,10 +29,12 @@ public class SwitchOn : MonoBehaviour {
         if (switchOn != null && !isInteractableByPlayer && other.gameObject.tag == "Cube") {
             if (isOn) {
                 switchOn.Invoke();
+                meshRenderer.material = onMaterial;
             }
         } else if (switchOn != null && isInteractableByPlayer && other.gameObject.tag == "Player") {
             if (isOn) {
                 switchOn.Invoke();
+                meshRenderer.material = onMaterial;
                 if (animator != null) {
                     animator.SetBool("On", true);
                 }
@@ -49,6 +55,7 @@ public class SwitchOn : MonoBehaviour {
         if (switchOff != null && other.gameObject.tag == "Cube") {
             if (isOn) {
                 switchOff.Invoke();
+                meshRenderer.material = offMaterial;
             }
         }
         /*        else if (switchOn != null && isInteractableByPast && other.gameObject.tag == "CubePast")
