@@ -26,7 +26,7 @@ public class CaptureNode : Node
     {
         Physics.Raycast(losPos, (player.position - losPos).normalized,
             out hit, Mathf.Infinity, obstacleMask, QueryTriggerInteraction.Ignore);
-        Debug.Log($"hit layer: {hit.collider.gameObject.layer}");
+        //Debug.Log($"hit layer: {hit.collider.gameObject.layer}");
         if (hit.collider.gameObject.layer == player.gameObject.layer && !enemy.IsCapturing)
         {
             enemy.DrawLOS(true);

@@ -233,7 +233,7 @@ public class EnemyAI : MonoBehaviour
     public void DrawLOS(bool arg)
     {
         withinReach = true;
-        print($"losPos: {drawLOS}");
+        //print($"losPos: {drawLOS}");
         drawLOS = arg;
     }
     //Animation event methods.
