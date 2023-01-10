@@ -7,38 +7,37 @@ using UnityEngine.Animations.Rigging;
 
 public class CaptureNode : Node
 {
-    private LayerMask obstacleMask;
-    private EnemyAI enemy;
-    private Animator animator;
+    private Vector3 PlayerColliderOffset = new Vector3(0f, 0.1f, 0f);
 
-    private Transform handIKTarget;
     private Transform player;
+    private EnemyAI enemy;
+
     private Vector3 losPos;
-
-    private float captureDistance;
-    private float distanceToPlayer;
-    private bool recentlyCaught;
-
+    private LayerMask obstacleMask;
     private RaycastHit hit;
+    private Vector3 playerColliderPos;
 
-    public CaptureNode(NavMeshAgent agent, Transform player, float captureDistance, Transform agentCenterTransform,
-        Animator animator, EnemyAI enemy, LayerMask obstacleMask, IKControl ikControl)
+    public CaptureNode(Transform player, EnemyAI enemy, Vector3 losPos, LayerMask obstacleMask)
     {
         this.player = player;
+        this.losPos = losPos;
         this.enemy = enemy;
         this.obstacleMask = obstacleMask;
-        losPos = agentCenterTransform.localPosition + Vector3.up * 0.8f;
-        this.animator = animator;
     }
 
     public override NodeState Evaluate()
     {
-        Physics.Raycast(losPos, (player.position - losPos).normalized,
+        playerColliderPos = player.position + PlayerColliderOffset;
+        Physics.Raycast(losPos, (playerColliderPos - losPos).normalized,
             out hit, Mathf.Infinity, obstacleMask, QueryTriggerInteraction.Ignore);
-        
-            if (hit.collider.gameObject.layer == player.gameObject.layer && !enemy.IsCapturing)
-                return NodeState.SUCCESS;
-            else
-                return NodeState.FAILURE;
+        //Debug.Log($"hit layer: {hit.collider.gameObject.layer}");
+        if (hit.collider.gameObject.layer == player.gameObject.layer && !enemy.IsCapturing)
+        {
+            return NodeState.SUCCESS;
+        }
+        else
+        {
+            return NodeState.FAILURE;
+        }
     }
 }
