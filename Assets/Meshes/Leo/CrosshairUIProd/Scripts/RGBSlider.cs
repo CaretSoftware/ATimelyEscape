@@ -16,7 +16,7 @@ public class RGBSlider : MonoBehaviour
     private void Update()
     {
         // pressing esc toggles between hide/show
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             lockCursor = !lockCursor;
         }
