@@ -7,8 +7,7 @@ public class changeColor : MonoBehaviour
 {
     [SerializeField] private LayerMask cubeLayerMask;
     [SerializeField] private LayerMask defaultLayerMask;
-    [SerializeField] RawImage crossHair;
-    [SerializeField] RawImage crossHairRed;
+    [SerializeField] private GameObject crosshairRed;
     void Start()
     {
      
@@ -23,11 +22,13 @@ public class changeColor : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out hit, 10, cubeLayerMask) ||
             (Physics.Raycast(transform.position, transform.forward, out keyPadHit, 10,defaultLayerMask, QueryTriggerInteraction.Ignore) && keyPadHit.collider.CompareTag("Keypad")))
         {
-            Debug.Log(true);  
+            Debug.Log(true);
+            crosshairRed.SetActive(true);
         }
         else
         {
             Debug.Log(false);
+            crosshairRed.SetActive(false);
         }
 
     }

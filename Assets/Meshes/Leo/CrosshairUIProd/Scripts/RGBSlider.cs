@@ -12,13 +12,17 @@ public class RGBSlider : MonoBehaviour
     {
         rgbSlider = this.gameObject.GetComponent<Slider>();
     }
+    public bool lockCursor = true;
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        // pressing esc toggles between hide/show
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            lockCursor = !lockCursor;
         }
+
+        Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !lockCursor;
     }
     public void RGBSlide()
     {
