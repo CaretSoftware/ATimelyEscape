@@ -173,7 +173,7 @@ public class NewIncubator : MonoBehaviour
     {
         characterInput.CanTimeTravelPast = true;
         puzzleTwoDone = true;
-
+        OnboardingHandler.TimeTravelDiscovered = true;
     }
     private void Step5()
     {
@@ -232,7 +232,8 @@ public class NewIncubator : MonoBehaviour
         puzzleFloor.SetActive(false);
         audioManager.Play("8");
         instructions.text = "Charge this cube on the chargepad. It holds charge for a long time";
-        //Debug.Log("STEP10");
+        OnboardingHandler.CubeChargeDiscovered = true; 
+       // Debug.Log("STEP10");
     }
 
     public void CubeButton()
