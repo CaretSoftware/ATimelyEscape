@@ -27,12 +27,12 @@ public class EnemyAI : MonoBehaviour
 
     [Header("Rig Setup")]
     [SerializeField] private Transform handIKTarget;
-    [SerializeField] private IKControl ikControl;
     [SerializeField] private Transform feetPos;
     [SerializeField] private Transform hipPos;
     [SerializeField] private Transform agentCenterTransform;
     [SerializeField] private GameObject fullBodyRig;
-    
+    [SerializeField] private Transform losPos;
+
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
     [HideInInspector] public bool activeAI;
@@ -55,7 +55,7 @@ public class EnemyAI : MonoBehaviour
     private Vector3 defaultHipPos;
     private Vector3 feetPosBent;
     private Vector3 hipPosBent;
-    
+
     private float deltaMagnitude;
     private float chaseRange;
     private float captureRange;
@@ -120,7 +120,7 @@ public class EnemyAI : MonoBehaviour
         hipPosBent = new Vector3(defaultHipPos.x, AnimationPreviewBasedHipPos ,defaultHipPos.z);
         feetPosBent = new Vector3(defaultFeetPos.x, AnimationPreviewBasedFeetPos ,defaultFeetPos.z);
     }
-
+    
     private void AssignCollidersIgnore()
     {
         for (int i = 0; i < collidersToIgnorePlayer.Length; i++)
@@ -174,7 +174,7 @@ public class EnemyAI : MonoBehaviour
         RangeNode chaseRangeNode = new RangeNode(chaseRange, agentCenterTransform, playerTransform, enemyFOV, animator);
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange, chaseRange);
         RangeNode captureRangeNode = new RangeNode(captureRange, agentCenterTransform, playerTransform, enemyFOV, animator);
-        CaptureNode captureAttemptNode = new CaptureNode(agent, playerTransform, captureRange, agentCenterTransform, animator, this, playerLayerMask, ikControl);
+        CaptureNode captureAttemptNode = new CaptureNode(playerTransform, this, losPos.position, playerLayerMask);
         CaptureAnimationNode captureAnimationNode = new CaptureAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
         InvertedRangeNode invertedRangeNode = new InvertedRangeNode(captureRange, agentCenterTransform, playerTransform, animator, this);
 
@@ -221,7 +221,7 @@ public class EnemyAI : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, captureRange);
         }
     }
-
+    
     //Animation event methods.
     public void ResetAfterAnimations()
     {
@@ -258,7 +258,7 @@ public class EnemyAI : MonoBehaviour
 
     public void BendTheKnee()
     {
-        if (playerTransform.position.y < 0.5f)
+        if (playerTransform.position.y < agentCenterTransform.position.y)
         {
             feetPos.localPosition = feetPosBent;
             hipPos.localPosition = hipPosBent;
