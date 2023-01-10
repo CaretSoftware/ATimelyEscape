@@ -17,11 +17,11 @@ public class RobotPunch : MonoBehaviour {
 
     public void IsOn() {
         animator.SetBool("On", true);
-        Invoke("CrackGlass", 1.19f);
+        Invoke("CrackGlass", 1.15f);
     }
     private void CrackGlass()
     {
-        Debug.Log("Pang");
+        audioSource.Play();
         glassWall.SetActive(true);
         notCrackedglassWall.SetActive(false);
     }
