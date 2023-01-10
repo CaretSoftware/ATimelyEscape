@@ -25,8 +25,8 @@ namespace NewRatCharacterController {
 			if (NewRatCharacter.Jumped) // coyote time jump
 				stateMachine.TransitionTo<JumpState>();
 
-			if (WallRunState.Requirement(NewRatCharacter))
-				stateMachine.TransitionTo<WallRunState>();
+			//if (WallRunState.Requirement(NewRatCharacter))
+			//	stateMachine.TransitionTo<WallRunState>();
 			
 			if (NewRatCharacter.Caught)
 				stateMachine.TransitionTo<CaughtState>();
