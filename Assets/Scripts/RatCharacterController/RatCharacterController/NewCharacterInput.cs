@@ -23,45 +23,50 @@ namespace NewRatCharacterController {
 
 		// Time Travel
 		private bool canTimeTravel = false;
-		private bool canTimeTravelPast = true;
-		private bool canTimeTravelPresent = true;
-		private bool canTimeTravelFuture = true;
-		public bool CanTimeTravel { 
+		private bool canTimeTravelPast = false;
+		private bool canTimeTravelPresent = false;
+		private bool canTimeTravelFuture = false;
+		public bool CanTimeTravel {
 			get => canTimeTravel;
+			
 			set {
-				if (value) {
-					if (canTimeTravelPast)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, true);
-					if (canTimeTravelPresent)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, true);
-					if (canTimeTravelFuture)
-						TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, true);
-				}
-				canTimeTravel = value;
+				canTimeTravel = value; 
+				
+				if (canTimeTravelPast)
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast );//&& canTimeTravel);
+				if (canTimeTravelPresent)
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent );// && canTimeTravel);
+				if (canTimeTravelFuture)
+					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture );// && canTimeTravel);
 			}
 		}
 		public bool CanTimeTravelPast {
 			get => canTimeTravelPast;
-			set {
-				if (canTimeTravel)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
+			
+			set
+			{
+				canTimeTravel = true;
 				canTimeTravelPast = value;
+				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
 			}
 		}
 		public bool CanTimeTravelPresent {
 			get => canTimeTravelPresent;
-			set {
-				if (canTimeTravel)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
+			
+			set
+			{
+				canTimeTravel = true;
 				canTimeTravelPresent = value;
+				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
 			}
 		}
 		public bool CanTimeTravelFuture {
 			get => canTimeTravelFuture;
+			
 			set {
-				if (canTimeTravel)
-					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
+				canTimeTravel = true;
 				canTimeTravelFuture = value;
+				TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
 			}
 		}
 		
@@ -105,6 +110,29 @@ namespace NewRatCharacterController {
 		private void Update() {
 			if (_paused) return;
 
+			/*
+			if (UnityEngine.Input.GetKeyDown(KeyCode.U))
+				CanTimeTravel = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.H))
+				CanTimeTravel = false;
+			
+			if (UnityEngine.Input.GetKeyDown(KeyCode.I))
+				CanTimeTravelPast = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.J))
+				CanTimeTravelPast = false;
+			
+			if (UnityEngine.Input.GetKeyDown(KeyCode.O))
+				CanTimeTravelPresent = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.K))
+				CanTimeTravelPresent = false;
+			
+			if (UnityEngine.Input.GetKeyDown(KeyCode.P))
+				CanTimeTravelFuture = true;
+			else if (UnityEngine.Input.GetKeyDown(KeyCode.L))
+				CanTimeTravelFuture = false;
+			*/
+
+			
 			MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
 			CameraInput();
 			DeveloperCheats();
@@ -144,38 +172,42 @@ namespace NewRatCharacterController {
 		}
 
 		private void TravelToPast(InputAction.CallbackContext context) {
+#if UNITY_EDITOR
 			if (FindObjectOfType<TimeTravelManager>() == null) {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
-
-			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Past, TimeTravelManager.currentPeriod, canTimeTravelPast);
+#endif
+			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Past, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelPast);
 			
-			if (CanTimeTravel && CanTimeTravelPast)
+			if (CanTimeTravel && CanTimeTravelPast && !_paused)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Past);
 		}
 
 		private void TravelToPresent(InputAction.CallbackContext context) {
+#if UNITY_EDITOR
 			if (FindObjectOfType<TimeTravelManager>() == null) {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
+#endif			
 			
-			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Present, TimeTravelManager.currentPeriod, canTimeTravelPresent);
+			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Present, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelPresent);
 
-			if (CanTimeTravel && CanTimeTravelPresent)
+			if (CanTimeTravel && CanTimeTravelPresent && !_paused)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
 		}
 
 		private void TravelToFuture(InputAction.CallbackContext context) {
+#if UNITY_EDITOR			
 			if (FindObjectOfType<TimeTravelManager>() == null) {
 				Debug.LogWarning("No TimeTravelManager found");
 				return;
 			}
-			
-			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Future, TimeTravelManager.currentPeriod, canTimeTravelFuture);
+#endif			
+			TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Future, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelFuture);
 
-			if (CanTimeTravel && CanTimeTravelFuture)
+			if (CanTimeTravel && CanTimeTravelFuture && _paused)
 				TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
 		}
 
@@ -210,6 +242,9 @@ namespace NewRatCharacterController {
 			                                     Input.GetKey(KeyCode.RightControl) ||
 			                                     Input.GetKey(KeyCode.LeftCommand)))) {
 				CanTimeTravel = true;
+				CanTimeTravelPast = true;
+				CanTimeTravelPresent = true;
+				CanTimeTravelFuture = true;
 				Debug.Log($"CanTimeTravel {CanTimeTravel}");
 			}
 #endif

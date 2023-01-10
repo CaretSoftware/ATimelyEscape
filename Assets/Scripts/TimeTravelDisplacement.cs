@@ -26,13 +26,6 @@ public class TimeTravelDisplacement : MonoBehaviour {
         mr = GetComponent<MeshRenderer>();
     }
 
-    // private void Update() {
-    // 	t = Mathf.Sin(Time.time * Mathf.PI) * .5f + .5f;
-    // 	Displace(t);
-    // 	// if (Input.GetKeyDown(KeyCode.Q))
-    // 	// 	MoveAndRotateMesh();
-    // }
-
     private void MoveAndRotateMesh() {
         if (other == null || mr == null) return;
         StopAllCoroutines();
@@ -41,7 +34,6 @@ public class TimeTravelDisplacement : MonoBehaviour {
 
     public void Displace(Transform target) {
         other = target;
-        //Debug.LogWarning(target.name);
         MoveAndRotateMesh();
     }
 
@@ -49,17 +41,14 @@ public class TimeTravelDisplacement : MonoBehaviour {
         float t = 0.0f;
         float velocity = 1.0f / time;
 
-        // OutlineStrength(0f);
 
         while (t < 1.0f) {
             t += velocity * Time.deltaTime;
             Displace(Ease.EaseInOutCubic(t));
-            // OutlineStrength(1.0f - t);
             yield return null;
         }
 
         Displace(0.0f);
-        //StartCoroutine(FadeInOutline());
     }
 
     private void Displace(float t) {

@@ -5,8 +5,7 @@ using UnityEngine.Serialization;
 
 namespace NewRatCharacterController { 
 [RequireComponent(typeof(CapsuleCollider)), DisallowMultipleComponent, SelectionBase]
-public class NewRatCharacterController : MonoBehaviour
-{
+public class NewRatCharacterController : MonoBehaviour {
 	public delegate void CaughtEvent(bool caught);
 	public static CaughtEvent caughtEvent;
 	
@@ -19,8 +18,8 @@ public class NewRatCharacterController : MonoBehaviour
 	// State Machine
 	private StateMachine _stateMachine;
 	private List<BaseState> _states = new List<BaseState> { 
-		new WakeUpState(),
 		new MoveState(), 
+		new WakeUpState(),
 		new JumpState(), 
 		new AirState(), 
 		new WallRunState(), 
