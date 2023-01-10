@@ -237,7 +237,7 @@ namespace NewRatCharacterController {
 		
 		private void DeveloperCheats() {
 #if UNITY_EDITOR
-			// Developer code - Get Time Travel
+			// Developer Cheat - Get Time Travel
 			if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) ||
 			                                     Input.GetKey(KeyCode.RightControl) ||
 			                                     Input.GetKey(KeyCode.LeftCommand)))) {
