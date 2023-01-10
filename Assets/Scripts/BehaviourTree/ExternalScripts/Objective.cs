@@ -11,7 +11,7 @@ public class Objective : MonoBehaviour
     [SerializeField] private Material idleMaterial;
     [SerializeField] private Material completeMaterial;
     private ObjectiveHolder parent;
-    private Transform questlog;
+    [SerializeField] private Transform questlog;
     private BoxCollider boxCollider;
     private TextMeshProUGUI objectiveText;
     private MeshRenderer mr;
@@ -21,20 +21,22 @@ public class Objective : MonoBehaviour
     
     private void Start()
     {
-        questlog = GameObject.Find("QuestLog").transform;
         parent = GetComponentInParent<ObjectiveHolder>();
         boxCollider = GetComponent<BoxCollider>();
         mr = GetComponent<MeshRenderer>();
+        canvas = questlog.parent.gameObject;
         mr.material = idleMaterial;
         boxCollider.isTrigger = true;
         isComplete = false;
         gameObject.SetActive(false);
         //mr.enabled = false;
     }
+
+    private GameObject canvas;
     
     private void UpdateTextObject()
     {
-        objectiveText.fontSize = 14;
+        objectiveText.fontSize = 30;
         objectiveText.fontStyle = FontStyles.Bold;
         objectiveText.alignment = TextAlignmentOptions.Center;
         rt = objectiveText.GetComponent<RectTransform>();
@@ -42,7 +44,7 @@ public class Objective : MonoBehaviour
         objectiveText.text = Description;
     }
     
-    public void AddObjective()
+    public void AddObjectiveTextComponent()
     {
         objectiveText = new GameObject($"{name} textObject").AddComponent<TextMeshProUGUI>();
         objectiveText.transform.SetParent(questlog);
@@ -62,9 +64,17 @@ public class Objective : MonoBehaviour
         }
     }
 
-    public void ClearObjective()
+    public void SetObjectiveAtive(bool arg)
     {
+        if(objectiveText == null || gameObject == null)
+            return;
         Destroy(objectiveText.gameObject);
-        Destroy(gameObject);
+        gameObject.SetActive(arg);
+    }
+
+    public void SetCanvasActive(bool arg)
+    {
+        if(canvas != null)
+            canvas.gameObject.SetActive(arg);
     }
 }

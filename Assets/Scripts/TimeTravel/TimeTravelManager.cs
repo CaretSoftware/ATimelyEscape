@@ -10,7 +10,6 @@ using UnityEngine;
 public class TimeTravelManager : MonoBehaviour {
     private StateMachine stateMachine;
     public TimeTravelPeriod startPeriod = TimeTravelPeriod.Present;
-    [SerializeField] private TextMeshProUGUI timeText;
     public static TimeTravelPeriod currentPeriod;
     public static TimeTravelPeriod desiredPeriod;
     public static HashSet<Rigidbody> MovableObjects = new HashSet<Rigidbody>();
@@ -53,6 +52,7 @@ public class TimeTravelManager : MonoBehaviour {
         if (currentPeriod == TimeTravelPeriod.Dummy) return;
         TimeTravelManager manager = FindObjectOfType<TimeTravelManager>();
         TimePeriodChanged e = new TimePeriodChanged() { from = TimeTravelPeriod.Dummy, to = currentPeriod, IsReload = true };
+        TimeTravelManager.desiredPeriod = currentPeriod;
 
         State nextState = manager.stateMachine.stateDict[TimeTravelManager.PeriodStates[currentPeriod]];
         manager.stateMachine.CurrentState = nextState;
@@ -80,18 +80,6 @@ public class TimeTravelManager : MonoBehaviour {
         SimulateMovableObjectPhysics(50);
         var simulationComplete = new PhysicsSimulationComplete { from = e.from, to = e.to };
         simulationComplete.Invoke();
-
-        /*         switch (e.to) {
-                    case TimeTravelPeriod.Past:
-                        timeText.text = "Current Time Period: Past";
-                        break;
-                    case TimeTravelPeriod.Present:
-                        timeText.text = "Current Time Period: Present";
-                        break;
-                    case TimeTravelPeriod.Future:
-                        timeText.text = "Current Time Period: Future";
-                        break;
-                } */
     }
 }
 

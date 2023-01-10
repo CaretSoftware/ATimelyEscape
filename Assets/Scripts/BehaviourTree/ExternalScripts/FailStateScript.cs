@@ -39,12 +39,12 @@ public class FailStateScript : MonoBehaviour
     {
         if (goTransform.tag.Equals("Scientist"))
         {
-            //OnboardingHandler.ScientistDiscovered = true;
+             OnboardingHandler.ScientistDiscovered = true;
         }
 
         else if (goTransform.tag.Equals("Roomba"))
         {
-            //OnboardingHandler.VacuumCleanerDiscovered = true;  
+            OnboardingHandler.VacuumCleanerDiscovered = true;  
         }
 
         NewRatCharacterController.NewRatCharacterController.caughtEvent?.Invoke(true);
