@@ -8,6 +8,7 @@ public class SwitchOn : MonoBehaviour
 
     [SerializeField] private bool isInteractableByPlayer;
     [SerializeField] private bool isTreePuzzle;
+    [SerializeField] private bool ispressureButton;
     /*    [SerializeField] private bool isInteractableByPast;
         [SerializeField] private bool isInteractableByPresent;*/
     [SerializeField] private UnityEvent switchOn;
@@ -68,13 +69,11 @@ public class SwitchOn : MonoBehaviour
     {
         if (switchOff != null && other.gameObject.tag == "Cube")
         {
-            if (isOn)
+            if (isOn && ispressureButton)
             {
                 switchOff.Invoke();
-                if (!isTreePuzzle)
-                {
-                    meshRenderer.material = offMaterial;
-                }
+                meshRenderer.material = offMaterial;
+
             }
         }
         /*        else if (switchOn != null && isInteractableByPast && other.gameObject.tag == "CubePast")
