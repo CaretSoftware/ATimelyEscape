@@ -31,7 +31,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform hipPos;
     [SerializeField] private Transform agentCenterTransform;
     [SerializeField] private GameObject fullBodyRig;
-    [SerializeField] private Transform losPos;
+    [SerializeField] public Transform losHeadPos;
+    [SerializeField] public Transform losKneePos;
 
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public Animator animator;
@@ -44,6 +45,7 @@ public class EnemyAI : MonoBehaviour
     
     private Transform defaultIKTarget;
     private Transform playerTransform;
+    private Transform losPos;
 
     private NavMeshHit hit;
     private Vector3 worldDeltaPosition;
@@ -113,6 +115,7 @@ public class EnemyAI : MonoBehaviour
         defaultIKTarget = handIKTarget;
         chaseRange = enemyFOV.ChaseRadius;
         captureRange = enemyFOV.CatchRadius;
+        losPos = losHeadPos;
         ConstructBehaviourTreePersonnel();
 
         defaultFeetPos = feetPos.localPosition;
@@ -174,7 +177,7 @@ public class EnemyAI : MonoBehaviour
         RangeNode chaseRangeNode = new RangeNode(chaseRange, agentCenterTransform, playerTransform, enemyFOV, animator);
         ChaseNode chaseNode = new ChaseNode(playerTransform, agent, agentCenterTransform, captureRange, chaseRange);
         RangeNode captureRangeNode = new RangeNode(captureRange, agentCenterTransform, playerTransform, enemyFOV, animator);
-        CaptureNode captureAttemptNode = new CaptureNode(playerTransform, this, losPos.position, playerLayerMask);
+        CaptureNode captureAttemptNode = new CaptureNode(playerTransform, agentCenterTransform, this, losPos.position, playerLayerMask);
         CaptureAnimationNode captureAnimationNode = new CaptureAnimationNode(playerTransform, agentCenterTransform, animator, captureRange);
         InvertedRangeNode invertedRangeNode = new InvertedRangeNode(captureRange, agentCenterTransform, playerTransform, animator, this);
 
