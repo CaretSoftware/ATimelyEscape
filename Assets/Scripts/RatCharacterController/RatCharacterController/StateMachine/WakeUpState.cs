@@ -20,6 +20,9 @@ namespace NewRatCharacterController
             
             if (NewRatCharacter.Awakened || _time > _wakeupDuration)
                 stateMachine.TransitionTo<MoveState>();
+            
+            if (NewRatCharacterController.Locked)
+                stateMachine.TransitionTo<LockState>();
         }
 
         public override void Exit() {
