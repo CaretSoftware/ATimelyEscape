@@ -64,6 +64,7 @@ public class SettingsMenuController : MonoBehaviour
             volumeMusicSlider.value = startMusicVolume;
             volumeEffectsSlider.value = startEffectsVolume;
         }
+        /*
         else
         {
             audioMixer.GetFloat("MasterVolume", out float value);
@@ -75,6 +76,7 @@ public class SettingsMenuController : MonoBehaviour
             audioMixer.GetFloat("EffectsVolume", out float value2);
             volumeEffectsSlider.value = value2;
         }
+        */
     }
 
     public void SetFullscreen(bool isFullscreen) // Checkbox for Fullscreen
