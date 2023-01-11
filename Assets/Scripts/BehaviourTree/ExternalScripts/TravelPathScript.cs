@@ -28,15 +28,12 @@ public class TravelPathScript : MonoBehaviour
 
     private void Start()
     {
-        TimePeriodChanged.AddListener<TimePeriodChanged>(TimeTravel);
-
         CubePushState.pushCubeEvent += CubePushed;
         line = GetComponent<LineRenderer>();
         positions = new Vector3[line.positionCount];
         pos = GetLinePointsInWorldSpace();
         objectToMove.SetActive(false);
         playerParent = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
-
     }
 
     private void CubePushed(Transform cube)
@@ -104,26 +101,9 @@ public class TravelPathScript : MonoBehaviour
             }
         }
     }
-
-    private void TimeTravel(TimePeriodChanged eve)
-    {
-        if(eve.to == TimeTravelPeriod.Past && existsInPast)
-            gameObject.SetActive(true);
-        else
-            gameObject.SetActive(false);
-
-        if (eve.to == TimeTravelPeriod.Present && existsInPresent)
-            gameObject.SetActive(true);
-        else
-            gameObject.SetActive(false);
-        
-        if(eve.to == TimeTravelPeriod.Future)
-            gameObject.SetActive(false);
-    }
-
+    
     private void OnDestroy()
     {
         CubePushState.pushCubeEvent -= CubePushed;
-        if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeTravel);
     }
 }
