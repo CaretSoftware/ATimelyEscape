@@ -13,6 +13,7 @@ public class NewIncubator : MonoBehaviour
     [SerializeField] private GameObject bigHatch;
     [SerializeField] private GameObject smallHatch;
     [SerializeField] private GameObject candyFeeder;
+    [SerializeField] private GameObject candyCollider;
     [SerializeField] private GameObject puzzleFloor;
     [SerializeField] private GameObject step1;
     [SerializeField] private GameObject step2;
@@ -123,6 +124,7 @@ public class NewIncubator : MonoBehaviour
                 signMr.material = done;
                 audioManager.Play("10");
                 instructions.text = "Good. All Done. Have some Candy";
+                candyCollider.SetActive(false);
                 smallHatchAnim.SetBool("Open", true);
                 candyFeederAnim.SetBool("Open", true);
                 puzzleFiveDone = true;
