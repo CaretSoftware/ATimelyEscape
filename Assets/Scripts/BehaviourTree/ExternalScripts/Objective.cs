@@ -38,7 +38,7 @@ public class Objective : MonoBehaviour
 
     private void AssignObjectiveTextValues()
     {
-        objectiveText.fontSize = 30;
+        objectiveText.fontSize = 16;
         objectiveText.fontStyle = FontStyles.Bold;
         objectiveText.alignment = TextAlignmentOptions.Center;
         rt = objectiveText.GetComponent<RectTransform>();

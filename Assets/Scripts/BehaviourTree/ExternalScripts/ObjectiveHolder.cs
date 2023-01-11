@@ -16,6 +16,8 @@ public class ObjectiveHolder : MonoBehaviour
     public void Triggered()
     {
         SetCanvasComponentsActive(true);
+        guideArrow.ToggleGuideArrow(true);
+        
         for (int i = 0; i < objectives.Count; i++)
             objectives[i].ParentTriggered();
 
@@ -25,7 +27,6 @@ public class ObjectiveHolder : MonoBehaviour
     //call after an objective is achieved.
     public void UpdateCurrentObjectiveOrInactivate()
     {
-        guideArrow.ToggleGuideArrow(true);
         for (int i = 0; i < objectives.Count; i++)
         {
             if (!objectives[i].isComplete)
