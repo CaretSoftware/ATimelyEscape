@@ -13,14 +13,12 @@ public class DialogueTrigger : MonoBehaviour {
         NewRatCharacterController.NewCharacterInput.returnToGameDelegate += GoBackToGame;
     }
 
-
     private void OnDestroy() {
         NewRatCharacterController.NewCharacterInput.advanceDialogueDelegate -= AdvanceDialouge;
         NewRatCharacterController.NewCharacterInput.returnToGameDelegate -= GoBackToGame;
     }
 
     private void AdvanceDialouge() {
-        // OnNextDialogue();
         if (dialogueManager.dialogueStarted) {
             dialogueManager.NextPressed();
         } else {
@@ -28,37 +26,8 @@ public class DialogueTrigger : MonoBehaviour {
             dialogueManager.StartDialogue(dialogue);
         }
     }
-
- /*    private void WhatHappensOnDpadLeftPressed() {
-        GoBackToGame();
-    } */
-
-    /*     private void Update() {
-            if (Input.GetKeyDown(KeyCode.F)) {
-                OnNextDialogue();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Escape)) {
-                GoBackToGame();
-            }
-        } */
-
-/*     private void OnNextDialogue() {
-        if (dialogueManager.dialogueStarted) {
-            dialogueManager.NextPressed();
-        } else {
-            dialogueManager.dialogueStarted = true;
-            dialogueManager.StartDialogue(dialogue);
-        }
-    } */
 
     private void GoBackToGame() {
         FindObjectOfType<RuntimeSceneManager>().UnloadOnboardingRoom();
     }
-
-
-    /*public void TriggerDialogue()
-    {
-        dialogueManager.StartDialogue(dialogue);
-    }*/
 }
