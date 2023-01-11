@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1793566, g: 0.22457995, b: 0.3062622, a: 1}
+  m_IndirectSpecularColor: {r: 0.1793568, g: 0.22457936, b: 0.30626127, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!72 &758303068
+--- !u!72 &275570803
 ComputeShader:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1418,7 +1418,7 @@ MonoBehaviour:
   lodCamera: {fileID: 0}
   material: {fileID: 2100000, guid: c2778ea5590b0d246a72a6a500f3ba31, type: 2}
   drawWindContribution: 0
-  computeShader: {fileID: 758303068}
+  computeShader: {fileID: 275570803}
   furContainer: {fileID: 11400000, guid: 9b8f55b3cd37ba945a10d248efdde819, type: 2}
   furRendererSettings:
     sourceMeshNormalToStrandNormalPercent: 0
@@ -1453,13 +1453,13 @@ MonoBehaviour:
     perLayerNormals: 0
   motionVectors: 1
   headerExpanded:
-    isMainExpanded: 0
-    isMovementExpanded: 0
-    isNormalExpanded: 0
+    isMainExpanded: 1
+    isMovementExpanded: 1
+    isNormalExpanded: 1
     isStrandShapeExpanded: 0
-    isWindExpanded: 0
-    isColliderExpanded: 0
-    isLodExpanded: 0
+    isWindExpanded: 1
+    isColliderExpanded: 1
+    isLodExpanded: 1
   instanceID: 58826
   materialPostfix: Strands
   isHdrp: 0
@@ -1469,6 +1469,58 @@ MonoBehaviour:
   sphereColliders: []
   capsuleColliders: []
   sdfColliders: []
+--- !u!114 &1101235907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101235901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b4b82c07a7cd844af1c8810ebde715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groomContainer: {fileID: 11400000, guid: 6b38fe42f6d1dd145b4824b35f1689c3, type: 2}
+  undoRecorder:
+    undoIndex: 0
+  painterProperties: {fileID: 1259745458}
+  needsUpdate: 0
+--- !u!114 &1259745458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03d03218291443188389da726693c34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBrushMenuExpanded: 1
+  brushSize: 0.1
+  brushFalloff: 0.05
+  brushOpacity: 0.5
+  brushFalloffPercentOfBrushSize: 0.5
+  isNormalIgnored: 0
+  isSelectionLocked: 0
+  isMirrorMode: 0
+  mirrorAxisTab: 0
+  type: 1
+  painterMagnitudeIntensity: 1
+  clumpMaskIntensity: 0
+  maskErase: 1
+  isClumpTwistSelected: 0
+  twistAmount: 1
+  twistSpread: 0.3
+  overrideColor: {r: 0, g: 0, b: 0, a: 1}
+  overrideIntensity: 1
+  resetWidthAmount: 0.5
+  resetLengthAmount: 0.5
+  resetBendAmount: 0.5
+  resetOrientAmount: 0.5
+  isGroomAllLayerAtOnce: 0
 --- !u!1 &1566218419
 GameObject:
   m_ObjectHideFlags: 0
@@ -1576,14 +1628,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1566218419}
-  m_LocalRotation: {x: 0.8304169, y: -0.16557752, z: 0.3287853, w: 0.41820106}
+  m_LocalRotation: {x: 0.8930259, y: 0.0070649344, z: -0.014028757, w: 0.44973117}
   m_LocalPosition: {x: 0.04717962, y: 0.2263469, z: -0.028532006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 126.54, y: -43.2, z: 0}
+  m_LocalEulerAnglesHint: {x: 126.54, y: 1.8, z: 0}
 --- !u!1001 &1690235200
 PrefabInstance:
   m_ObjectHideFlags: 0
