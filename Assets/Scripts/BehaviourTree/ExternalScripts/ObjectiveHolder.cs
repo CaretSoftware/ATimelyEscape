@@ -9,7 +9,7 @@ public class ObjectiveHolder : MonoBehaviour
     [SerializeField] private List<Objective> objectives;
     [SerializeField] private GuideArrow guideArrow;
     [SerializeField] private GameObject canvas;
-
+    
     //the objective with the lowest index on the list.
     public Vector3 currentObjective { get; private set; }
     

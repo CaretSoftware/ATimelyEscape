@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(BoxCollider))]
 public class CognitiveAssistanceTriggerHandler : MonoBehaviour
@@ -12,7 +13,9 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
     [SerializeField] private ObjectiveHolder objectiveHolder;
     [SerializeField] private GameObject[] children;
     
-    [HideInInspector] public bool active;
+    [HideInInspector] public bool isCurrentlyActive;
+    [SerializeField] public bool Active; 
+
     
     private void Start()
     {
@@ -23,7 +26,8 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag != "Player" || active) 
+
+        if(!Active || other.tag != "Player" || isCurrentlyActive) 
             return;
 
         fetchAll();
@@ -34,10 +38,10 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
                 setChildrenActive(true);
                 objectiveHolder.Triggered();
                 collider.enabled = false;
-                active = true;
+                isCurrentlyActive = true;
                 return;
             }
-            handlers[i].active = false;
+            handlers[i].isCurrentlyActive = false;
             handlers[i].setChildrenActive(false);
         }
     }
