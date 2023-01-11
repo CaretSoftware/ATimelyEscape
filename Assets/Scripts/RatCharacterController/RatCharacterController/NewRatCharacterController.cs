@@ -176,6 +176,7 @@ public class NewRatCharacterController : MonoBehaviour {
 	}
 	
 	private void Awake() {
+		NewCharacterInput.exitZoomDelegate += ExitCamera;
 		caughtEvent += CaughtMe;
 		_transform = transform;
 		_animationController = GetComponent<NewRatAnimationController>();
@@ -185,21 +186,23 @@ public class NewRatCharacterController : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
+		NewCharacterInput.exitZoomDelegate -= ExitCamera;
 		caughtEvent -= CaughtMe;
 	}
 
 	private void Start() {
 		_colliderRadius = CharCollider.radius;
 	}
+
+	private bool exitCameraZoom;
+	[SerializeField] private Transform exitCamera;
+	private void ExitCamera(bool zoom)
+	{
+		exitCameraZoom = zoom;
+	}
 	
 	private void Update()
 	{
-
-		if (UnityEngine.Input.GetKeyDown(KeyCode.F))
-			Locked = true;
-		if (UnityEngine.Input.GetKeyDown(KeyCode.J))
-			Locked = false;
-		
 		_inputMovement = Vector3.zero;
 		
 		UpdateGrounded();
@@ -227,8 +230,8 @@ public class NewRatCharacterController : MonoBehaviour {
 
 	private void Input() {
 		AnimationController.SetInputVector(InputVector);
-		
-		_inputMovement = Quaternion.Euler(0, _camera.rotation.y,0)  * InputVector;
+		Transform cam = exitCameraZoom ? exitCamera : _camera;
+		_inputMovement = Quaternion.Euler(0, cam.rotation.y,0) * InputVector;
 		_inputMovement = InputToCameraProjection(_inputMovement);
 		if (_inputMovement.magnitude > 1.0f) // > 1.0f to keep thumbstick input from being normalized
 			_inputMovement.Normalize();
@@ -283,7 +286,9 @@ public class NewRatCharacterController : MonoBehaviour {
 		if (_camera == null) 
 			return input;
 
-		Vector3 cameraRotation = _camera.rotation.eulerAngles;
+		Transform cam = exitCameraZoom ? exitCamera : _camera;
+
+		Vector3 cameraRotation = cam.rotation.eulerAngles;
 		cameraRotation.x = Mathf.Min(cameraRotation.x, GroundNormal.y);
 		input = Quaternion.Euler(cameraRotation) * input;
 		return Vector3.ProjectOnPlane(input, GroundNormal);
