@@ -83,7 +83,6 @@ namespace NewRatCharacterController {
 
 			float velocityLateralMin = -.1f;
 			if (NewRatCharacter.LetGoOfCube || cubeRB != null && cubeRB.velocity.y < velocityLateralMin) {
-				Debug.Log("FALLING");
 				NewRatCharacter.LetGoOfCube = false;
 				stateMachine.TransitionTo<MoveState>();
 			}
@@ -93,6 +92,9 @@ namespace NewRatCharacterController {
 			
 			if (NewRatCharacter.Caught)
 				stateMachine.TransitionTo<CaughtState>();
+			
+			if (NewRatCharacterController.Locked)
+				stateMachine.TransitionTo<LockState>();
 		}
 
 		public override void Exit() {

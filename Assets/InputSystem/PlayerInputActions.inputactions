@@ -538,7 +538,7 @@
             "id": "60844a0f-68df-488f-8c42-c5f34a7ec646",
             "actions": [
                 {
-                    "name": "DRight",
+                    "name": "AdvanceDialogue",
                     "type": "Button",
                     "id": "92305ec1-51bb-4034-a842-a807e82a31a8",
                     "expectedControlType": "Button",
@@ -547,7 +547,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "DLeft",
+                    "name": "ReturnToGame",
                     "type": "Button",
                     "id": "e3ba9e78-99be-4e07-83af-4561264003a3",
                     "expectedControlType": "Button",
@@ -564,7 +564,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DRight",
+                    "action": "AdvanceDialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bf6aa305-b912-48a7-952b-83e49886beef",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AdvanceDialogue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -575,7 +586,105 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DLeft",
+                    "action": "ReturnToGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a5f8e728-cb37-4aa6-be65-5ab8bc6a26d9",
+                    "path": "<Keyboard>/f1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReturnToGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "LevelSelect",
+            "id": "ebd2275d-f8b9-47a6-bbaa-1b2958161091",
+            "actions": [
+                {
+                    "name": "EnableMenu",
+                    "type": "Button",
+                    "id": "b344ebbb-5e73-4b8f-88c2-7d02334869e5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6da579e4-6abf-41a1-a3ae-9d1d9502919d",
+                    "path": "<Keyboard>/f3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EnableMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a75e954b-5b9d-4fc5-a8bf-9c744584a23f",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EnableMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Zoom",
+            "id": "b3c501ad-606e-4d41-9781-263eed078da4",
+            "actions": [
+                {
+                    "name": "ExitZoom",
+                    "type": "Button",
+                    "id": "274aa136-2376-4589-a68c-40f2a2311eca",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FirstPerson",
+                    "type": "Button",
+                    "id": "d77e5ef4-0603-442d-a3d0-aa98893c0f95",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "08d35c5a-d175-4e3d-a458-a44b2edad8dc",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b7f87b0e-64cc-42ff-b776-5ac6d965fa5d",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FirstPerson",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

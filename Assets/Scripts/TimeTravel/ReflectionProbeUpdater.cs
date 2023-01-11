@@ -11,8 +11,13 @@ public class ReflectionProbeUpdater : MonoBehaviour
     void Start()
     {
         _probe = GetComponent<ReflectionProbe>();
-        _probe.RenderProbe();
+        UpdateProbe();
         TimePeriodChanged.AddListener<TimePeriodChanged>(TriggerTimer);
+    }
+
+    public void UpdateProbe()
+    {
+        _probe.RenderProbe(null);
     }
 
     private void TriggerTimer(TimePeriodChanged e)
@@ -20,11 +25,6 @@ public class ReflectionProbeUpdater : MonoBehaviour
         if (e.IsReload) return;
         UpdateProbe();
         Invoke(nameof(UpdateProbe), 1f);
-    }
-
-    private void UpdateProbe()
-    {
-        _probe.RenderProbe();
     }
 
     private void OnDestroy() {

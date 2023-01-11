@@ -14,6 +14,7 @@ public class KillZone : MonoBehaviour
         }
         else if(other.CompareTag("Cube"))
         {
+            other.gameObject.SetActive(false);
             Destroy(other.gameObject);
         }
     }

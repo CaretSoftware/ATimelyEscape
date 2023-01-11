@@ -14,7 +14,16 @@ public class SettingsMenuController : MonoBehaviour
 
     public bool shouldPlayTextToSpeach;
 
-    [SerializeField] private Slider volumeSlider;
+    [Header("UI Sliders")]
+    [SerializeField] private Slider volumeMasterSlider;
+    [SerializeField] private Slider volumeMusicSlider;
+    [SerializeField] private Slider volumeEffectsSlider;
+
+    [Header("Volume Values")]
+    [SerializeField] private bool shallChangeValuesAtStart;
+    [SerializeField] private float startMasterVolume;
+    [SerializeField] private float startMusicVolume;
+    [SerializeField] private float startEffectsVolume;
 
     private void Start()
     {
@@ -49,23 +58,59 @@ public class SettingsMenuController : MonoBehaviour
             Debug.Log("Message: Settings Menu is missing Dropdown for resolution");
         }
 
-        audioMixer.GetFloat("volume", out float value);
-        volumeSlider.value = value;
+        if (shallChangeValuesAtStart)
+        {
+            volumeMasterSlider.value = startMasterVolume;
+            volumeMusicSlider.value = startMusicVolume;
+            volumeEffectsSlider.value = startEffectsVolume;
+        }
+        /*
+        else
+        {
+            audioMixer.GetFloat("MasterVolume", out float value);
+            volumeMasterSlider.value = value;
 
+            audioMixer.GetFloat("MusicVolume", out float value1);
+            volumeMusicSlider.value = value1;
+
+            audioMixer.GetFloat("EffectsVolume", out float value2);
+            volumeEffectsSlider.value = value2;
+        }
+        */
     }
 
-    public void SetFullscreen(bool isFullscreen)
+    public void SetFullscreen(bool isFullscreen) // Checkbox for Fullscreen
     {
         Screen.fullScreen = isFullscreen;
     }
-    public void SetShouldPlayTextToSpeach(bool shouldPlayTextToSpeach)
+    public void SetShouldPlayTextToSpeach(bool shouldPlayTextToSpeach) // Checkbox for TextForSpeach
     {
         ButtonSoundBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
     }
-
-    public void SetVolume(float volume)
+    public void SetMovementControls(bool boolean)
     {
-        audioMixer.SetFloat("volume", Mathf.Log(volume) * 20);
+
+    }
+    public void SetCameraControls(bool boolean)
+    {
+
+    }
+    public void SetCognitiveAssistanceGuidance(bool boolean)
+    {
+
+    }
+
+    public void SetMasterVolume(float volume)
+    {
+        audioMixer.SetFloat("MasterVolume", Mathf.Log(volume) * 20);
+    }
+    public void SetMusicVolume(float volume)
+    {
+        audioMixer.SetFloat("MusicVolume", Mathf.Log(volume) * 20);
+    }
+    public void SetEffectsVolume(float volume)
+    {
+        audioMixer.SetFloat("EffectsVolume", Mathf.Log(volume) * 20);
     }
 
     public void SetResolution(int index)

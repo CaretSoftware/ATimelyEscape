@@ -6,17 +6,17 @@ public class LightAndEffectManager : MonoBehaviour
 {
     private Light[] lightsInRoom;
     private ParticleSystem[] particlesInRoom;
-    private static ReflectionProbe[] probesInRoom;
+    private ReflectionProbe[] probesInRoom;
 
     void Start()
     {
         lightsInRoom = GetComponentsInChildren<Light>(true);
         particlesInRoom = GetComponentsInChildren<ParticleSystem>(true);
-        probesInRoom = FindObjectsOfType<ReflectionProbe>(true);
+        probesInRoom = GetComponentsInChildren<ReflectionProbe>(true);
 
         ActivateLights(false);
         ActivateParticles(false);
-        ReloadProbes();
+        ActivateProbes(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,7 +25,7 @@ public class LightAndEffectManager : MonoBehaviour
         {
             ActivateLights(true);
             ActivateParticles(true);
-            ReloadProbes();
+            ActivateProbes(true);
         }
     }
 
@@ -35,7 +35,7 @@ public class LightAndEffectManager : MonoBehaviour
         {
             ActivateLights(false);
             ActivateParticles(false);
-            ReloadProbes();
+            ActivateProbes(false);
         }
     }
 
@@ -68,15 +68,17 @@ public class LightAndEffectManager : MonoBehaviour
         }
     }
 
-    private void ReloadProbes()
+    private void ActivateProbes(bool activate)
     {
         if (probesInRoom != null && probesInRoom.Length > 0)
         {
             for (int i = 0; i < probesInRoom.Length; i++)
             {
-                if (probesInRoom[i] != null)
+                probesInRoom[i].enabled = activate;
+
+                if (activate)
                 {
-                    probesInRoom[i].RenderProbe();
+                    probesInRoom[i].GetComponent<ReflectionProbeUpdater>().UpdateProbe();
                 }
             }
         }

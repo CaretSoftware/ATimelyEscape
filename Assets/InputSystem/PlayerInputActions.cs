@@ -560,7 +560,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
             ""id"": ""60844a0f-68df-488f-8c42-c5f34a7ec646"",
             ""actions"": [
                 {
-                    ""name"": ""DRight"",
+                    ""name"": ""AdvanceDialogue"",
                     ""type"": ""Button"",
                     ""id"": ""92305ec1-51bb-4034-a842-a807e82a31a8"",
                     ""expectedControlType"": ""Button"",
@@ -569,7 +569,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""DLeft"",
+                    ""name"": ""ReturnToGame"",
                     ""type"": ""Button"",
                     ""id"": ""e3ba9e78-99be-4e07-83af-4561264003a3"",
                     ""expectedControlType"": ""Button"",
@@ -586,7 +586,18 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DRight"",
+                    ""action"": ""AdvanceDialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf6aa305-b912-48a7-952b-83e49886beef"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AdvanceDialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -597,7 +608,105 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DLeft"",
+                    ""action"": ""ReturnToGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5f8e728-cb37-4aa6-be65-5ab8bc6a26d9"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReturnToGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""LevelSelect"",
+            ""id"": ""ebd2275d-f8b9-47a6-bbaa-1b2958161091"",
+            ""actions"": [
+                {
+                    ""name"": ""EnableMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""b344ebbb-5e73-4b8f-88c2-7d02334869e5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6da579e4-6abf-41a1-a3ae-9d1d9502919d"",
+                    ""path"": ""<Keyboard>/f3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnableMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a75e954b-5b9d-4fc5-a8bf-9c744584a23f"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnableMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Zoom"",
+            ""id"": ""b3c501ad-606e-4d41-9781-263eed078da4"",
+            ""actions"": [
+                {
+                    ""name"": ""ExitZoom"",
+                    ""type"": ""Button"",
+                    ""id"": ""274aa136-2376-4589-a68c-40f2a2311eca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FirstPerson"",
+                    ""type"": ""Button"",
+                    ""id"": ""d77e5ef4-0603-442d-a3d0-aa98893c0f95"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""08d35c5a-d175-4e3d-a458-a44b2edad8dc"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExitZoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b7f87b0e-64cc-42ff-b776-5ac6d965fa5d"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FirstPerson"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -630,8 +739,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Pause_Pause = m_Pause.FindAction("Pause", throwIfNotFound: true);
         // Onboarding
         m_Onboarding = asset.FindActionMap("Onboarding", throwIfNotFound: true);
-        m_Onboarding_DRight = m_Onboarding.FindAction("DRight", throwIfNotFound: true);
-        m_Onboarding_DLeft = m_Onboarding.FindAction("DLeft", throwIfNotFound: true);
+        m_Onboarding_AdvanceDialogue = m_Onboarding.FindAction("AdvanceDialogue", throwIfNotFound: true);
+        m_Onboarding_ReturnToGame = m_Onboarding.FindAction("ReturnToGame", throwIfNotFound: true);
+        // LevelSelect
+        m_LevelSelect = asset.FindActionMap("LevelSelect", throwIfNotFound: true);
+        m_LevelSelect_EnableMenu = m_LevelSelect.FindAction("EnableMenu", throwIfNotFound: true);
+        // Zoom
+        m_Zoom = asset.FindActionMap("Zoom", throwIfNotFound: true);
+        m_Zoom_ExitZoom = m_Zoom.FindAction("ExitZoom", throwIfNotFound: true);
+        m_Zoom_FirstPerson = m_Zoom.FindAction("FirstPerson", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -921,14 +1037,14 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     // Onboarding
     private readonly InputActionMap m_Onboarding;
     private IOnboardingActions m_OnboardingActionsCallbackInterface;
-    private readonly InputAction m_Onboarding_DRight;
-    private readonly InputAction m_Onboarding_DLeft;
+    private readonly InputAction m_Onboarding_AdvanceDialogue;
+    private readonly InputAction m_Onboarding_ReturnToGame;
     public struct OnboardingActions
     {
         private @PlayerInputActions m_Wrapper;
         public OnboardingActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @DRight => m_Wrapper.m_Onboarding_DRight;
-        public InputAction @DLeft => m_Wrapper.m_Onboarding_DLeft;
+        public InputAction @AdvanceDialogue => m_Wrapper.m_Onboarding_AdvanceDialogue;
+        public InputAction @ReturnToGame => m_Wrapper.m_Onboarding_ReturnToGame;
         public InputActionMap Get() { return m_Wrapper.m_Onboarding; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -938,26 +1054,100 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_OnboardingActionsCallbackInterface != null)
             {
-                @DRight.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
-                @DRight.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
-                @DRight.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDRight;
-                @DLeft.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
-                @DLeft.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
-                @DLeft.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnDLeft;
+                @AdvanceDialogue.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnAdvanceDialogue;
+                @AdvanceDialogue.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnAdvanceDialogue;
+                @AdvanceDialogue.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnAdvanceDialogue;
+                @ReturnToGame.started -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnReturnToGame;
+                @ReturnToGame.performed -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnReturnToGame;
+                @ReturnToGame.canceled -= m_Wrapper.m_OnboardingActionsCallbackInterface.OnReturnToGame;
             }
             m_Wrapper.m_OnboardingActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @DRight.started += instance.OnDRight;
-                @DRight.performed += instance.OnDRight;
-                @DRight.canceled += instance.OnDRight;
-                @DLeft.started += instance.OnDLeft;
-                @DLeft.performed += instance.OnDLeft;
-                @DLeft.canceled += instance.OnDLeft;
+                @AdvanceDialogue.started += instance.OnAdvanceDialogue;
+                @AdvanceDialogue.performed += instance.OnAdvanceDialogue;
+                @AdvanceDialogue.canceled += instance.OnAdvanceDialogue;
+                @ReturnToGame.started += instance.OnReturnToGame;
+                @ReturnToGame.performed += instance.OnReturnToGame;
+                @ReturnToGame.canceled += instance.OnReturnToGame;
             }
         }
     }
     public OnboardingActions @Onboarding => new OnboardingActions(this);
+
+    // LevelSelect
+    private readonly InputActionMap m_LevelSelect;
+    private ILevelSelectActions m_LevelSelectActionsCallbackInterface;
+    private readonly InputAction m_LevelSelect_EnableMenu;
+    public struct LevelSelectActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public LevelSelectActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @EnableMenu => m_Wrapper.m_LevelSelect_EnableMenu;
+        public InputActionMap Get() { return m_Wrapper.m_LevelSelect; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(LevelSelectActions set) { return set.Get(); }
+        public void SetCallbacks(ILevelSelectActions instance)
+        {
+            if (m_Wrapper.m_LevelSelectActionsCallbackInterface != null)
+            {
+                @EnableMenu.started -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnEnableMenu;
+                @EnableMenu.performed -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnEnableMenu;
+                @EnableMenu.canceled -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnEnableMenu;
+            }
+            m_Wrapper.m_LevelSelectActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @EnableMenu.started += instance.OnEnableMenu;
+                @EnableMenu.performed += instance.OnEnableMenu;
+                @EnableMenu.canceled += instance.OnEnableMenu;
+            }
+        }
+    }
+    public LevelSelectActions @LevelSelect => new LevelSelectActions(this);
+
+    // Zoom
+    private readonly InputActionMap m_Zoom;
+    private IZoomActions m_ZoomActionsCallbackInterface;
+    private readonly InputAction m_Zoom_ExitZoom;
+    private readonly InputAction m_Zoom_FirstPerson;
+    public struct ZoomActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public ZoomActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ExitZoom => m_Wrapper.m_Zoom_ExitZoom;
+        public InputAction @FirstPerson => m_Wrapper.m_Zoom_FirstPerson;
+        public InputActionMap Get() { return m_Wrapper.m_Zoom; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ZoomActions set) { return set.Get(); }
+        public void SetCallbacks(IZoomActions instance)
+        {
+            if (m_Wrapper.m_ZoomActionsCallbackInterface != null)
+            {
+                @ExitZoom.started -= m_Wrapper.m_ZoomActionsCallbackInterface.OnExitZoom;
+                @ExitZoom.performed -= m_Wrapper.m_ZoomActionsCallbackInterface.OnExitZoom;
+                @ExitZoom.canceled -= m_Wrapper.m_ZoomActionsCallbackInterface.OnExitZoom;
+                @FirstPerson.started -= m_Wrapper.m_ZoomActionsCallbackInterface.OnFirstPerson;
+                @FirstPerson.performed -= m_Wrapper.m_ZoomActionsCallbackInterface.OnFirstPerson;
+                @FirstPerson.canceled -= m_Wrapper.m_ZoomActionsCallbackInterface.OnFirstPerson;
+            }
+            m_Wrapper.m_ZoomActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ExitZoom.started += instance.OnExitZoom;
+                @ExitZoom.performed += instance.OnExitZoom;
+                @ExitZoom.canceled += instance.OnExitZoom;
+                @FirstPerson.started += instance.OnFirstPerson;
+                @FirstPerson.performed += instance.OnFirstPerson;
+                @FirstPerson.canceled += instance.OnFirstPerson;
+            }
+        }
+    }
+    public ZoomActions @Zoom => new ZoomActions(this);
     public interface ICameraControlsActions
     {
         void OnCameraThumbstick(InputAction.CallbackContext context);
@@ -988,7 +1178,16 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     }
     public interface IOnboardingActions
     {
-        void OnDRight(InputAction.CallbackContext context);
-        void OnDLeft(InputAction.CallbackContext context);
+        void OnAdvanceDialogue(InputAction.CallbackContext context);
+        void OnReturnToGame(InputAction.CallbackContext context);
+    }
+    public interface ILevelSelectActions
+    {
+        void OnEnableMenu(InputAction.CallbackContext context);
+    }
+    public interface IZoomActions
+    {
+        void OnExitZoom(InputAction.CallbackContext context);
+        void OnFirstPerson(InputAction.CallbackContext context);
     }
 }

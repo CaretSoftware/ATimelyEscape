@@ -6,14 +6,23 @@ using UnityEngine.InputSystem;
 
 namespace NewRatCharacterController {
 	public class NewCharacterInput : MonoBehaviour {
+		public delegate void ZoomDelegate(bool zoom);
+		public static ZoomDelegate zoomDelegate;
+		
+		public delegate void ExitZoomDelegate(bool zoom);
+		public static ExitZoomDelegate exitZoomDelegate;
+		
+		public delegate void SelectPressed();
+		public static SelectPressed selectPressed;
+		
 		
 		[SerializeField] private TimeTravelButtonUIManager timeTravelButtonUIManager;
 
-		public delegate void DPadRightPressed();
-		public static DPadRightPressed dPadRightPressed;
+		public delegate void AdvanceDialogueDelegate();
+		public static AdvanceDialogueDelegate advanceDialogueDelegate;
 		
-		public delegate void DPadLeftPressed();
-		public static DPadLeftPressed dPadLeftPressed;
+		public delegate void ReturnToGameDelegate();
+		public static ReturnToGameDelegate returnToGameDelegate;
 
 		private PlayerInputActions _playerInputActions;
 		private NewRatCharacterController _newRatCharacterController;
@@ -22,21 +31,24 @@ namespace NewRatCharacterController {
 		private bool _paused;
 
 		// Time Travel
-		private bool canTimeTravel = false;
-		private bool canTimeTravelPast = true;
-		private bool canTimeTravelPresent = true;
-		private bool canTimeTravelFuture = true;
+		private bool canTimeTravel			= false;
+		private bool canTimeTravelPast		= false;
+		private bool canTimeTravelPresent	= false;
+		private bool canTimeTravelFuture	= false;
 		public bool CanTimeTravel {
-			get => canTimeTravel;
+			get
+			{
+				return canTimeTravel;
+			} 
 			
 			set {
 				canTimeTravel = value; 
 				
-				if (canTimeTravelPast)
+				if (canTimeTravelPast && canTimeTravel)
 					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast );//&& canTimeTravel);
-				if (canTimeTravelPresent)
+				if (canTimeTravelPresent && canTimeTravel)
 					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent );// && canTimeTravel);
-				if (canTimeTravelFuture)
+				if (canTimeTravelFuture && canTimeTravel)
 					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture );// && canTimeTravel);
 			}
 		}
@@ -80,13 +92,18 @@ namespace NewRatCharacterController {
 			_newRatCharacterController.NewCharacterInput = this;
 			
 			_playerInputActions = new PlayerInputActions();
+			
 			_playerInputActions.CameraControls.Enable();
 			_playerInputActions.CharacterMovement.Enable();
 			_playerInputActions.Interact.Enable();
 			_playerInputActions.Pause.Enable();
 			_playerInputActions.Onboarding.Enable();
-			_playerInputActions.Onboarding.DLeft.started += DPadLeft;
-			_playerInputActions.Onboarding.DRight.started += DPadRight;
+			_playerInputActions.LevelSelect.Enable();
+			_playerInputActions.Zoom.Enable();
+			
+            _playerInputActions.LevelSelect.EnableMenu.performed += EnableLevelSelectMenu;
+            _playerInputActions.Onboarding.ReturnToGame.started += ReturnToGame;
+            _playerInputActions.Onboarding.AdvanceDialogue.started += AdvanceDialogue;
 			_playerInputActions.CharacterMovement.Jump.started += Jump;
 			_playerInputActions.CharacterMovement.Jump.canceled += JumpReleased;
 			_playerInputActions.Pause.Pause.performed += Pause;
@@ -95,16 +112,40 @@ namespace NewRatCharacterController {
 			_playerInputActions.Interact.Past.performed += TravelToPast;
 			_playerInputActions.Interact.Present.performed += TravelToPresent;
 			_playerInputActions.Interact.Future.performed += TravelToFuture;
+			_playerInputActions.Zoom.ExitZoom.performed += ExitZoom;
+			_playerInputActions.Zoom.ExitZoom.canceled += ExitUnZoom;
+			_playerInputActions.Zoom.FirstPerson.performed += FirstPersonZoom;
+			_playerInputActions.Zoom.FirstPerson.canceled += FirstPersonUnZoom;
+		}
+
+		private void ExitZoom(InputAction.CallbackContext context) {
+			exitZoomDelegate?.Invoke(true);
+		}
+		
+		private void ExitUnZoom(InputAction.CallbackContext context) {
+			exitZoomDelegate?.Invoke(false);
+		}
+		
+		private void FirstPersonZoom(InputAction.CallbackContext context) {
+			zoomDelegate?.Invoke(true);
+		}
+		
+		private void FirstPersonUnZoom(InputAction.CallbackContext context) {
+			zoomDelegate?.Invoke(false);
 		}
 
 		private void Paused(bool paused) => _paused = paused;
 
-		private void DPadRight(InputAction.CallbackContext context) {
-			dPadRightPressed?.Invoke();
+        private void EnableLevelSelectMenu(InputAction.CallbackContext context){
+            LevelSelect.Instance.EnableMenu();
+        }
+
+		private void AdvanceDialogue(InputAction.CallbackContext context) {
+			advanceDialogueDelegate?.Invoke();
 		}
 
-		private void DPadLeft(InputAction.CallbackContext context) {
-			dPadLeftPressed?.Invoke();
+		private void ReturnToGame(InputAction.CallbackContext context) {
+			returnToGameDelegate?.Invoke();
 		}
 
 		private void Update() {
@@ -131,7 +172,6 @@ namespace NewRatCharacterController {
 			else if (UnityEngine.Input.GetKeyDown(KeyCode.L))
 				CanTimeTravelFuture = false;
 			*/
-
 			
 			MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
 			CameraInput();
@@ -213,19 +253,24 @@ namespace NewRatCharacterController {
 
 		private void OnDestroy() => Unsubscribe();
 		
-		private void Unsubscribe() { 
-			PauseMenuBehaviour.pauseDelegate -= Paused;
-			
-			_playerInputActions.Onboarding.DLeft.started -= DPadLeft;
-			_playerInputActions.Onboarding.DRight.started -= DPadRight;
-			_playerInputActions.CharacterMovement.Jump.started -= Jump;
-			_playerInputActions.CharacterMovement.Jump.canceled -= JumpReleased;
-			_playerInputActions.Pause.Pause.performed -= Pause;
-			_playerInputActions.Interact.Interact.performed -= Interact;
-			_playerInputActions.Interact.Interact.canceled -= StopInteract;
-			_playerInputActions.Interact.Past.performed -= TravelToPast;
-			_playerInputActions.Interact.Present.performed -= TravelToPresent;
-			_playerInputActions.Interact.Future.performed -= TravelToFuture;
+		private void Unsubscribe() {
+            PauseMenuBehaviour.pauseDelegate -= Paused;
+
+            _playerInputActions.Onboarding.ReturnToGame.started -= ReturnToGame;
+            _playerInputActions.Onboarding.AdvanceDialogue.started -= AdvanceDialogue;
+            _playerInputActions.CharacterMovement.Jump.started -= Jump;
+            _playerInputActions.CharacterMovement.Jump.canceled -= JumpReleased;
+            _playerInputActions.Pause.Pause.performed -= Pause;
+            _playerInputActions.Interact.Interact.performed -= Interact;
+            _playerInputActions.Interact.Interact.canceled -= StopInteract;
+            _playerInputActions.Interact.Past.performed -= TravelToPast;
+            _playerInputActions.Interact.Present.performed -= TravelToPresent;
+            _playerInputActions.Interact.Future.performed -= TravelToFuture;
+            _playerInputActions.LevelSelect.EnableMenu.performed -= EnableLevelSelectMenu;
+            _playerInputActions.Zoom.ExitZoom.performed -= ExitZoom;
+            _playerInputActions.Zoom.ExitZoom.canceled -= ExitUnZoom;
+            _playerInputActions.Zoom.FirstPerson.performed -= FirstPersonZoom;
+            _playerInputActions.Zoom.FirstPerson.canceled -= FirstPersonUnZoom;
 		}
 
 		public void EnableCharacterMovement(bool enable) {
@@ -236,7 +281,7 @@ namespace NewRatCharacterController {
 		}
 		
 		private void DeveloperCheats() {
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 			// Developer Cheat - Get Time Travel
 			if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) ||
 			                                     Input.GetKey(KeyCode.RightControl) ||
@@ -249,7 +294,7 @@ namespace NewRatCharacterController {
 				
 				Debug.Log($"CanTimeTravel {CanTimeTravel}");
 			}
-#endif
+//#endif
 		}
 	}
 }
