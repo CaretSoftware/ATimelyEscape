@@ -18,38 +18,39 @@ public class Objective : MonoBehaviour
     private RectTransform rt;
     private Vector2 objectiveSizeUI = new Vector2(200, 20);
     public bool isComplete { get; private set; }
-    
+
     private void Start()
     {
         parent = GetComponentInParent<ObjectiveHolder>();
         boxCollider = GetComponent<BoxCollider>();
         mr = GetComponent<MeshRenderer>();
-        canvas = questlog.parent.gameObject;
         mr.material = idleMaterial;
         boxCollider.isTrigger = true;
         isComplete = false;
-        gameObject.SetActive(false);
-        //mr.enabled = false;
     }
 
-    private GameObject canvas;
-    
-    private void UpdateTextObject()
+    public void ParentTriggered()
     {
-        objectiveText.fontSize = 30;
+        CreateAndAddObjectiveTextComponentToCanvas();
+        AssignObjectiveTextValues();
+        SetObjectiveActive(true);
+    }
+
+    private void AssignObjectiveTextValues()
+    {
+        objectiveText.fontSize = 16;
         objectiveText.fontStyle = FontStyles.Bold;
         objectiveText.alignment = TextAlignmentOptions.Center;
         rt = objectiveText.GetComponent<RectTransform>();
         rt.sizeDelta = objectiveSizeUI;
         objectiveText.text = Description;
     }
-    
-    public void AddObjectiveTextComponent()
+
+    public void CreateAndAddObjectiveTextComponentToCanvas()
     {
         objectiveText = new GameObject($"{name} textObject").AddComponent<TextMeshProUGUI>();
         objectiveText.transform.SetParent(questlog);
-        UpdateTextObject();
-        gameObject.SetActive(true);
+        AssignObjectiveTextValues();
     }
 
     //if player collide with this transform, mission is complete & objective list is updated.
@@ -60,21 +61,15 @@ public class Objective : MonoBehaviour
             isComplete = true;
             objectiveText.fontStyle = FontStyles.Strikethrough;
             mr.material = completeMaterial;
-            parent.UpdateObjectiveList();
+            parent.UpdateCurrentObjectiveOrInactivate();
         }
     }
 
-    public void SetObjectiveAtive(bool arg)
+    public void SetObjectiveActive(bool arg)
     {
-        if(objectiveText == null || gameObject == null)
+        if (objectiveText == null || gameObject == null)
             return;
-        Destroy(objectiveText.gameObject);
+        objectiveText.gameObject.SetActive(arg);
         gameObject.SetActive(arg);
-    }
-
-    public void SetCanvasActive(bool arg)
-    {
-        if(canvas != null)
-            canvas.gameObject.SetActive(arg);
     }
 }
