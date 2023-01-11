@@ -100,7 +100,7 @@ public class TimeTravelObject : MonoBehaviour {
     private void OnDestinyChanged(DestinyChanged e) {
         if (e.changedObject == pastSelf ||
             (pastSelf != null && pastSelf.pastSelf != null && e.changedObject == pastSelf.pastSelf)) {
-            print($"Destiny of {name} has been changed!");
+            // Destiny has been changed
 
             destiny.position = e.changedObject.transform.position;
             destiny.rotation = e.changedObject.transform.rotation;
