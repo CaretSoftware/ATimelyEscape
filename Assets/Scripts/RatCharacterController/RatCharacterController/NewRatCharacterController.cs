@@ -230,7 +230,7 @@ public class NewRatCharacterController : MonoBehaviour {
 
 	private void Input() {
 		AnimationController.SetInputVector(InputVector);
-		Transform cam = exitCameraZoom ? exitCamera : _camera;
+		Transform cam = exitCameraZoom && exitCamera ? exitCamera : _camera;  // Emil & Johan PROD
 		_inputMovement = Quaternion.Euler(0, cam.rotation.y,0) * InputVector;
 		_inputMovement = InputToCameraProjection(_inputMovement);
 		if (_inputMovement.magnitude > 1.0f) // > 1.0f to keep thumbstick input from being normalized
