@@ -18,33 +18,22 @@ public class LookAt : MonoBehaviour
 
     private void ControllerZoom(bool zoom)
     {
-        if (zoom) 
-        {
-            zoomedIn = true;
+        if (zoom)
             ZoomIn();
-        } 
-        else 
-        {
-            zoomedIn = false;
+        else
             ZoomOut();
-        }
     }
 
     void Update()
     {
-        if(zoomedIn || Input.GetKey(KeyCode.Tab))
-        {
+        if (zoomedIn)
             ZoomIn();
-        }
-        if(Input.GetKeyUp(KeyCode.Tab))
-        {
-            zoomedIn = false;
-            ZoomOut();
-        }
+        return;
     }
 
     private void ZoomIn()
     {
+        zoomedIn = true;
         exitCamera.tag = MainCamera; // To satisfy Fluffy that searches for an active camera with tag "MainCamera" if no active camera assigned
         exitCamera.transform.LookAt(cameraTarget);
         thirdPersonCamera.enabled = false;
@@ -53,6 +42,7 @@ public class LookAt : MonoBehaviour
 
     private void ZoomOut()
     {
+        zoomedIn = false;
         exitCamera.tag = UnTagged;
         exitCamera.enabled = false;
         thirdPersonCamera.enabled = true;

@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CallbackSystem;
-using RatCharacterController;
 using StateMachines;
-using TMPro;
 using UnityEngine;
 
 public class TimeTravelManager : MonoBehaviour {
@@ -57,7 +55,6 @@ public class TimeTravelManager : MonoBehaviour {
         State nextState = manager.stateMachine.stateDict[TimeTravelManager.PeriodStates[currentPeriod]];
         manager.stateMachine.CurrentState = nextState;
         manager.stateMachine.QueuedState = nextState;
-        Debug.Log($"Reloading current time period: {currentPeriod}");
         e.Invoke();
     }
 
@@ -128,9 +125,8 @@ namespace StateMachines {
                     travellingTo = TimeTravelManager.desiredPeriod;
                     Exit();
                 } else {
+                    // Player tried time travelling into another object
                     TimeTravelManager.desiredPeriod = TimeTravelManager.currentPeriod;
-                    Debug.LogError("You tried Time Travelling into another object!");
-
                     CallHintAnimation callHint = new CallHintAnimation() { animationName = "TravelWarning", waitForTime = 0.5f };
                     callHint.Invoke();
                 }
@@ -143,7 +139,6 @@ namespace StateMachines {
 
             var travelEvent = new TimePeriodChanged() { from = thisPeriod, to = travellingTo };
             travelEvent.Invoke();
-            Debug.Log("Travelled to: " + travellingTo);
             TimeTravelManager.currentPeriod = travellingTo;
             coroutineRunner.StartCoroutine(DisableTimeTravelDuringEffect(input.CanTimeTravel));
         }

@@ -3,11 +3,15 @@ using System.Collections;
 using NewRatCharacterController;
 using UnityEngine;
 using UnityEngine.AI;
+using CallbackSystem;
+using Event = CallbackSystem.Event;
 
 public class TravelPathScript : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private GameObject objectToMove;
+    [SerializeField] private bool existsInPast;
+    [SerializeField] private bool existsInPresent;
     private LineRenderer line;
     private GameObject teleportingObject;
     private NavMeshHit hit;
@@ -30,12 +34,6 @@ public class TravelPathScript : MonoBehaviour
         pos = GetLinePointsInWorldSpace();
         objectToMove.SetActive(false);
         playerParent = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
-
-    }
-
-    private void OnDestroy()
-    {
-        CubePushState.pushCubeEvent -= CubePushed;
     }
 
     private void CubePushed(Transform cube)
@@ -102,5 +100,10 @@ public class TravelPathScript : MonoBehaviour
                 playerParent.transform.position = location + (Vector3.left / 5);
             }
         }
+    }
+    
+    private void OnDestroy()
+    {
+        CubePushState.pushCubeEvent -= CubePushed;
     }
 }
