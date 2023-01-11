@@ -27,7 +27,7 @@ public class ScenTimer : MonoBehaviour
     {
         fileName = Application.persistentDataPath + "/TimeInScens";
         timer = 0f; previusTime = 0f;
-        currentScen = runtimeSceneManager.GetCurrentSceneIndex();
+        currentScen = runtimeSceneManager.CurrentSceneIndex;
         previusScen = currentScen;
         int counter = 0;
         while (File.Exists(fileName + string.Format("{0:D2}", counter) + ".txt"))
@@ -49,7 +49,7 @@ public class ScenTimer : MonoBehaviour
     void Update()
     {
         timer += Time.unscaledDeltaTime;
-        currentScen = runtimeSceneManager.GetCurrentSceneIndex();
+        currentScen = runtimeSceneManager.CurrentSceneIndex;
         if(currentScen != previusScen)
         {
             previusScen = currentScen;
