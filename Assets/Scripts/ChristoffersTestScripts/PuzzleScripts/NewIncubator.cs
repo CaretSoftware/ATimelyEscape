@@ -91,8 +91,8 @@ public class NewIncubator : MonoBehaviour
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && !puzzleOneDone)
             {
                 if (signMr) signMr.material = done;
-                audioManager.Play("3");
-                instructions.text = "Good";
+                //audioManager.Play("3");
+                //instructions.text = "Good";
                 Invoke("Step2", 3.5f);
                 //StartCoroutine(Delay());
                 bigHatchAnim.SetBool("Open", true);
