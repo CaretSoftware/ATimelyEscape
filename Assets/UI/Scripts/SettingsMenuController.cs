@@ -14,11 +14,13 @@ public class SettingsMenuController : MonoBehaviour
 
     public bool shouldPlayTextToSpeach;
 
+    [Header("UI Sliders")]
     [SerializeField] private Slider volumeMasterSlider;
-
     [SerializeField] private Slider volumeMusicSlider;
     [SerializeField] private Slider volumeEffectsSlider;
 
+    [Header("Volume Values")]
+    [SerializeField] private bool shallChangeValuesAtStart;
     [SerializeField] private float startMasterVolume;
     [SerializeField] private float startMusicVolume;
     [SerializeField] private float startEffectsVolume;
@@ -56,24 +58,44 @@ public class SettingsMenuController : MonoBehaviour
             Debug.Log("Message: Settings Menu is missing Dropdown for resolution");
         }
 
-        audioMixer.GetFloat("MasterVolume", out float value);
-        volumeMasterSlider.value = startMasterVolume;
+        if (shallChangeValuesAtStart)
+        {
+            volumeMasterSlider.value = startMasterVolume;
+            volumeMusicSlider.value = startMusicVolume;
+            volumeEffectsSlider.value = startEffectsVolume;
+        }
+        else
+        {
+            audioMixer.GetFloat("MasterVolume", out float value);
+            volumeMasterSlider.value = value;
 
-        audioMixer.GetFloat("MusicVolume", out float value1);
-        volumeMusicSlider.value = startMusicVolume;
+            audioMixer.GetFloat("MusicVolume", out float value1);
+            volumeMusicSlider.value = value1;
 
-        audioMixer.GetFloat("EffectsVolume", out float value2);
-        volumeEffectsSlider.value = startEffectsVolume;
-
+            audioMixer.GetFloat("EffectsVolume", out float value2);
+            volumeEffectsSlider.value = value2;
+        }
     }
 
-    public void SetFullscreen(bool isFullscreen)
+    public void SetFullscreen(bool isFullscreen) // Checkbox for Fullscreen
     {
         Screen.fullScreen = isFullscreen;
     }
-    public void SetShouldPlayTextToSpeach(bool shouldPlayTextToSpeach)
+    public void SetShouldPlayTextToSpeach(bool shouldPlayTextToSpeach) // Checkbox for TextForSpeach
     {
         ButtonSoundBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
+    }
+    public void SetMovementControls(bool boolean)
+    {
+
+    }
+    public void SetCameraControls(bool boolean)
+    {
+
+    }
+    public void SetCognitiveAssistanceGuidance(bool boolean)
+    {
+
     }
 
     public void SetMasterVolume(float volume)
