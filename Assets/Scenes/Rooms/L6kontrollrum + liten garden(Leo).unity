@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414738, b: 0.12107852, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3838,7 +3838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5524649878897875434, guid: dd49ee7ec0ef72a41bdae8d86e2b5e5e, type: 3}
       propertyPath: m_RootOrder
-      value: 29
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 5524649878897875434, guid: dd49ee7ec0ef72a41bdae8d86e2b5e5e, type: 3}
       propertyPath: m_LocalScale.x
@@ -5560,7 +5560,6 @@ Transform:
   - {fileID: 2046967810}
   - {fileID: 606789814}
   - {fileID: 1561991494}
-  - {fileID: 789216191}
   - {fileID: 1454372489}
   - {fileID: 1664450972}
   - {fileID: 186467300}
@@ -11097,7 +11096,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 283432415}
+    m_TransformParent: {fileID: 813030270}
     m_Modifications:
     - target: {fileID: 214082529524074226, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
       propertyPath: m_Name
@@ -11105,19 +11104,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 214082529524074229, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
       propertyPath: m_RootOrder
-      value: 26
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 214082529524074229, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.638
+      value: 0.8203707
       objectReference: {fileID: 0}
     - target: {fileID: 214082529524074229, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.134
+      value: 0.1000554
       objectReference: {fileID: 0}
     - target: {fileID: 214082529524074229, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -20.311
+      value: 0.9053521
       objectReference: {fileID: 0}
     - target: {fileID: 214082529524074229, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -13919,6 +13918,10 @@ PrefabInstance:
       propertyPath: SmoothingSections
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 769498175952484960, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
+      propertyPath: coolDownTime
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 5835350731389133637, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.0472
@@ -13942,6 +13945,10 @@ PrefabInstance:
     - target: {fileID: 5835350731389133637, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7665970965390260035, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
+      propertyPath: coolDownTime
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 8995194218091143178, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13984,6 +13991,11 @@ PrefabInstance:
 --- !u!4 &789216191 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 214082529524074229, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
+  m_PrefabInstance: {fileID: 789216190}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &789216192 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 214082529524074226, guid: e7847ff0dd9f1064ea301557bf5154dd, type: 3}
   m_PrefabInstance: {fileID: 789216190}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &790078099
@@ -14319,6 +14331,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4733670072525036552, guid: c5dd21ccc3edcf14b8e66fb03c41bcc8, type: 3}
   m_PrefabInstance: {fileID: 803322542}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &813030269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 813030270}
+  - component: {fileID: 813030271}
+  m_Layer: 0
+  m_Name: TreepuzzleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &813030270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813030269}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.068954, y: -0.081724346, z: -7.4956326}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 789216191}
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &813030271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813030269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a467a90ec5ebc574194c1d8cac6c777b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleporter: {fileID: 789216192}
 --- !u!1 &834658676
 GameObject:
   m_ObjectHideFlags: 0
@@ -23435,7 +23493,7 @@ Transform:
   m_Children:
   - {fileID: 835828094}
   m_Father: {fileID: 283432415}
-  m_RootOrder: 27
+  m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1454372490
 Animator:
@@ -26358,7 +26416,7 @@ Transform:
   - {fileID: 303169044}
   - {fileID: 758508699}
   m_Father: {fileID: 283432415}
-  m_RootOrder: 28
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1664450973
 MonoBehaviour:
@@ -26428,7 +26486,7 @@ Transform:
   - {fileID: 497844001}
   - {fileID: 1864617362}
   m_Father: {fileID: 283432415}
-  m_RootOrder: 30
+  m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1679758940
 PrefabInstance:
@@ -30765,7 +30823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractableByPlayer: 0
-  isTreePuzzle: 0
+  isTreePuzzle: 1
   ispressureButton: 0
   switchOn:
     m_PersistentCalls:
@@ -30773,6 +30831,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1454372491}
         m_TargetAssemblyTypeName: PlayAnimation, Assembly-CSharp
         m_MethodName: StartAnimation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 813030271}
+        m_TargetAssemblyTypeName: TreePuzzle, Assembly-CSharp
+        m_MethodName: TeleportOn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
