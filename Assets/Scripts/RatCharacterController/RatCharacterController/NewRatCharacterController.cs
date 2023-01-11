@@ -14,10 +14,12 @@ public class NewRatCharacterController : MonoBehaviour {
 	public bool Caught;// { get; set; }
 	
 	public bool LetGoOfCube { get; set; }
+	
+	public static bool Locked { get; set; }
 
 	// State Machine
 	private StateMachine _stateMachine;
-	private List<BaseState> _states = new List<BaseState> { 
+	private List<BaseState> _states = new List<BaseState> {
 		new MoveState(), 
 		new WakeUpState(),
 		new JumpState(), 
@@ -29,6 +31,7 @@ public class NewRatCharacterController : MonoBehaviour {
 		new CubePushState(),
 		new CaughtState(),
 		new KeypadState(),
+		new LockState(),
 	};
 	
 	public Vector3 halfHeight = new Vector3(0, .05f, 0);
@@ -189,7 +192,14 @@ public class NewRatCharacterController : MonoBehaviour {
 		_colliderRadius = CharCollider.radius;
 	}
 	
-	private void Update() {
+	private void Update()
+	{
+
+		if (UnityEngine.Input.GetKeyDown(KeyCode.F))
+			Locked = true;
+		if (UnityEngine.Input.GetKeyDown(KeyCode.J))
+			Locked = false;
+		
 		_inputMovement = Vector3.zero;
 		
 		UpdateGrounded();

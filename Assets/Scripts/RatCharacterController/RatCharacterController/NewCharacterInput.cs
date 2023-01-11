@@ -27,16 +27,19 @@ namespace NewRatCharacterController {
 		private bool canTimeTravelPresent = true;
 		private bool canTimeTravelFuture = true;
 		public bool CanTimeTravel {
-			get => canTimeTravel;
+			get
+			{
+				return canTimeTravel;
+			} 
 			
 			set {
 				canTimeTravel = value; 
 				
-				if (canTimeTravelPast)
+				if (canTimeTravelPast && canTimeTravel)
 					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast );//&& canTimeTravel);
-				if (canTimeTravelPresent)
+				if (canTimeTravelPresent && canTimeTravel)
 					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent );// && canTimeTravel);
-				if (canTimeTravelFuture)
+				if (canTimeTravelFuture && canTimeTravel)
 					TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture );// && canTimeTravel);
 			}
 		}
@@ -137,7 +140,6 @@ namespace NewRatCharacterController {
 			else if (UnityEngine.Input.GetKeyDown(KeyCode.L))
 				CanTimeTravelFuture = false;
 			*/
-
 			
 			MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
 			CameraInput();
@@ -219,7 +221,7 @@ namespace NewRatCharacterController {
 
 		private void OnDestroy() => Unsubscribe();
 		
-		private void Unsubscribe() { 
+		private void Unsubscribe() {
             PauseMenuBehaviour.pauseDelegate -= Paused;
 
             _playerInputActions.Onboarding.ReturnToGame.started -= ReturnToGame;
@@ -243,7 +245,7 @@ namespace NewRatCharacterController {
 		}
 		
 		private void DeveloperCheats() {
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 			// Developer Cheat - Get Time Travel
 			if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) ||
 			                                     Input.GetKey(KeyCode.RightControl) ||
@@ -256,7 +258,7 @@ namespace NewRatCharacterController {
 				
 				Debug.Log($"CanTimeTravel {CanTimeTravel}");
 			}
-#endif
+//#endif
 		}
 	}
 }

@@ -16,10 +16,12 @@ namespace NewRatCharacterController
         public override void Run() {
             if (!NewRatCharacter.Caught)
                 stateMachine.TransitionTo<MoveState>();
+            
+            if (NewRatCharacterController.Locked)
+                stateMachine.TransitionTo<LockState>();
         }
 
-        public override void Exit()
-        {
+        public override void Exit() {
             NewRatCharacter.NewCharacterInput.CanTimeTravel = true;
             NewRatCharacter.AnimationController.SetCaught(false);
             NewRatCharacter.transform.parent = null; // if caught and parented to scientist hand
