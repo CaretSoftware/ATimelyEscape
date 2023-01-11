@@ -52,7 +52,7 @@ public static class SaveDataCollected
         }
         else
         {
-            Debug.LogError("Save file not found in" + path);
+            Debug.LogWarning("Save file not found in" + path);
             return null;
         }
 
@@ -66,5 +66,15 @@ public static class SaveDataCollected
             Directory.CreateDirectory(fi.DirectoryName);
 
         }
+    }
+
+    public static int GetNumberOfSaves()
+    {
+        int counter = 0;
+        while (File.Exists(RomeTimerFolder + string.Format("{0:D2}", counter) + ".data"))
+        {
+            counter++;
+        }
+        return counter;
     }
 }

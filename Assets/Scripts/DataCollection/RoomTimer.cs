@@ -17,21 +17,25 @@ public class RoomTimer : MonoBehaviour
 
     [SerializeField] private int saveEvery = 10;
 
+    private float timer;
+
 
     private void Start()
     {
+        timer = 0;
         timeInRooms = new List<TimeInRoomX>();
         currentRoomIndex = runtimeSceneManager.GetCurrentSceneIndex();
         currentRoom = new TimeInRoomX(currentRoomIndex);
         timeInRooms.Add(currentRoom);
-        saveNumber = SaveDataCollected.SaveRoomTimer(this);
-        StartCoroutine(Save(saveEvery));
+        saveNumber = SaveDataCollected.SaveRoomTimer(this);   
     }
 
     private void Update()
     {
         if (currentRoomIndex != runtimeSceneManager.GetCurrentSceneIndex())
         {
+            currentRoom.SetTime(timer);
+            timer = 0; 
             currentRoomIndex = runtimeSceneManager.GetCurrentSceneIndex();
 
             bool alreadyExist = false;
@@ -50,16 +54,16 @@ public class RoomTimer : MonoBehaviour
                 currentRoom = new TimeInRoomX(currentRoomIndex);
                 timeInRooms.Add(currentRoom);
             }
-            
+            SaveDataCollected.SaveRoomTimer(this, saveNumber);
         }
-        currentRoom.SetTime(Time.deltaTime);
+        timer += Time.deltaTime;
     }
 
-    private IEnumerator Save(int timer)
+   
+    private void OnDestroy()
     {
-        yield return new WaitForSeconds(timer);
+        currentRoom.SetTime(timer);
         SaveDataCollected.SaveRoomTimer(this, saveNumber);
-        StartCoroutine(Save(timer));
     }
 
     [ContextMenu("Load")]
