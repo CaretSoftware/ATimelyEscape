@@ -29,6 +29,8 @@ namespace NewRatCharacterController {
         private NewRatCameraController _camController;
 
         private bool _paused;
+        
+        public static bool Accessibility { get; set; }
 
         // Time Travel
         private bool canTimeTravel = false;
