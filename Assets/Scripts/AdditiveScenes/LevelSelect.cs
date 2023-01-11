@@ -16,7 +16,7 @@ public class LevelSelect : MonoBehaviour {
     private TimeTravelPeriod periodToLoad;
     private Transform playerTransform;
     private NewRatCharacterController.NewCharacterInput input;
-    private NewRatCharacterController.NewRatCharacterController controller; 
+    private NewRatCharacterController.NewRatCharacterController controller;
     private RuntimeSceneManager sceneManager;
 
     private static readonly TimeTravelPeriod[] startPeriods = new TimeTravelPeriod[]{
@@ -52,14 +52,7 @@ public class LevelSelect : MonoBehaviour {
         controller = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
         playerTransform = input.transform;
         sceneManager = FindObjectOfType<RuntimeSceneManager>();
-
-        loadButton.onClick.AddListener(delegate {
-            if (System.Int32.TryParse(inputField.text, out int startRoom)) {
-                TriggerRoomLoad(startRoom);
-                canvas.gameObject.SetActive(false);
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-        });
+        loadButton.onClick.AddListener(delegate { TriggerRoomLoad(); });
         loadToggle.onValueChanged.AddListener(delegate { reloadIfLoaded = loadToggle.isOn; });
         dropdown.onValueChanged.AddListener(delegate {
             switch (dropdown.value) {
@@ -70,7 +63,15 @@ public class LevelSelect : MonoBehaviour {
         });
     }
 
-    public void TriggerRoomLoad(int roomIndex) {
+    public void TriggerRoomLoad() {
+        if (System.Int32.TryParse(inputField.text, out int startRoom)) {
+            TriggerRoomLoad(startRoom);
+            canvas.gameObject.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
+    private void TriggerRoomLoad(int roomIndex) {
         if (roomIndex < 1) roomIndex = 1;
         else if (roomIndex > 10) roomIndex = 10;
         if (reloadIfLoaded) sceneManager.UnloadAllRooms();
@@ -85,6 +86,7 @@ public class LevelSelect : MonoBehaviour {
         canvas.gameObject.SetActive(!canvas.gameObject.activeSelf);
         input.CanTimeTravel = !canvas.gameObject.activeSelf;
         if (!canvas.gameObject.activeSelf) inputField.text = "";
+        if (canvas.gameObject.activeSelf) inputField.Select();
         Cursor.lockState = canvas.gameObject.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
