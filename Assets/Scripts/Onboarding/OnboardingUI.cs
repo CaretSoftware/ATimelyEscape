@@ -28,8 +28,6 @@ public class OnboardingUI : MonoBehaviour {
     }
 
     private void OnDiscoveredNewTutorial(DebugEvent e) {
-        if (e.DebugText != null) print(e.DebugText);
-
         switch (e.DebugText) {
             case "interactions":
                 CreateButton(11, "CUBE & CLIMB TUTORIAL");
@@ -62,7 +60,6 @@ public class OnboardingUI : MonoBehaviour {
             sceneManager.LoadOnboardingRoom(sceneIndex);
             TimeTravelManager.currentPeriod = startPeriods[sceneIndex - 11];
             TimeTravelManager.ReloadCurrentTimeTravelPeriod();
-            print("onboard button clicked");
         });
         button.GetComponentInChildren<TextMeshProUGUI>().text = name;
         button.transform.parent = transform;
