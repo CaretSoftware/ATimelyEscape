@@ -8,6 +8,7 @@ using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCou
 public static class SaveDataCollected 
 {
     private static string RomeTimerFolder = Application.persistentDataPath + "/RoomTimer/";
+    private static string VariableFolder = Application.persistentDataPath + "/VariableFolder/";
     public static int SaveRoomTimer(RoomTimer roomTimer) 
     {
         EnsureDirectoryExists(RomeTimerFolder);
@@ -68,7 +69,7 @@ public static class SaveDataCollected
         }
     }
 
-    public static int GetNumberOfSaves()
+    public static int GetNumberOfRoomSaves()
     {
         int counter = 0;
         while (File.Exists(RomeTimerFolder + string.Format("{0:D2}", counter) + ".data"))
@@ -77,4 +78,15 @@ public static class SaveDataCollected
         }
         return counter;
     }
+
+    public static void SaveVariableData(string fileName, VariablesID variables)
+    {
+        EnsureDirectoryExists(VariableFolder);
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream stream = new FileStream(VariableFolder + fileName + ".data", FileMode.Create);
+
+        formatter.Serialize(stream, variables);
+        stream.Close();
+    }
+
 }
