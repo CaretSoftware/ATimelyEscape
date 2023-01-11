@@ -637,6 +637,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LoadRoom"",
+                    ""type"": ""Button"",
+                    ""id"": ""9ef3cc81-71fc-4ca5-9d37-6d34aeabc123"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -659,6 +668,28 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""EnableMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28abef34-f218-4477-8550-9e7d81d17f99"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LoadRoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d22041ed-8946-4b85-941d-ccd7d6439ec7"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LoadRoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -744,6 +775,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // LevelSelect
         m_LevelSelect = asset.FindActionMap("LevelSelect", throwIfNotFound: true);
         m_LevelSelect_EnableMenu = m_LevelSelect.FindAction("EnableMenu", throwIfNotFound: true);
+        m_LevelSelect_LoadRoom = m_LevelSelect.FindAction("LoadRoom", throwIfNotFound: true);
         // Zoom
         m_Zoom = asset.FindActionMap("Zoom", throwIfNotFound: true);
         m_Zoom_ExitZoom = m_Zoom.FindAction("ExitZoom", throwIfNotFound: true);
@@ -1079,11 +1111,13 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_LevelSelect;
     private ILevelSelectActions m_LevelSelectActionsCallbackInterface;
     private readonly InputAction m_LevelSelect_EnableMenu;
+    private readonly InputAction m_LevelSelect_LoadRoom;
     public struct LevelSelectActions
     {
         private @PlayerInputActions m_Wrapper;
         public LevelSelectActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @EnableMenu => m_Wrapper.m_LevelSelect_EnableMenu;
+        public InputAction @LoadRoom => m_Wrapper.m_LevelSelect_LoadRoom;
         public InputActionMap Get() { return m_Wrapper.m_LevelSelect; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1096,6 +1130,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @EnableMenu.started -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnEnableMenu;
                 @EnableMenu.performed -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnEnableMenu;
                 @EnableMenu.canceled -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnEnableMenu;
+                @LoadRoom.started -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnLoadRoom;
+                @LoadRoom.performed -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnLoadRoom;
+                @LoadRoom.canceled -= m_Wrapper.m_LevelSelectActionsCallbackInterface.OnLoadRoom;
             }
             m_Wrapper.m_LevelSelectActionsCallbackInterface = instance;
             if (instance != null)
@@ -1103,6 +1140,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @EnableMenu.started += instance.OnEnableMenu;
                 @EnableMenu.performed += instance.OnEnableMenu;
                 @EnableMenu.canceled += instance.OnEnableMenu;
+                @LoadRoom.started += instance.OnLoadRoom;
+                @LoadRoom.performed += instance.OnLoadRoom;
+                @LoadRoom.canceled += instance.OnLoadRoom;
             }
         }
     }
@@ -1184,6 +1224,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     public interface ILevelSelectActions
     {
         void OnEnableMenu(InputAction.CallbackContext context);
+        void OnLoadRoom(InputAction.CallbackContext context);
     }
     public interface IZoomActions
     {

@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class GuideArrow : MonoBehaviour
 {
-    private static GuideArrow _instance;
-    public static GuideArrow Instance { get { return _instance; } }
-
     private Transform target;
     private Transform rotator;
     private Transform scaler;
+    private Transform player;
+    private Vector3 arrowOffset = new Vector3(0, 0.2f, 0);
     
     public Transform Target { get { return target; } }
     public Transform Rotator { get { return rotator; } }
@@ -22,24 +21,18 @@ public class GuideArrow : MonoBehaviour
         this.target = target;
     }
 
-    private void Awake()
-    {
-        if (_instance != null && _instance != this)
-            Destroy(this.gameObject);
-        else
-            _instance = this;
-    }
-
     private void Start()
     {
-        gameObject.SetActive(false);
+        ToggleGuideArrow(false);
         scaler = transform.GetChild(0).GetChild(0).transform;
         rotator = scaler.GetChild(0).transform;
-        ToggleGuideArrow(false);
-    }
+        player = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
 
+    }
+    
     private void Update()
     {
+        transform.position = player.position + arrowOffset;
         if(Target)
             transform.LookAt(target);
         if(Rotator)
