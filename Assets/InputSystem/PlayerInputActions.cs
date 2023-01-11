@@ -654,11 +654,59 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a75e954b-5b9d-4fc5-a8bf-9c744584a23f"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/select"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""EnableMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Zoom"",
+            ""id"": ""b3c501ad-606e-4d41-9781-263eed078da4"",
+            ""actions"": [
+                {
+                    ""name"": ""ExitZoom"",
+                    ""type"": ""Button"",
+                    ""id"": ""274aa136-2376-4589-a68c-40f2a2311eca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FirstPerson"",
+                    ""type"": ""Button"",
+                    ""id"": ""d77e5ef4-0603-442d-a3d0-aa98893c0f95"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""08d35c5a-d175-4e3d-a458-a44b2edad8dc"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExitZoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b7f87b0e-64cc-42ff-b776-5ac6d965fa5d"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FirstPerson"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -696,6 +744,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // LevelSelect
         m_LevelSelect = asset.FindActionMap("LevelSelect", throwIfNotFound: true);
         m_LevelSelect_EnableMenu = m_LevelSelect.FindAction("EnableMenu", throwIfNotFound: true);
+        // Zoom
+        m_Zoom = asset.FindActionMap("Zoom", throwIfNotFound: true);
+        m_Zoom_ExitZoom = m_Zoom.FindAction("ExitZoom", throwIfNotFound: true);
+        m_Zoom_FirstPerson = m_Zoom.FindAction("FirstPerson", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1055,6 +1107,47 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public LevelSelectActions @LevelSelect => new LevelSelectActions(this);
+
+    // Zoom
+    private readonly InputActionMap m_Zoom;
+    private IZoomActions m_ZoomActionsCallbackInterface;
+    private readonly InputAction m_Zoom_ExitZoom;
+    private readonly InputAction m_Zoom_FirstPerson;
+    public struct ZoomActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public ZoomActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ExitZoom => m_Wrapper.m_Zoom_ExitZoom;
+        public InputAction @FirstPerson => m_Wrapper.m_Zoom_FirstPerson;
+        public InputActionMap Get() { return m_Wrapper.m_Zoom; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ZoomActions set) { return set.Get(); }
+        public void SetCallbacks(IZoomActions instance)
+        {
+            if (m_Wrapper.m_ZoomActionsCallbackInterface != null)
+            {
+                @ExitZoom.started -= m_Wrapper.m_ZoomActionsCallbackInterface.OnExitZoom;
+                @ExitZoom.performed -= m_Wrapper.m_ZoomActionsCallbackInterface.OnExitZoom;
+                @ExitZoom.canceled -= m_Wrapper.m_ZoomActionsCallbackInterface.OnExitZoom;
+                @FirstPerson.started -= m_Wrapper.m_ZoomActionsCallbackInterface.OnFirstPerson;
+                @FirstPerson.performed -= m_Wrapper.m_ZoomActionsCallbackInterface.OnFirstPerson;
+                @FirstPerson.canceled -= m_Wrapper.m_ZoomActionsCallbackInterface.OnFirstPerson;
+            }
+            m_Wrapper.m_ZoomActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ExitZoom.started += instance.OnExitZoom;
+                @ExitZoom.performed += instance.OnExitZoom;
+                @ExitZoom.canceled += instance.OnExitZoom;
+                @FirstPerson.started += instance.OnFirstPerson;
+                @FirstPerson.performed += instance.OnFirstPerson;
+                @FirstPerson.canceled += instance.OnFirstPerson;
+            }
+        }
+    }
+    public ZoomActions @Zoom => new ZoomActions(this);
     public interface ICameraControlsActions
     {
         void OnCameraThumbstick(InputAction.CallbackContext context);
@@ -1091,5 +1184,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     public interface ILevelSelectActions
     {
         void OnEnableMenu(InputAction.CallbackContext context);
+    }
+    public interface IZoomActions
+    {
+        void OnExitZoom(InputAction.CallbackContext context);
+        void OnFirstPerson(InputAction.CallbackContext context);
     }
 }

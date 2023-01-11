@@ -13,6 +13,7 @@ public class NewIncubator : MonoBehaviour
     [SerializeField] private GameObject bigHatch;
     [SerializeField] private GameObject smallHatch;
     [SerializeField] private GameObject candyFeeder;
+    [SerializeField] private GameObject candyCollider;
     [SerializeField] private GameObject puzzleFloor;
     [SerializeField] private GameObject step1;
     [SerializeField] private GameObject step2;
@@ -97,6 +98,7 @@ public class NewIncubator : MonoBehaviour
                 bigHatchAnim.SetBool("Open", true);
                 step1Anim.SetBool("Open", true);
                 //Debug.Log("STEP1");
+                TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, false); // Patrik
             }
             if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && puzzleOneDone && !puzzleTwoDone)
             {
@@ -106,6 +108,7 @@ public class NewIncubator : MonoBehaviour
                 Invoke("Step4", 1.5f);
                 //StartCoroutine(Delay());
                 //Debug.Log("STEP3");
+                TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, false); // Patrik
             }
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
@@ -117,12 +120,17 @@ public class NewIncubator : MonoBehaviour
                 Invoke("Step5", 2f);
                 //StartCoroutine(Delay());
                 //Debug.Log("STEP5");
+                TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, false); // Patrik
             }
             if (e.from == TimeTravelPeriod.Past && e.to == TimeTravelPeriod.Present && charging && !puzzleFiveDone)
             {
                 signMr.material = done;
                 audioManager.Play("10");
                 instructions.text = "Good. All Done. Have some Candy";
+                if (candyCollider != null)
+                    candyCollider.SetActive(false);
+                else
+                    Debug.Log( $"{nameof(candyCollider)} is not assigned");
                 smallHatchAnim.SetBool("Open", true);
                 candyFeederAnim.SetBool("Open", true);
                 puzzleFiveDone = true;
@@ -144,14 +152,15 @@ public class NewIncubator : MonoBehaviour
         puzzleFloor.SetActive(false);
         bigHatchAnim.SetBool("Open", false);
         //Debug.Log("STEP2");
-        Invoke("Step2AndHalf", 7f);
+        Invoke(nameof(Step2AndHalf), 7f);
     }
     private void Step2AndHalf()
     {
         audioManager.Play("5");
-        instructions.text = "Timetravel forward in time <sprite name=\"Y\">";
+        instructions.text = "Time travel forward in time <sprite name=\"Y\">";
         characterInput.CanTimeTravelPresent = true; 
         puzzleOneDone = true;
+        TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, true); // Patrik
     }
     private void Step4()
     {
@@ -160,13 +169,14 @@ public class NewIncubator : MonoBehaviour
         audioManager.Play("6");
         instructions.text = "Move the cube in this time.";
         //Debug.Log("STEP4");
-        Invoke("Step4AndHalf", 6f);
+        Invoke(nameof(Step4AndHalf), 6f);
     }
     private void Step4AndHalf()
     {
         audioManager.Play("7");
         instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
-        Invoke("Step4TwoThirds", 5.5f);
+        Invoke(nameof(Step4TwoThirds), 5.5f);
+        TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, true); // Patrik
         
     }
     private void Step4TwoThirds()
