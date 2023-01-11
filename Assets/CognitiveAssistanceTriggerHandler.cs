@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider))]
 public class CognitiveAssistanceTriggerHandler : MonoBehaviour
 {
     private List<CognitiveAssistanceTriggerHandler> handlers = new List<CognitiveAssistanceTriggerHandler>();
@@ -18,41 +19,46 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
         collider.enabled = true;
         collider.isTrigger = true;
         setChildrenActive(false);
-        fetchAll();
-    }
-
-    private void fetchAll()
-    {
-        GameObject[] handlers = GameObject.FindGameObjectsWithTag("CognitiveAssistanceHandler");
-        for (int i = 0; i < handlers.Length; i++)
-        {
-            this.handlers.Add(handlers[i].GetComponent<CognitiveAssistanceTriggerHandler>());
-        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(active || other.tag != "Player") 
+        if(other.tag != "Player" || active) 
             return;
 
+        fetchAll();
         for (int i = 0; i < handlers.Count; i++)
         {
-            if (handlers[i] != this)
+            if (handlers[i] == this)
             {
-                handlers[i].active = false;
-                handlers[i].setChildrenActive(false);
+                setChildrenActive(true);
+                objectiveHolder.Triggered();
+                collider.enabled = false;
+                active = true;
+                return;
             }
+            handlers[i].active = false;
+            handlers[i].setChildrenActive(false);
         }
-        setChildrenActive(true);
-        objectiveHolder.ClearList();
-        objectiveHolder.Triggered();
-        collider.enabled = false;
-        active = true;
+    }
+
+    private void fetchAll()
+    {
+        this.handlers.Clear();
+        GameObject[] handlers = GameObject.FindGameObjectsWithTag("CognitiveAssistanceHandler");
+        
+        for (int i = 0; i < handlers.Length; i++)
+            this.handlers.Add(handlers[i].GetComponent<CognitiveAssistanceTriggerHandler>());
     }
 
     public void setChildrenActive(bool arg)
     {
         for(int i = 0; i < children.Length; i++)
             children[i].SetActive(arg);
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(gameObject);
     }
 }
