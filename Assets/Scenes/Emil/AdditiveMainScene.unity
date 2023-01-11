@@ -827,17 +827,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4770257075950780104, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
   m_PrefabInstance: {fileID: 1911777256}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &712817193 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3599624227751123530, guid: ebbb435c60abfeb41ab2e7f9144ce1c4, type: 3}
-  m_PrefabInstance: {fileID: 66878001}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &725983838 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2522656960160410690, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
-  m_PrefabInstance: {fileID: 1911777256}
-  m_PrefabAsset: {fileID: 0}
---- !u!72 &747939724
+--- !u!72 &702856758
 ComputeShader:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2112,6 +2102,16 @@ ComputeShader:
     includeHash3: 4253705536
   errors: []
   m_PreprocessorOverride: 0
+--- !u!1 &712817193 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3599624227751123530, guid: ebbb435c60abfeb41ab2e7f9144ce1c4, type: 3}
+  m_PrefabInstance: {fileID: 66878001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &725983838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2522656960160410690, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &790899986
 GameObject:
   m_ObjectHideFlags: 0
@@ -2248,7 +2248,7 @@ MonoBehaviour:
   lodCamera: {fileID: 0}
   material: {fileID: 2100000, guid: c2778ea5590b0d246a72a6a500f3ba31, type: 2}
   drawWindContribution: 0
-  computeShader: {fileID: 747939724}
+  computeShader: {fileID: 702856758}
   furContainer: {fileID: 11400000, guid: 9b8f55b3cd37ba945a10d248efdde819, type: 2}
   furRendererSettings:
     sourceMeshNormalToStrandNormalPercent: 0
@@ -2263,7 +2263,7 @@ MonoBehaviour:
       windDirectionDegree: 90
       windTex: {fileID: 2800000, guid: d45c82fb1b5ac084eb8267d9dcedbe46, type: 3}
     verletSimulationSettings:
-      enableMovement: 1
+      enableMovement: 0
       constraintIterations: 10
       gravity: {x: 0, y: 0, z: 0}
       drag: 0.01
@@ -2313,7 +2313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groomContainer: {fileID: 11400000, guid: 6b38fe42f6d1dd145b4824b35f1689c3, type: 2}
   undoRecorder:
-    undoIndex: 138
+    undoIndex: 139
   painterProperties: {fileID: 1407294975}
   needsUpdate: 0
 --- !u!1001 &1137618446
