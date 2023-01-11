@@ -3,11 +3,15 @@ using System.Collections;
 using NewRatCharacterController;
 using UnityEngine;
 using UnityEngine.AI;
+using CallbackSystem;
+using Event = CallbackSystem.Event;
 
 public class TravelPathScript : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private GameObject objectToMove;
+    [SerializeField] private bool existsInPast;
+    [SerializeField] private bool existsInPresent;
     private LineRenderer line;
     private GameObject teleportingObject;
     private NavMeshHit hit;
@@ -24,6 +28,8 @@ public class TravelPathScript : MonoBehaviour
 
     private void Start()
     {
+        TimePeriodChanged.AddListener<TimePeriodChanged>(TimeTravel);
+
         CubePushState.pushCubeEvent += CubePushed;
         line = GetComponent<LineRenderer>();
         positions = new Vector3[line.positionCount];
@@ -31,11 +37,6 @@ public class TravelPathScript : MonoBehaviour
         objectToMove.SetActive(false);
         playerParent = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>();
 
-    }
-
-    private void OnDestroy()
-    {
-        CubePushState.pushCubeEvent -= CubePushed;
     }
 
     private void CubePushed(Transform cube)
@@ -102,5 +103,27 @@ public class TravelPathScript : MonoBehaviour
                 playerParent.transform.position = location + (Vector3.left / 5);
             }
         }
+    }
+
+    private void TimeTravel(TimePeriodChanged eve)
+    {
+        if(eve.to == TimeTravelPeriod.Past && existsInPast)
+            gameObject.SetActive(true);
+        else
+            gameObject.SetActive(false);
+
+        if (eve.to == TimeTravelPeriod.Present && existsInPresent)
+            gameObject.SetActive(true);
+        else
+            gameObject.SetActive(false);
+        
+        if(eve.to == TimeTravelPeriod.Future)
+            gameObject.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        CubePushState.pushCubeEvent -= CubePushed;
+        if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeTravel);
     }
 }
