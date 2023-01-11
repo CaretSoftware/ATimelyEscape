@@ -6,6 +6,15 @@ using UnityEngine.InputSystem;
 
 namespace NewRatCharacterController {
 	public class NewCharacterInput : MonoBehaviour {
+		public delegate void ZoomDelegate(bool zoom);
+		public static ZoomDelegate zoomDelegate;
+		
+		public delegate void ExitZoomDelegate(bool zoom);
+		public static ExitZoomDelegate exitZoomDelegate;
+		
+		public delegate void SelectPressed();
+		public static SelectPressed selectPressed;
+		
 		
 		[SerializeField] private TimeTravelButtonUIManager timeTravelButtonUIManager;
 
@@ -83,12 +92,15 @@ namespace NewRatCharacterController {
 			_newRatCharacterController.NewCharacterInput = this;
 			
 			_playerInputActions = new PlayerInputActions();
+			
 			_playerInputActions.CameraControls.Enable();
 			_playerInputActions.CharacterMovement.Enable();
 			_playerInputActions.Interact.Enable();
 			_playerInputActions.Pause.Enable();
 			_playerInputActions.Onboarding.Enable();
 			_playerInputActions.LevelSelect.Enable();
+			_playerInputActions.Zoom.Enable();
+			
             _playerInputActions.LevelSelect.EnableMenu.performed += EnableLevelSelectMenu;
             _playerInputActions.Onboarding.ReturnToGame.started += ReturnToGame;
             _playerInputActions.Onboarding.AdvanceDialogue.started += AdvanceDialogue;
@@ -100,6 +112,26 @@ namespace NewRatCharacterController {
 			_playerInputActions.Interact.Past.performed += TravelToPast;
 			_playerInputActions.Interact.Present.performed += TravelToPresent;
 			_playerInputActions.Interact.Future.performed += TravelToFuture;
+			_playerInputActions.Zoom.ExitZoom.performed += ExitZoom;
+			_playerInputActions.Zoom.ExitZoom.canceled += ExitUnZoom;
+			_playerInputActions.Zoom.FirstPerson.performed += FirstPersonZoom;
+			_playerInputActions.Zoom.FirstPerson.canceled += FirstPersonUnZoom;
+		}
+
+		private void ExitZoom(InputAction.CallbackContext context) {
+			exitZoomDelegate?.Invoke(true);
+		}
+		
+		private void ExitUnZoom(InputAction.CallbackContext context) {
+			exitZoomDelegate?.Invoke(false);
+		}
+		
+		private void FirstPersonZoom(InputAction.CallbackContext context) {
+			zoomDelegate?.Invoke(true);
+		}
+		
+		private void FirstPersonUnZoom(InputAction.CallbackContext context) {
+			zoomDelegate?.Invoke(false);
 		}
 
 		private void Paused(bool paused) => _paused = paused;
@@ -235,6 +267,10 @@ namespace NewRatCharacterController {
             _playerInputActions.Interact.Present.performed -= TravelToPresent;
             _playerInputActions.Interact.Future.performed -= TravelToFuture;
             _playerInputActions.LevelSelect.EnableMenu.performed -= EnableLevelSelectMenu;
+            _playerInputActions.Zoom.ExitZoom.performed -= ExitZoom;
+            _playerInputActions.Zoom.ExitZoom.canceled -= ExitUnZoom;
+            _playerInputActions.Zoom.FirstPerson.performed -= FirstPersonZoom;
+            _playerInputActions.Zoom.FirstPerson.canceled -= FirstPersonUnZoom;
 		}
 
 		public void EnableCharacterMovement(bool enable) {
