@@ -81,6 +81,7 @@ public class RuntimeSceneManager : MonoBehaviour {
     private int currentSceneIndex = 0;
     private int currentOnboardingSceneIndex = -1;
     private int loadedScenesCounter = 0;
+    public bool OnboardingRoomLoaded { get { return currentOnboardingSceneIndex != -1; } }
 
     private void Start() {
         /*     TimeTravelManager.SimulatePhysics = false;
