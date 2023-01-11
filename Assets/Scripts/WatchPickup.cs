@@ -22,7 +22,10 @@ public class WatchPickup : MonoBehaviour {
 		if (other.CompareTag("Player")) {
 
 			if (instructions != null)
+			{
 				instructions.text = "Use the timetravel device <sprite name=\"X\"> to timetravel one year to the past";
+				TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, true); // Patrik
+			}
 			FindObjectOfType<AudioManager>().Play("2");
 			_characterInput.CanTimeTravel = true;
 			_characterInput.CanTimeTravelPresent = false;

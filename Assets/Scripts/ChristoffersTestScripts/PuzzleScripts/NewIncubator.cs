@@ -104,6 +104,7 @@ public class NewIncubator : MonoBehaviour
                 audioManager.Play("3");
                 signMr.material = done;
                 Invoke("Step4", 1.5f);
+                TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, false); // Patrik
                 //StartCoroutine(Delay());
                 //Debug.Log("STEP3");
             }
@@ -115,6 +116,7 @@ public class NewIncubator : MonoBehaviour
                 puzzleThreeDone = true;
                 signMr.material = done;
                 Invoke("Step5", 2f);
+                TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, false); // Patrik
                 //StartCoroutine(Delay());
                 //Debug.Log("STEP5");
             }
@@ -149,7 +151,8 @@ public class NewIncubator : MonoBehaviour
     private void Step2AndHalf()
     {
         audioManager.Play("5");
-        instructions.text = "Timetravel forward in time <sprite name=\"Y\">";
+        instructions.text = "Time travel forward in time <sprite name=\"Y\">";
+        TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, true); // Patrik
         characterInput.CanTimeTravelPresent = true; 
         puzzleOneDone = true;
     }
@@ -166,6 +169,7 @@ public class NewIncubator : MonoBehaviour
     {
         audioManager.Play("7");
         instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
+        TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, true); // Patrik
         Invoke("Step4TwoThirds", 5.5f);
         
     }
