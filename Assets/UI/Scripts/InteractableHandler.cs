@@ -46,7 +46,7 @@ public class InteractableHandler : MonoBehaviour
         if ((Vector3.Distance(interactVector, transform.position) > 0.1f) && Physics.Raycast(ray, out RaycastHit pad, 0.2f) && pad.transform.CompareTag(keypadTag))
         {
             interactVector = pad.point;
-            CallHintAnimation call = new CallHintAnimation() { animationName = "LeftClick", waitForTime = 0.5f };
+            CallHintAnimation call = new CallHintAnimation() { animationName = "LeftClick"};
             call.Invoke();
         }
         else if ((Vector3.Distance(cubeTransform.position, transform.position) > 0.1f && Physics.Raycast(ray, out RaycastHit cubeInfo, 0.3f, cubeLayerMask)))
@@ -55,18 +55,18 @@ public class InteractableHandler : MonoBehaviour
 
             if (cubeInfo.transform.GetComponent<CubePush>().Pushable())
             {
-                CallHintAnimation call = new CallHintAnimation() { animationName = "LeftClick", waitForTime = 0.5f };
+                CallHintAnimation call = new CallHintAnimation() { animationName = "LeftClick"};
                 call.Invoke();
             }
             else if (GetComponent<CharacterInput>().LedgeAhead(out Vector3 hitPosition))
             {
-                CallHintAnimation call = new CallHintAnimation() { animationName = "JumpHint", waitForTime = 0.5f };
+                CallHintAnimation call = new CallHintAnimation() { animationName = "JumpHint"};
                 call.Invoke();
             }
         }
         else if(GetComponent<CharacterInput>().LedgeAhead(out Vector3 hitPosition) && !Physics.Raycast(ray, out RaycastHit obj, 0.3f, cubeLayerMask))
         {
-            CallHintAnimation call = new CallHintAnimation() { animationName = "JumpHint", waitForTime = 0.5f };
+            CallHintAnimation call = new CallHintAnimation() { animationName = "JumpHint"};
             call.Invoke();
         }
     }

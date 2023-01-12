@@ -505,6 +505,8 @@ public class NewRatCharacterController : MonoBehaviour {
 
 	public void Awoken() {
 		Awakened = true;
+		CallbackSystem.CallHintAnimation call = new CallbackSystem.CallHintAnimation { animationName = "Tutorial" };
+		call.Invoke();
 	} 
 
 	public bool KeypadInteraction { get; set; }
