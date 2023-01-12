@@ -17,9 +17,11 @@ public class CubeSideActivator : MonoBehaviour {
 
 	private int activeUI;
 
+
 	// Start is called before the first frame update
 	void Start()
 	{
+		
 		maxDistance = gameObject.GetComponent<SphereCollider>().radius * transform.localScale.x;
 		canvasGroup = gameObject.GetComponent<CanvasGroup>();
 

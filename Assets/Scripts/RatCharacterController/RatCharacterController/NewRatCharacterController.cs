@@ -9,10 +9,7 @@ namespace NewRatCharacterController {
 public class NewRatCharacterController : MonoBehaviour {
 	public delegate void CaughtEvent(bool caught);
 	public static CaughtEvent caughtEvent;
-	
-	public delegate void CubeLetGo();
-	public static CubeLetGo cubeLetGo;
-	
+
 	public NewCharacterInput NewCharacterInput { get; set; }
 
 	public bool Caught { get; set; }
@@ -23,8 +20,8 @@ public class NewRatCharacterController : MonoBehaviour {
 		get => _letGo;
 		
 		set {
-			if (value)
-				cubeLetGo?.Invoke();
+			if (value) 
+				CubePushState.cubeLetGo?.Invoke();
 			_letGo = value;
 		}
 	}

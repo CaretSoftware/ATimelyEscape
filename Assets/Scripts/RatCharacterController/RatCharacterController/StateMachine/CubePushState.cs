@@ -6,6 +6,12 @@ namespace NewRatCharacterController {
 		public delegate void PushCubeEvent(Transform cube);
 		public static PushCubeEvent pushCubeEvent;
 		
+		public delegate void CubeLetGo();
+		public static CubeLetGo cubeLetGo;
+
+		public delegate void PushCubeUIOn(bool on);
+		public static PushCubeUIOn pushCubeUIOn;
+
 		private const string State = nameof(CubePushState);
 
 		private CubePush cube;
@@ -18,11 +24,11 @@ namespace NewRatCharacterController {
 		private bool letGo;
 
 		public CubePushState() {
-			NewRatCharacterController.cubeLetGo += LetGoOfCube;
+			CubePushState.cubeLetGo += LetGoOfCube;
 		}
 		
 		~CubePushState() {
-			NewRatCharacterController.cubeLetGo -= LetGoOfCube;
+			CubePushState.cubeLetGo -= LetGoOfCube;
 		}
 		
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
@@ -32,6 +38,7 @@ namespace NewRatCharacterController {
 
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
+			CubePushState.pushCubeUIOn?.Invoke(false);
 			NewRatCharacter.AnimationController.Push(true);
 			
 			AttachPlayerToCube();
@@ -106,16 +113,18 @@ namespace NewRatCharacterController {
 				stateMachine.TransitionTo<LockState>();
 
 			if (letGo) {
-				letGo = false;
 				stateMachine.TransitionTo<MoveState>();
 			}
 		}
 
-		public void LetGoOfCube() {
+		public void LetGoOfCube()
+		{
+			Debug.Log(nameof(LetGoOfCube));
 			letGo = true;
 		}
 
 		public override void Exit() {
+			CubePushState.pushCubeUIOn?.Invoke(true);
 			NewRatCharacter.AnimationController.Push(false);
 			//NewRatCharacter.transform.parent = null;
 		}
