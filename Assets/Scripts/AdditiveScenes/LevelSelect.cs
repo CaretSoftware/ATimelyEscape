@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class LevelSelect : MonoBehaviour {
     [SerializeField] private Canvas canvas;
     [SerializeField] private TMP_InputField inputField;
-    [SerializeField] private TMP_Dropdown dropdown;
     [SerializeField] private Button loadButton;
     [SerializeField] private Toggle loadToggle;
     [SerializeField] private StartRoom startRoom = StartRoom.room1;
@@ -61,14 +60,6 @@ public class LevelSelect : MonoBehaviour {
         sceneManager = FindObjectOfType<RuntimeSceneManager>();
         loadButton.onClick.AddListener(delegate { TriggerRoomLoad(); });
         loadToggle.onValueChanged.AddListener(delegate { reloadIfLoaded = loadToggle.isOn; });
-        dropdown.onValueChanged.AddListener(delegate {
-            switch (dropdown.value) {
-                case 0: periodToLoad = TimeTravelPeriod.Past; break;
-                case 1: periodToLoad = TimeTravelPeriod.Present; break;
-                case 2: periodToLoad = TimeTravelPeriod.Future; break;
-            }
-        });
-
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded;
         TriggerRoomLoad((int)startRoom);
