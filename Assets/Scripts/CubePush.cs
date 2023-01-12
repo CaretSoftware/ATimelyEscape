@@ -29,8 +29,6 @@ public class CubePush : MonoBehaviour {
 		closestCube = null;
 	}
 
-	
-
 	public void Push(Vector2 direction) => Push(direction.ToVector3()); 
 	public void Push(Vector3 direction)
 	{
