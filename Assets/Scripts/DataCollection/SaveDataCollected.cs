@@ -25,6 +25,7 @@ public static class SaveDataCollected
 
     public static void SaveRoomTimer(RoomTimer roomTimer, int number)
     {
+        if (roomTimer)
         SaveRoomTimer(roomTimer, roomTimerFolder + string.Format("{0:D2}", number) + ".data");
     }
 

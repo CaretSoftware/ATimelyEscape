@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -69,39 +70,56 @@ public class DataToText : MonoBehaviour
         int counter = 0;
         RoomTimerData temp = SaveDataCollected.LoadDataCollected(counter);
         List<TimeInRoomX> tempList;
+        int totalTotalTime = 0;
+        
 
         stringBuilder.AppendLine(string.Format("Number Of Playthrough: {0:D2}", SaveDataCollected.GetNumberOfRoomSaves()));
         while (temp != null)
         {
             tempList = SaveDataCollected.LoadDataCollected(counter).timeInRooms;
-            stringBuilder.AppendLine(string.Format("Playthrough {0:D2}:", counter));
-            stringBuilder.AppendLine(ConvertRoomDataAtIndex(counter));
+            stringBuilder.AppendLine(string.Format("Playthrough {0:D2}:\n", counter));
+            stringBuilder.Append(ConvertRoomDataAtIndex(counter));
+            int roomTotalTime = 0;
 
-            foreach(TimeInRoomX tempX in tempList) 
+            foreach (TimeInRoomX tempX in tempList) 
             {
                 bool exist = false;
                 foreach (TimeInRoomX totalX in total)
                 {
-                    if (tempX.room == totalX.room)
+                    if (tempX.room == totalX.room && tempX.IsTutorial == totalX.IsTutorial)
                     {
                         exist = true;
                         totalX.SetTime(tempX.GetTimeInSeconds());
                         totalX.SetVisited(tempX.GetVisited());
+                        
                         break;
                     }
                 }
                 if (!exist)
                 {
-                    total.Add(new TimeInRoomX(tempX.room, tempX.GetVisited(), tempX.GetTimeInSeconds()));
+                    total.Add(new TimeInRoomX(tempX.room, tempX.GetVisited(), tempX.GetTimeInSeconds(), tempX.IsTutorial));
                 }
+                roomTotalTime += tempX.GetTimeInSeconds();
             }
 
+            stringBuilder.AppendLine(string.Format("Playthrough {0:D2} Total time: \n{1:D2} : {2:D2} : {3:D2} \n\n", 
+                counter,
+                (roomTotalTime / 3600),
+                (roomTotalTime / 60) % 60,
+                roomTotalTime % 60));
             counter++;
             temp = SaveDataCollected.LoadDataCollected(counter);
+            totalTotalTime += roomTotalTime;
         }
         
         stringBuilder.AppendLine("Total:");
         stringBuilder.AppendLine(ConvertRoomData(new RoomTimerData(total)));
+
+        stringBuilder.AppendLine(string.Format("Total time: \n{1:D2} : {2:D2} : {3:D2}",
+                counter,
+                (totalTotalTime / 3600),
+                (totalTotalTime / 60) % 60,
+                totalTotalTime % 60));
 
         CreateTxtFile(stringBuilder.ToString(), "Total.txt", Application.persistentDataPath + "/RoomTimertxt/");
     }
@@ -135,9 +153,23 @@ public class DataToText : MonoBehaviour
         StringBuilder sb = new StringBuilder();
         foreach(string variable in variablesFile) 
         { 
-            sb.Append(SaveDataCollected.LoadVariableData(variable).ToString());
+            sb.AppendLine(SaveDataCollected.LoadVariableData(variable).ToString());
         }
         CreateTxtFile(sb.ToString(), "Variables.txt", Application.persistentDataPath + "/Variabletxt/");
+    }
+
+    [ContextMenu("Convert Spesific Variable Files")]
+    private void ConvertSpesificVariable()
+    {
+        GetVeriableFileNames();
+        if (variablesFile.Contains(variableNames))
+        {
+            CreateTxtFile(SaveDataCollected.LoadVariableData(variableNames).ToString(), "Variables.txt", Application.persistentDataPath + "/Variabletxt/");
+        }
+        else
+        {
+            Debug.LogError(variableNames + " doesn't exist in" + Application.persistentDataPath + "/VariableFolder/");
+        }
     }
 
 

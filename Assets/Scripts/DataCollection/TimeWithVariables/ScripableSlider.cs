@@ -43,6 +43,7 @@ public class ScripableSlider : MonoBehaviour
     private void OnDisable()
     {
         data.UpdateVariableData(value, timer);
+        timer = 0f;
     }
 
   
@@ -61,8 +62,12 @@ public class ScripableSlider : MonoBehaviour
         SaveDataCollected.SaveVariableData(data);
     }
 
+    [ContextMenu("Load")]
 
-
+    private void Load()
+    {
+        data = SaveDataCollected.LoadVariableData(gameObject.name + ".data");
+    }
 
     [Serializable]
 

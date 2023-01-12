@@ -10,7 +10,7 @@ public class TimeInRoomX
     
     public int room;
 
-    private bool isTutorial = false;
+    [SerializeField] private bool isTutorial = false;
     public bool IsTutorial { get { return isTutorial; } }
 
     [SerializeField] private int visited;
