@@ -6,6 +6,7 @@ using System;
 
 public class AudioManager : MonoBehaviour
 {
+    [SerializeField]private AudioMixerGroup audioMixer;
     public Sound[] sounds;
     // Start is called before the first frame update
 
@@ -15,6 +16,7 @@ public class AudioManager : MonoBehaviour
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
+            s.source.outputAudioMixerGroup = audioMixer;
 
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
