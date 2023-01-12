@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using CallbackSystem;
+using UnityEngine;
 
+/// <summary>
+/// @author Emil Wessman
+/// </summary>
 public class SceneLoadMarker : MonoBehaviour {
     [SerializeField] private int sceneIndex;
     [SerializeField] private float sceneLoadCoolDownSeconds = 3;
@@ -19,6 +22,7 @@ public class SceneLoadMarker : MonoBehaviour {
         }
     }
 
+    // to disallow constant calls to load a room
     private IEnumerator LoadCooldown() {
         yield return new WaitForSecondsRealtime(sceneLoadCoolDownSeconds);
         readyToLoad = true;

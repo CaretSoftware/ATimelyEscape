@@ -1,11 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using Object = System.Object;
 
+/// <summary>
+/// @author Emil Wessman
+/// </summary>
 namespace CallbackSystem {
     // public fields are supposed to start with capital letters
     public abstract class Event {

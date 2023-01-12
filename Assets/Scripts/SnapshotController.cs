@@ -28,6 +28,7 @@ public class SnapshotController : MonoBehaviour
 
     void OnTimeTravel(TimePeriodChanged tpc)
     {
+        if (tpc.IsReload) return;
         source.PlayOneShot(zap);
 
         switch (tpc.to)

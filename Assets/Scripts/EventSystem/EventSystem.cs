@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// @author Emil Wessman
+/// </summary>
 namespace CallbackSystem {
     public class EventSystem : MonoBehaviour {
         private Dictionary<Type, HashSet<EventInfo>> eventListeners;

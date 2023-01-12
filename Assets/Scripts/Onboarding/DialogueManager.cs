@@ -23,7 +23,7 @@ public class DialogueManager : MonoBehaviour {
     void Awake() {
         sentences = new Queue<string>();
         audioClips = new Queue<AudioClip>();
-        audioSource = FindObjectOfType<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         sceneManager = FindObjectOfType<RuntimeSceneManager>();
     }
 
