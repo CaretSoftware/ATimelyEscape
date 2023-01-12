@@ -87,7 +87,9 @@ public class NewRatCameraController : MonoBehaviour {
 	}
 
 	private bool _turnAccessible;
-	public void TurnCamera(bool turn) {
+	public void TurnCamera(bool turn)
+	{
+		_dir *= -1;
 		_turnAccessible = turn;
 	}
 
@@ -140,9 +142,9 @@ public class NewRatCameraController : MonoBehaviour {
 	}
 
 	private float _cameraTurnSpeed = 40f;
-	
+	private int _dir = 1;
 	private void MoveCamera() {
-		if (_turnAccessible) _mouseMovement.x += Time.unscaledDeltaTime * _cameraTurnSpeed;
+		if (_turnAccessible) _mouseMovement.x += Time.unscaledDeltaTime * _cameraTurnSpeed * _dir;
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 
 		_cameraPos = Vector3.SmoothDamp(_cameraPos, transform.position, ref _smoothDampCurrentVelocityLateral, _smoothCameraPosTime);

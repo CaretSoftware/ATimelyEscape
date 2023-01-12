@@ -181,7 +181,7 @@ namespace NewRatCharacterController {
             Debug.Log($"char mov enabled: {_playerInputActions.CharacterMovement.enabled}");
         }
 
-        private void AButton(InputAction.CallbackContext context)
+        private void BButton(InputAction.CallbackContext context)
         {
             
             AccessibleState = ++AccessibleState % 4;
@@ -214,11 +214,11 @@ namespace NewRatCharacterController {
         private const int Past = 0;
         private const int Present = 1;
         private const int Future = 2;
-        private bool bButton;
-        private void BButton(InputAction.CallbackContext context) {
-            bButton = !bButton;
+        private bool xButton;
+        private void XButton(InputAction.CallbackContext context) {
+            xButton = !xButton;
             if (canTimeTravelPast || canTimeTravelPresent || canTimeTravelFuture) {
-                Debug.Log($"{nameof(BButton)} {bButton}");
+                Debug.Log($"{nameof(BButton)} {xButton}");
                 StartCoroutine(CycleTimeTravelButtons());
             }
         }
@@ -226,8 +226,10 @@ namespace NewRatCharacterController {
         private IEnumerator CycleTimeTravelButtons() {
             int timeTravelTime = -1;
 
-            while (bButton) {
-                CycleButton(timeTravelTime = ++timeTravelTime % 3);
+            while (xButton) {
+                timeTravelTime = ++timeTravelTime % 3;
+                
+                CycleButton(timeTravelTime);
                 yield return new WaitForSeconds(1f);
             }
 
@@ -242,11 +244,12 @@ namespace NewRatCharacterController {
             TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, false);
             TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Future, false);
 
-            bButton = false;
+            xButton = false;
         }
 
         private void CycleButton(int timeTravelTime)
         {
+            
             switch (timeTravelTime)
             {
                 case (Past):
@@ -267,8 +270,8 @@ namespace NewRatCharacterController {
             }
         }
         
-        private void XButton(InputAction.CallbackContext context) {
-            Debug.Log($"{nameof(XButton)}");
+        private void AButton(InputAction.CallbackContext context) {
+            Debug.Log($"{nameof(AButton)}");
             Jump();
         }
 
@@ -325,31 +328,8 @@ namespace NewRatCharacterController {
             returnToGameDelegate?.Invoke();
         }
 
-        private void Update()
-        {
+        private void Update() {
             if (_paused) return;
-
-            /*
-			if (UnityEngine.Input.GetKeyDown(KeyCode.U))
-				CanTimeTravel = true;
-			else if (UnityEngine.Input.GetKeyDown(KeyCode.H))
-				CanTimeTravel = false;
-			
-			if (UnityEngine.Input.GetKeyDown(KeyCode.I))
-				CanTimeTravelPast = true;
-			else if (UnityEngine.Input.GetKeyDown(KeyCode.J))
-				CanTimeTravelPast = false;
-			
-			if (UnityEngine.Input.GetKeyDown(KeyCode.O))
-				CanTimeTravelPresent = true;
-			else if (UnityEngine.Input.GetKeyDown(KeyCode.K))
-				CanTimeTravelPresent = false;
-			
-			if (UnityEngine.Input.GetKeyDown(KeyCode.P))
-				CanTimeTravelFuture = true;
-			else if (UnityEngine.Input.GetKeyDown(KeyCode.L))
-				CanTimeTravelFuture = false;
-			*/
 
             MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
             CameraInput();
@@ -361,8 +341,7 @@ namespace NewRatCharacterController {
         private void MovementInput(Vector3 input) =>
             _newRatCharacterController.InputVector = input;
 
-        private void CameraInput()
-        {
+        private void CameraInput() {
             Vector2 cameraStickInput = _playerInputActions.CameraControls.CameraThumbstick.ReadValue<Vector2>();
             Vector2 cameraMouseInput = _playerInputActions.CameraControls.CameraMouseInput.ReadValue<Vector2>();
 
@@ -371,8 +350,7 @@ namespace NewRatCharacterController {
         }
 
         private void Jump(InputAction.CallbackContext context) => Jump();
-        private void Jump()
-        {
+        private void Jump() {
             Debug.Log("Pressed jump");
             _newRatCharacterController.PressedJump = true;
             _newRatCharacterController.HoldingJump = true;
@@ -381,28 +359,24 @@ namespace NewRatCharacterController {
         private void JumpReleased(InputAction.CallbackContext context) =>
             _newRatCharacterController.HoldingJump = false;
 
-        private void Pause(InputAction.CallbackContext context)
-        {
+        private void Pause(InputAction.CallbackContext context) {
             _newRatCharacterController.paused = !_newRatCharacterController.paused;
         }
 
         private void Interact(InputAction.CallbackContext context) => Interact();
-        private void Interact()
-        {
+        private void Interact() {
             _newRatCharacterController.Interact();
         }
 
         private void StopInteract(InputAction.CallbackContext context) => StopInteract();
-        private void StopInteract()
-        {
+        private void StopInteract() {
             _newRatCharacterController.StopInteract();
         }
 
         private void TravelToPast(InputAction.CallbackContext context) => TravelToPast();
         private void TravelToPast() {
 #if UNITY_EDITOR
-            if (FindObjectOfType<TimeTravelManager>() == null)
-            {
+            if (FindObjectOfType<TimeTravelManager>() == null) {
                 Debug.LogWarning("No TimeTravelManager found");
                 return;
             }
@@ -417,8 +391,7 @@ namespace NewRatCharacterController {
         private void TravelToPresent(InputAction.CallbackContext context) => TravelToPresent();
         private void TravelToPresent() {
 #if UNITY_EDITOR
-            if (FindObjectOfType<TimeTravelManager>() == null)
-            {
+            if (FindObjectOfType<TimeTravelManager>() == null) {
                 Debug.LogWarning("No TimeTravelManager found");
                 return;
             }
@@ -435,8 +408,7 @@ namespace NewRatCharacterController {
         private void TravelToFuture(InputAction.CallbackContext context) => TravelToFuture();
         private void TravelToFuture() {
 #if UNITY_EDITOR
-            if (FindObjectOfType<TimeTravelManager>() == null)
-            {
+            if (FindObjectOfType<TimeTravelManager>() == null) {
                 Debug.LogWarning("No TimeTravelManager found");
                 return;
             }
@@ -452,8 +424,7 @@ namespace NewRatCharacterController {
             Debug.LogWarning("fix this :) SettingsMeny is setting Accessibility to false");
             if (true) return;   // TODO debug
             
-            if (enable)
-            {
+            if (enable) {
                 Debug.LogError("h");
                 _playerInputActions.CharacterMovement.Enable();
             }
