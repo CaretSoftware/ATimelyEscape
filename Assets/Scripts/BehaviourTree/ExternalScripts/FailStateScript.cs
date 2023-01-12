@@ -15,6 +15,7 @@ public class FailStateScript : MonoBehaviour
     private Transform player;
     private ImageFadeFunctions blackScreenImage;
     private ImageFadeFunctions messageImage;
+    private AudioSource audioSource;
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class FailStateScript : MonoBehaviour
         //TODO Gretas test scen 
         player = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         blackScreenImage = GameObject.Find("FailStateCanvas/BlackScreen").GetComponent<ImageFadeFunctions>();
         messageImage = GameObject.Find("FailStateCanvas/MessageScreen").GetComponent<ImageFadeFunctions>();
 
@@ -71,6 +73,11 @@ public class FailStateScript : MonoBehaviour
     public void FadeToWhite()
     {
         blackScreenImage.RunFadeToWhite();
+    }
+
+    public void PlaySoundEffect()
+    {
+        audioSource.Play();
     }
 
     public void FadeBack()
