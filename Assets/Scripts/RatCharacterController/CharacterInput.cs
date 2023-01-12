@@ -61,7 +61,7 @@ namespace RatCharacterController {
 				Debug.LogWarning($"Missing Camera Follow Prefab in scene, add prefab before going into playmode",
 					this.gameObject);
 
-			CallHintAnimation callHint = new CallHintAnimation() {animationName = "TutorialControl", waitForTime = 15f};
+			CallHintAnimation callHint = new CallHintAnimation() {animationName = "Tutorial"};
 			callHint.Invoke();
 		}
 
@@ -118,7 +118,7 @@ namespace RatCharacterController {
 				PushCubeInput(_playerInputActions.BoxMovement.Movement.ReadValue<Vector2>());
 
 			if (LedgeAhead(out Vector3 hitPosition, true)) { // TODO Noah! Remove this?
-				CallHintAnimation callHint = new CallHintAnimation() {animationName = "JumpHint", waitForTime = 1f};
+				CallHintAnimation callHint = new CallHintAnimation() { animationName = "ClimbHint" };
 				callHint.Invoke();
 			}
 		}
