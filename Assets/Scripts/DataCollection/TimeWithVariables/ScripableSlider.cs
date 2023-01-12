@@ -15,22 +15,9 @@ public class ScripableSlider : MonoBehaviour
     [SerializeField]private VariablesID data;
 
     private Slider _slider;
-
-    private float previusValue;
     private float value;
 
     private float timer;
-
-    private int hours;
-    private int minutes;
-    private int seconds;
-
-    private string path;
-    private string fileName;
-
-   
-
-    StreamWriter writer;
 
     void Start()
     {
@@ -39,8 +26,12 @@ public class ScripableSlider : MonoBehaviour
         if (myUnityEvent == null)
             myUnityEvent = new TestSlider();
         if (_slider == null) return;
-        myUnityEvent.AddListener(Ping);
-        data = new(gameObject.name);
+
+        data = SaveDataCollected.LoadVariableData(gameObject.name);
+        if (data == null)
+        {
+            data = new(gameObject.name);
+        }
         value = _slider.value;
     }
 
@@ -62,17 +53,12 @@ public class ScripableSlider : MonoBehaviour
         value = _slider.value;
         myUnityEvent.Invoke(value);
 
-        Debug.Log(value);
     }
 
     private void OnDestroy()
     {
         data.UpdateVariableData(value, timer);
-    }
-
-    void Ping(float value)
-    {
-        Debug.Log("Ping" + value);
+        SaveDataCollected.SaveVariableData(data);
     }
 
 

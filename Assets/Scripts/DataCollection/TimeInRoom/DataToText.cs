@@ -12,19 +12,19 @@ public class DataToText : MonoBehaviour
     [SerializeField] private int convertIndex;
     [SerializeField] private int numberOfSaves;
 
-    [ContextMenu("Number Of Saves")]
-    private void NumberOfSaves()
+    [ContextMenu("Number Of Room Saves")]
+    private void ConvertRoomDataAtIndex()
     {
         numberOfSaves = SaveDataCollected.GetNumberOfRoomSaves();
     }
 
-    private string ConvertAtIndex(int convertIndex)
+    private string ConvertRoomDataAtIndex(int convertIndex)
     {
         RoomTimerData data = SaveDataCollected.LoadDataCollected(convertIndex);
-        return Convert(data);
+        return ConvertRoomData(data);
     }
 
-    private string Convert(RoomTimerData data)
+    private string ConvertRoomData(RoomTimerData data)
     {
         if (data != null)
         {
@@ -40,14 +40,14 @@ public class DataToText : MonoBehaviour
         return null;
     }
 
-    [ContextMenu("Convert at index")]
-    private void CreateTxtFile()
+    [ContextMenu("Convert RoomData at index")]
+    private void CreateRoomTxtFile()
     {
-        if (ConvertAtIndex(convertIndex) == null) return;
-        CreateTxtFile(ConvertAtIndex(convertIndex), string.Format("{0:D2}.txt", convertIndex)); 
+        if (ConvertRoomDataAtIndex(convertIndex) == null) return;
+        CreateRoomTxtFile(ConvertRoomDataAtIndex(convertIndex), string.Format("{0:D2}.txt", convertIndex)); 
     }
 
-    private void CreateTxtFile(string txt, string fileName)
+    private void CreateRoomTxtFile(string txt, string fileName)
     {
         RomeTimerTxtFolder = Application.persistentDataPath + "/RoomTimertxt/";
         EnsureDirectoryExists(RomeTimerTxtFolder);
@@ -58,8 +58,8 @@ public class DataToText : MonoBehaviour
         Debug.Log(txt);
     }
 
-    [ContextMenu("Convert Total")]
-    private void CreateSummery()
+    [ContextMenu("Convert RoomData Total")]
+    private void CreateRoomDataSummery()
     {
         StringBuilder stringBuilder = new StringBuilder();
         List<TimeInRoomX> total = new();
@@ -73,7 +73,7 @@ public class DataToText : MonoBehaviour
         {
             tempList = SaveDataCollected.LoadDataCollected(counter).timeInRooms;
             stringBuilder.AppendLine(string.Format("Playthrough {0:D2}:", counter));
-            stringBuilder.AppendLine(ConvertAtIndex(counter));
+            stringBuilder.AppendLine(ConvertRoomDataAtIndex(counter));
 
             foreach(TimeInRoomX tempX in tempList) 
             {
@@ -99,9 +99,9 @@ public class DataToText : MonoBehaviour
         }
         
         stringBuilder.AppendLine("Total:");
-        stringBuilder.AppendLine(Convert(new RoomTimerData(total)));
+        stringBuilder.AppendLine(ConvertRoomData(new RoomTimerData(total)));
 
-        CreateTxtFile(stringBuilder.ToString(), "Total.txt");
+        CreateRoomTxtFile(stringBuilder.ToString(), "Total.txt");
     }
 
 
