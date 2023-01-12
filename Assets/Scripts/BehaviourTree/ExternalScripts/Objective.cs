@@ -16,7 +16,7 @@ public class Objective : MonoBehaviour
     private TextMeshProUGUI objectiveText;
     private MeshRenderer mr;
     private RectTransform rt;
-    private Vector2 objectiveSizeUI = new Vector2(200, 20);
+    private Vector2 objectiveSizeUI = new Vector2(200, 50);
     public bool isComplete { get; private set; }
 
     private void Start()
