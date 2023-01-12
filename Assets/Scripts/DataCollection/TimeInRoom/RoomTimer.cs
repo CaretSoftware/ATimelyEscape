@@ -70,7 +70,7 @@ public class RoomTimer : MonoBehaviour
                 bool alreadyExist = false;
                 foreach (TimeInRoomX x in timeInRooms)
                 {
-                    if (x.room == currentRoomIndex)
+                    if (!x.IsTutorial && x.room == currentRoomIndex)
                     {
                         alreadyExist = true;
                         currentRoom = x;
