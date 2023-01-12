@@ -22,6 +22,20 @@ namespace NewRatCharacterController {
 		private Quaternion worldRotation;
 		private Rigidbody cubeRB;
 
+		private bool _letGo;
+		
+		public CubePushState() {
+			cubeLetGo += LetGoOfCUbe;
+		}
+		
+		~CubePushState() {
+			cubeLetGo -= LetGoOfCUbe;
+		}
+
+		private void LetGoOfCUbe() {
+			_letGo = true;
+		}
+
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
 			// are we pressing interact? are we in front of cube?
 			return newRatCharacter.Interacting && newRatCharacter.InFrontOfCube();
@@ -88,8 +102,8 @@ namespace NewRatCharacterController {
 				}
 			}
 
-			float velocityLateralMin = -.1f;
-			if (NewRatCharacter.LetGoOfCube || cubeRB != null && cubeRB.velocity.y < velocityLateralMin) {
+			float velocityLateralMin = -.2f;
+			if (_letGo || NewRatCharacter.LetGoOfCube || (cubeRB != null && cubeRB.velocity.y < velocityLateralMin)) {
 				NewRatCharacter.LetGoOfCube = false;
 				stateMachine.TransitionTo<MoveState>();
 			}
@@ -107,6 +121,7 @@ namespace NewRatCharacterController {
 		public override void Exit() {
 			CubePushState.pushCubeUIOn?.Invoke(true);
 			NewRatCharacter.AnimationController.Push(false);
+			_letGo = false;
 			//NewRatCharacter.transform.parent = null;
 		}
 	}
