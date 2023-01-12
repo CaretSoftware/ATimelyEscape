@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.Serialization;
 
 public class SettingsMenuController : MonoBehaviour
 {
@@ -16,7 +17,6 @@ public class SettingsMenuController : MonoBehaviour
     [SerializeField] private Slider volumeMasterSlider;
     [SerializeField] private Slider volumeMusicSlider;
     [SerializeField] private Slider volumeEffectsSlider;
-    [SerializeField] private Slider timeScaleSlider;
 
     [Header("UI Crosshair")]
     [SerializeField] private GameObject crossHairCanvas;
@@ -25,14 +25,13 @@ public class SettingsMenuController : MonoBehaviour
     [SerializeField] private Toggle textToSpeach;
     [SerializeField] private Toggle movementAccessiblityControl;
     [SerializeField] private Toggle crosshair;
-    [SerializeField] private Toggle navigationAssist;
+    [SerializeField] private Toggle navigationAssistToggle;
 
     private void Start()
     {
         volumeMasterSlider.value = SettingsManager.Instance.masterVolume;
         volumeMusicSlider.value = SettingsManager.Instance.musicVolume;
         volumeEffectsSlider.value = SettingsManager.Instance.effectVolume;
-        timeScaleSlider.value = SettingsManager.Instance.timeScaleValue;
 
         SetTextToSpeachActive(SettingsManager.Instance.textToSpeachActive);
         SetMovementControls(SettingsManager.Instance.movmentAccessiblityActive);
@@ -73,13 +72,6 @@ public class SettingsMenuController : MonoBehaviour
         ButtonSoundBehaviour.shouldPlayTextToSpeach = active;
     }
 
-    public void SetDeltaTime(float value)
-    {
-        if (value < 0)
-            SettingsManager.Instance.timeScaleValue = 0;
-        SettingsManager.Instance.timeScaleValue = value;
-    }
-
     public void SetMovementControls(bool accessible)
     {
         SettingsManager.Instance.movmentAccessiblityActive = accessible;
@@ -99,9 +91,9 @@ public class SettingsMenuController : MonoBehaviour
     public void SetNavigationAssistActive(bool active)
     {
         SettingsManager.Instance.navigationAssistActive = active;
-        navigationAssist.isOn = active;
-        if(isPauseMenu)
-            CognitiveAssistanceTriggerHandler.SetNavigationActive(navigationAssist.isOn);
+        navigationAssistToggle.isOn = active;
+        CognitiveAssistanceTriggerHandler.SetNavigationActive(active);
+        
     }
 
     public void SetMasterVolume(float volume)
