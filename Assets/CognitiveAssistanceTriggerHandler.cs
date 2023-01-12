@@ -14,10 +14,12 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
     [SerializeField] private BoxCollider collider;
     [SerializeField] private ObjectiveHolder objectiveHolder;
     [SerializeField] private GameObject[] children;
-    
-    //[HideInInspector] public bool isCurrentlyActive;
+    private bool isCurrentlyActive;
 
-    public static void SetNavigationActive(bool arg) { NAVIGATION_ACTIVE = arg; }
+    public static void SetNavigationActive(bool arg)
+    {
+        NAVIGATION_ACTIVE = arg;
+    }
 
     private void Start()
     {
@@ -29,8 +31,7 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        //|| isCurrentlyActive
-        if(!NAVIGATION_ACTIVE || other.tag != "Player") 
+        if(!NAVIGATION_ACTIVE || other.tag != "Player" || isCurrentlyActive) 
             return;
 
         fetchAll();
