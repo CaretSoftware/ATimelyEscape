@@ -76,6 +76,7 @@ public class RuntimeSceneManager : MonoBehaviour {
         TimeTravelManager.ReloadCurrentTimeTravelPeriod();
         SceneManager.UnloadSceneAsync(currentOnboardingSceneIndex, UnloadSceneOptions.None);
         currentOnboardingSceneIndex = -1;
+        NewRatCharacterController.NewRatCharacterController.Locked = false; 
     }
 
     public void UnloadAllRooms() {
