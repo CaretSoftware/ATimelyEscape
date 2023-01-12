@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using CallbackSystem;
 using UnityEngine;
 
+/// <summary>
+/// @author Emil Wessman & Greta Hassler
+/// </summary>
 public static class OnboardingHandler {
     private static bool cubeInteractionsDiscovered;
     private static bool cubeChargeDiscovered;

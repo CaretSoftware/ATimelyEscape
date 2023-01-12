@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// @author Emil Wessman
+/// </summary>
 namespace StateMachines {
     public class StateMachine {
         public State CurrentState { get; set; }
