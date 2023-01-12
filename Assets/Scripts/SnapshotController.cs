@@ -20,10 +20,14 @@ public class SnapshotController : MonoBehaviour
         source = GetComponent<AudioSource>();
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
     void OnTimeTravel(TimePeriodChanged tpc)
     {
-        if (tpc.IsReload) { return; }
-
         source.PlayOneShot(zap);
 
         switch (tpc.to)
