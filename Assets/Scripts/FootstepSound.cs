@@ -6,7 +6,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class FootstepSound : MonoBehaviour {
-    [SerializeField, Range(0f, 1.0f)] private float footStepVolume = .5f; 
+    [SerializeField, Range(0f, 1.0f)] private float footStepVolume = .5f;
     [SerializeField, Range(0f, 1.0f)] private float randomVolumePercentage = .25f;
     [SerializeField] private AudioClip[] footSteps;
     
@@ -29,7 +29,7 @@ public class FootstepSound : MonoBehaviour {
             if (_characterController != null)
                 _currentVelocity = _characterController._velocity.magnitude;
             float randomVolumePercentage = 1f - Random.Range(0f, this.randomVolumePercentage);
-            float volume = Mathf.InverseLerp(minVelocity,   maxVelocity, _currentVelocity) * footStepVolume * randomVolumePercentage;
+            float volume = 1f - randomVolumePercentage; //Mathf.InverseLerp(minVelocity,   maxVelocity, _currentVelocity) * footStepVolume * randomVolumePercentage;
             PlayFootstep(volume);
         }
     }
