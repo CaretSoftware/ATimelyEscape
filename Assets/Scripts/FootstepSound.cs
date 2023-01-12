@@ -17,7 +17,10 @@ public class FootstepSound : MonoBehaviour {
     private float minVelocity = .5f;
     private float _currentVelocity = 1.0f;
 
+    private AudioSource _audioSource;
+
     private void Start() {
+        _audioSource = GetComponentInChildren<AudioSource>();
         _characterController = GetComponent<NewRatCharacterController.NewRatCharacterController>();
     }
 
@@ -35,8 +38,8 @@ public class FootstepSound : MonoBehaviour {
     private void PlayFootstep() => PlayFootstep(1.0f); 
     private void PlayFootstep(float volume) {
         int rnd = Random.Range(0, footSteps.Length);
-        
-        AudioSource.PlayClipAtPoint(footSteps[rnd], transform.position, volume);
+        _audioSource.clip = footSteps[rnd];
+        _audioSource.PlayOneShot(footSteps[rnd], volume);
+        // PlayClipAtPoint(footSteps[rnd], transform.position, volume);
     }
-    
 }
