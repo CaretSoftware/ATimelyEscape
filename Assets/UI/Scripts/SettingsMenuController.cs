@@ -11,7 +11,6 @@ public class SettingsMenuController : MonoBehaviour
     public bool isPauseMenu;
 
     public AudioMixer audioMixer;
-
     public TMPro.TMP_Dropdown resolutionDropdown;
     Resolution[] resolutions;
 
@@ -27,6 +26,7 @@ public class SettingsMenuController : MonoBehaviour
     [SerializeField] private Toggle textToSpeach;
     [SerializeField] private Toggle movementAccessiblityControl;
     [SerializeField] private Toggle crosshair;
+    [SerializeField] private Toggle navigationAssist;
 
     private void Start()
     {
@@ -37,6 +37,7 @@ public class SettingsMenuController : MonoBehaviour
         SetTextToSpeachActive(SettingsManager.Instance.textToSpeachActive);
         SetMovementControls(SettingsManager.Instance.movmentAccessiblityActive);
         SetCrossHairCanvas(SettingsManager.Instance.crossHairCanvasActive);
+        SetNavigationAssistActive(SettingsManager.Instance.navigationAssistActive);
 
         if (resolutionDropdown != null)
         {
@@ -86,6 +87,13 @@ public class SettingsMenuController : MonoBehaviour
         crosshair.isOn = active;
         if(crossHairCanvas != null)
             crossHairCanvas.SetActive(active);
+    }
+
+    public void SetNavigationAssistActive(bool active)
+    {
+        SettingsManager.Instance.navigationAssistActive = active;
+        navigationAssist.isOn = active;
+        CognitiveAssistanceTriggerHandler.SetNavigationActive(navigationAssist.isOn);
     }
 
     public void SetMasterVolume(float volume)
