@@ -14,7 +14,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
     
     private IEnumerator currentCoroutine;
 
-    // private bool paused;
+    public bool isPaused { get; set; }
 
     private Animator pauseMenyAnimator;
 
@@ -122,7 +122,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
         while (time < pauseDelay) {
             time += Time.unscaledDeltaTime;
 
-            Time.timeScale = Mathf.Lerp(startScale, 1, time / pauseDelay);
+            Time.timeScale = Mathf.Lerp(startScale, SettingsManager.Instance.timeScaleValue, time / pauseDelay);
 
             yield return null;
         }
