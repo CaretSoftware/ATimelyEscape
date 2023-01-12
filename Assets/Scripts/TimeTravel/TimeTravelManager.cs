@@ -127,7 +127,7 @@ namespace StateMachines {
                 } else {
                     // Player tried time travelling into another object
                     TimeTravelManager.desiredPeriod = TimeTravelManager.currentPeriod;
-                    CallHintAnimation callHint = new CallHintAnimation() { animationName = "TravelWarning", waitForTime = 0.5f };
+                    CallHintAnimation callHint = new CallHintAnimation() { animationName = "TravelWarning" };
                     callHint.Invoke();
                 }
             }

@@ -10,7 +10,7 @@ namespace CallbackSystem
     public class CallHintAnimation : UIEvent
     {
         public string animationName;
-        public float waitForTime;
+        //public float waitForTime;
     }
 
     public class CubeIconStateEvent : UIEvent
