@@ -14,8 +14,7 @@ public class RoomTimer : MonoBehaviour
     private TimeInRoomX currentRoom;
 
     private int currentRoomIndex;
-
-    [SerializeField] private int saveEvery = 10;
+    private int currentTutorialIndex;
 
     private float timer;
 
@@ -27,39 +26,70 @@ public class RoomTimer : MonoBehaviour
         currentRoomIndex = runtimeSceneManager.CurrentSceneIndex;
         currentRoom = new TimeInRoomX(currentRoomIndex);
         timeInRooms.Add(currentRoom);
-        saveNumber = SaveDataCollected.SaveRoomTimer(this);   
+        saveNumber = SaveDataCollected.SaveRoomTimer(this);
     }
 
     private void Update()
     {
-        if (currentRoomIndex != runtimeSceneManager.CurrentSceneIndex)
+        if (runtimeSceneManager.OnboardingRoomLoaded)
         {
-            currentRoom.SetTime(timer);
-            timer = 0; 
-            currentRoomIndex = runtimeSceneManager.CurrentSceneIndex;
+            if (currentTutorialIndex != runtimeSceneManager.OnboadringRoomIndex)
+            {
+                currentRoom.SetTime(timer);
+                timer = 0;
+                currentTutorialIndex = runtimeSceneManager.OnboadringRoomIndex;
 
-            bool alreadyExist = false;
-            foreach (TimeInRoomX x in timeInRooms)
-            {
-                if (x.room == currentRoomIndex)
+                bool alreadyExist = false;
+                foreach (TimeInRoomX x in timeInRooms)
                 {
-                    alreadyExist = true;
-                    currentRoom = x;
-                    currentRoom.Visited();
-                    break;
+                    if (x.IsTutorial && x.room == currentTutorialIndex)
+                    {
+                        alreadyExist = true;
+                        currentRoom = x;
+                        currentRoom.Visited();
+                        break;
+                    }
                 }
+                if (!alreadyExist)
+                {
+                    currentRoom = new TimeInRoomX(currentRoomIndex, true);
+                    timeInRooms.Add(currentRoom);
+                }
+                SaveDataCollected.SaveRoomTimer(this, saveNumber);
             }
-            if (!alreadyExist)
+        }
+        else
+        {
+            if (currentRoomIndex != runtimeSceneManager.CurrentSceneIndex)
             {
-                currentRoom = new TimeInRoomX(currentRoomIndex);
-                timeInRooms.Add(currentRoom);
+                currentTutorialIndex = -1;
+                currentRoom.SetTime(timer);
+                timer = 0;
+                currentRoomIndex = runtimeSceneManager.CurrentSceneIndex;
+
+                bool alreadyExist = false;
+                foreach (TimeInRoomX x in timeInRooms)
+                {
+                    if (!x.IsTutorial && x.room == currentRoomIndex)
+                    {
+                        alreadyExist = true;
+                        currentRoom = x;
+                        currentRoom.Visited();
+                        break;
+                    }
+                }
+                if (!alreadyExist)
+                {
+                    currentRoom = new TimeInRoomX(currentRoomIndex);
+                    timeInRooms.Add(currentRoom);
+                }
+                SaveDataCollected.SaveRoomTimer(this, saveNumber);
             }
-            SaveDataCollected.SaveRoomTimer(this, saveNumber);
         }
         timer += Time.deltaTime;
     }
 
-   
+
     private void OnDestroy()
     {
         currentRoom.SetTime(timer);
