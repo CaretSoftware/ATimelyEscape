@@ -7,8 +7,8 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(BoxCollider))]
 public class CognitiveAssistanceTriggerHandler : MonoBehaviour
 {
-    private static bool NAVIGATION_ACTIVE; 
-
+    private static bool NAVIGATION_ACTIVE;
+    private static CognitiveAssistanceTriggerHandler current;
     private List<CognitiveAssistanceTriggerHandler> handlers = new List<CognitiveAssistanceTriggerHandler>();
 
     [SerializeField] private BoxCollider collider;
@@ -16,11 +16,11 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
     [SerializeField] private GameObject[] children;
     private bool isCurrentlyActive;
 
-    public static void SetNavigationActive(bool arg) { NAVIGATION_ACTIVE = arg; }
-
-    public static void InactivateAllHandlers()
+    public static void SetNavigationActive(bool arg)
     {
-        
+        NAVIGATION_ACTIVE = arg;
+        if(current != null)
+            current.setChildrenActive(arg);
     }
 
     private void Start()
@@ -32,7 +32,6 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         if(!NAVIGATION_ACTIVE || other.tag != "Player" || isCurrentlyActive) 
             return;
 
@@ -41,6 +40,7 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
         {
             if (handlers[i] == this)
             {
+                current = this;
                 setChildrenActive(true);
                 objectiveHolder.Triggered();
                 collider.enabled = false;
