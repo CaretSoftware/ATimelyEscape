@@ -12,6 +12,8 @@ public class DataToText : MonoBehaviour
     [SerializeField] private int convertIndex;
     [SerializeField] private int numberOfSaves;
 
+    [SerializeField] private string[] variablesFile;
+
     [ContextMenu("Number Of Room Saves")]
     private void ConvertRoomDataAtIndex()
     {
@@ -44,14 +46,13 @@ public class DataToText : MonoBehaviour
     private void CreateRoomTxtFile()
     {
         if (ConvertRoomDataAtIndex(convertIndex) == null) return;
-        CreateRoomTxtFile(ConvertRoomDataAtIndex(convertIndex), string.Format("{0:D2}.txt", convertIndex)); 
+        CreateTxtFile(ConvertRoomDataAtIndex(convertIndex), string.Format("{0:D2}.txt", convertIndex), Application.persistentDataPath + "/RoomTimertxt/"); 
     }
 
-    private void CreateRoomTxtFile(string txt, string fileName)
+    private void CreateTxtFile(string txt, string fileName, string path)
     {
-        RomeTimerTxtFolder = Application.persistentDataPath + "/RoomTimertxt/";
-        EnsureDirectoryExists(RomeTimerTxtFolder);
-        StreamWriter writer = new StreamWriter(RomeTimerTxtFolder + fileName);
+        EnsureDirectoryExists(path);
+        StreamWriter writer = new StreamWriter(path + fileName);
         writer.WriteLine(txt);
         writer.Close();
 
@@ -101,7 +102,7 @@ public class DataToText : MonoBehaviour
         stringBuilder.AppendLine("Total:");
         stringBuilder.AppendLine(ConvertRoomData(new RoomTimerData(total)));
 
-        CreateRoomTxtFile(stringBuilder.ToString(), "Total.txt");
+        CreateTxtFile(stringBuilder.ToString(), "Total.txt", Application.persistentDataPath + "/RoomTimertxt/");
     }
 
 
@@ -115,4 +116,28 @@ public class DataToText : MonoBehaviour
             Directory.CreateDirectory(fi.DirectoryName);
         }
     }
+
+    [ContextMenu("Get Variable Files")]
+    private void GetVeriableFileNames()
+    {
+        variablesFile = Directory.GetFiles(Application.persistentDataPath + "/VariableFolder/");
+        for (int i = 0; i < variablesFile.Length; i++)
+        {
+            variablesFile[i] = Path.GetFileName(variablesFile[i]);
+        }
+    }
+
+    [ContextMenu("Convert Variable Files")]
+    private void ConvertVariablesToTxt()
+    {
+        GetVeriableFileNames();
+        StringBuilder sb = new StringBuilder();
+        foreach(string variable in variablesFile) 
+        { 
+            sb.Append(SaveDataCollected.LoadVariableData(variable).ToString());
+        }
+        CreateTxtFile(sb.ToString(), "Variables.txt", Application.persistentDataPath + "/Variabletxt/");
+    }
+
+
 }

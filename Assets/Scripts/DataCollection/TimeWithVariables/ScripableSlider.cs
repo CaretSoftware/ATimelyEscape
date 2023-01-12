@@ -27,7 +27,7 @@ public class ScripableSlider : MonoBehaviour
             myUnityEvent = new TestSlider();
         if (_slider == null) return;
 
-        data = SaveDataCollected.LoadVariableData(gameObject.name);
+        data = SaveDataCollected.LoadVariableData(gameObject.name + ".data");
         if (data == null)
         {
             data = new(gameObject.name);

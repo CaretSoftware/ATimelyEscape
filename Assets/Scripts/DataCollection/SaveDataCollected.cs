@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public static class SaveDataCollected 
 {
@@ -93,7 +92,7 @@ public static class SaveDataCollected
 
     public static VariablesID LoadVariableData(string fileName)
     {
-        string path = variableFolder + fileName + ".data";
+        string path = variableFolder + fileName;
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

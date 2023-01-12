@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -31,5 +32,17 @@ public class VariablesID
         {
             data.Add(new VariableData(value, time));
         }
+    }
+
+    override
+    public string ToString()
+    {
+        StringBuilder sb = new();
+        sb.AppendLine(name + ":");
+        foreach (VariableData d in data)
+        {
+            sb.AppendLine(d.ToString());
+        }
+        return sb.ToString();
     }
 }
