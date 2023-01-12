@@ -51,13 +51,13 @@ public class TimeInRoomX
     public string ToString()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine(string.Format("Room {0:D2}:", room));
+        if (isTutorial) { stringBuilder.AppendLine(string.Format("Tutorial {0:D2}:", room)); }
+        else { stringBuilder.AppendLine(string.Format("Room {0:D2}:", room)); }
         stringBuilder.AppendLine(string.Format("Visited: {0:D2}", visited));
         stringBuilder.AppendLine(string.Format("Time in Room: {0:D2} : {1:D2} : {2:D2} ", hours, minutes, seconds));
 
         return stringBuilder.ToString();
     }
-
     public string ToString(string name)
     {
         StringBuilder stringBuilder = new StringBuilder();

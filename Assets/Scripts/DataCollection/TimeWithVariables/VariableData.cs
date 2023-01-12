@@ -27,7 +27,7 @@ public class VariableData
     {
         StringBuilder sb = new StringBuilder();
         sb.Append(value.ToString());
-        sb.Append("; ");
+        sb.AppendLine("; ");
         sb.AppendLine(String.Format("{0:D2} : {1:D2} : {2:D2}",
             (int)(time / 3600),
             (int)(time / 60) % 60,
