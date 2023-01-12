@@ -95,6 +95,7 @@ public class SettingsMenuController : MonoBehaviour
         SettingsManager.Instance.navigationAssistActive = active;
         navigationAssistToggle.isOn = active;
         CognitiveAssistanceTriggerHandler.SetNavigationActive(active);
+        
     }
 
     public void SetMasterVolume(float volume)

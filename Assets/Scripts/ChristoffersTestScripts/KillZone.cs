@@ -5,7 +5,6 @@ using UnityEngine;
 public class KillZone : MonoBehaviour
 {
     [SerializeField] private GameObject checkPoint;
-    [SerializeField] private bool isOnlyRatKillzone;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -13,13 +12,10 @@ public class KillZone : MonoBehaviour
         {
             other.transform.position = checkPoint.transform.position;
         }
-        if (!isOnlyRatKillzone)
+        else if(other.CompareTag("Cube"))
         {
-            if (other.CompareTag("Cube"))
-            {
-                other.gameObject.SetActive(false);
-                Destroy(other.gameObject);
-            }
+            other.gameObject.SetActive(false);
+            Destroy(other.gameObject);
         }
     }
 }
