@@ -4,6 +4,9 @@ using CallbackSystem;
 using NaughtyAttributes;
 using UnityEngine;
 
+/// <summary>
+/// @author Emil Wessman
+/// </summary>
 public class TimeTravelObjectManager : MonoBehaviour {
     [Tooltip(
         "Whether the time travelling object uses different prefabs in different time periods, this goes for meshes AND decals")]
@@ -63,6 +66,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
          future.wireBox == null);
 
     private TimeTravelPeriod traveledFrom, traveledTo;
+    private const float DISPLACEMENT_EFFECT_LENGTH = 0.4f;
 
     private Dictionary<string, DisplacmentInfo[]> DisplacementsAndRenderers = new Dictionary<string, DisplacmentInfo[]>();
     private Material pastDisplacement, presentDisplacement, futureDisplacement;
@@ -92,6 +96,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Checks whether or not a TimeTravelObject & Manager has been set up correctly by the user. Partially reduntant since the introduction of tools that
+    /// make sure it's done right.
+    /// </summary>
     private void CheckForMissingComponents() {
         string missingComponentNames = "";
         for (int i = 0; i < transform.childCount; i++) {
@@ -109,6 +117,9 @@ public class TimeTravelObjectManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Determine how child TimeTravelObjects should be set up
+    /// </summary>
     private void DetermineTimeTravelObjectState() {
         switch (changesPrefab) {
             case true when !canBeMovedByPlayer: ObjectState = TimeTravelObjectState.PrefabChanging; break;
@@ -116,6 +127,9 @@ public class TimeTravelObjectManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Data class to store information about each TimeTravelObject and how it should apply the Displacement shader effect
+    /// </summary>
     public class DisplacmentInfo {
         public Renderer renderer;
         public string rendererID;
@@ -123,6 +137,12 @@ public class TimeTravelObjectManager : MonoBehaviour {
         public Material[] originalMaterials;
     }
 
+    /// <summary>
+    /// Recursively sorts and "pairs" TimeTravelObjects and their child objects togheter based on ID in their respective gameObject's names.
+    /// Names that are string variants of GUIDs so as to avoid TTOs being combined wrong.
+    /// </summary>
+    /// <param name="currentTransform">The currently considered child/TTO transform</param>
+    /// <param name="currentTTO">The main/parent TTO</param>
     private void CategorizeRenderersForDisplacement(Transform currentTransform, TimeTravelObject currentTTO) {
         Renderer subRenderer = currentTransform.GetComponent<Renderer>();
 
@@ -167,6 +187,7 @@ public class TimeTravelObjectManager : MonoBehaviour {
         else activePosition = future.transform.position;
     }
 
+    //methods to use a faux "shader" to show cubes in other periods than the active. Not used in final game
     private void SetUpWireBox(TimeTravelObject travelObject, Color color) {
         GameObject wireObj = new GameObject(travelObject.name + " preview");
         wireObj.transform.parent = transform;
@@ -186,6 +207,10 @@ public class TimeTravelObjectManager : MonoBehaviour {
         } else timeTravelObject.previewBoxObject?.SetActive(false);
     }
 
+    /// <summary>
+    /// Callback function that initiates the TimeTravel shader disaplacement effect 
+    /// </summary>
+    /// <param name="e">The time travel event</param>
     private void HandleDisplacement(TimePeriodChanged e) {
         traveledFrom = e.from;
         traveledTo = e.to;
@@ -216,20 +241,13 @@ public class TimeTravelObjectManager : MonoBehaviour {
     }
 
     private IEnumerator<WaitForSecondsRealtime> DisplacementComplete() {
-        yield return new WaitForSecondsRealtime(!displaceOnTimeTravel ? 0 : 0.4f);
-
-        /*        if ((int)traveledFrom < 3 || (int)traveledTo < 3) {
-                   foreach (var info in DisplacementsAndRenderers.Values) {
-                       for (int i = 0; i < 3; i++) {
-                           if (info[i] == null) continue;
-                           info[i].renderer.sharedMaterials = info[i].originalMaterials;
-                           info[i].renderer.enabled = i == (int)traveledTo ? true : false;
-                       }
-                   }
-               } */
+        yield return new WaitForSecondsRealtime(!displaceOnTimeTravel ? 0 : DISPLACEMENT_EFFECT_LENGTH);
         DiscplacementCompleteHelper();
     }
 
+    /// <summary>
+    /// function to restore materials and properties to TimeTravelObjects after displacement is complete
+    /// </summary>
     private void DiscplacementCompleteHelper() {
         if ((int)traveledFrom < 3 || (int)traveledTo < 3) {
             foreach (var info in DisplacementsAndRenderers.Values) {

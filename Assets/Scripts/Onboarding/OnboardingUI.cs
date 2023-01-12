@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using CallbackSystem;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// @author Emil Wessman & Greta Hassler
+/// </summary>
 public class OnboardingUI : MonoBehaviour {
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private TextMeshProUGUI notificationText;
@@ -59,6 +61,12 @@ public class OnboardingUI : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Creates buttons based with delgates triggering the right onboarding room to be told. In case of main tutorial room (incubator)
+    /// a notification saying the action is not allowed will be shown.
+    /// </summary>
+    /// <param name="sceneIndex">the index of the tutorial scene</param>
+    /// <param name="name">The text to display on the button in the UI</param>
     private void CreateButton(int sceneIndex, string name) {
         GameObject buttonObject = Instantiate(buttonPrefab, transform) as GameObject;
         Button button = buttonObject.GetComponent<Button>();
@@ -77,6 +85,12 @@ public class OnboardingUI : MonoBehaviour {
         unlockedButtons.Add(button);
     }
 
+    /// <summary>
+    /// Fades in or out a notification message on the UI
+    /// </summary>
+    /// <param name="fadeIn">Whether to fade in or out</param>
+    /// <param name="text">The message</param>
+    /// <returns></returns>
     private IEnumerator FadeNotification(bool fadeIn, string text = null) {
         if (text != null) notificationText.text = text;
         Color32 initialColor = notificationText.color;

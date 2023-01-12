@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// @author Emil Wessman
+/// </summary>
 [RequireComponent(typeof(LineRenderer))]
 public class WireBox : MonoBehaviour {
     private LineRenderer lRenderer;
