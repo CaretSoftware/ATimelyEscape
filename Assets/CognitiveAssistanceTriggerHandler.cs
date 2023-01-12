@@ -16,7 +16,10 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
     [SerializeField] private GameObject[] children;
     private bool isCurrentlyActive;
 
-    public static void SetNavigationActive(bool arg) { NAVIGATION_ACTIVE = arg; }
+    public static void SetNavigationActive(bool arg)
+    {
+        NAVIGATION_ACTIVE = arg;
+    }
 
     private void Start()
     {
