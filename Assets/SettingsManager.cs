@@ -15,6 +15,7 @@ public class SettingsManager : MonoBehaviour
     public bool textToSpeachActive;
     public bool crossHairCanvasActive;
     public bool movmentAccessiblityActive;
+    public bool navigationAssistActive;
 
 
     private void Awake()
