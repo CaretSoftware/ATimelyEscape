@@ -13,6 +13,7 @@ public class DataToText : MonoBehaviour
     [SerializeField] private int numberOfSaves;
 
     [SerializeField] private string[] variablesFile;
+    [SerializeField] private string variableNames;
 
     [ContextMenu("Number Of Room Saves")]
     private void ConvertRoomDataAtIndex()
@@ -138,6 +139,8 @@ public class DataToText : MonoBehaviour
         }
         CreateTxtFile(sb.ToString(), "Variables.txt", Application.persistentDataPath + "/Variabletxt/");
     }
+
+
 
 
 }
