@@ -6,6 +6,12 @@ namespace NewRatCharacterController {
 		public delegate void PushCubeEvent(Transform cube);
 		public static PushCubeEvent pushCubeEvent;
 		
+		public delegate void CubeLetGo();
+		public static CubeLetGo cubeLetGo;
+
+		public delegate void PushCubeUIOn(bool on);
+		public static PushCubeUIOn pushCubeUIOn;
+
 		private const string State = nameof(CubePushState);
 
 		private CubePush cube;
@@ -15,7 +21,7 @@ namespace NewRatCharacterController {
 		private Vector3 _pushedCubeOffset;
 		private Quaternion worldRotation;
 		private Rigidbody cubeRB;
-		
+
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
 			// are we pressing interact? are we in front of cube?
 			return newRatCharacter.Interacting && newRatCharacter.InFrontOfCube();
@@ -23,6 +29,7 @@ namespace NewRatCharacterController {
 
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
+			CubePushState.pushCubeUIOn?.Invoke(false);
 			NewRatCharacter.AnimationController.Push(true);
 			
 			AttachPlayerToCube();
@@ -98,17 +105,9 @@ namespace NewRatCharacterController {
 		}
 
 		public override void Exit() {
+			CubePushState.pushCubeUIOn?.Invoke(true);
 			NewRatCharacter.AnimationController.Push(false);
 			//NewRatCharacter.transform.parent = null;
 		}
 	}
 }
-
-// TODO
-// Unsubscriptions Emils Eventsystem
-// Load markers på passande platser
-// SmoothDamp on camera transform
-// EventSystem timetravel bool don't set on Gretas timeTravel effect
-// SkinnedMeshRenderer i Gretas Tool
-// script for AI kinematics
-// Displacement max distance
