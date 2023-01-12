@@ -46,6 +46,8 @@ public class NewIncubator : MonoBehaviour
     private bool ratButtonOn;
     private bool charging;
     private bool welcome;
+    private bool slidingBack;
+
 
     private bool isON;
 
@@ -85,6 +87,7 @@ public class NewIncubator : MonoBehaviour
 
     }
 
+
     private void OnDestroy() { if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TimeTravel); }
     private void TimeTravel(TimePeriodChanged e)
     {
@@ -114,7 +117,7 @@ public class NewIncubator : MonoBehaviour
             }
             if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleTwoDone && !puzzleThreeDone)
             {
-                characterInput.CanTimeTravelPresent = true; 
+                characterInput.CanTimeTravelPresent = true;
                 instructions.text = "You see?";
                 audioManager.Play("11");
                 puzzleThreeDone = true;
@@ -150,7 +153,7 @@ public class NewIncubator : MonoBehaviour
         characterInput.CanTimeTravelPast = false;
         signMr.material = notDone;
         audioManager.Play("4");
-        instructions.text = "Moving a cube changes its destiny in the future. Move the cube.";
+        instructions.text = "Moving a cube changes its destiny in the future. Move the cube <sprite name=\"RT\" color=#A1A1A1>.";
         puzzleFloor.SetActive(false);
         bigHatchAnim.SetBool("Open", false);
         //Debug.Log("STEP2");
@@ -159,8 +162,8 @@ public class NewIncubator : MonoBehaviour
     private void Step2AndHalf()
     {
         audioManager.Play("5");
-        instructions.text = "Time travel forward in time <sprite name=\"Y\">";
-        characterInput.CanTimeTravelPresent = true; 
+        instructions.text = "Time travel forward in time <sprite name=\"Y\" color=#ECDB33>";
+        characterInput.CanTimeTravelPresent = true;
         puzzleOneDone = true;
         TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, true); // Patrik
     }
@@ -176,10 +179,10 @@ public class NewIncubator : MonoBehaviour
     private void Step4AndHalf()
     {
         audioManager.Play("7");
-        instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\">";
+        instructions.text = "Travel back in time. Observe the cube travelling back in time to its previous position <sprite name=\"X\" color=#40CCD0>";
         Invoke(nameof(Step4TwoThirds), 5.5f);
         TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, true); // Patrik
-        
+
     }
     private void Step4TwoThirds()
     {
@@ -192,13 +195,16 @@ public class NewIncubator : MonoBehaviour
         puzzleFloor.SetActive(true);
         bigHatchAnim.SetBool("OpenAgain", true);
         step1Anim.SetBool("Open", false);
+        slidingBack = true; 
+        StartCoroutine(DropTheCube());
         Invoke("Step6", 3.5f);
     }
     private void Step6()
     {
+        slidingBack = false;
         signMr.material = notDone;
         step1.SetActive(false);
-        charactercontroller.LetGoOfCube = true; 
+        charactercontroller.LetGoOfCube = true;
         step2.SetActive(true);
         bigHatchAnim.SetBool("OpenFourth", true);
         step2Anim.SetBool("Open", true);
@@ -221,12 +227,15 @@ public class NewIncubator : MonoBehaviour
         puzzleFloor.SetActive(true);
         bigHatchAnim.SetBool("OpenThird", true);
         step2Anim.SetBool("Open", false);
+        slidingBack = true; 
+        StartCoroutine(DropTheCube());
         Invoke("Step9", 3.5f);
         //StartCoroutine(Delay());
         //Debug.Log("STEP8");
     }
     private void Step9()
     {
+        slidingBack = false;
         sign.SetActive(true);
         signMr.material = notDone;
         sign2.SetActive(false);
@@ -244,8 +253,16 @@ public class NewIncubator : MonoBehaviour
         puzzleFloor.SetActive(false);
         audioManager.Play("8");
         instructions.text = "Charge this cube on the chargepad. It holds charge for a long time";
-        OnboardingHandler.CubeChargeDiscovered = true; 
-       // Debug.Log("STEP10");
+        OnboardingHandler.CubeChargeDiscovered = true;
+        // Debug.Log("STEP10");
+    }
+    private IEnumerator DropTheCube()
+    {
+        while (slidingBack)
+        {
+            yield return null;
+            charactercontroller.LetGoOfCube = true;
+        }
     }
 
     public void CubeButton()

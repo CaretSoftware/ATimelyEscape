@@ -5,6 +5,7 @@ using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.Serialization;
 
 public class SettingsMenuController : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class SettingsMenuController : MonoBehaviour
     [SerializeField] private Toggle textToSpeach;
     [SerializeField] private Toggle movementAccessiblityControl;
     [SerializeField] private Toggle crosshair;
-    [SerializeField] private Toggle navigationAssist;
+    [SerializeField] private Toggle navigationAssistToggle;
 
     private void Start()
     {
@@ -92,8 +93,8 @@ public class SettingsMenuController : MonoBehaviour
     public void SetNavigationAssistActive(bool active)
     {
         SettingsManager.Instance.navigationAssistActive = active;
-        navigationAssist.isOn = active;
-        CognitiveAssistanceTriggerHandler.SetNavigationActive(navigationAssist.isOn);
+        navigationAssistToggle.isOn = active;
+        CognitiveAssistanceTriggerHandler.SetNavigationActive(active);
     }
 
     public void SetMasterVolume(float volume)
