@@ -89,5 +89,4 @@ public class CubeSideActivator : MonoBehaviour {
 		Gizmos.color = prev;
 	}
 #endif
-	
 }

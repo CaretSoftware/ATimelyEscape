@@ -15,6 +15,15 @@ namespace NewRatCharacterController {
 		private Vector3 _pushedCubeOffset;
 		private Quaternion worldRotation;
 		private Rigidbody cubeRB;
+		private bool letGo;
+
+		public CubePushState() {
+			NewRatCharacterController.cubeLetGo += LetGoOfCube;
+		}
+		
+		~CubePushState() {
+			NewRatCharacterController.cubeLetGo -= LetGoOfCube;
+		}
 		
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
 			// are we pressing interact? are we in front of cube?
@@ -95,6 +104,15 @@ namespace NewRatCharacterController {
 			
 			if (NewRatCharacterController.Locked)
 				stateMachine.TransitionTo<LockState>();
+
+			if (letGo) {
+				letGo = false;
+				stateMachine.TransitionTo<MoveState>();
+			}
+		}
+
+		public void LetGoOfCube() {
+			letGo = true;
 		}
 
 		public override void Exit() {
@@ -103,12 +121,3 @@ namespace NewRatCharacterController {
 		}
 	}
 }
-
-// TODO
-// Unsubscriptions Emils Eventsystem
-// Load markers på passande platser
-// SmoothDamp on camera transform
-// EventSystem timetravel bool don't set on Gretas timeTravel effect
-// SkinnedMeshRenderer i Gretas Tool
-// script for AI kinematics
-// Displacement max distance

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
 namespace NewRatCharacterController { 
@@ -9,11 +10,24 @@ public class NewRatCharacterController : MonoBehaviour {
 	public delegate void CaughtEvent(bool caught);
 	public static CaughtEvent caughtEvent;
 	
+	public delegate void CubeLetGo();
+	public static CubeLetGo cubeLetGo;
+	
 	public NewCharacterInput NewCharacterInput { get; set; }
 
-	public bool Caught;// { get; set; }
-	
-	public bool LetGoOfCube { get; set; }
+	public bool Caught { get; set; }
+
+
+	private bool _letGo;
+	public bool LetGoOfCube {
+		get => _letGo;
+		
+		set {
+			if (value)
+				cubeLetGo?.Invoke();
+			_letGo = value;
+		}
+	}
 	
 	public static bool Locked { get; set; }
 
