@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CallbackSystem;
 using TMPro;
+using UnityEngine.UI;
 
 public class NewIncubator : MonoBehaviour
 {
@@ -13,7 +14,6 @@ public class NewIncubator : MonoBehaviour
     [SerializeField] private GameObject bigHatch;
     [SerializeField] private GameObject smallHatch;
     [SerializeField] private GameObject candyFeeder;
-    [SerializeField] private GameObject candyCollider;
     [SerializeField] private GameObject puzzleFloor;
     [SerializeField] private GameObject step1;
     [SerializeField] private GameObject step2;
@@ -22,6 +22,7 @@ public class NewIncubator : MonoBehaviour
     [SerializeField] private Material done;
     [SerializeField] private Material notDone;
     [SerializeField] private TextMeshProUGUI instructions;
+    [SerializeField] private Image textBackground;
 
     private Animator bigHatchAnim;
     private Animator smallHatchAnim;
@@ -35,6 +36,7 @@ public class NewIncubator : MonoBehaviour
     private AudioManager audioManager;
     private NewRatCharacterController.NewCharacterInput characterInput;
     private NewRatCharacterController.NewRatCharacterController charactercontroller;
+    private int candyCount;
     private bool puzzleOneDone;
     private bool puzzleTwoDone;
     private bool puzzleThreeDone;
@@ -127,15 +129,15 @@ public class NewIncubator : MonoBehaviour
                 signMr.material = done;
                 audioManager.Play("10");
                 instructions.text = "Good. All Done. Have some Candy";
-                if (candyCollider != null)
-                    candyCollider.SetActive(false);
-                else
-                    Debug.Log( $"{nameof(candyCollider)} is not assigned");
                 smallHatchAnim.SetBool("Open", true);
                 candyFeederAnim.SetBool("Open", true);
                 puzzleFiveDone = true;
                 isON = false;
                 //Debug.Log("STEP11");
+                if (textBackground)
+                {
+                    textBackground.enabled = false;
+                }
             }
         }
         if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleFiveDone)
@@ -263,11 +265,6 @@ public class NewIncubator : MonoBehaviour
         charging = true;
         //Debug.Log("Charging");
     }
-    /*    public void DontCharge()
-        {
-            charging = false;
-            Debug.Log("StoppedCharge");
-        }*/
 
     public void StartText()
     {
@@ -275,6 +272,10 @@ public class NewIncubator : MonoBehaviour
         {
             audioManager.Play("1");
             instructions.text = "Subject R@, welcome! Please step forward";
+            if (textBackground)
+            {
+                textBackground.enabled = true;
+            }
             welcome = true;
         }
     }
