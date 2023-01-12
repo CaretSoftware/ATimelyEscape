@@ -24,6 +24,7 @@ public class CameraZoom : MonoBehaviour
             ZoomOut();
     }
 
+    /*
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -35,6 +36,7 @@ public class CameraZoom : MonoBehaviour
             ZoomOut();
         }
     }
+    */
 
     private void ZoomIn()
     {

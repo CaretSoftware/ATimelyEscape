@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
@@ -24,6 +26,9 @@ public class SettingsMenuController : MonoBehaviour
     [SerializeField] private float startMasterVolume;
     [SerializeField] private float startMusicVolume;
     [SerializeField] private float startEffectsVolume;
+
+    [Header("CrosshairUI")]
+    [SerializeField] private GameObject crossHairCanvas;
 
     private void Start()
     {
@@ -83,18 +88,27 @@ public class SettingsMenuController : MonoBehaviour
     {
         Screen.fullScreen = isFullscreen;
     }
+    
     public void SetShouldPlayTextToSpeach(bool shouldPlayTextToSpeach) // Checkbox for TextForSpeach
     {
         ButtonSoundBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
     }
-    public void SetMovementControls(bool boolean)
-    {
 
+    public void SetMovementControls(bool accessible)
+    {
+        NewRatCharacterController.NewCharacterInput.Accessibility = accessible;
     }
+
+    public void SetCrossHairCanvas(bool on)
+    {
+        crossHairCanvas.SetActive(on);
+    }
+
     public void SetCameraControls(bool boolean)
     {
 
     }
+    
     public void SetCognitiveAssistanceGuidance(bool boolean)
     {
 

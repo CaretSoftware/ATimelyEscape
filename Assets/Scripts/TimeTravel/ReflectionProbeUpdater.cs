@@ -17,7 +17,9 @@ public class ReflectionProbeUpdater : MonoBehaviour
 
     public void UpdateProbe()
     {
-        _probe.RenderProbe(null);
+        if(_probe.enabled) { 
+            _probe.RenderProbe(null);
+        }
     }
 
     private void TriggerTimer(TimePeriodChanged e)

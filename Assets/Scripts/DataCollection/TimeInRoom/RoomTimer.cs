@@ -24,7 +24,7 @@ public class RoomTimer : MonoBehaviour
     {
         timer = 0;
         timeInRooms = new List<TimeInRoomX>();
-        currentRoomIndex = runtimeSceneManager.GetCurrentSceneIndex();
+        currentRoomIndex = runtimeSceneManager.CurrentSceneIndex;
         currentRoom = new TimeInRoomX(currentRoomIndex);
         timeInRooms.Add(currentRoom);
         saveNumber = SaveDataCollected.SaveRoomTimer(this);   
@@ -32,11 +32,11 @@ public class RoomTimer : MonoBehaviour
 
     private void Update()
     {
-        if (currentRoomIndex != runtimeSceneManager.GetCurrentSceneIndex())
+        if (currentRoomIndex != runtimeSceneManager.CurrentSceneIndex)
         {
             currentRoom.SetTime(timer);
             timer = 0; 
-            currentRoomIndex = runtimeSceneManager.GetCurrentSceneIndex();
+            currentRoomIndex = runtimeSceneManager.CurrentSceneIndex;
 
             bool alreadyExist = false;
             foreach (TimeInRoomX x in timeInRooms)
