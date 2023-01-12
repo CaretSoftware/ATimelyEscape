@@ -18,6 +18,11 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
 
     public static void SetNavigationActive(bool arg) { NAVIGATION_ACTIVE = arg; }
 
+    public static void InactivateAllHandlers()
+    {
+        
+    }
+
     private void Start()
     {
         collider.enabled = true;
