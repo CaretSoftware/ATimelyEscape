@@ -17,6 +17,8 @@ public class SettingsManager : MonoBehaviour
     public bool movmentAccessiblityActive;
     public bool navigationAssistActive;
 
+    [Header("Overhaul Values")]
+    public float deltaTimeValue = 1;
 
     private void Awake()
     {
