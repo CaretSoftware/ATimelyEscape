@@ -93,7 +93,8 @@ public class SettingsMenuController : MonoBehaviour
     {
         SettingsManager.Instance.navigationAssistActive = active;
         navigationAssist.isOn = active;
-        CognitiveAssistanceTriggerHandler.SetNavigationActive(navigationAssist.isOn);
+        if(isPauseMenu)
+            CognitiveAssistanceTriggerHandler.SetNavigationActive(navigationAssist.isOn);
     }
 
     public void SetMasterVolume(float volume)
