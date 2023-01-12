@@ -21,16 +21,7 @@ namespace NewRatCharacterController {
 		private Vector3 _pushedCubeOffset;
 		private Quaternion worldRotation;
 		private Rigidbody cubeRB;
-		private bool letGo;
 
-		public CubePushState() {
-			CubePushState.cubeLetGo += LetGoOfCube;
-		}
-		
-		~CubePushState() {
-			CubePushState.cubeLetGo -= LetGoOfCube;
-		}
-		
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
 			// are we pressing interact? are we in front of cube?
 			return newRatCharacter.Interacting && newRatCharacter.InFrontOfCube();
@@ -111,16 +102,6 @@ namespace NewRatCharacterController {
 			
 			if (NewRatCharacterController.Locked)
 				stateMachine.TransitionTo<LockState>();
-
-			if (letGo) {
-				stateMachine.TransitionTo<MoveState>();
-			}
-		}
-
-		public void LetGoOfCube()
-		{
-			Debug.Log(nameof(LetGoOfCube));
-			letGo = true;
 		}
 
 		public override void Exit() {
