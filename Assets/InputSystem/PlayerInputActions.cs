@@ -764,6 +764,94 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""AccessibilityControls"",
+            ""id"": ""21886847-670c-496f-9782-7d6aa9df0a82"",
+            ""actions"": [
+                {
+                    ""name"": ""AButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""6934d168-8a8e-4b68-9475-889e8960b0d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""0751f4a0-3e08-4b1e-938d-a4112eac09b0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""XButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f3cdc59-3fba-4037-82f7-2bd7d0d1b552"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""YButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""02ad6ca6-ebc6-4e9e-86ff-082c1d50a24a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a7c767ec-ad37-4627-9676-681ea31ed1f4"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3cfeaca5-bf94-4155-be9b-3a7c9ddd5c22"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f70e7b33-85c6-4557-b811-cec44652542a"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""XButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""10d935e9-c867-4709-bdd3-fab6e339be94"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""YButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -802,6 +890,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Zoom = asset.FindActionMap("Zoom", throwIfNotFound: true);
         m_Zoom_ExitZoom = m_Zoom.FindAction("ExitZoom", throwIfNotFound: true);
         m_Zoom_FirstPerson = m_Zoom.FindAction("FirstPerson", throwIfNotFound: true);
+        // AccessibilityControls
+        m_AccessibilityControls = asset.FindActionMap("AccessibilityControls", throwIfNotFound: true);
+        m_AccessibilityControls_AButton = m_AccessibilityControls.FindAction("AButton", throwIfNotFound: true);
+        m_AccessibilityControls_BButton = m_AccessibilityControls.FindAction("BButton", throwIfNotFound: true);
+        m_AccessibilityControls_XButton = m_AccessibilityControls.FindAction("XButton", throwIfNotFound: true);
+        m_AccessibilityControls_YButton = m_AccessibilityControls.FindAction("YButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1210,6 +1304,63 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public ZoomActions @Zoom => new ZoomActions(this);
+
+    // AccessibilityControls
+    private readonly InputActionMap m_AccessibilityControls;
+    private IAccessibilityControlsActions m_AccessibilityControlsActionsCallbackInterface;
+    private readonly InputAction m_AccessibilityControls_AButton;
+    private readonly InputAction m_AccessibilityControls_BButton;
+    private readonly InputAction m_AccessibilityControls_XButton;
+    private readonly InputAction m_AccessibilityControls_YButton;
+    public struct AccessibilityControlsActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public AccessibilityControlsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @AButton => m_Wrapper.m_AccessibilityControls_AButton;
+        public InputAction @BButton => m_Wrapper.m_AccessibilityControls_BButton;
+        public InputAction @XButton => m_Wrapper.m_AccessibilityControls_XButton;
+        public InputAction @YButton => m_Wrapper.m_AccessibilityControls_YButton;
+        public InputActionMap Get() { return m_Wrapper.m_AccessibilityControls; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(AccessibilityControlsActions set) { return set.Get(); }
+        public void SetCallbacks(IAccessibilityControlsActions instance)
+        {
+            if (m_Wrapper.m_AccessibilityControlsActionsCallbackInterface != null)
+            {
+                @AButton.started -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnAButton;
+                @AButton.performed -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnAButton;
+                @AButton.canceled -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnAButton;
+                @BButton.started -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnBButton;
+                @BButton.performed -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnBButton;
+                @BButton.canceled -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnBButton;
+                @XButton.started -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnXButton;
+                @XButton.performed -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnXButton;
+                @XButton.canceled -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnXButton;
+                @YButton.started -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnYButton;
+                @YButton.performed -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnYButton;
+                @YButton.canceled -= m_Wrapper.m_AccessibilityControlsActionsCallbackInterface.OnYButton;
+            }
+            m_Wrapper.m_AccessibilityControlsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @AButton.started += instance.OnAButton;
+                @AButton.performed += instance.OnAButton;
+                @AButton.canceled += instance.OnAButton;
+                @BButton.started += instance.OnBButton;
+                @BButton.performed += instance.OnBButton;
+                @BButton.canceled += instance.OnBButton;
+                @XButton.started += instance.OnXButton;
+                @XButton.performed += instance.OnXButton;
+                @XButton.canceled += instance.OnXButton;
+                @YButton.started += instance.OnYButton;
+                @YButton.performed += instance.OnYButton;
+                @YButton.canceled += instance.OnYButton;
+            }
+        }
+    }
+    public AccessibilityControlsActions @AccessibilityControls => new AccessibilityControlsActions(this);
     public interface ICameraControlsActions
     {
         void OnCameraThumbstick(InputAction.CallbackContext context);
@@ -1252,5 +1403,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     {
         void OnExitZoom(InputAction.CallbackContext context);
         void OnFirstPerson(InputAction.CallbackContext context);
+    }
+    public interface IAccessibilityControlsActions
+    {
+        void OnAButton(InputAction.CallbackContext context);
+        void OnBButton(InputAction.CallbackContext context);
+        void OnXButton(InputAction.CallbackContext context);
+        void OnYButton(InputAction.CallbackContext context);
     }
 }
