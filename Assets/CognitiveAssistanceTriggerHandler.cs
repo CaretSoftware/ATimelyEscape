@@ -15,7 +15,7 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
     [SerializeField] private ObjectiveHolder objectiveHolder;
     [SerializeField] private GameObject[] children;
     
-    [HideInInspector] public bool isCurrentlyActive;
+    //[HideInInspector] public bool isCurrentlyActive;
 
     public static void SetNavigationActive(bool arg) { NAVIGATION_ACTIVE = arg; }
 
@@ -29,7 +29,8 @@ public class CognitiveAssistanceTriggerHandler : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if(!NAVIGATION_ACTIVE || other.tag != "Player" || isCurrentlyActive) 
+        //|| isCurrentlyActive
+        if(!NAVIGATION_ACTIVE || other.tag != "Player") 
             return;
 
         fetchAll();
