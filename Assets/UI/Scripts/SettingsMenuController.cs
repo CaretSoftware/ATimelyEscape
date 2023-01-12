@@ -27,6 +27,9 @@ public class SettingsMenuController : MonoBehaviour
     [SerializeField] private float startMusicVolume;
     [SerializeField] private float startEffectsVolume;
 
+    [Header("CrosshairUI")]
+    [SerializeField] private GameObject crossHairCanvas;
+
     private void Start()
     {
 
@@ -95,7 +98,12 @@ public class SettingsMenuController : MonoBehaviour
     {
         NewRatCharacterController.NewCharacterInput.Accessibility = accessible;
     }
-    
+
+    public void SetCrossHairCanvas(bool on)
+    {
+        crossHairCanvas.SetActive(on);
+    }
+
     public void SetCameraControls(bool boolean)
     {
 
