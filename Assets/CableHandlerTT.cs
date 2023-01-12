@@ -10,7 +10,7 @@ public class CableHandlerTT : MonoBehaviour
 
     private void Start()
     {
-        if(past != null)
+        if(past != null && present != null)
             past.SetActive(false);
         TimePeriodChanged.AddListener<TimePeriodChanged>(TimeTravel);
     }
@@ -18,12 +18,10 @@ public class CableHandlerTT : MonoBehaviour
     private void TimeTravel(TimePeriodChanged eve)
     {
         if(past != null)
-            past.SetActive((eve.from == TimeTravelPeriod.Present && eve.to == TimeTravelPeriod.Past) 
-                           || (eve.from == TimeTravelPeriod.Future && eve.to == TimeTravelPeriod.Past));
+            past.SetActive(eve.to == TimeTravelPeriod.Past);
         
-        present.SetActive((eve.from == TimeTravelPeriod.Past && eve.to == TimeTravelPeriod.Present) 
-                          || (eve.from == TimeTravelPeriod.Future && eve.to == TimeTravelPeriod.Present) 
-                          || eve.to == TimeTravelPeriod.Present);
+        if(present != null)
+            present.SetActive(eve.to == TimeTravelPeriod.Present);
     }
 
     private void OnDestroy()

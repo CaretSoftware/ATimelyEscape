@@ -11,6 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
   m_ValidKeywords:
   - OUTLINE_ON
+  - UNDERLAY_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -34,7 +35,7 @@ Material:
     - _MaskSoftnessX: 0
     - _MaskSoftnessY: 0
     - _OutlineSoftness: 0
-    - _OutlineWidth: 0.27
+    - _OutlineWidth: 0.15
     - _PerspectiveFilter: 0.875
     - _ScaleRatioA: 0.9
     - _ScaleRatioB: 1
@@ -50,9 +51,9 @@ Material:
     - _StencilWriteMask: 255
     - _TextureHeight: 1024
     - _TextureWidth: 1024
-    - _UnderlayDilate: 0
-    - _UnderlayOffsetX: 0
-    - _UnderlayOffsetY: 0
+    - _UnderlayDilate: -0.082
+    - _UnderlayOffsetX: 1
+    - _UnderlayOffsetY: 0.677
     - _UnderlaySoftness: 0
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
@@ -62,7 +63,7 @@ Material:
     - _ClipRect: {r: 90, g: -627, b: 100, a: 25}
     - _FaceColor: {r: 0, g: 0.2917707, b: 0.016807375, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.6}
   m_BuildTextureStacks: []
 --- !u!114 &11400000
 MonoBehaviour:

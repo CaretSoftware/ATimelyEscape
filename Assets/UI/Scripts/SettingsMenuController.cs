@@ -8,30 +8,35 @@ using UnityEngine.Audio;
 
 public class SettingsMenuController : MonoBehaviour
 {
+    public bool isPauseMenu;
+
     public AudioMixer audioMixer;
 
     public TMPro.TMP_Dropdown resolutionDropdown;
-
     Resolution[] resolutions;
-
-    public bool shouldPlayTextToSpeach;
 
     [Header("UI Sliders")]
     [SerializeField] private Slider volumeMasterSlider;
     [SerializeField] private Slider volumeMusicSlider;
     [SerializeField] private Slider volumeEffectsSlider;
 
-    [Header("Volume Values")]
-    [SerializeField] private bool shallChangeValuesAtStart;
-    [SerializeField] private float startMasterVolume;
-    [SerializeField] private float startMusicVolume;
-    [SerializeField] private float startEffectsVolume;
-
-    [Header("CrosshairUI")]
+    [Header("UI Crosshair")]
     [SerializeField] private GameObject crossHairCanvas;
+
+    [Header("UI Toggle")]
+    [SerializeField] private Toggle textToSpeach;
+    [SerializeField] private Toggle movementAccessiblityControl;
+    [SerializeField] private Toggle crosshair;
 
     private void Start()
     {
+        volumeMasterSlider.value = SettingsManager.Instance.masterVolume;
+        volumeMusicSlider.value = SettingsManager.Instance.musicVolume;
+        volumeEffectsSlider.value = SettingsManager.Instance.effectVolume;
+
+        SetTextToSpeachActive(SettingsManager.Instance.textToSpeachActive);
+        SetMovementControls(SettingsManager.Instance.movmentAccessiblityActive);
+        SetCrossHairCanvas(SettingsManager.Instance.crossHairCanvasActive);
 
         if (resolutionDropdown != null)
         {
@@ -58,72 +63,44 @@ public class SettingsMenuController : MonoBehaviour
             resolutionDropdown.value = currentResolutionIndex;
             resolutionDropdown.RefreshShownValue();
         }
-        else
-        {
-            Debug.Log("Message: Settings Menu is missing Dropdown for resolution");
-        }
-
-        if (shallChangeValuesAtStart)
-        {
-            volumeMasterSlider.value = startMasterVolume;
-            volumeMusicSlider.value = startMusicVolume;
-            volumeEffectsSlider.value = startEffectsVolume;
-        }
-        /*
-        else
-        {
-            audioMixer.GetFloat("MasterVolume", out float value);
-            volumeMasterSlider.value = value;
-
-            audioMixer.GetFloat("MusicVolume", out float value1);
-            volumeMusicSlider.value = value1;
-
-            audioMixer.GetFloat("EffectsVolume", out float value2);
-            volumeEffectsSlider.value = value2;
-        }
-        */
-    }
-
-    public void SetFullscreen(bool isFullscreen) // Checkbox for Fullscreen
-    {
-        Screen.fullScreen = isFullscreen;
     }
     
-    public void SetShouldPlayTextToSpeach(bool shouldPlayTextToSpeach) // Checkbox for TextForSpeach
+    public void SetTextToSpeachActive(bool active) // Checkbox for TextForSpeach
     {
-        ButtonSoundBehaviour.shouldPlayTextToSpeach = shouldPlayTextToSpeach;
+        SettingsManager.Instance.textToSpeachActive = active;
+        textToSpeach.isOn = active;
+        ButtonSoundBehaviour.shouldPlayTextToSpeach = active;
     }
 
     public void SetMovementControls(bool accessible)
     {
-        NewRatCharacterController.NewCharacterInput.Accessibility = accessible;
+        SettingsManager.Instance.movmentAccessiblityActive = accessible;
+        movementAccessiblityControl.isOn = accessible;
+        if(isPauseMenu)
+            NewRatCharacterController.NewCharacterInput.Accessibility = accessible;
     }
 
-    public void SetCrossHairCanvas(bool on)
+    public void SetCrossHairCanvas(bool active)
     {
-        crossHairCanvas.SetActive(on);
-    }
-
-    public void SetCameraControls(bool boolean)
-    {
-
-    }
-    
-    public void SetCognitiveAssistanceGuidance(bool boolean)
-    {
-
+        SettingsManager.Instance.crossHairCanvasActive = active;
+        crosshair.isOn = active;
+        if(crossHairCanvas != null)
+            crossHairCanvas.SetActive(active);
     }
 
     public void SetMasterVolume(float volume)
     {
+        SettingsManager.Instance.masterVolume = volume;
         audioMixer.SetFloat("MasterVolume", Mathf.Log(volume) * 20);
     }
     public void SetMusicVolume(float volume)
     {
+        SettingsManager.Instance.musicVolume = volume;
         audioMixer.SetFloat("MusicVolume", Mathf.Log(volume) * 20);
     }
     public void SetEffectsVolume(float volume)
     {
+        SettingsManager.Instance.effectVolume = volume;
         audioMixer.SetFloat("EffectsVolume", Mathf.Log(volume) * 20);
     }
 
@@ -131,5 +108,9 @@ public class SettingsMenuController : MonoBehaviour
     {
         Resolution resolution = resolutions[index];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+    }
+    public void SetFullscreen(bool isFullscreen) // Checkbox for Fullscreen
+    {
+        Screen.fullScreen = isFullscreen;
     }
 }

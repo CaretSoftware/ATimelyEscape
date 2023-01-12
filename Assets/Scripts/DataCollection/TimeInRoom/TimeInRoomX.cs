@@ -7,8 +7,11 @@ using UnityEngine;
 [Serializable]
 public class TimeInRoomX
 {
-
+    
     public int room;
+
+    private bool isTutorial = false;
+    public bool IsTutorial { get { return isTutorial; } }
 
     [SerializeField] private int visited;
 
@@ -22,6 +25,11 @@ public class TimeInRoomX
     public TimeInRoomX(int x, int visited) { this.room = x; }
 
     public TimeInRoomX(int x, int visited, float totalTime) { this.room = x; this.visited = visited; SetTime(totalTime); }
+
+    public TimeInRoomX(int x, bool isTutorial) { this.room = x; visited++; this.isTutorial = isTutorial; }
+    public TimeInRoomX(int x, int visited, bool isTutorial) { this.room = x; this.isTutorial = isTutorial; }
+
+    public TimeInRoomX(int x, int visited, float totalTime, bool isTutorial) { this.room = x; this.visited = visited; SetTime(totalTime); this.isTutorial = isTutorial; }
 
     public void SetTime(float x)
     {
