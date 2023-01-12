@@ -16,7 +16,7 @@ public class RuntimeSceneManager : MonoBehaviour {
     private static readonly HashSet<int> Room6 = new HashSet<int> { 6, 7, 8 };      // Conveyor room
     private static readonly HashSet<int> Room7 = new HashSet<int> { 7, 8, 9 };     // Robot Factory
     private static readonly HashSet<int> Room8 = new HashSet<int> { 8, 9, 10 };    // Garden
-    private static readonly HashSet<int> Room9 = new HashSet<int> { 9, 10, };   // Cryo Hall
+    private static readonly HashSet<int> Room9 = new HashSet<int> { 5, 9, 10, };   // Cryo Hall
 
     private static readonly HashSet<int>[] Rooms = new HashSet<int>[] {
         new HashSet<int>(),
@@ -76,6 +76,7 @@ public class RuntimeSceneManager : MonoBehaviour {
         TimeTravelManager.ReloadCurrentTimeTravelPeriod();
         SceneManager.UnloadSceneAsync(currentOnboardingSceneIndex, UnloadSceneOptions.None);
         currentOnboardingSceneIndex = -1;
+        NewRatCharacterController.NewRatCharacterController.Locked = false; 
     }
 
     public void UnloadAllRooms() {

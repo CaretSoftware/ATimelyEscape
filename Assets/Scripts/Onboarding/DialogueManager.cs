@@ -84,6 +84,7 @@ public class DialogueManager : MonoBehaviour {
         if (sentence.Contains("Congratulations")) {
             Invoke(nameof(EndDialogue), 3f);
             Invoke(nameof(UnloadRoom), 3.1f);
+            NewRatCharacterController.NewRatCharacterController.Locked = true;
         }
     }
 
