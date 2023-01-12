@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CallbackSystem;
 using TMPro;
+using UnityEngine.UI;
 
 public class NewIncubator : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class NewIncubator : MonoBehaviour
     [SerializeField] private Material done;
     [SerializeField] private Material notDone;
     [SerializeField] private TextMeshProUGUI instructions;
+    [SerializeField] private Image textBackground;
 
     private Animator bigHatchAnim;
     private Animator smallHatchAnim;
@@ -132,6 +134,10 @@ public class NewIncubator : MonoBehaviour
                 puzzleFiveDone = true;
                 isON = false;
                 //Debug.Log("STEP11");
+                if (textBackground)
+                {
+                    textBackground.enabled = false;
+                }
             }
         }
         if (e.from == TimeTravelPeriod.Present && e.to == TimeTravelPeriod.Past && puzzleFiveDone)
@@ -266,6 +272,10 @@ public class NewIncubator : MonoBehaviour
         {
             audioManager.Play("1");
             instructions.text = "Subject R@, welcome! Please step forward";
+            if (textBackground)
+            {
+                textBackground.enabled = true;
+            }
             welcome = true;
         }
     }
