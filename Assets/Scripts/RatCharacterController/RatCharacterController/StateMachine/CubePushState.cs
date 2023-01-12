@@ -6,6 +6,12 @@ namespace NewRatCharacterController {
 		public delegate void PushCubeEvent(Transform cube);
 		public static PushCubeEvent pushCubeEvent;
 		
+		public delegate void CubeLetGo();
+		public static CubeLetGo cubeLetGo;
+
+		public delegate void PushCubeUIOn(bool on);
+		public static PushCubeUIOn pushCubeUIOn;
+
 		private const string State = nameof(CubePushState);
 
 		private CubePush cube;
@@ -15,7 +21,21 @@ namespace NewRatCharacterController {
 		private Vector3 _pushedCubeOffset;
 		private Quaternion worldRotation;
 		private Rigidbody cubeRB;
+
+		private bool _letGo;
 		
+		public CubePushState() {
+			cubeLetGo += LetGoOfCUbe;
+		}
+		
+		~CubePushState() {
+			cubeLetGo -= LetGoOfCUbe;
+		}
+
+		private void LetGoOfCUbe() {
+			_letGo = true;
+		}
+
 		public static bool Requirement(NewRatCharacterController newRatCharacter) {
 			// are we pressing interact? are we in front of cube?
 			return newRatCharacter.Interacting && newRatCharacter.InFrontOfCube();
@@ -23,6 +43,7 @@ namespace NewRatCharacterController {
 
 		public override void Enter() {
 			StateChange.stateUpdate?.Invoke(State);
+			CubePushState.pushCubeUIOn?.Invoke(false);
 			NewRatCharacter.AnimationController.Push(true);
 			
 			AttachPlayerToCube();
@@ -81,8 +102,8 @@ namespace NewRatCharacterController {
 				}
 			}
 
-			float velocityLateralMin = -.1f;
-			if (NewRatCharacter.LetGoOfCube || cubeRB != null && cubeRB.velocity.y < velocityLateralMin) {
+			float velocityLateralMin = -.2f;
+			if (_letGo || NewRatCharacter.LetGoOfCube || (cubeRB != null && cubeRB.velocity.y < velocityLateralMin)) {
 				NewRatCharacter.LetGoOfCube = false;
 				stateMachine.TransitionTo<MoveState>();
 			}
@@ -98,17 +119,10 @@ namespace NewRatCharacterController {
 		}
 
 		public override void Exit() {
+			CubePushState.pushCubeUIOn?.Invoke(true);
 			NewRatCharacter.AnimationController.Push(false);
+			_letGo = false;
 			//NewRatCharacter.transform.parent = null;
 		}
 	}
 }
-
-// TODO
-// Unsubscriptions Emils Eventsystem
-// Load markers på passande platser
-// SmoothDamp on camera transform
-// EventSystem timetravel bool don't set on Gretas timeTravel effect
-// SkinnedMeshRenderer i Gretas Tool
-// script for AI kinematics
-// Displacement max distance
