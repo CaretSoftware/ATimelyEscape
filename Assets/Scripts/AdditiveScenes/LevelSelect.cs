@@ -43,7 +43,7 @@ public class LevelSelect : MonoBehaviour {
         room10
     }
     private static readonly Dictionary<int, RoomLoadInfo> loadInfo = new Dictionary<int, RoomLoadInfo>(){
-        {1, new RoomLoadInfo(TimeTravelPeriod.Present, false, false, false, false, new Vector3(-0.292491376f, -0.254999995f,4.37516403f))}, //new Vector3(-0.291999996f, -0.254999995f, 4.42600012f))},
+        {1, new RoomLoadInfo(TimeTravelPeriod.Present, false, false, false, false, new Vector3(-0.292491376f, -0.254999995f,4.393f))}, //new Vector3(-0.291999996f, -0.254999995f, 4.42600012f))},
         {2, new RoomLoadInfo(TimeTravelPeriod.Present, false, false, false, false, new Vector3(-2.09899998f, 0.239999995f, 0.850000024f))},
         {3, new RoomLoadInfo(TimeTravelPeriod.Present, true, false, true, true, new Vector3(-4.37599993f, 0.175999999f, 1.95500004f))},
         {4, new RoomLoadInfo(TimeTravelPeriod.Present, true, false, true, true, new Vector3(-5.81074095f, -0.68900001f, 2.9472518f))},
