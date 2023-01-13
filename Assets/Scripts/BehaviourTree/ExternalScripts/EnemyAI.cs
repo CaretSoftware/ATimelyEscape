@@ -10,7 +10,7 @@ public class EnemyAI : MonoBehaviour
 {
     private const float MovingToIdleMagnitude = 0.5f;
     private const float NavMeshRadiusOffstep = 20f;
-    private const float AnimationPreviewBasedFeetPos = 0.285f;
+    private const float AnimationPreviewBasedFeetPos = 0.385f;
     private const float AnimationPreviewBasedHipPos = 0.5f;
 
     [HideInInspector] public static int IDCounter;
