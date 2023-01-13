@@ -6,17 +6,17 @@ public class LightAndEffectManager : MonoBehaviour
 {
     private Light[] lightsInRoom;
     private ParticleSystem[] particlesInRoom;
-    //private ReflectionProbe[] probesInRoom;
+    private ReflectionProbe[] probesInRoom;
 
     void Start()
     {
         lightsInRoom = GetComponentsInChildren<Light>(true);
         particlesInRoom = GetComponentsInChildren<ParticleSystem>(true);
-        //probesInRoom = GetComponentsInChildren<ReflectionProbe>(true);
+        probesInRoom = GetComponentsInChildren<ReflectionProbe>(true);
 
         ActivateLights(false);
         ActivateParticles(false);
-        //ActivateProbes(false);
+        ActivateProbes(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,7 +25,7 @@ public class LightAndEffectManager : MonoBehaviour
         {
             ActivateLights(true);
             ActivateParticles(true);
-            //ActivateProbes(true);
+            ActivateProbes(true);
         }
     }
 
@@ -35,7 +35,7 @@ public class LightAndEffectManager : MonoBehaviour
         {
             ActivateLights(false);
             ActivateParticles(false);
-            //ActivateProbes(false);
+            ActivateProbes(false);
         }
     }
 
@@ -68,7 +68,7 @@ public class LightAndEffectManager : MonoBehaviour
         }
     }
 
-    /*private void ActivateProbes(bool activate)
+    private void ActivateProbes(bool activate)
     {
         if (probesInRoom != null && probesInRoom.Length > 0)
         {
@@ -82,5 +82,5 @@ public class LightAndEffectManager : MonoBehaviour
                 }
             }
         }
-    }*/
+    }
 }
