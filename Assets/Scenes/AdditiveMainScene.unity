@@ -520,1281 +520,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fa60d5f55e8dcd48ba6b18c0dff5e80, type: 3}
---- !u!72 &170834661
-ComputeShader:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ProceduralFurSetup(Clone)
-  variants:
-  - serializedVersion: 2
-    targetRenderer: 2
-    targetLevel: 0
-    kernels:
-    - serializedVersion: 2
-      name: UpdateFurMeshKernel
-      variantMap:
-        HAS_CLUMPS HAS_COLLIDERS IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          isCompiled: 0
-        HAS_COLLIDERS VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        INIT_VERLET:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - INIT_VERLET
-          isCompiled: 0
-        HAS_CLUMPS INIT_VERLET IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        INIT_VERLET IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          isCompiled: 0
-        HAS_COLLIDERS:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          isCompiled: 0
-        HAS_CLUMPS INIT_VERLET VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - INIT_VERLET
-          - VERLET_ENABLED
-          isCompiled: 0
-        :
-          serializedVersion: 2
-          cbVariantIndices: 00000000
-          cbs:
-          - name: $Globals
-            generatedName: 
-            bindPoint: 0
-            samplerBindPoint: -1
-            texDimension: -1
-          textures: []
-          builtinSamplers: []
-          inBuffers:
-          - name: hairStrandsBuffer
-            generatedName: 
-            bindPoint: 0
-            samplerBindPoint: -1
-            texDimension: -1
-          - name: sourceMesh
-            generatedName: 
-            bindPoint: 1
-            samplerBindPoint: -1
-            texDimension: -1
-          - name: cardMesh
-            generatedName: 
-            bindPoint: 2
-            samplerBindPoint: -1
-            texDimension: -1
-          outBuffers:
-          - name: furMeshBuffer
-            generatedName: 
-            bindPoint: 0
-            samplerBindPoint: -1
-            texDimension: -1
-          code: 44584243a91b64453baa986ca8cfe5b8bc2a0b7401000000241d0000030000002c0000003c0000004c0000004953474e0800000000000000080000004f53474e08000000000000000800000053484558d01c000050000500340700006a08000159000004468e2000000000000d000000a20000040070100000000000e4000000a2000004007010000100000028000000a20000040070100002000000400000009d00000300e01100000000005f0000021200020068000002190000009b0000040001000001000000010000002100000712001000000000000a0002003a802000000000000c0000001f0004030a001000000000003e000001150000014e000008120010000000000000d000000a0002000a802000000000000b0000005600000582001000000000000a001000000000001b00000512001000010000003a001000000000002300000a22001000010000000a00108041000000010000000a802000000000000b0000000a0002001e00000742001000010000000a0002001a802000000000000b000000a700008b020302808399190072001000020000001a0010000100000001400000000000004672100002000000a700008b020302808399190082001000010000001a0010000100000001400000280000000670100002000000a700008b020302808399190032001000030000001a0010000100000001400000380000004670100002000000a700008b022307808399190012001000040000000a0010000100000001400000000000000670100000000000a700008b0223078083991900f2001000050000000a001000010000000140000008000000467e100000000000a700008b022307808399190032001000060000000a0010000100000001400000180000004670100000000000a700008b0223078083991900f2001000070000000a001000010000000140000020000000467e100000000000a700008b0223078083991900f2001000080000000a001000010000000140000030000000467e100000000000a700008b022307808399190072001000090000000a0010000100000001400000500000004672100000000000a700008b0223078083991900720010000a0000000a0010000100000001400000600000004672100000000000a700008b0223078083991900720010000b0000000a0010000100000001400000700000004672100000000000a700008b0223078083991900b20010000c0000000a0010000100000001400000800000004678100000000000a700008b0223078083991900f20010000d0000000a001000010000000140000090000000467e100000000000a700008b0223078083991900f20010000e0000000a0010000100000001400000a0000000467e100000000000a700008b0223078083991900c2001000030000000a0010000100000001400000b00000000674100000000000a700008b022307808399190022001000010000000a0010000100000001400000c40000000670100000000000a700008b022307808399190042001000040000000a0010000100000001400000cc0000000670100000000000a700008b0223078083991900f20010000f0000000a0010000100000001400000d4000000467e1000000000001b000005720010000e000000460210000e000000a700008b0243018083991900f2001000100000000a0010000e00000001400000000000003679100001000000a700008b0243018083991900f2001000110000000a0010000e0000000140000010000000467e100001000000a700008b024301808399190032001000120000000a0010000e00000001400000200000004670100001000000a700008b0243018083991900f2001000130000001a0010000e00000001400000000000003679100001000000a700008b0243018083991900f2001000140000001a0010000e0000000140000010000000467e100001000000a700008b024301808399190032001000150000001a0010000e00000001400000200000004670100001000000a700008b0243018083991900f2001000160000002a0010000e00000001400000000000003679100001000000a700008b0243018083991900f2001000170000002a0010000e0000000140000010000000467e100001000000a700008b024301808399190032001000180000002a0010000e0000000140000020000000467010000100000038000007720010000e000000a60a100003000000960710001300000032000009720010000e0000009607100010000000f60f10000e000000460210000e00000032000009720010000e0000009607100016000000f60f100003000000460210000e00000036000005620010001000000006011000110000003600000562001000130000000601100014000000380000077200100013000000a60a10000300000046021000130000003200000972001000100000004602100010000000f60f10000e000000460210001300000036000005620010001600000006011000170000003200000972001000100000004602100016000000f60f100003000000460210001000000036000005c200100012000000a60e10001100000036000005c200100015000000a60e10001400000038000007f200100011000000a60a100003000000e60410001500000032000009f200100011000000e604100012000000f60f10000e000000460e10001100000036000005c200100018000000a60e10001700000032000009f200100011000000e604100018000000f60f100003000000460e100011000000100000071200100001000000460210001000000046021000100000004400000512001000010000000a0010000100000038000007720010001200000006001000010000004602100010000000100000071200100001000000460210001100000046021000110000004400000512001000010000000a0010000100000038000007720010001300000006001000010000002609100011000000380000077200100014000000460210001200000046021000130000003200000a720010001200000026091000120000009604100013000000460210804100000014000000100000074200100003000000460210001200000046021000120000004400000542001000030000002a00100003000000380000077200100014000000a60a1000030000004602100012000000380000077200100015000000460210001300000046021000140000003200000a72001000150000002609100013000000960410001400000046021080410000001500000032000009c200100013000000a602100012000000a60a10000300000056011000150000003200000982001000030000002a001000110000000a001000010000002a0010001300000031000007820010000400000001400000000000003a001000030000000000000782001000030000003a00100003000000014000000000803f4b00000582001000030000003a001000030000003800000782001000160000003a00100003000000014000000000003f0e0000078200100003000000014000000000003f3a001000030000003200000a82001000090000001a00108041000000110000000a001000010000002a001000150000003800000712001000160000003a001000030000003a001000090000003200000a820010000a0000000a001000110000000a001000010000001a00108041000000140000003800000722001000160000003a001000030000003a0010000a0000003200000a820010000b0000000a001000120000002a001000030000000a00108041000000150000003800000742001000160000003a001000030000003a0010000b0000001d00000782001000030000002a001000140000001a001000150000001d000007820010000e0000002a001000140000000a001000130000000100000782001000030000003a001000030000003a0010000e00000032000009820010000e0000002a001000120000002a00100003000000014000000000803f00000008820010000e0000001a00108041000000150000003a0010000e0000003200000a820010000e0000002a00108041000000110000000a001000010000003a0010000e0000004b000005820010000e0000003a0010000e0000000e0000078200100010000000014000000000003f3a0010000e0000003800000712001000140000003a0010000e000000014000000000003f3800000722001000140000003a001000100000003a0010001300000032000009820010000e0000001a001000120000002a001000030000001a001000130000003800000742001000140000003a001000100000003a0010000e0000003800000782001000140000003a001000090000003a001000100000003100000782001000090000000a001000130000001a001000150000000000000782001000100000001a00100015000000014000000000803f3200000a82001000100000002a00108041000000120000002a001000030000003a001000100000003200000a82001000100000002a00108041000000110000000a001000010000003a001000100000004b00000582001000100000003a001000100000000e0000071200100012000000014000000000003f3a001000100000003800000712001000130000000a001000120000003a001000130000003800000722001000130000003a00100010000000014000000000003f3200000982001000100000001a001000110000000a001000010000002a001000150000003800000742001000130000000a001000120000003a001000100000003800000782001000130000003a0010000a0000000a001000120000003200000912001000010000002a001000110000000a00100001000000014000000000803f3200000a12001000010000002a00108041000000120000002a001000030000000a001000010000000000000812001000010000001a00108041000000150000000a001000010000004b00000512001000010000000a001000010000000e0000074200100003000000014000000000003f0a001000010000003800000712001000120000002a001000030000003a0010000e0000003800000722001000120000002a001000030000003a001000100000003800000742001000120000000a00100001000000014000000000003f3800000782001000120000002a001000030000003a0010000b00000037000009f200100012000000f60f100009000000460e100013000000460e10001200000037000009f200100012000000f60f100003000000460e100014000000460e10001200000037000009f200100012000000f60f100004000000460e100016000000460e10001200000000000007f200100013000000a604100012000000a60410001200000038000007c2001000030000000604100012000000a60e10001300000038000007f200100014000000960f100012000000460e1000130000003800000712001000010000003a001000120000001a001000130000003200000972001000150000001604100012000000760e100013000000d6051000140000003200000a22001000160000000a001000120000003a001000130000000a00108041000000010000003200000912001000170000000a001000120000003a001000130000000a001000010000000000000842001000170000002a0010804100000015000000014000000000803f3200000a82001000170000001a001000120000000a001000130000002a00108041000000140000003200000a12001000120000000a001000120000001a001000130000003a00108041000000140000000000000722001000120000002a001000140000000a001000140000000000000712001000010000003a001000030000002a001000030000000000000842001000120000000a0010804100000001000000014000000000803f3800000842001000020000002a001000020000002a802000000000000b000000360000058200100002000000014000000000803f36000005c200100006000000a60e100005000000110000071200100006000000e604100002000000460e100006000000110000072200100006000000460e100002000000460e100007000000110000074200100006000000460e100002000000460e1000080000003800000722001000020000002a00100004000000014000000000803e3800000712001000010000003a001000010000001a001000010000003800000712001000010000000a001000010000000140000020a504424d000007120010000100000012001000070000000a001000010000000000000822001000010000000a0010804100000007000000014000000000803f360000051200100002000000014000000000803f0f0000074200100002000000460010000200000046001000020000004400000542001000020000002a00100002000000380000073200100002000000a60a10000200000046001000020000003800000742001000020000001a001000010000001a001000020000003800000742001000080000000a001000020000002a001000020000003200000912001000080000002a001000020000001a001000020000000a001000070000003800000742001000020000000a001000020000000a001000020000003200000912001000130000002a001000020000001a001000010000000a00100007000000380000073200100002000000060010000100000046001000020000003600000622001000130000001a00108041000000020000003600000582001000080000000a00100002000000100000071200100014000000860310000800000046021000060000003600000582001000130000002a00100008000000100000072200100014000000360d10001300000046021000060000003600000642001000020000000a00108041000000020000003600000582001000020000000a00100007000000100000074200100014000000660b10000200000046021000060000003800000712001000010000003a001000010000001a001000050000003800000712001000010000000a0010000100000001400000db0fc93f4d000007120010000100000012001000020000000a001000010000000000000822001000010000000a0010804100000002000000014000000000803f3600000522001000040000000a001000050000000f0000078200100001000000460010000400000046001000040000004400000582001000010000003a00100001000000380000076200100002000000f60f10000100000006011000040000003800000782001000010000001a001000020000001a001000020000003200000912001000040000003a001000010000001a001000010000000a001000020000003800000732001000050000000600100001000000660a1000020000003800000712001000010000001a001000010000002a001000020000003600000622001000040000000a00108041000000050000003800000782001000040000001a001000020000000a001000010000003200000942001000060000000a001000010000002a001000020000000a00100002000000100000071200100007000000460310000400000046021000140000003600000542001000050000000a001000020000003600000682001000050000001a0010804100000005000000100000072200100007000000860310000500000046021000140000003600000512001000060000003a001000040000003600000522001000060000001a00100005000000100000074200100007000000460210000600000046021000140000003600000512001000020000000a001000090000003600000522001000020000000a0010000a0000003600000542001000020000000a0010000b0000003600000582001000020000000a0010000c000000360000058200100007000000014000000000803f110000071200100002000000460e100002000000460e1000070000003600000512001000040000001a001000090000003600000522001000040000001a0010000a0000003600000542001000040000001a0010000b0000003600000582001000040000001a0010000c000000110000072200100002000000460e100004000000460e10000700000036000005120010000c0000002a0010000900000036000005220010000c0000002a0010000a00000036000005420010000c0000002a0010000b000000110000074200100002000000460e10000c000000460e1000070000003200000f5200100016000000060110001500000002400000000080bf000000000000803f00000000024000000000803f00000000000000000000000010000007120010000400000046021000160000004602100002000000100000072200100004000000860310001700000046021000020000001000000742001000040000004602100012000000460210000200000000000007b200100001000000460810000e000000460810000400000038000008720010000200000056051000010000004682200000000000060000003200000a7200100002000000468220000000000005000000060010000100000046021000020000003200000ab200100001000000468820000000000007000000f60f100001000000460810000200000000000008b200100001000000460c1000010000004688200000000000080000002600000900d0000012001000020000002a001000010000000a8020000000000000000000a5000089c20200808399190072001000000000000a0010000200000046e21100000000000100000722001000020000002a0010000100000001400000010000001f0000031a0010000200000038000008e20010000200000056051000100000000689200000000000020000003200000ae2001000020000000689200000000000010000000600100010000000560e1000020000003200000ae200100002000000068920000000000003000000a60a100010000000560e10000200000000000008e200100002000000560e1000020000000689200000000000040000001e00000ac200100003000000a60a10000100000002400000000000000000000002000000010000002600000900d0000042001000030000002a001000030000000a8020000000000000000000a5000089c20200808399190072001000040000002a0010000300000046e2110000000000000000087200100004000000d604108041000000010000009604100004000000100000074200100003000000460210000400000046021000040000004400000542001000030000002a00100003000000380000077200100004000000a60a10000300000046021000040000003800000a7200100005000000460210000400000002400000000000000000803f00000000000000003200000d72001000050000002609100004000000024000000000803f0000000000000000000000004602108041000000050000000f0000074200100003000000460010000500000046001000050000004400000542001000030000002a00100003000000380000077200100005000000a60a1000030000004602100005000000380000077200100006000000460210000400000046021000050000003200000a72001000040000002609100005000000960410000400000046021080410000000600000000000008720010000400000096071080410000000200000046021000040000003200000ae2001000020000005685200000000000000000000609100004000000560e1000020000002300000a42001000030000002a001000010000000a8020000000000000000000014000000c000000a600000772e01100000000002a0010000300000096071000020000002300000a42001000030000003a001000030000000a8020000000000000000000014000000c000000a600000772e01100000000002a00100003000000960710000200000015000001a600000772e01100000000000a0010000200000046031000010000002300000df200100001000000a60a1000010000000680200000000000000000000240000018000000280000003800000048000000a6000007f2e01100000000000a00100001000000460e100011000000a6000007f2e01100000000001a00100001000000460e10000f00000000000007c20010000d0000000604100003000000a60e10000d000000a6000007f2e01100000000002a00100001000000460e10000d000000a6000007f2e01100000000003a00100001000000460e1000000000003e000001
-          threadGroupSize: 000100000100000001000000
-          requirements: 16385
-          keywords: []
-          isCompiled: 1
-        HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS INIT_VERLET:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - INIT_VERLET
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - VERLET_ENABLED
-          isCompiled: 0
-        IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_COLLIDERS IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        INIT_VERLET VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - INIT_VERLET
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_COLLIDERS INIT_VERLET:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_CLUMPS IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_COLLIDERS INIT_VERLET VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          isCompiled: 0
-        HAS_CLUMPS VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_COLLIDERS IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - VERLET_ENABLED
-          isCompiled: 0
-      globalKeywords:
-      - HAS_COLLIDERS
-      - VERLET_ENABLED
-      - INIT_VERLET
-      - HAS_CLUMPS
-      - IS_CHILD_CLUMP
-      localKeywords: []
-    - serializedVersion: 2
-      name: UpdateClumpsPositionKernel
-      variantMap:
-        HAS_CLUMPS HAS_COLLIDERS IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          isCompiled: 0
-        HAS_COLLIDERS VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        INIT_VERLET:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - INIT_VERLET
-          isCompiled: 0
-        HAS_CLUMPS INIT_VERLET IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        INIT_VERLET IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          isCompiled: 0
-        HAS_COLLIDERS:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          isCompiled: 0
-        HAS_CLUMPS INIT_VERLET VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - INIT_VERLET
-          - VERLET_ENABLED
-          isCompiled: 0
-        :
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords: []
-          isCompiled: 0
-        HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        INIT_VERLET IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS INIT_VERLET:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - INIT_VERLET
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - VERLET_ENABLED
-          isCompiled: 0
-        IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_COLLIDERS IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        INIT_VERLET VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - INIT_VERLET
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_COLLIDERS INIT_VERLET:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_CLUMPS IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_COLLIDERS INIT_VERLET IS_CHILD_CLUMP:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - IS_CHILD_CLUMP
-          isCompiled: 0
-        HAS_COLLIDERS INIT_VERLET VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS HAS_COLLIDERS INIT_VERLET VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - HAS_COLLIDERS
-          - INIT_VERLET
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_CLUMPS:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          isCompiled: 0
-        HAS_CLUMPS VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_CLUMPS
-          - VERLET_ENABLED
-          isCompiled: 0
-        HAS_COLLIDERS IS_CHILD_CLUMP VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - HAS_COLLIDERS
-          - IS_CHILD_CLUMP
-          - VERLET_ENABLED
-          isCompiled: 0
-        VERLET_ENABLED:
-          serializedVersion: 2
-          cbVariantIndices: 
-          cbs: []
-          textures: []
-          builtinSamplers: []
-          inBuffers: []
-          outBuffers: []
-          code: 
-          threadGroupSize: 000000000000000000000000
-          requirements: 16385
-          keywords:
-          - VERLET_ENABLED
-          isCompiled: 0
-      globalKeywords:
-      - HAS_COLLIDERS
-      - VERLET_ENABLED
-      - INIT_VERLET
-      - HAS_CLUMPS
-      - IS_CHILD_CLUMP
-      localKeywords: []
-    constantBuffers:
-    - name: $Globals
-      byteSize: 224
-      params:
-      - name: furMeshBufferStride
-        type: 5
-        offset: 0
-        arraySize: 0
-        rowCount: 1
-        colCount: 1
-      - name: sourceMeshNormalToStrandNormalPercent
-        type: 0
-        offset: 4
-        arraySize: 0
-        rowCount: 1
-        colCount: 1
-      - name: objectRotationMatrix
-        type: 0
-        offset: 16
-        arraySize: 0
-        rowCount: 4
-        colCount: 4
-      - name: localToWorldMatrix
-        type: 0
-        offset: 80
-        arraySize: 0
-        rowCount: 4
-        colCount: 4
-      - name: cardMeshVerticesCount
-        type: 1
-        offset: 176
-        arraySize: 0
-        rowCount: 1
-        colCount: 1
-      - name: layerVertexStartIndex
-        type: 5
-        offset: 180
-        arraySize: 0
-        rowCount: 1
-        colCount: 1
-      - name: extraScale
-        type: 0
-        offset: 184
-        arraySize: 0
-        rowCount: 1
-        colCount: 1
-      - name: layerVerticesCount
-        type: 1
-        offset: 204
-        arraySize: 0
-        rowCount: 1
-        colCount: 1
-    resourcesResolved: 1
-    compilerPlatform: 4
-    needsReflectionData: 0
-  m_CompilationContext:
-    buildTarget:
-      platform: 19
-      subTarget: 0
-      extendedPlatform: 0
-      isEditor: 0
-    platformGroup: 1
-    sourceFileName: ProceduralFurSetup.compute
-    source: "//ragma kernel UpdateFurMeshKernel\n//ragma kernel UpdateClumpsPositionKernel\n\n//ragma
-      multi_compile __  HAS_COLLIDERS\n//ragma multi_compile __  VERLET_ENABLED\n//ragma
-      multi_compile __  INIT_VERLET\n//ragma multi_compile __  HAS_CLUMPS\n//ragma
-      multi_compile __  IS_CHILD_CLUMP\n\n#include <HLSLSupport.cginc>\n#include
-      \"FurMotionInclude.cginc\"\n#include \"Thread.hlsl\"\n#include \"../NormalHelperInclude.cginc\"\n\nuniform
-      StructuredBuffer<MeshProperties> sourceMesh;\nuniform StructuredBuffer<MeshFullProperties>
-      cardMesh;\n\nint cardMeshVerticesCount;\nuint layerVertexStartIndex;\n\nfloat
-      extraScale = 1;\n\n//START Clumps\nuniform StructuredBuffer<HairStrandStruct>
-      clumpsBuffer;\nuniform StructuredBuffer<float> clumpAttractionCurve;\nuniform
-      RWStructuredBuffer<float4> clumpPointsPosition;\nuniform RWStructuredBuffer<float4>
-      parentClumpPointsPosition;\nint clumpYCoordinates;\n// END Clumps\n\nstatic
-      float CARD_MESH_HEIGHT = 0.12;\nstatic float MAX_TWIST = 1900;\n\nfloat3 skinnedMeshScale;\n\n\nfloat3
-      applyClumping(HairStrandStruct hairStrand, float4 colors, float3 currentPosition,
-      float clumpOffset)\n{\n    float3 positionWithClumping = currentPosition;\n\n   
-      if (hairStrand.clumpIndices >= 0 && hairStrand.clumpMask > 0)\n    {\n       
-      float myScaleY = length(float3(hairStrand.scaleMatrix[0][1], hairStrand.scaleMatrix[1][1],
-      hairStrand.scaleMatrix[2][1]));\n        int clumpRootIndex = hairStrand.clumpIndices
-      * clumpYCoordinates;\n        int strandMeshYIndex = colors.y;\n\n        float
-      clumpScaleY = clumpPointsPosition[clumpRootIndex + strandMeshYIndex].w;\n       
-      float scalePercent = myScaleY / clumpScaleY;\n        float newIndex = scalePercent
-      * (float)strandMeshYIndex;\n        float newIndexLower = min(floor(newIndex),
-      clumpYCoordinates - 1);\n        float newIndexUpper = min(newIndexLower +
-      1, clumpYCoordinates - 1);\n        float lerpAmount = newIndex - newIndexLower;\n\n       
-      float3 clumpPositionLow = clumpPointsPosition[clumpRootIndex + newIndexLower].xyz;\n       
-      float3 clumpPositionHigh = clumpPointsPosition[clumpRootIndex + newIndexUpper].xyz;\n       
-      float3 clumpPosition = lerp(clumpPositionLow, clumpPositionHigh, lerpAmount);\n\n       
-      clumpPosition.z += clumpOffset; //Not the best solution but ok for now. Prevents
-      the strands from disappearing.\n        clumpPosition.x += clumpOffset;\n       
-      float attractionAmountLow = clumpAttractionCurve[(int)newIndexLower];\n       
-      float attractionAmountHigh = clumpAttractionCurve[(int)newIndexUpper];\n       
-      float attraction = 1.0 - lerp(attractionAmountLow, attractionAmountHigh, lerpAmount);\n       
-      positionWithClumping = lerp(currentPosition, clumpPosition, clamp(0, 1, attraction)
-      * hairStrand.clumpMask);\n        // normal = normalize(currentPosition - clumpPosition);\n   
-      }\n    return positionWithClumping;\n}\n\nuniform int layerVerticesCount;\n\nMeshProperties
-      getBarycentricMeshData(float3 indices, float3 barycentricCoord)\n{\n    MeshProperties
-      triangle1 = sourceMesh[(int)indices.x];\n    MeshProperties triangle2 = sourceMesh[(int)indices.y];\n   
-      MeshProperties triangle3 = sourceMesh[(int)indices.z];\n    MeshProperties
-      interpolated;\n    interpolated.sourceVertex = Interpolate3(triangle1.sourceVertex,
-      triangle2.sourceVertex, triangle3.sourceVertex, barycentricCoord);\n    interpolated.sourceNormal
-      = Interpolate3(triangle1.sourceNormal, triangle2.sourceNormal, triangle3.sourceNormal,
-      barycentricCoord);\n    interpolated.sourceTangent = Interpolate4(triangle1.sourceTangent,
-      triangle2.sourceTangent, triangle3.sourceTangent, barycentricCoord);\n    return
-      interpolated;\n}\n\n#if defined(VERLET_ENABLED)\n    RWStructuredBuffer<VerletNode>
-      verletNodes; \n    RWStructuredBuffer<VerletRestNode> _RestPositions;\n \n   
-      void setupVerlet(uint proceduralMeshIndex, float3 currentPosition, float vertexMovability,
-      float windContribution, float3 worldSourceMeshNormal)\n    {\n        if(proceduralMeshIndex
-      % 2 == 0)\n        {\n            int verletIndex = proceduralMeshIndex / 2;\n           
-      VerletRestNode restNode = _RestPositions[verletIndex];\n            restNode.position
-      = currentPosition;\n            restNode.worldSourceMeshNormal = worldSourceMeshNormal;\n#if
-      defined(INIT_VERLET)\n            VerletNode node;\n            node.position
-      = currentPosition;\n            node.prevPosition = currentPosition;\n           
-      restNode.vertMoveAbility = vertexMovability;\n            restNode.pinnedAmount
-      = 1 - windContribution;\n            node.isFixed = restNode.vertMoveAbility
-      == 0 || restNode.pinnedAmount == 1;//This means we can't paint wind during
-      play mode.\n            node.tangent = 0;\n            node.rotationDiffFromPrevNode
-      = 0;\n            node.rotationDiffFromPrevNode2 = 0;\n            verletNodes[verletIndex]
-      = node; \n#endif\n            _RestPositions[verletIndex] = restNode;\n           
-      if(vertexMovability == 0)\n            {\n                VerletNode fixedNode
-      = verletNodes[verletIndex];\n                fixedNode.position = currentPosition;\n               
-      fixedNode.prevPosition = currentPosition;\n                verletNodes[verletIndex]
-      = fixedNode;\n            }\n        } \n    }\n#endif\n\nvoid setupNormal(const
-      uint proceduralMeshIndex, const float3 worldSourceMeshNormal, float3 currentPosition,
-      uint furMeshIndex)\n{\n    if (proceduralMeshIndex % 2 == 0)\n    {\n       
-      uint nextStrandPosIndex = ((uint)proceduralMeshIndex + 2) * furMeshBufferStride;\n       
-      uint nextMeshIndex = ((uint)proceduralMeshIndex + 1) * furMeshBufferStride;\n       
-      float3 tangent = normalize(loadSourceVertex(nextStrandPosIndex) - currentPosition);\n       
-      writeNormal(furMeshIndex, nextMeshIndex, worldSourceMeshNormal, tangent);\n   
-      }\n}\n\nTHREAD_SIZE\nvoid UpdateFurMeshKernel(uint3 id : SV_DispatchThreadID)\n{\n   
-      const int i = id.x;\n    if (i >= layerVerticesCount) return;\n    const int
-      hairStrandIndex = floor(id.x / cardMeshVerticesCount);\n    const int cardMeshIndex
-      = i - hairStrandIndex * cardMeshVerticesCount;\n    const uint proceduralMeshIndex
-      = i + layerVertexStartIndex;\n    const MeshFullProperties cardMeshData = cardMesh[cardMeshIndex];\n   
-      float3 cardStaticPosition = cardMeshData.sourceVertex;\n    float3 vertexBasePosition
-      = cardStaticPosition;\n\n    const HairStrandStruct hairStrand = hairStrandsBuffer[hairStrandIndex];\n   
-      const float3 triangles = hairStrand.triangles;\n    const float3 barycentricCoord
-      = hairStrand.barycentricCoordinates;\n\n    MeshProperties meshProperties =
-      getBarycentricMeshData(triangles, barycentricCoord);\n\n    float3 position
-      = meshProperties.sourceVertex;\n    float3 normal = meshProperties.sourceNormal;\n   
-      const float4 tangent = meshProperties.sourceTangent;\n\n    const float4x4
-      rotationFromNormalMatrix = quaternionToMatrix(QuaternionLookRotation(tangent,
-      normal));\n    const float3 worldSourceMeshNormal = mul(objectRotationMatrix,
-      fixed4(normal, 1.0)).xyz;\n    vertexBasePosition.z *= extraScale;\n\n    //Scale  
-      \n    vertexBasePosition = mul(float4(vertexBasePosition, 1), hairStrand.scaleMatrix).xyz;\n   
-      #if defined(HAS_CLUMPS)\n        float clumpOffset = vertexBasePosition.z *
-      objectGlobalScale;\n    #endif\n    float4 colors = cardMeshData.sourceColor;\n   
-      const float vertexMoveAbility = colors.r;\n\n    //Twist\n    vertexBasePosition
-      = Unity_RotateAboutAxis_Degrees(vertexBasePosition, float3(0.25 * hairStrand.twist.z,
-      1, 0),\n                                                       MAX_TWIST *
-      vertexMoveAbility * hairStrand.twist.x);\n    //Bend\n    const float bendAmount
-      = hairStrand.bend.w * 90.0 * vertexMoveAbility;\n    const float3 bendXZ =
-      float3(hairStrand.bend.x, 0, hairStrand.bend.z);\n    vertexBasePosition =
-      Unity_RotateAboutAxis_Degrees(vertexBasePosition, bendXZ, bendAmount);\n\n   
-      //Root rotation Y and Orientation  \n    vertexBasePosition = mul(hairStrand.rootAndOrientationMatrix,
-      float4(vertexBasePosition, 1)).xyz;\n    vertexBasePosition = mul(rotationFromNormalMatrix,
-      float4(vertexBasePosition, 1)).xyz;\n\n    //Source mesh position\n    vertexBasePosition
-      += position;\n\n    //Apply the localToWorldMatrix\n    float3 currentPosition
-      = mul(localToWorldMatrix, float4(vertexBasePosition, 1.0)).xyz;\n\n    uint
-      furMeshIndex = (uint)proceduralMeshIndex * furMeshBufferStride;\n    //Add
-      clumping\n    #if defined(HAS_CLUMPS)\n        currentPosition = applyClumping(hairStrand,
-      colors, currentPosition, clumpOffset);\n    #else\n    #endif\n    const float3
-      oldPosition = loadSourceVertex(furMeshIndex);\n    //Our strand vertex is setup,
-      now let's append the same shenanigans as for the regular move kernels \n   
-      #if defined(VERLET_ENABLED)\n        setupVerlet(proceduralMeshIndex, currentPosition,
-      vertexMoveAbility, hairStrand.windContribution, worldSourceMeshNormal);\n   
-      #else\n    //NORMAL\n    setupNormal(proceduralMeshIndex, worldSourceMeshNormal,
-      currentPosition, furMeshIndex);\n    #endif\n    //VERTEX\n    writeVector3(furMeshIndex,
-      0, currentPosition);\n    //TANGENT\n    writeVector4(furMeshIndex, SIZEOF_FLOAT3
-      * 2, tangent); //Should this use the same logic as the normals? \n    //OVERRIDE
-      COLOR \n    writeVector4(furMeshIndex, SIZEOF_FLOAT3 * 2 + SIZEOF_FLOAT4, hairStrand.overrideColor);\n   
-      //SOURCE MESH UV\n    writeVector2(furMeshIndex, SIZEOF_FLOAT3 * 2 + SIZEOF_FLOAT4
-      * 2, hairStrand.uv);\n    //CARD UV\n    writeVector2(furMeshIndex, SIZEOF_FLOAT3
-      * 2 + SIZEOF_FLOAT4 * 2 + SIZEOF_FLOAT2, cardMeshData.sourceUV + hairStrand.uvOffset);\n   
-      //We store the previous position in uv3-4 for motion vectors\n    //OLD POS
-      XY Can we use a separate buffer here instead? Maybe use drawPocedural? \n   
-      writeVector2(furMeshIndex, SIZEOF_FLOAT3 * 2 + SIZEOF_FLOAT4 * 2 + SIZEOF_FLOAT2
-      * 2, float2(oldPosition.x, oldPosition.y));\n    //OLD POS Z and HAIR_STRAND_INDEX\n   
-      writeVector2(furMeshIndex, SIZEOF_FLOAT3 * 2 + SIZEOF_FLOAT4 * 2 + SIZEOF_FLOAT2
-      * 3, float2(oldPosition.z, (float)hairStrandIndex));\n}\n\nuniform float clumpPointsCount;\n\nTHREAD_SIZE\nvoid
-      UpdateClumpsPositionKernel(uint3 id : SV_DispatchThreadID)\n{\n    int i =
-      id.x;\n    if (i >= clumpPointsCount)return;\n    const int clumpIndex = floor((float)i
-      / (float)clumpYCoordinates);\n    const int clumpPointIndex = i - clumpIndex
-      * clumpYCoordinates;\n    const float yPercent = (float)(clumpPointIndex +
-      1) / (float)clumpYCoordinates;\n    const HairStrandStruct clump = clumpsBuffer[clumpIndex];\n\n   
-      MeshProperties meshProperties = getBarycentricMeshData(clump.triangles, clump.barycentricCoordinates);\n\n   
-      float3 clumpPos = meshProperties.sourceVertex;\n    float3 normal = meshProperties.sourceNormal;\n   
-      const float4 tangent = meshProperties.sourceTangent;\n    float3 vertexBasePosition
-      = float3(0, yPercent * CARD_MESH_HEIGHT, 0);\n\n    const float4x4 rotationFromNormalMatrix
-      = quaternionToMatrix(QuaternionLookRotation(tangent, normal));\n\n    //Scale  
-      \n    vertexBasePosition = mul(float4(vertexBasePosition, 1), clump.scaleMatrix).xyz;\n\n   
-      //Bend\n    #ifndef IS_CHILD_CLUMP\n    vertexBasePosition = Unity_RotateAboutAxis_Degrees(\n       
-      vertexBasePosition,\n        float3(0.25 * clump.twist.w, 1, 0),\n        MAX_TWIST
-      * (1 - yPercent) * clump.twist.y);\n    #endif\n    const float bendAmount
-      = clump.bend.w * 90.0 * yPercent;\n    const float3 bendXZ = float3(clump.bend.x,
-      0, clump.bend.z);\n    vertexBasePosition = Unity_RotateAboutAxis_Degrees(vertexBasePosition,
-      bendXZ, bendAmount);\n\n    //Root rotation Y and Orientation TODO: Should
-      look at cam? \n    vertexBasePosition = mul(clump.rootAndOrientationMatrix,
-      float4(vertexBasePosition, 1)).xyz;\n    vertexBasePosition = mul(rotationFromNormalMatrix,
-      float4(vertexBasePosition, 1)).xyz;\n    vertexBasePosition += clumpPos;\n   
-      float clumpScale = length(float3(clump.scaleMatrix[0][1], clump.scaleMatrix[1][1],
-      clump.scaleMatrix[2][1]));\n    vertexBasePosition.xyz = mul(localToWorldMatrix,
-      float4(vertexBasePosition, 1.0)).xyz;\n\n    #if defined(IS_CHILD_CLUMP)\n       
-      int clumpRootIndex = clump.clumpIndices * clumpYCoordinates;\n        float3
-      parentClumpPointPosition = parentClumpPointsPosition[clumpRootIndex + clumpPointIndex];\n       
-      float attraction = clumpAttractionCurve[clumpPointIndex];\n        vertexBasePosition.xyz
-      = lerp(parentClumpPointPosition, vertexBasePosition.xyz, attraction);\n   
-      #endif\n\n    clumpPointsPosition[i] = float4(vertexBasePosition.xyz, clumpScale);\n}\n"
-    sourceFile: Assets/FluffyGroomingTool/Shaders/Resources/ProceduralFurSetup.compute
-    kernels:
-    - UpdateFurMeshKernel
-    - UpdateClumpsPositionKernel
-    kernelMacros:
-    - []
-    - []
-    compilationFlags: 0
-    supportedAPIs: 4294967295
-    useDxcAPIs: 0
-    neverUseDxcAPIs: 0
-    includeHash0: 3132019983
-    includeHash1: 4185264385
-    includeHash2: 1743707524
-    includeHash3: 4253705536
-  errors: []
-  m_PreprocessorOverride: 0
 --- !u!1001 &307345796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2739,94 +1464,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1023419028349994181, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
   m_PrefabInstance: {fileID: 1911777256}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1111057397 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6589762666823174373, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
-  m_PrefabInstance: {fileID: 1911777256}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1111057399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1111057397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 301a92326dc4a094a9b1328d98a6b82d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lodCamera: {fileID: 0}
-  material: {fileID: 2100000, guid: c2778ea5590b0d246a72a6a500f3ba31, type: 2}
-  drawWindContribution: 0
-  computeShader: {fileID: 170834661}
-  furContainer: {fileID: 11400000, guid: 9b8f55b3cd37ba945a10d248efdde819, type: 2}
-  furRendererSettings:
-    sourceMeshNormalToStrandNormalPercent: 0
-    isAlphaSortingEnabled: 0
-    isFrustumCullingEnabled: 0
-    isOcclusionCullingEnabled: 0
-    enableLod: 1
-    enableLodInEditMode: 0
-    windProperties:
-      gustFrequency: 0.2
-      windStrength: 0.002
-      windDirectionDegree: 90
-      windTex: {fileID: 2800000, guid: d45c82fb1b5ac084eb8267d9dcedbe46, type: 3}
-    verletSimulationSettings:
-      enableMovement: 0
-      constraintIterations: 10
-      gravity: {x: 0, y: 0, z: 0}
-      drag: 0.01
-      stiffnessRoot: 1
-      stiffnessTip: 10
-      collideWithSourceMesh: 0
-      colliderSkinWidth: 0.01
-      sdfColliderResolution: 15
-      gridAllocationMultiplier: 1
-      extraPaddingInCells: 0.9
-      useForwardCollision: 1
-      isFirstNodeFixed: 0
-      keepShapeStrength: 0
-      isUnsupportedSDFPlatform: 0
-    runPhysicsInFixedUpdate: 0
-    perLayerMotionSettings: 0
-    perLayerNormals: 0
-  motionVectors: 1
-  headerExpanded:
-    isMainExpanded: 1
-    isMovementExpanded: 1
-    isNormalExpanded: 0
-    isStrandShapeExpanded: 0
-    isWindExpanded: 0
-    isColliderExpanded: 0
-    isLodExpanded: 0
-  instanceID: 286302
-  materialPostfix: Strands
-  isHdrp: 0
-  isUrp: 1
-  activeLodCameraName: Main Camera
-  activeLodName: LOD 1
-  sphereColliders: []
-  capsuleColliders: []
-  sdfColliders: []
---- !u!114 &1111057402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1111057397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29b4b82c07a7cd844af1c8810ebde715, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groomContainer: {fileID: 11400000, guid: 6b38fe42f6d1dd145b4824b35f1689c3, type: 2}
-  undoRecorder:
-    undoIndex: 164
-  painterProperties: {fileID: 1407294975}
-  needsUpdate: 0
 --- !u!1001 &1137618446
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2900,6 +1537,256 @@ PrefabInstance:
       objectReference: {fileID: 352095360}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1d4d1c0d289c1c4092f5b1d366cd7d4, type: 3}
+--- !u!1 &1192818553
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1192818554}
+  - component: {fileID: 1192818555}
+  m_Layer: 0
+  m_Name: Rat.001Fur
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1192818554
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192818553}
+  m_LocalRotation: {x: 0.7071069, y: -0.00000000583521, z: 0.000000005208608, w: 0.7071067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1911777261}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!137 &1192818555
+SkinnedMeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192818553}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 3
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: c2778ea5590b0d246a72a6a500f3ba31, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: 4300000, guid: 99020c8da3df29948a76b4faf8faa563, type: 2}
+  m_Bones:
+  - {fileID: 1911777260}
+  - {fileID: 1911777259}
+  - {fileID: 1911777258}
+  - {fileID: 1911777419}
+  - {fileID: 1911777407}
+  - {fileID: 1911777406}
+  - {fileID: 1911777405}
+  - {fileID: 1017808358}
+  - {fileID: 725983838}
+  - {fileID: 1911777404}
+  - {fileID: 1911777403}
+  - {fileID: 1911777402}
+  - {fileID: 1911777401}
+  - {fileID: 1911777400}
+  - {fileID: 1911777399}
+  - {fileID: 1911777398}
+  - {fileID: 1911777397}
+  - {fileID: 1911777396}
+  - {fileID: 1911777395}
+  - {fileID: 1911777394}
+  - {fileID: 1911777393}
+  - {fileID: 1911777392}
+  - {fileID: 1911777391}
+  - {fileID: 1911777390}
+  - {fileID: 1911777389}
+  - {fileID: 1911777388}
+  - {fileID: 1911777387}
+  - {fileID: 1911777386}
+  - {fileID: 1911777385}
+  - {fileID: 1911777384}
+  - {fileID: 1911777383}
+  - {fileID: 1911777382}
+  - {fileID: 1911777381}
+  - {fileID: 1911777380}
+  - {fileID: 1911777379}
+  - {fileID: 1911777378}
+  - {fileID: 1911777377}
+  - {fileID: 1911777376}
+  - {fileID: 1911777375}
+  - {fileID: 1911777374}
+  - {fileID: 1911777373}
+  - {fileID: 1911777372}
+  - {fileID: 1911777371}
+  - {fileID: 1911777370}
+  - {fileID: 1911777369}
+  - {fileID: 1911777368}
+  - {fileID: 1911777367}
+  - {fileID: 1911777366}
+  - {fileID: 1911777365}
+  - {fileID: 1911777364}
+  - {fileID: 1911777363}
+  - {fileID: 1911777362}
+  - {fileID: 1911777361}
+  - {fileID: 1911777360}
+  - {fileID: 1911777359}
+  - {fileID: 1911777358}
+  - {fileID: 1911777357}
+  - {fileID: 1911777356}
+  - {fileID: 1911777355}
+  - {fileID: 1911777354}
+  - {fileID: 1911777353}
+  - {fileID: 1911777352}
+  - {fileID: 1911777351}
+  - {fileID: 1911777350}
+  - {fileID: 1911777349}
+  - {fileID: 1911777348}
+  - {fileID: 1911777347}
+  - {fileID: 1911777346}
+  - {fileID: 1911777345}
+  - {fileID: 1911777344}
+  - {fileID: 1911777343}
+  - {fileID: 1911777342}
+  - {fileID: 1911777341}
+  - {fileID: 1911777257}
+  - {fileID: 1911777418}
+  - {fileID: 1911777340}
+  - {fileID: 1911777339}
+  - {fileID: 1911777338}
+  - {fileID: 1911777337}
+  - {fileID: 1911777417}
+  - {fileID: 1911777336}
+  - {fileID: 1911777335}
+  - {fileID: 1911777334}
+  - {fileID: 1911777333}
+  - {fileID: 1831612760}
+  - {fileID: 1911777332}
+  - {fileID: 1911777331}
+  - {fileID: 1911777330}
+  - {fileID: 1911777329}
+  - {fileID: 1911777328}
+  - {fileID: 1911777327}
+  - {fileID: 1911777326}
+  - {fileID: 1911777408}
+  - {fileID: 1911777325}
+  - {fileID: 1911777324}
+  - {fileID: 1911777323}
+  - {fileID: 1911777322}
+  - {fileID: 1911777321}
+  - {fileID: 1911777320}
+  - {fileID: 1911777319}
+  - {fileID: 1911777318}
+  - {fileID: 1911777317}
+  - {fileID: 1911777316}
+  - {fileID: 1911777315}
+  - {fileID: 1911777314}
+  - {fileID: 1911777313}
+  - {fileID: 1911777312}
+  - {fileID: 1911777311}
+  - {fileID: 1911777310}
+  - {fileID: 1911777309}
+  - {fileID: 1911777308}
+  - {fileID: 1911777307}
+  - {fileID: 1911777306}
+  - {fileID: 1911777305}
+  - {fileID: 1911777304}
+  - {fileID: 1911777303}
+  - {fileID: 1911777302}
+  - {fileID: 1911777301}
+  - {fileID: 1911777300}
+  - {fileID: 1911777299}
+  - {fileID: 1911777298}
+  - {fileID: 1911777297}
+  - {fileID: 1911777296}
+  - {fileID: 1911777295}
+  - {fileID: 1911777294}
+  - {fileID: 1911777293}
+  - {fileID: 1911777292}
+  - {fileID: 1911777416}
+  - {fileID: 1911777412}
+  - {fileID: 1911777415}
+  - {fileID: 1911777411}
+  - {fileID: 1911777414}
+  - {fileID: 1911777291}
+  - {fileID: 1911777290}
+  - {fileID: 1911777289}
+  - {fileID: 1911777288}
+  - {fileID: 1911777287}
+  - {fileID: 1911777286}
+  - {fileID: 1911777285}
+  - {fileID: 1911777284}
+  - {fileID: 1911777283}
+  - {fileID: 1911777282}
+  - {fileID: 1911777281}
+  - {fileID: 1911777280}
+  - {fileID: 1911777279}
+  - {fileID: 1911777278}
+  - {fileID: 1911777277}
+  - {fileID: 1911777410}
+  - {fileID: 1911777413}
+  - {fileID: 1911777276}
+  - {fileID: 1911777275}
+  - {fileID: 1911777274}
+  - {fileID: 1911777273}
+  - {fileID: 1911777272}
+  - {fileID: 1911777271}
+  - {fileID: 1911777270}
+  - {fileID: 1911777269}
+  - {fileID: 1911777268}
+  - {fileID: 1911777267}
+  - {fileID: 1911777266}
+  - {fileID: 1911777265}
+  - {fileID: 1911777264}
+  - {fileID: 1911777263}
+  - {fileID: 1911777262}
+  - {fileID: 1911777409}
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 1911777260}
+  m_AABB:
+    m_Center: {x: 0.00026077777, y: 0.036768995, z: 0.000026362017}
+    m_Extent: {x: 0.058241356, y: 0.094319455, z: 0.03835374}
+  m_DirtyAABB: 0
 --- !u!1001 &1196142082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3303,41 +2190,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1407294975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c03d03218291443188389da726693c34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isBrushMenuExpanded: 1
-  brushSize: 0.07
-  brushFalloff: 0.035
-  brushOpacity: 0.084
-  brushFalloffPercentOfBrushSize: 0.5
-  isNormalIgnored: 1
-  isSelectionLocked: 1
-  isMirrorMode: 0
-  mirrorAxisTab: 0
-  type: 8
-  painterMagnitudeIntensity: 0.01
-  clumpMaskIntensity: 0
-  maskErase: 0
-  isClumpTwistSelected: 0
-  twistAmount: 1
-  twistSpread: 0.3
-  overrideColor: {r: 0, g: 0, b: 0, a: 1}
-  overrideIntensity: 1
-  resetWidthAmount: 0.5
-  resetLengthAmount: 0.5
-  resetBendAmount: 0.5
-  resetOrientAmount: 0.5
-  isGroomAllLayerAtOnce: 1
 --- !u!1 &1422789412
 GameObject:
   m_ObjectHideFlags: 0
@@ -6094,6 +4946,821 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5014290310931560881, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+--- !u!4 &1911777257 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1668289617658873274, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777258 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3868674095921532636, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777259 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 929956031073314072, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777260 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3926900769543143843, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777261 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 452165687850488709, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777262 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6267394244554399345, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777263 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 166598546765820972, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777264 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1167271541232944903, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777265 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5406514726955652739, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777266 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8309434731531569402, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777267 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1864777275499645346, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777268 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4785509041985227098, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777269 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7212931934037550151, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777270 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8143020672906423541, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777271 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6683466758166965905, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777272 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3941406311999683157, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777273 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9127267276707198119, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777274 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2120713893158277493, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777275 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8424270825024924982, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777276 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2987461402935957336, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777277 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 101307487854303310, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777278 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4555587193015504765, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777279 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2161970865991993675, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777280 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4177382398881509236, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777281 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1850814651012106929, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777282 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2875677057103184522, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777283 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 488074854240672107, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777284 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3293157845281591179, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777285 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4815218090784763770, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777286 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9188258425312580116, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777287 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1062273674355310296, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777288 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 498594201340879525, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777289 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5819583738189653611, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777290 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2760254962001783388, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777291 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1270709286274007300, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777292 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6403694238596062573, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777293 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8287427211061309015, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777294 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3587175624332683438, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777295 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 499276171926378704, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777296 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7548057184532297077, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777297 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5295740208484699179, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777298 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8596031257773963551, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777299 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1889350627391662382, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777300 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7169516389888157608, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777301 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5168276374321045443, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777302 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8982392313314727294, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777303 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3244891686452428273, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777304 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2717419568434507056, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777305 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7870636849531433617, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777306 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7288664112989334684, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777307 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7746302165375327233, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777308 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 768280765494747143, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777309 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8176726568024974941, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777310 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5850989555693093165, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777311 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2740235865327741100, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777312 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3020749196330319670, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777313 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8630892025621714181, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777314 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5606979910683765090, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777315 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6346514508944116422, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777316 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7064750980757497292, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777317 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2344422448525411440, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777318 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3410567573479213264, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777319 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8732843628369011768, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777320 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7389139177652436215, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777321 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2340135277498141108, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777322 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8403450921427925476, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777323 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5480781497580933595, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777324 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4996990572648253746, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777325 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9088684058371307905, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777326 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7286503045253283700, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777327 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7839382505096550143, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777328 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4113481909055841234, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777329 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1105397917290259318, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777330 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1153854489995567251, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777331 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7082962344033527217, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777332 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 424872628362744042, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777333 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5048446922644235347, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777334 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4685465668986941196, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777335 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7060593830757541876, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777336 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7504796467436934732, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777337 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2906368173318754523, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777338 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5470196949470041200, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777339 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1532376881307814527, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777340 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7861140134375071960, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777341 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2815261095506617745, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777342 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7546135630970609558, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777343 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7154151573784548868, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777344 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 173826803654578888, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777345 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3621737154071458562, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777346 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7844732299431861152, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777347 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1668150016646377796, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777348 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6552563203839949147, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777349 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2024022770808646674, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777350 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8779488594296008212, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777351 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 999524541314442589, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777352 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3714202669868807959, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777353 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7135754988357954818, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777354 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7919651107846073564, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777355 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7245452813514453032, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777356 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1848062838257051856, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777357 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6251133532867670569, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777358 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1967994496476514735, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777359 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9184374488683795865, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777360 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7405961412057469489, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777361 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7662051639040800492, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777362 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 330517242859103716, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777363 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5047891807401957171, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777364 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8411918674340208116, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777365 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 242377130240308744, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777366 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 408728806689460818, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777367 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4552689104285580234, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777368 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3847060424035944840, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777369 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1238222572997365939, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777370 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 496732408951275276, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777371 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1843777346882335964, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777372 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8782666438803967816, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777373 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6051358724279397890, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777374 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5276423555095585314, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777375 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 141417359351645364, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777376 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2750208285005767780, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777377 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4817969456779812221, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777378 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5325516134516792189, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777379 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3744192956340455783, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777380 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7681194869722243111, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777381 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4539200958504003190, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777382 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1963892816711525080, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777383 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9002933376750700007, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777384 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6718555618645069985, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777385 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6573246058475074348, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777386 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3288376563879194814, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777387 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5855635186696160180, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777388 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8290550430694218753, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777389 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7093157644825879744, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777390 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5290040041629082139, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777391 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8714315898898378584, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777392 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5332020286572503294, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777393 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2643772154363001804, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777394 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 671859120790115874, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777395 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8991689784623039680, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777396 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3207418147590509985, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777397 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7070383071682743558, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777398 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5495641032862614451, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777399 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2301700611002381403, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777400 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4669912622605880841, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777401 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6112793681994341450, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777402 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4164293172970706413, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777403 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6427453481130799285, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777404 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 856561210190971539, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777405 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5123094347182849833, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777406 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4622070321173800570, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777407 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3504476660683086291, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777408 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7948428627641263706, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777409 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6673177045234995852, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777410 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6817063829191988045, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777411 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4996910753547676253, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777412 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8601217932755956510, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777413 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 576459339421496118, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777414 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3284109198479910971, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777415 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5020828892622122207, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777416 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7469372169055538300, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777417 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3961541497654957776, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777418 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4938415837841456326, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1911777419 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3660970289927712324, guid: 7bbe3d58a0fa5467b8fc60619c3d6b7d, type: 3}
+  m_PrefabInstance: {fileID: 1911777256}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2008162586
 PrefabInstance:
   m_ObjectHideFlags: 0
