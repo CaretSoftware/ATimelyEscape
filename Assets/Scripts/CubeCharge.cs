@@ -1,7 +1,7 @@
 using CallbackSystem;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+//using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -10,6 +10,7 @@ namespace CallbackSystem
     [RequireComponent(typeof(CubePush))]
     [RequireComponent(typeof(TimeTravelObject))]
     [RequireComponent(typeof(MeshRenderer))]
+
     public class CubeCharge : MonoBehaviour
     {
         private static readonly int chargeReductionAfterTimeJump = 1;
@@ -28,6 +29,10 @@ namespace CallbackSystem
 
         private IconBehaviour iconBehaviour;
 
+        private AudioSource audioSource;
+
+        private bool isOn;
+
         private void Start()
         {
             
@@ -37,6 +42,7 @@ namespace CallbackSystem
             timeTravelObject = GetComponent<TimeTravelObject>();
             meshRenderer = GetComponent<MeshRenderer>();
             pingPong = GetComponent<PingPong>();
+            audioSource = GetComponentInChildren<AudioSource>();
             // if (pingPong == null)
             // {
             //     Debug.Log("¯\\_(ツ)_/¯ Patrik says the PingPong.cs Script is missing from this cube. He's not sure if it should be here or not, so he adds it anyway.", this);
@@ -44,17 +50,23 @@ namespace CallbackSystem
             // }
             if (charge > 0)
             {
+                //audioSource.Play();
                 cubePush.SetPushable(true);
                 //iconBehaviour.IsCharged(true);
                 pingPong.SetPower(1f);
-
+                //audioSource.volume = .5f;
+                isOn = true;
             }
             else
             {
+                //audioSource.Play();
+                //audioSource.Stop();
                 cubePush.SetPushable(false);
                 //iconBehaviour.IsCharged(false);
                 pingPong.SetPower(0f);
-                
+                //audioSource.volume = 0f;
+                isOn = false;
+
             }
 
             chargeEvent = new(timeTravelObject);
@@ -62,6 +74,15 @@ namespace CallbackSystem
             StartCoroutine(SetPast());
             ChargeChangedEvent.AddListener<ChargeChangedEvent>(PastChargeChange);
             TimePeriodChanged.AddListener<TimePeriodChanged>(changedTime);
+        }
+
+        private void Update()
+        {
+            if (isOn && !audioSource.isPlaying) { audioSource.Play();
+                audioSource.volume = 1f;
+                
+            } else if(!isOn) audioSource.Stop(); //audioSource.volume = 0f;
+           
         }
 
         public void Charging(int charge, Object origin)
@@ -74,10 +95,12 @@ namespace CallbackSystem
                     StartCoroutine(SetMaterial(true));
                     if (cubePush != null)
                         cubePush.SetPushable(true);
+                    isOn = true;
                 }
                 else
                 {
                     StartCoroutine(SetMaterial(false));
+                    isOn = false;
                 }
                 if (!origin.GetType().Equals(GetType()))
                 {
@@ -96,7 +119,11 @@ namespace CallbackSystem
             {
                 
                     Charging(pastCubeCharge.charge - chargeReductionAfterTimeJump, this);
+            } if (charge > 0)
+            {
+                isOn = true;
             }
+            else isOn = false;
         }
 
         private void PastChargeChange()
@@ -119,15 +146,23 @@ namespace CallbackSystem
                 if (on)
                 {
                     timer += Time.deltaTime / timeToCharge;
-                    if (pingPong != null)
+                    if (pingPong != null){
                         pingPong.SetPower(Mathf.Lerp(0f, 1f, timer));
+
+                        //audioSource.Play();
+                        audioSource.volume = Mathf.Lerp(0f, .5f, timer);
+                    }
                     yield return null;
                 }
                 else
                 {
                     timer += Time.deltaTime / timeToCharge;
-                    if (pingPong != null)
+                    if (pingPong != null){
                         pingPong.SetPower(Mathf.Lerp(1f, 0f, timer));
+
+                        //audioSource.Play();
+                        audioSource.volume = Mathf.Lerp(.5f, 0f, timer);
+                    }
                     yield return null;
                 }
             }
