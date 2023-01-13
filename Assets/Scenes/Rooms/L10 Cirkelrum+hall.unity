@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 4213983}
   - component: {fileID: 4213982}
   - component: {fileID: 4213981}
+  - component: {fileID: 4213986}
   m_Layer: 5
   m_Name: TimerCanvas
   m_TagString: Untagged
@@ -288,6 +289,102 @@ RectTransform:
   m_AnchoredPosition: {x: -4.612, y: 2.128}
   m_SizeDelta: {x: 0.6, y: 0.3}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!82 &4213986
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4213980}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 7040894396018080319, guid: ccb2cbaa0094a4747ab4c0428fac841a, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 6dd096a525827b143923d917922a7eb8, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &23900290
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1191,7 +1288,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 63421226}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.632, y: -2.527, z: 1.592}
+  m_LocalPosition: {x: 2.632, y: -2.544, z: 1.592}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3083,7 +3180,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 251298822}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.23, y: -2.527, z: 3.323}
+  m_LocalPosition: {x: 2.764, y: -2.558, z: 3.661}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5233,7 +5330,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 409987364}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.352, y: -2.527, z: -4.15}
+  m_LocalPosition: {x: 2.786, y: -2.52, z: -4.499}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9783,6 +9880,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 777525346}
     m_Modifications:
+    - target: {fileID: 243001926757052306, guid: 63341ed8e35002049ab9bc4f7e9d0190, type: 3}
+      propertyPath: m_BaseOffset
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 243001927060900089, guid: 63341ed8e35002049ab9bc4f7e9d0190, type: 3}
       propertyPath: checkpoint
       value: 
@@ -19970,6 +20071,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 777525346}
     m_Modifications:
+    - target: {fileID: 243001926757052306, guid: 63341ed8e35002049ab9bc4f7e9d0190, type: 3}
+      propertyPath: m_BaseOffset
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 243001927060900089, guid: 63341ed8e35002049ab9bc4f7e9d0190, type: 3}
       propertyPath: checkpoint
       value: 
@@ -21223,7 +21328,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695883004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.202, y: -2.527, z: 1.454}
+  m_LocalPosition: {x: 3.202, y: -2.541, z: 1.454}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22557,7 +22662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2840859810876255239, guid: 849ae767a40b94aaa9ccdf3010ea2d2a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.982
+      value: -10.08
       objectReference: {fileID: 0}
     - target: {fileID: 2840859810876255239, guid: 849ae767a40b94aaa9ccdf3010ea2d2a, type: 3}
       propertyPath: m_LocalPosition.y
