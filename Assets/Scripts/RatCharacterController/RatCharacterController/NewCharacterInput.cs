@@ -181,9 +181,7 @@ namespace NewRatCharacterController {
             Debug.Log($"char mov enabled: {_playerInputActions.CharacterMovement.enabled}");
         }
 
-        private void BButton(InputAction.CallbackContext context)
-        {
-            
+        private void BButton(InputAction.CallbackContext context) {
             AccessibleState = ++AccessibleState % 4;
             Debug.Log($"{nameof(AButton)} state: {AccessibleState}");
 
@@ -247,11 +245,8 @@ namespace NewRatCharacterController {
             xButton = false;
         }
 
-        private void CycleButton(int timeTravelTime)
-        {
-            
-            switch (timeTravelTime)
-            {
+        private void CycleButton(int timeTravelTime) {
+            switch (timeTravelTime) {
                 case (Past):
                     Debug.Log(nameof(Past));
                     TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Future, false);
@@ -286,45 +281,37 @@ namespace NewRatCharacterController {
                 StopInteract();
         }
 
-        private void ExitZoom(InputAction.CallbackContext context)
-        {
+        private void ExitZoom(InputAction.CallbackContext context) {
             exitZoomDelegate?.Invoke(true);
         }
 
-        private void ExitUnZoom(InputAction.CallbackContext context)
-        {
+        private void ExitUnZoom(InputAction.CallbackContext context) {
             exitZoomDelegate?.Invoke(false);
         }
 
-        private void FirstPersonZoom(InputAction.CallbackContext context)
-        {
+        private void FirstPersonZoom(InputAction.CallbackContext context) {
             zoomDelegate?.Invoke(true);
         }
 
-        private void FirstPersonUnZoom(InputAction.CallbackContext context)
-        {
+        private void FirstPersonUnZoom(InputAction.CallbackContext context) {
             zoomDelegate?.Invoke(false);
         }
 
         private void Paused(bool paused) => _paused = paused;
 
-        private void EnableLevelSelectMenu(InputAction.CallbackContext context)
-        {
+        private void EnableLevelSelectMenu(InputAction.CallbackContext context) {
             LevelSelect.Instance.EnableMenu();
         }
 
-        private void LoadSelectedRoom(InputAction.CallbackContext context)
-        {
+        private void LoadSelectedRoom(InputAction.CallbackContext context) {
             LevelSelect.Instance.TriggerRoomLoad();
         }
 
-        private void AdvanceDialogue(InputAction.CallbackContext context)
-        {
+        private void AdvanceDialogue(InputAction.CallbackContext context) {
             advanceDialogueDelegate?.Invoke();
         }
 
-        private void ReturnToGame(InputAction.CallbackContext context)
-        {
+        private void ReturnToGame(InputAction.CallbackContext context) {
             returnToGameDelegate?.Invoke();
         }
 

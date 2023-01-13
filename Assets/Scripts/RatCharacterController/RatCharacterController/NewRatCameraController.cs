@@ -89,7 +89,8 @@ public class NewRatCameraController : MonoBehaviour {
 	private bool _turnAccessible;
 	public void TurnCamera(bool turn)
 	{
-		_dir *= -1;
+		if (turn)
+			_dir *= -1;
 		_turnAccessible = turn;
 	}
 
