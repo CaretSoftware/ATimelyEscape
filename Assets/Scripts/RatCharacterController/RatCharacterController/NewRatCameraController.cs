@@ -144,11 +144,24 @@ public class NewRatCameraController : MonoBehaviour {
 
 	private float _cameraTurnSpeed = 40f;
 	private int _dir = 1;
+
+	private float _height;
+	private float _vel;
+	[SerializeField] private float smoothTime;
+	
 	private void MoveCamera() {
 		if (_turnAccessible) _mouseMovement.x += Time.unscaledDeltaTime * _cameraTurnSpeed * _dir;
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 
-		_cameraPos = Vector3.SmoothDamp(_cameraPos, transform.position, ref _smoothDampCurrentVelocityLateral, _smoothCameraPosTime);
+		Vector3 pos = transform.position;
+
+		bool higher = pos.y > _height;
+
+		_height = Mathf.SmoothDamp(_height, pos.y, ref _vel, smoothTime);
+		
+		_height = higher ? _height : pos.y;
+
+		_cameraPos = Vector3.SmoothDamp(_cameraPos, pos, ref _smoothDampCurrentVelocityLateral, _smoothCameraPosTime);
 		
 		_abovePlayer = _cameraPos + Vector3.up * _headHeight;
 		_offsetTarget = _abovePlayer + _camera.rotation * _camera3rdPersonOffset;
