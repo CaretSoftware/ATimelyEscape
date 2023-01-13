@@ -389,10 +389,6 @@ public class NewRatCharacterController : MonoBehaviour {
 			ApplyFriction(normalForce);
 			
 		} while (hit.collider && iterations++ < 10);
-		
-
-		if (iterations > 9)
-			Debug.Log("UpdateVelocity " + iterations);
 	}
 	
 	public void ResolveOverlap() {
