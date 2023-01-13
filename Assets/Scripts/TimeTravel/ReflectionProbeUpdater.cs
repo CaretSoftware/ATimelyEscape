@@ -26,7 +26,7 @@ public class ReflectionProbeUpdater : MonoBehaviour
     {
         if (e.IsReload) return;
         UpdateProbe();
-        Invoke(nameof(UpdateProbe), 1f);
+        Invoke(nameof(UpdateProbe), 6f * Time.deltaTime);
     }
 
     private void OnDestroy() {
