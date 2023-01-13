@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 namespace NewRatCharacterController {
     public class NewCharacterInput : MonoBehaviour
     {
+        private static NewCharacterInput _instance;
+        
         public delegate void ZoomDelegate(bool zoom);
 
         public static ZoomDelegate zoomDelegate;
@@ -37,7 +39,17 @@ namespace NewRatCharacterController {
 
         private bool _paused;
 
-        public static bool Accessibility { get; set; } = true;
+
+        private static bool _accessible;
+        public static bool Accessibility
+        {
+            get => _accessible;
+            set {
+                _accessible = value;
+                _instance.ToggleAccessibilityButtons();
+            }
+        }
+
         private const int Stop = 0;
         private const int Run = 1;
         private const int StopAgain = 2;
@@ -108,6 +120,10 @@ namespace NewRatCharacterController {
             }
         }
 
+        private void Awake() {
+            _instance = this;
+        }
+
         private void Start()
         {
             PauseMenuBehaviour.pauseDelegate += Paused;
@@ -164,7 +180,7 @@ namespace NewRatCharacterController {
         }
 
         private void ToggleAccessibilityButtons() {
-            if (true) // TODO debug prod
+            if ( Accessibility ) // TODO debug prod
             {
                 _playerInputActions.AccessibilityControls.Enable();
                 _playerInputActions.CharacterMovement.Disable();
@@ -224,7 +240,7 @@ namespace NewRatCharacterController {
         private IEnumerator CycleTimeTravelButtons() {
             int timeTravelTime = -1;
 
-            while (xButton) {
+            while (xButton && Accessibility) {
                 timeTravelTime = ++timeTravelTime % 3;
                 
                 CycleButton(timeTravelTime);
@@ -338,7 +354,6 @@ namespace NewRatCharacterController {
 
         private void Jump(InputAction.CallbackContext context) => Jump();
         private void Jump() {
-            Debug.Log("Pressed jump");
             _newRatCharacterController.PressedJump = true;
             _newRatCharacterController.HoldingJump = true;
         }
@@ -408,8 +423,7 @@ namespace NewRatCharacterController {
         }
         
         public void EnableCharacterMovement(bool enable) {
-            Debug.LogWarning("fix this :) SettingsMeny is setting Accessibility to false");
-            if (true) return;   // TODO debug
+            if (Accessibility) return;   // TODO debug
             
             if (enable) {
                 Debug.LogError("h");

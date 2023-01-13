@@ -83,8 +83,11 @@ public class SettingsMenuController : MonoBehaviour
     {
         SettingsManager.Instance.movmentAccessiblityActive = accessible;
         movementAccessiblityControl.isOn = accessible;
-        if(isPauseMenu)
+        Debug.Log($"{accessible} {isPauseMenu}");
+        if (isPauseMenu)
+        {
             NewRatCharacterController.NewCharacterInput.Accessibility = accessible;
+        }
     }
 
     public void SetCrossHairCanvas(bool active)
