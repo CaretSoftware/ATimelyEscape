@@ -142,8 +142,13 @@ public class LevelSelect : MonoBehaviour {
     public void EnableMenu() {
         canvas.gameObject.SetActive(!canvas.gameObject.activeSelf);
         input.CanTimeTravel = !canvas.gameObject.activeSelf;
-        if (canvas.gameObject.activeSelf) inputField.Select();
-        Cursor.lockState = canvas.gameObject.activeSelf ? CursorLockMode.None : CursorLockMode.Locked;
+        if (canvas.gameObject.activeSelf) {
+            if (UnityEngine.EventSystems.EventSystem.current != null) {
+                UnityEngine.EventSystems.EventSystem.current .SetSelectedGameObject(null);
+                UnityEngine.EventSystems.EventSystem.current .SetSelectedGameObject(inputField.gameObject);
+            }
+            inputField.Select();
+        }
     }
 
     /// <summary>
