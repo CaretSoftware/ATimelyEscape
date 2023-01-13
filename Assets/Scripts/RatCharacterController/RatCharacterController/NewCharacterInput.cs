@@ -139,9 +139,8 @@ namespace NewRatCharacterController {
         }
 
         private void Subscribe() {
-            _playerInputActions.CharacterMovement.Disable();
-
             ToggleAccessibilityButtons();
+            _playerInputActions.Movement.Enable();
             _playerInputActions.CameraControls.Enable();
             _playerInputActions.Pause.Enable();
             _playerInputActions.Onboarding.Enable();
@@ -154,8 +153,8 @@ namespace NewRatCharacterController {
             _playerInputActions.Onboarding.ReturnToGame.started += ReturnToGame;
             _playerInputActions.Onboarding.AdvanceDialogue.started += AdvanceDialogue;
             
-            _playerInputActions.CharacterMovement.Jump.started += Jump;
-            _playerInputActions.CharacterMovement.Jump.canceled += JumpReleased;
+            _playerInputActions.Jump.Jump.started += Jump;
+            _playerInputActions.Jump.Jump.canceled += JumpReleased;
             
             _playerInputActions.Pause.Pause.performed += Pause;
             
@@ -183,43 +182,36 @@ namespace NewRatCharacterController {
             if ( Accessibility ) // TODO debug prod
             {
                 _playerInputActions.AccessibilityControls.Enable();
-                _playerInputActions.CharacterMovement.Disable();
+                _playerInputActions.Jump.Disable();
                 _playerInputActions.Interact.Disable();
             }
             else
             {
-                Debug.Log("you shouldn't be here");
                 _playerInputActions.AccessibilityControls.Disable();
-                _playerInputActions.CharacterMovement.Enable();
+                _playerInputActions.Jump.Enable();
                 _playerInputActions.Interact.Enable();
             }
 
-            Debug.Log($"char mov enabled: {_playerInputActions.CharacterMovement.enabled}");
         }
 
         private void BButton(InputAction.CallbackContext context) {
             AccessibleState = ++AccessibleState % 4;
-            Debug.Log($"{nameof(AButton)} state: {AccessibleState}");
 
             switch (AccessibleState)
             {
                 case (Stop):
-                    Debug.Log(nameof(Stop));
                     _camController.TurnCamera(false);
                     _newRatCharacterController.RunForward(false);
                     break;
                 case (Run):
-                    Debug.Log(nameof(Run));
                     _camController.TurnCamera(false);
                     _newRatCharacterController.RunForward(true);
                     break;
                 case (StopAgain):
-                    Debug.Log(nameof(StopAgain));
                     _camController.TurnCamera(false);
                     _newRatCharacterController.RunForward(false);
                     break;
                 case (TurnCamera):
-                    Debug.Log(nameof(TurnCamera));
                     _camController.TurnCamera(true);
                     break;
             }
@@ -232,7 +224,6 @@ namespace NewRatCharacterController {
         private void XButton(InputAction.CallbackContext context) {
             xButton = !xButton;
             if (canTimeTravelPast || canTimeTravelPresent || canTimeTravelFuture) {
-                Debug.Log($"{nameof(BButton)} {xButton}");
                 StartCoroutine(CycleTimeTravelButtons());
             }
         }
@@ -264,17 +255,14 @@ namespace NewRatCharacterController {
         private void CycleButton(int timeTravelTime) {
             switch (timeTravelTime) {
                 case (Past):
-                    Debug.Log(nameof(Past));
                     TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Future, false);
                     TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, true);
                     break;
                 case (Present):
-                    Debug.Log(nameof(Present));
                     TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, false);
                     TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, true);
                     break;
                 case (Future):
-                    Debug.Log(nameof(Future));
                     TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, false);
                     TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Future, true);
                     break;
@@ -282,13 +270,11 @@ namespace NewRatCharacterController {
         }
         
         private void AButton(InputAction.CallbackContext context) {
-            Debug.Log($"{nameof(AButton)}");
             Jump();
         }
 
         private bool _interactAccessible;
         private void YButton(InputAction.CallbackContext context) {
-            Debug.Log($"{nameof(YButton)}");
             _interactAccessible = !_interactAccessible;
             
             if (_interactAccessible)
@@ -334,7 +320,7 @@ namespace NewRatCharacterController {
         private void Update() {
             if (_paused) return;
 
-            MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
+            MovementInput(_playerInputActions.Movement.Movement.ReadValue<Vector2>());
             CameraInput();
             DeveloperCheats();
         }
@@ -426,11 +412,10 @@ namespace NewRatCharacterController {
             if (Accessibility) return;   // TODO debug
             
             if (enable) {
-                Debug.LogError("h");
-                _playerInputActions.CharacterMovement.Enable();
+                _playerInputActions.Jump.Enable();
             }
             else
-                _playerInputActions.CharacterMovement.Disable();
+                _playerInputActions.Jump.Disable();
         }
 
         private void DeveloperCheats() {
@@ -444,8 +429,6 @@ namespace NewRatCharacterController {
                 CanTimeTravelFuture = true;
 
                 CanTimeTravel = true;
-
-                Debug.Log($"CanTimeTravel {CanTimeTravel}");
             }
             //#endif
         }
@@ -457,8 +440,8 @@ namespace NewRatCharacterController {
             
             _playerInputActions.Onboarding.ReturnToGame.started -= ReturnToGame;
             _playerInputActions.Onboarding.AdvanceDialogue.started -= AdvanceDialogue;
-            _playerInputActions.CharacterMovement.Jump.started -= Jump;
-            _playerInputActions.CharacterMovement.Jump.canceled -= JumpReleased;
+            _playerInputActions.Jump.Jump.started -= Jump;
+            _playerInputActions.Jump.Jump.canceled -= JumpReleased;
             _playerInputActions.Pause.Pause.performed -= Pause;
             _playerInputActions.Interact.Interact.performed -= Interact;
             _playerInputActions.Interact.Interact.canceled -= StopInteract;

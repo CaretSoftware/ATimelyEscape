@@ -38,9 +38,9 @@ namespace RatCharacterController {
 			//Physics.queriesHitTriggers = false;    // ray-/capsule-/sphere-casts don't hit triggers
 			_playerInputActions = new PlayerInputActions();
 			_playerInputActions.CameraControls.Enable();
-			_playerInputActions.CharacterMovement.Enable();
+			_playerInputActions.Jump.Enable();
 			_playerInputActions.Interact.Enable();
-			_playerInputActions.CharacterMovement.Jump.performed += Jump;
+			_playerInputActions.Jump.Jump.performed += Jump;
 			_playerInputActions.Interact.Interact.performed += Interact;
 			_playerInputActions.Interact.Interact.canceled += StopInteract;
 			_playerInputActions.Interact.Past.performed += TravelToPast;
@@ -70,7 +70,7 @@ namespace RatCharacterController {
 		}
 
 		private void Unsubscribe() {
-			_playerInputActions.CharacterMovement.Jump.performed -= Jump;
+			_playerInputActions.Jump.Jump.performed -= Jump;
 			_playerInputActions.Interact.Interact.performed -= Interact;
 			_playerInputActions.Interact.Interact.canceled -= StopInteract;
 			_playerInputActions.Interact.Past.performed -= TravelToPast;
@@ -95,14 +95,14 @@ namespace RatCharacterController {
 		}
 
 		private void Update() {
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 			if (Input.GetKeyDown(KeyCode.C) && ((Input.GetKey(KeyCode.LeftControl) ||
 			                                     Input.GetKey(KeyCode.RightControl) ||
 			                                     Input.GetKey(KeyCode.LeftCommand)))) {
 				CanTimeTravel = true;
 				Debug.Log($"CanTimeTravel {CanTimeTravel}");
 			}
-#endif
+//#endif
 
 			if (_paused) {
 				_characterAnimationController.InputVector(Vector2.zero);
@@ -113,7 +113,7 @@ namespace RatCharacterController {
 			_characterAnimationController.SetGrounded(Grounded());
 
 			if (!_pushing)
-				MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
+				MovementInput(_playerInputActions.Movement.Movement.ReadValue<Vector2>());
 			else
 				PushCubeInput(_playerInputActions.BoxMovement.Movement.ReadValue<Vector2>());
 
@@ -307,7 +307,7 @@ namespace RatCharacterController {
 				_cameraFollow.SetFollowTransform(cube);
 
 				_playerInputActions.BoxMovement.Enable();
-				_playerInputActions.CharacterMovement.Disable();
+				_playerInputActions.Jump.Disable();
 			}
 			else if (Physics.Raycast(ray, out RaycastHit hit, .3f) && hit.transform.CompareTag(keypadTag)) {
 				KeypadHandler keypad = hit.transform.GetComponent<KeypadHandler>();
@@ -328,7 +328,7 @@ namespace RatCharacterController {
 			CubePush.NotClosest();
 
 			_playerInputActions.BoxMovement.Disable();
-			_playerInputActions.CharacterMovement.Enable();
+			_playerInputActions.Jump.Enable();
 		}
 
 		private Vector3 InputToCameraProjection(Vector3 input) {
