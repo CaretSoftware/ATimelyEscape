@@ -19,6 +19,8 @@ public class ScripableSlider : MonoBehaviour
 
     private Slider _slider;
     private float value;
+    private float maxValue;
+    private float minValue;
 
     private float timer;
 
@@ -35,8 +37,10 @@ public class ScripableSlider : MonoBehaviour
         {
             data = new(gameObject.name);
         }
+        maxValue = _slider.maxValue;
+        minValue = _slider.minValue;
         RoundValue();
-     }
+    }
 
 
     private void Update()
@@ -75,10 +79,12 @@ public class ScripableSlider : MonoBehaviour
 
     private void RoundValue()
     {
-        value = Mathf.Round((_slider.value) * (sliderSegments / (_slider.maxValue - _slider.minValue))) * (sliderSegments / (_slider.maxValue - _slider.minValue));
+        value = Mathf.Round((_slider.value) * (sliderSegments / (maxValue - minValue))) / (sliderSegments / (maxValue - minValue));
         _slider.value = value;
     }
-        
+
+    [Serializable]
+
     public class TestSlider : UnityEvent<float> { }
 
 }
