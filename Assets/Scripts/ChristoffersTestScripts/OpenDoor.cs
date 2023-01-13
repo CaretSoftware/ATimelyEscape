@@ -8,6 +8,8 @@ public class OpenDoor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!doorAnimator) Debug.Log("Assign DoorAnimator on this object", this);
+        
         if (other.gameObject.tag == "Player")
         {
             doorAnimator.SetBool("Open", true);
