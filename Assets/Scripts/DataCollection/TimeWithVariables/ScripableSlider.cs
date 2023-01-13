@@ -14,6 +14,9 @@ public class ScripableSlider : MonoBehaviour
 
     [SerializeField]private VariablesID data;
 
+    [SerializeField] private int sliderSegments;
+
+
     private Slider _slider;
     private float value;
 
@@ -32,8 +35,8 @@ public class ScripableSlider : MonoBehaviour
         {
             data = new(gameObject.name);
         }
-        value = _slider.value;
-    }
+        RoundValue();
+     }
 
 
     private void Update()
@@ -49,9 +52,10 @@ public class ScripableSlider : MonoBehaviour
   
     public void OnValueChange()
     {
+
         data.UpdateVariableData(value, timer);
         timer = 0f;
-        value = _slider.value;
+        RoundValue();
         myUnityEvent.Invoke(value);
 
     }
@@ -69,8 +73,12 @@ public class ScripableSlider : MonoBehaviour
         data = SaveDataCollected.LoadVariableData(gameObject.name + ".data");
     }
 
-    [Serializable]
-
+    private void RoundValue()
+    {
+        value = Mathf.Round((_slider.value) * (sliderSegments / (_slider.maxValue - _slider.minValue))) * (sliderSegments / (_slider.maxValue - _slider.minValue));
+        _slider.value = value;
+    }
+        
     public class TestSlider : UnityEvent<float> { }
 
 }
