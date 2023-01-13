@@ -86,6 +86,14 @@ public class NewRatCameraController : MonoBehaviour {
 		PauseMenuBehaviour.pauseDelegate += Pause;
 	}
 
+	private bool _turnAccessible;
+	public void TurnCamera(bool turn)
+	{
+		if (turn)
+			_dir *= -1;
+		_turnAccessible = turn;
+	}
+
 	private void OnDestroy() {
 		PauseMenuBehaviour.pauseDelegate -= Pause;
 	}
@@ -133,9 +141,11 @@ public class NewRatCameraController : MonoBehaviour {
 		
 		_mouseMovement.y = Mathf.Clamp(_mouseMovement.y, min, max);
 	}
-	
+
+	private float _cameraTurnSpeed = 40f;
+	private int _dir = 1;
 	private void MoveCamera() {
-		
+		if (_turnAccessible) _mouseMovement.x += Time.unscaledDeltaTime * _cameraTurnSpeed * _dir;
 		_camera.rotation = Quaternion.Euler(_mouseMovement.y, _mouseMovement.x, 0.0f);
 
 		_cameraPos = Vector3.SmoothDamp(_cameraPos, transform.position, ref _smoothDampCurrentVelocityLateral, _smoothCameraPosTime);

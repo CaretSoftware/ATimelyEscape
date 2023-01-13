@@ -1,27 +1,36 @@
 using System;
+using System.Collections;
 using CallbackSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace NewRatCharacterController {
-    public class NewCharacterInput : MonoBehaviour {
+    public class NewCharacterInput : MonoBehaviour
+    {
+        private static NewCharacterInput _instance;
+        
         public delegate void ZoomDelegate(bool zoom);
+
         public static ZoomDelegate zoomDelegate;
 
         public delegate void ExitZoomDelegate(bool zoom);
+
         public static ExitZoomDelegate exitZoomDelegate;
 
         public delegate void SelectPressed();
+
         public static SelectPressed selectPressed;
 
 
         [SerializeField] private TimeTravelButtonUIManager timeTravelButtonUIManager;
 
         public delegate void AdvanceDialogueDelegate();
+
         public static AdvanceDialogueDelegate advanceDialogueDelegate;
 
         public delegate void ReturnToGameDelegate();
+
         public static ReturnToGameDelegate returnToGameDelegate;
 
         private PlayerInputActions _playerInputActions;
@@ -29,60 +38,94 @@ namespace NewRatCharacterController {
         private NewRatCameraController _camController;
 
         private bool _paused;
-        
-        public static bool Accessibility { get; set; }
 
+
+        private static bool _accessible;
+        public static bool Accessibility
+        {
+            get => _accessible;
+            set {
+                _accessible = value;
+                _instance.ToggleAccessibilityButtons();
+            }
+        }
+
+        private const int Stop = 0;
+        private const int Run = 1;
+        private const int StopAgain = 2;
+        private const int TurnCamera = 3;
+        
+        private int AccessibleState = Stop;
+
+        
         // Time Travel
         private bool canTimeTravel = false;
         private bool canTimeTravelPast = false;
         private bool canTimeTravelPresent = false;
         private bool canTimeTravelFuture = false;
-        public bool CanTimeTravel {
-            get {
-                return canTimeTravel;
-            }
 
-            set {
+        public bool CanTimeTravel
+        {
+            get { return canTimeTravel; }
+
+            set
+            {
                 canTimeTravel = value;
 
                 if (canTimeTravelPast && canTimeTravel)
-                    TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, canTimeTravelPast);//&& canTimeTravel);
+                    TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past,
+                        canTimeTravelPast); //&& canTimeTravel);
                 if (canTimeTravelPresent && canTimeTravel)
-                    TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, canTimeTravelPresent);// && canTimeTravel);
+                    TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present,
+                        canTimeTravelPresent); // && canTimeTravel);
                 if (canTimeTravelFuture && canTimeTravel)
-                    TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, canTimeTravelFuture);// && canTimeTravel);
+                    TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future,
+                        canTimeTravelFuture); // && canTimeTravel);
             }
         }
-        public bool CanTimeTravelPast {
+
+        public bool CanTimeTravelPast
+        {
             get => canTimeTravelPast;
 
-            set {
+            set
+            {
                 //canTimeTravel = true;
                 canTimeTravelPast = value;
                 TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Past, value);
             }
         }
-        public bool CanTimeTravelPresent {
+
+        public bool CanTimeTravelPresent
+        {
             get => canTimeTravelPresent;
 
-            set {
+            set
+            {
                 //canTimeTravel = true;
                 canTimeTravelPresent = value;
                 TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Present, value);
             }
         }
-        public bool CanTimeTravelFuture {
+
+        public bool CanTimeTravelFuture
+        {
             get => canTimeTravelFuture;
 
-            set {
+            set
+            {
                 //canTimeTravel = true;
                 canTimeTravelFuture = value;
                 TimeTravelButtonUIManager.buttonActiveDelegate?.Invoke(TimeTravelPeriod.Future, value);
             }
         }
 
+        private void Awake() {
+            _instance = this;
+        }
 
-        private void Start() {
+        private void Start()
+        {
             PauseMenuBehaviour.pauseDelegate += Paused;
 
             _camController = GetComponent<NewRatCameraController>();
@@ -92,9 +135,13 @@ namespace NewRatCharacterController {
 
             _playerInputActions = new PlayerInputActions();
 
+            Subscribe();
+        }
+
+        private void Subscribe() {
+            ToggleAccessibilityButtons();
+            _playerInputActions.Movement.Enable();
             _playerInputActions.CameraControls.Enable();
-            _playerInputActions.CharacterMovement.Enable();
-            _playerInputActions.Interact.Enable();
             _playerInputActions.Pause.Enable();
             _playerInputActions.Onboarding.Enable();
             _playerInputActions.LevelSelect.Enable();
@@ -102,20 +149,138 @@ namespace NewRatCharacterController {
 
             _playerInputActions.LevelSelect.EnableMenu.performed += EnableLevelSelectMenu;
             _playerInputActions.LevelSelect.LoadRoom.performed += LoadSelectedRoom;
+            
             _playerInputActions.Onboarding.ReturnToGame.started += ReturnToGame;
             _playerInputActions.Onboarding.AdvanceDialogue.started += AdvanceDialogue;
-            _playerInputActions.CharacterMovement.Jump.started += Jump;
-            _playerInputActions.CharacterMovement.Jump.canceled += JumpReleased;
+            
+            _playerInputActions.Jump.Jump.started += Jump;
+            _playerInputActions.Jump.Jump.canceled += JumpReleased;
+            
             _playerInputActions.Pause.Pause.performed += Pause;
+            
             _playerInputActions.Interact.Interact.performed += Interact;
+            
             _playerInputActions.Interact.Interact.canceled += StopInteract;
             _playerInputActions.Interact.Past.performed += TravelToPast;
             _playerInputActions.Interact.Present.performed += TravelToPresent;
             _playerInputActions.Interact.Future.performed += TravelToFuture;
+            
             _playerInputActions.Zoom.ExitZoom.performed += ExitZoom;
             _playerInputActions.Zoom.ExitZoom.canceled += ExitUnZoom;
+            
             _playerInputActions.Zoom.FirstPerson.performed += FirstPersonZoom;
             _playerInputActions.Zoom.FirstPerson.canceled += FirstPersonUnZoom;
+            
+            _playerInputActions.AccessibilityControls.AButton.performed += AButton;
+            _playerInputActions.AccessibilityControls.BButton.performed += BButton;
+            _playerInputActions.AccessibilityControls.XButton.performed += XButton;
+            _playerInputActions.AccessibilityControls.YButton.performed += YButton;
+
+        }
+
+        private void ToggleAccessibilityButtons() {
+            if ( Accessibility ) // TODO debug prod
+            {
+                _playerInputActions.AccessibilityControls.Enable();
+                _playerInputActions.Jump.Disable();
+                _playerInputActions.Interact.Disable();
+            }
+            else
+            {
+                _playerInputActions.AccessibilityControls.Disable();
+                _playerInputActions.Jump.Enable();
+                _playerInputActions.Interact.Enable();
+            }
+
+        }
+
+        private void BButton(InputAction.CallbackContext context) {
+            AccessibleState = ++AccessibleState % 4;
+
+            switch (AccessibleState)
+            {
+                case (Stop):
+                    _camController.TurnCamera(false);
+                    _newRatCharacterController.RunForward(false);
+                    break;
+                case (Run):
+                    _camController.TurnCamera(false);
+                    _newRatCharacterController.RunForward(true);
+                    break;
+                case (StopAgain):
+                    _camController.TurnCamera(false);
+                    _newRatCharacterController.RunForward(false);
+                    break;
+                case (TurnCamera):
+                    _camController.TurnCamera(true);
+                    break;
+            }
+        }
+
+        private const int Past = 0;
+        private const int Present = 1;
+        private const int Future = 2;
+        private bool xButton;
+        private void XButton(InputAction.CallbackContext context) {
+            xButton = !xButton;
+            if (canTimeTravelPast || canTimeTravelPresent || canTimeTravelFuture) {
+                StartCoroutine(CycleTimeTravelButtons());
+            }
+        }
+
+        private IEnumerator CycleTimeTravelButtons() {
+            int timeTravelTime = -1;
+
+            while (xButton && Accessibility) {
+                timeTravelTime = ++timeTravelTime % 3;
+                
+                CycleButton(timeTravelTime);
+                yield return new WaitForSeconds(1f);
+            }
+
+            if (timeTravelTime == Past)
+                TravelToPast();
+            if (timeTravelTime == Present)
+                TravelToPresent();
+            if (timeTravelTime == Future)
+                TravelToFuture();
+            
+            TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, false);
+            TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, false);
+            TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Future, false);
+
+            xButton = false;
+        }
+
+        private void CycleButton(int timeTravelTime) {
+            switch (timeTravelTime) {
+                case (Past):
+                    TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Future, false);
+                    TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, true);
+                    break;
+                case (Present):
+                    TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Past, false);
+                    TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, true);
+                    break;
+                case (Future):
+                    TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Present, false);
+                    TimeTravelUIButton.pulseButtonEvent?.Invoke(TimeTravelPeriod.Future, true);
+                    break;
+            }
+        }
+        
+        private void AButton(InputAction.CallbackContext context) {
+            Jump();
+        }
+
+        private bool _interactAccessible;
+        private void YButton(InputAction.CallbackContext context) {
+            _interactAccessible = !_interactAccessible;
+            
+            if (_interactAccessible)
+                Interact();
+            else
+                StopInteract();
         }
 
         private void ExitZoom(InputAction.CallbackContext context) {
@@ -155,29 +320,7 @@ namespace NewRatCharacterController {
         private void Update() {
             if (_paused) return;
 
-            /*
-			if (UnityEngine.Input.GetKeyDown(KeyCode.U))
-				CanTimeTravel = true;
-			else if (UnityEngine.Input.GetKeyDown(KeyCode.H))
-				CanTimeTravel = false;
-			
-			if (UnityEngine.Input.GetKeyDown(KeyCode.I))
-				CanTimeTravelPast = true;
-			else if (UnityEngine.Input.GetKeyDown(KeyCode.J))
-				CanTimeTravelPast = false;
-			
-			if (UnityEngine.Input.GetKeyDown(KeyCode.O))
-				CanTimeTravelPresent = true;
-			else if (UnityEngine.Input.GetKeyDown(KeyCode.K))
-				CanTimeTravelPresent = false;
-			
-			if (UnityEngine.Input.GetKeyDown(KeyCode.P))
-				CanTimeTravelFuture = true;
-			else if (UnityEngine.Input.GetKeyDown(KeyCode.L))
-				CanTimeTravelFuture = false;
-			*/
-
-            MovementInput(_playerInputActions.CharacterMovement.Movement.ReadValue<Vector2>());
+            MovementInput(_playerInputActions.Movement.Movement.ReadValue<Vector2>());
             CameraInput();
             DeveloperCheats();
         }
@@ -195,7 +338,8 @@ namespace NewRatCharacterController {
             _camController.MouseInput(cameraMouseInput);
         }
 
-        private void Jump(InputAction.CallbackContext context) {
+        private void Jump(InputAction.CallbackContext context) => Jump();
+        private void Jump() {
             _newRatCharacterController.PressedJump = true;
             _newRatCharacterController.HoldingJump = true;
         }
@@ -207,28 +351,33 @@ namespace NewRatCharacterController {
             _newRatCharacterController.paused = !_newRatCharacterController.paused;
         }
 
-        private void Interact(InputAction.CallbackContext context) {
+        private void Interact(InputAction.CallbackContext context) => Interact();
+        private void Interact() {
             _newRatCharacterController.Interact();
         }
 
-        private void StopInteract(InputAction.CallbackContext context) {
+        private void StopInteract(InputAction.CallbackContext context) => StopInteract();
+        private void StopInteract() {
             _newRatCharacterController.StopInteract();
         }
 
-        private void TravelToPast(InputAction.CallbackContext context) {
+        private void TravelToPast(InputAction.CallbackContext context) => TravelToPast();
+        private void TravelToPast() {
 #if UNITY_EDITOR
             if (FindObjectOfType<TimeTravelManager>() == null) {
                 Debug.LogWarning("No TimeTravelManager found");
                 return;
             }
 #endif
-            TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Past, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelPast);
+            TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Past,
+                TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelPast);
 
             if (CanTimeTravel && CanTimeTravelPast && !_paused)
                 TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Past);
         }
 
-        private void TravelToPresent(InputAction.CallbackContext context) {
+        private void TravelToPresent(InputAction.CallbackContext context) => TravelToPresent();
+        private void TravelToPresent() {
 #if UNITY_EDITOR
             if (FindObjectOfType<TimeTravelManager>() == null) {
                 Debug.LogWarning("No TimeTravelManager found");
@@ -236,53 +385,37 @@ namespace NewRatCharacterController {
             }
 #endif
 
-            TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Present, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelPresent);
+            TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Present,
+                TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelPresent);
 
             if (CanTimeTravel && CanTimeTravelPresent && !_paused)
                 TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
         }
 
-        private void TravelToFuture(InputAction.CallbackContext context) {
+        
+        private void TravelToFuture(InputAction.CallbackContext context) => TravelToFuture();
+        private void TravelToFuture() {
 #if UNITY_EDITOR
             if (FindObjectOfType<TimeTravelManager>() == null) {
                 Debug.LogWarning("No TimeTravelManager found");
                 return;
             }
 #endif
-            TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Future, TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelFuture);
+            TimeTravelButtonUIManager.buttonPressedDelegate?.Invoke(TimeTravelPeriod.Future,
+                TimeTravelManager.currentPeriod, CanTimeTravel && canTimeTravelFuture);
 
             if (CanTimeTravel && CanTimeTravelFuture && !_paused)
                 TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Future);
         }
-
-        private void OnDestroy() => Unsubscribe();
-
-        private void Unsubscribe() {
-            PauseMenuBehaviour.pauseDelegate -= Paused;
-
-            _playerInputActions.Onboarding.ReturnToGame.started -= ReturnToGame;
-            _playerInputActions.Onboarding.AdvanceDialogue.started -= AdvanceDialogue;
-            _playerInputActions.CharacterMovement.Jump.started -= Jump;
-            _playerInputActions.CharacterMovement.Jump.canceled -= JumpReleased;
-            _playerInputActions.Pause.Pause.performed -= Pause;
-            _playerInputActions.Interact.Interact.performed -= Interact;
-            _playerInputActions.Interact.Interact.canceled -= StopInteract;
-            _playerInputActions.Interact.Past.performed -= TravelToPast;
-            _playerInputActions.Interact.Present.performed -= TravelToPresent;
-            _playerInputActions.Interact.Future.performed -= TravelToFuture;
-            _playerInputActions.LevelSelect.EnableMenu.performed -= EnableLevelSelectMenu;
-			_playerInputActions.LevelSelect.LoadRoom.performed -= LoadSelectedRoom;
-            _playerInputActions.Zoom.ExitZoom.performed -= ExitZoom;
-            _playerInputActions.Zoom.ExitZoom.canceled -= ExitUnZoom;
-            _playerInputActions.Zoom.FirstPerson.performed -= FirstPersonZoom;
-            _playerInputActions.Zoom.FirstPerson.canceled -= FirstPersonUnZoom;
-        }
-
+        
         public void EnableCharacterMovement(bool enable) {
-            if (enable)
-                _playerInputActions.CharacterMovement.Enable();
+            if (Accessibility) return;   // TODO debug
+            
+            if (enable) {
+                _playerInputActions.Jump.Enable();
+            }
             else
-                _playerInputActions.CharacterMovement.Disable();
+                _playerInputActions.Jump.Disable();
         }
 
         private void DeveloperCheats() {
@@ -296,10 +429,31 @@ namespace NewRatCharacterController {
                 CanTimeTravelFuture = true;
 
                 CanTimeTravel = true;
-
-                Debug.Log($"CanTimeTravel {CanTimeTravel}");
             }
             //#endif
+        }
+        
+        private void OnDestroy() => Unsubscribe();
+
+        private void Unsubscribe() {
+            PauseMenuBehaviour.pauseDelegate -= Paused;
+            
+            _playerInputActions.Onboarding.ReturnToGame.started -= ReturnToGame;
+            _playerInputActions.Onboarding.AdvanceDialogue.started -= AdvanceDialogue;
+            _playerInputActions.Jump.Jump.started -= Jump;
+            _playerInputActions.Jump.Jump.canceled -= JumpReleased;
+            _playerInputActions.Pause.Pause.performed -= Pause;
+            _playerInputActions.Interact.Interact.performed -= Interact;
+            _playerInputActions.Interact.Interact.canceled -= StopInteract;
+            _playerInputActions.Interact.Past.performed -= TravelToPast;
+            _playerInputActions.Interact.Present.performed -= TravelToPresent;
+            _playerInputActions.Interact.Future.performed -= TravelToFuture;
+            _playerInputActions.LevelSelect.EnableMenu.performed -= EnableLevelSelectMenu;
+            _playerInputActions.LevelSelect.LoadRoom.performed -= LoadSelectedRoom;
+            _playerInputActions.Zoom.ExitZoom.performed -= ExitZoom;
+            _playerInputActions.Zoom.ExitZoom.canceled -= ExitUnZoom;
+            _playerInputActions.Zoom.FirstPerson.performed -= FirstPersonZoom;
+            _playerInputActions.Zoom.FirstPerson.canceled -= FirstPersonUnZoom;
         }
     }
 }

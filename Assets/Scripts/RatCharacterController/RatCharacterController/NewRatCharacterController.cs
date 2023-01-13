@@ -155,6 +155,12 @@ public class NewRatCharacterController : MonoBehaviour {
 
 	[SerializeField]
 	public float pushSpeed = 1.75f;
+
+	private bool _accessibleRun;
+	
+	public void RunForward(bool run) {
+		_accessibleRun = run;
+	}
 	
 	public void SetVelocity(float vel) {
 		_maxVelocity = vel;
@@ -211,13 +217,16 @@ public class NewRatCharacterController : MonoBehaviour {
 	{
 		_exitCameraZoom = zoom;
 	}
-	
+
 	private void Update()
 	{
 		_inputMovement = Vector3.zero;
-		
+
 		UpdateGrounded();
-		
+
+		if (_accessibleRun)	// TODO prod
+			InputVector = Vector2.up.ToVector3();
+			
 		Input();
 		
 		if (paused)
