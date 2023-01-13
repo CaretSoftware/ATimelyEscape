@@ -17,6 +17,7 @@ public class SettingsMenuController : MonoBehaviour
     [SerializeField] private Slider volumeMasterSlider;
     [SerializeField] private Slider volumeMusicSlider;
     [SerializeField] private Slider volumeEffectsSlider;
+    [SerializeField] private Slider timeScaleSlider;
 
     [Header("UI Crosshair")]
     [SerializeField] private GameObject crossHairCanvas;
@@ -32,6 +33,7 @@ public class SettingsMenuController : MonoBehaviour
         volumeMasterSlider.value = SettingsManager.Instance.masterVolume;
         volumeMusicSlider.value = SettingsManager.Instance.musicVolume;
         volumeEffectsSlider.value = SettingsManager.Instance.effectVolume;
+        timeScaleSlider.value = SettingsManager.Instance.timeScaleValue;
 
         SetTextToSpeachActive(SettingsManager.Instance.textToSpeachActive);
         SetMovementControls(SettingsManager.Instance.movmentAccessiblityActive);
@@ -72,6 +74,11 @@ public class SettingsMenuController : MonoBehaviour
         ButtonSoundBehaviour.shouldPlayTextToSpeach = active;
     }
 
+    public void SetTimeScale(float value)
+    {
+        SettingsManager.Instance.timeScaleValue = value;
+    }
+
     public void SetMovementControls(bool accessible)
     {
         SettingsManager.Instance.movmentAccessiblityActive = accessible;
@@ -92,8 +99,8 @@ public class SettingsMenuController : MonoBehaviour
     {
         SettingsManager.Instance.navigationAssistActive = active;
         navigationAssistToggle.isOn = active;
-        CognitiveAssistanceTriggerHandler.SetNavigationActive(active);
-        
+        if(isPauseMenu)
+            CognitiveAssistanceTriggerHandler.SetNavigationActive(active);  
     }
 
     public void SetMasterVolume(float volume)

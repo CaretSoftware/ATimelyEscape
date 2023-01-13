@@ -29,7 +29,7 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
         pauseDelegate += PausePressed;
         
-        Time.timeScale = 1;
+        Time.timeScale = SettingsManager.Instance.timeScaleValue;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

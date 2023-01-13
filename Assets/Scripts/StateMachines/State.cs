@@ -1,4 +1,7 @@
 using UnityEngine;
+/// <summary>
+/// @auhtor Emil Wessman
+/// </summary>
 
 namespace StateMachines {
     public abstract class State {
