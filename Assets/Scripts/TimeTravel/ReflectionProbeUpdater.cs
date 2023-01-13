@@ -32,14 +32,9 @@ public class ReflectionProbeUpdater : MonoBehaviour
 
     private IEnumerator UpdateProbeWithTime()
     {
-        // Start probe update
-        float elapsedTime = 0f;
-        while (elapsedTime < 0.5f)
-        {
-            elapsedTime += Time.deltaTime;
-            _probe.RenderProbe(null);
-            yield return null;
-        }
+        _probe.RenderProbe(null);
+        yield return new WaitForSecondsRealtime(0.5f);
+        _probe.RenderProbe(null);
     }
 
     private void OnDestroy()
