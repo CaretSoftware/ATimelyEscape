@@ -17,8 +17,10 @@ public class ReflectionProbeUpdater : MonoBehaviour
 
     public void UpdateProbe()
     {
-        if(_probe.enabled) { 
-            _probe.RenderProbe(null);
+        if (_probe.enabled)
+        {
+            StopAllCoroutines();
+            StartCoroutine(UpdateProbeWithTime());
         }
     }
 
@@ -26,10 +28,22 @@ public class ReflectionProbeUpdater : MonoBehaviour
     {
         if (e.IsReload) return;
         UpdateProbe();
-        Invoke(nameof(UpdateProbe), 6f * Time.deltaTime);
     }
 
-    private void OnDestroy() {
-        if(EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TriggerTimer);
+    private IEnumerator UpdateProbeWithTime()
+    {
+        // Start probe update
+        float elapsedTime = 0f;
+        while (elapsedTime < 0.5f)
+        {
+            elapsedTime += Time.deltaTime;
+            _probe.RenderProbe(null);
+            yield return null;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (EventSystem.Current != null) TimePeriodChanged.RemoveListener<TimePeriodChanged>(TriggerTimer);
     }
 }
