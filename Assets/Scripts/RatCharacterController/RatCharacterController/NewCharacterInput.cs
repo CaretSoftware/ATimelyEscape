@@ -139,7 +139,10 @@ namespace NewRatCharacterController {
         }
 
         private void Subscribe() {
+            _playerInputActions.Jump.Disable();
+
             ToggleAccessibilityButtons();
+            
             _playerInputActions.Movement.Enable();
             _playerInputActions.CameraControls.Enable();
             _playerInputActions.Pause.Enable();
@@ -179,7 +182,7 @@ namespace NewRatCharacterController {
         }
 
         private void ToggleAccessibilityButtons() {
-            if ( Accessibility ) // TODO debug prod
+            if ( Accessibility ) // TODO prod
             {
                 _playerInputActions.AccessibilityControls.Enable();
                 _playerInputActions.Jump.Disable();
@@ -392,7 +395,6 @@ namespace NewRatCharacterController {
                 TimeTravelManager.DesiredTimePeriod(TimeTravelPeriod.Present);
         }
 
-        
         private void TravelToFuture(InputAction.CallbackContext context) => TravelToFuture();
         private void TravelToFuture() {
 #if UNITY_EDITOR
@@ -409,13 +411,14 @@ namespace NewRatCharacterController {
         }
         
         public void EnableCharacterMovement(bool enable) {
-            if (Accessibility) return;   // TODO debug
-            
             if (enable) {
-                _playerInputActions.Jump.Enable();
-            }
-            else
+                if (!Accessibility)
+                    _playerInputActions.Jump.Enable();
+                _playerInputActions.Movement.Enable();
+            } else {
+                _playerInputActions.Movement.Disable();
                 _playerInputActions.Jump.Disable();
+            }
         }
 
         private void DeveloperCheats() {
