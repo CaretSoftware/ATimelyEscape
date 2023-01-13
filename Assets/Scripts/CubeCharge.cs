@@ -5,20 +5,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace CallbackSystem
-{
+namespace CallbackSystem {
     [RequireComponent(typeof(CubePush))]
     [RequireComponent(typeof(TimeTravelObject))]
     [RequireComponent(typeof(MeshRenderer))]
 
-    public class CubeCharge : MonoBehaviour
-    {
+    public class CubeCharge : MonoBehaviour {
         private static readonly int chargeReductionAfterTimeJump = 1;
 
         [Tooltip("Charge reducese with 1 every forward jump in time. At 0 cube can no longer be puched")]
         public int charge = 0;
         [SerializeField] private float timeToCharge;
-        /*[HideInInspector]*/ public CubeCharge pastCubeCharge;
+        /*[HideInInspector]*/
+        public CubeCharge pastCubeCharge;
 
 
         private CubePush cubePush;
@@ -33,9 +32,8 @@ namespace CallbackSystem
 
         private bool isOn;
 
-        private void Start()
-        {
-            
+        private void Start() {
+
             //iconBehaviour = GetComponentInChildren<IconBehaviour>();
 
             cubePush = GetComponent<CubePush>();
@@ -48,17 +46,14 @@ namespace CallbackSystem
             //     Debug.Log("¯\\_(ツ)_/¯ Patrik says the PingPong.cs Script is missing from this cube. He's not sure if it should be here or not, so he adds it anyway.", this);
             //     pingPong = gameObject.AddComponent<PingPong>(); // TODO SOMETIMES MAYBE GOOD, SOMETIMES MAYBE SHIT!
             // }
-            if (charge > 0)
-            {
+            if (charge > 0) {
                 //audioSource.Play();
                 cubePush.SetPushable(true);
                 //iconBehaviour.IsCharged(true);
                 pingPong.SetPower(1f);
                 //audioSource.volume = .5f;
                 isOn = true;
-            }
-            else
-            {
+            } else {
                 //audioSource.Play();
                 //audioSource.Stop();
                 cubePush.SetPushable(false);
@@ -76,58 +71,48 @@ namespace CallbackSystem
             TimePeriodChanged.AddListener<TimePeriodChanged>(changedTime);
         }
 
-        private void Update()
-        {
-            if (isOn && !audioSource.isPlaying) { audioSource.Play();
-                audioSource.volume = 1f;
-                
-            } else if(!isOn) audioSource.Stop(); //audioSource.volume = 0f;
-           
+        private void Update() {
+            if (audioSource != null) {
+                if (isOn && !audioSource.isPlaying) {
+                    audioSource.Play();
+                    audioSource.volume = 1f;
+
+                } else if (!isOn) audioSource.Stop(); //audioSource.volume = 0f;
+            }
         }
 
-        public void Charging(int charge, Object origin)
-        {
-            if (this.charge < charge)
-            {
+        public void Charging(int charge, Object origin) {
+            if (this.charge < charge) {
                 this.charge = charge;
-                if (charge > 0)
-                {
+                if (charge > 0) {
                     StartCoroutine(SetMaterial(true));
                     if (cubePush != null)
                         cubePush.SetPushable(true);
                     isOn = true;
-                }
-                else
-                {
+                } else {
                     StartCoroutine(SetMaterial(false));
                     isOn = false;
                 }
-                if (!origin.GetType().Equals(GetType()))
-                {
+                if (!origin.GetType().Equals(GetType())) {
                     chargeEvent?.Invoke();
                 }
             }
         }
 
-        private void PastChargeChange(ChargeChangedEvent chargeChangedEvent)
-        {
-            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.pastSelf != null && timeTravelObject.pastSelf.pastSelf.Equals(chargeChangedEvent.changedObject))
-            {
-                    Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
+        private void PastChargeChange(ChargeChangedEvent chargeChangedEvent) {
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.pastSelf != null && timeTravelObject.pastSelf.pastSelf.Equals(chargeChangedEvent.changedObject)) {
+                Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
             }
-            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.Equals(chargeChangedEvent.changedObject))
-            {
-                
-                    Charging(pastCubeCharge.charge - chargeReductionAfterTimeJump, this);
-            } if (charge > 0)
-            {
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.Equals(chargeChangedEvent.changedObject)) {
+
+                Charging(pastCubeCharge.charge - chargeReductionAfterTimeJump, this);
+            }
+            if (charge > 0) {
                 isOn = true;
-            }
-            else isOn = false;
+            } else isOn = false;
         }
 
-        private void PastChargeChange()
-        {
+        private void PastChargeChange() {
             /*if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.pastSelf != null)
             {
 //                Charging(pastCubeCharge.pastCubeCharge.charge - (2 * chargeReductionAfterTimeJump), this);
@@ -138,26 +123,21 @@ namespace CallbackSystem
             }*/
         }
 
-        private IEnumerator SetMaterial(bool on)
-        {
+        private IEnumerator SetMaterial(bool on) {
             float timer = 0f;
-            while (timer < 1f)
-            {
-                if (on)
-                {
+            while (timer < 1f) {
+                if (on) {
                     timer += Time.deltaTime / timeToCharge;
-                    if (pingPong != null){
+                    if (pingPong != null) {
                         pingPong.SetPower(Mathf.Lerp(0f, 1f, timer));
 
                         //audioSource.Play();
                         audioSource.volume = Mathf.Lerp(0f, .5f, timer);
                     }
                     yield return null;
-                }
-                else
-                {
+                } else {
                     timer += Time.deltaTime / timeToCharge;
-                    if (pingPong != null){
+                    if (pingPong != null) {
                         pingPong.SetPower(Mathf.Lerp(1f, 0f, timer));
 
                         //audioSource.Play();
@@ -176,25 +156,19 @@ namespace CallbackSystem
             //    iconBehaviour.IsCharged(false);
             //}
         }
-        private void changedTime(TimePeriodChanged timePeriodChanged)
-        {
-            if (charge > 0f)
-            {
+        private void changedTime(TimePeriodChanged timePeriodChanged) {
+            if (charge > 0f) {
                 pingPong.SetPower(1f);
                 //iconBehaviour.IsCharged(true);
-            }
-            else
-            {
+            } else {
                 pingPong.SetPower(0f);
                 //iconBehaviour.IsCharged(false);
             }
             PastChargeChange();
         }
-        private IEnumerator SetPast()
-        {
+        private IEnumerator SetPast() {
             yield return null;
-            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>() != null)
-            {
+            if (timeTravelObject.pastSelf != null && timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>() != null) {
                 pastCubeCharge = timeTravelObject.pastSelf.gameObject.GetComponent<CubeCharge>();
             }
         }

@@ -43,14 +43,18 @@ public class RuntimeSceneManager : MonoBehaviour {
     public int CurrentSceneIndex => currentSceneIndex;
     public bool OnboardingRoomLoaded => currentOnboardingSceneIndex != -1;
     public int OnboadringRoomIndex => currentOnboardingSceneIndex;
+    private int activeSceneCounter;
 
     private void Start() {
         playerTransform = FindObjectOfType<NewRatCharacterController.NewRatCharacterController>().transform;
         SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
         PlayerEnterRoom.AddListener<PlayerEnterRoom>(OnPlayerEnterRoom);
     }
 
-    private void OnPlayerEnterRoom(PlayerEnterRoom e) { LoadAndUnloadNeighbouringRooms(e.sceneIndex); }
+    private void OnPlayerEnterRoom(PlayerEnterRoom e) {
+        if (activeSceneCounter == activeSceneIndexes.Count || activeSceneIndexes.Count == 0) LoadAndUnloadNeighbouringRooms(e.sceneIndex);
+    }
 
     /// <summary>
     /// Callback function which main purpose is to initialise each new loaded room into the time period the player is currently in. 
@@ -59,6 +63,7 @@ public class RuntimeSceneManager : MonoBehaviour {
     /// <param name="scene">Loaded scene</param>
     /// <param name="mode">Scene load mode</param>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        activeSceneCounter++;
         TimeTravelManager.ReloadCurrentTimeTravelPeriod();
         GameObject onboardingSpawnMarker = GameObject.FindGameObjectWithTag("OnboardingSpawnMarker");
         if (onboardingSpawnMarker) {
@@ -67,7 +72,11 @@ public class RuntimeSceneManager : MonoBehaviour {
             Camera.main.transform.LookAt(onboardingSpawnMarker.transform, Vector3.forward);
         }
     }
-    private void OnDestroy() { SceneManager.sceneLoaded -= OnSceneLoaded; }
+    private void OnSceneUnloaded(Scene scene) { activeSceneCounter--; }
+    private void OnDestroy() {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
     public bool SceneIsLoaded(int sceneIndex) { return activeSceneIndexes.Contains(sceneIndex); }
 
     /// <summary>
