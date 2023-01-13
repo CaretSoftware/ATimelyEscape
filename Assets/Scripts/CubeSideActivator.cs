@@ -26,6 +26,7 @@ public class CubeSideActivator : MonoBehaviour {
 		canvasGroup = gameObject.GetComponent<CanvasGroup>();
 
 		canvasGroup.alpha = 0;
+		Debug.LogError("Dev build");
 	}
 
 	private void FixedUpdate()
