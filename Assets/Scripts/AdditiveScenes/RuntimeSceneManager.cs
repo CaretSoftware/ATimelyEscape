@@ -13,12 +13,12 @@ public class RuntimeSceneManager : MonoBehaviour {
     private static readonly HashSet<int> Room1 = new HashSet<int> { 2, 3, 4, 5, 10 };      // Incubator
     private static readonly HashSet<int> Room2 = new HashSet<int> { 2, 3, 4, 5, 10 };      // Office
     private static readonly HashSet<int> Room3 = new HashSet<int> { 3, 4, 5, 10 };      // Corridor
-    private static readonly HashSet<int> Room4 = new HashSet<int> { 2, 3, 5, 6, 10 };      // Lab Large
+    private static readonly HashSet<int> Room4 = new HashSet<int> { 2, 3, 4, 5, 6, 10 };      // Lab Large
     private static readonly HashSet<int> Room5 = new HashSet<int> { 5, 6, 7 };      // Control Room
     private static readonly HashSet<int> Room6 = new HashSet<int> { 6, 7, 8 };      // Conveyor room
     private static readonly HashSet<int> Room7 = new HashSet<int> { 7, 8, 9 };     // Robot Factory
     private static readonly HashSet<int> Room8 = new HashSet<int> { 8, 9, 10 };    // Garden
-    private static readonly HashSet<int> Room9 = new HashSet<int> { 5, 9, 10, };   // Cryo Hall
+    private static readonly HashSet<int> Room9 = new HashSet<int> { 2, 5, 9, 10, };   // Cryo Hall
 
     private static readonly HashSet<int>[] Rooms = new HashSet<int>[] {
         new HashSet<int>(),
