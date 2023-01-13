@@ -9,6 +9,7 @@ public class TimerScript : MonoBehaviour
     [SerializeField] private float timer;
     [SerializeField] private TextMeshProUGUI[] timerTexts;
     [SerializeField] private Transform checkpoint;
+    [SerializeField] private GameObject arrows;
     private float timeLeft;
     private bool firstOn;
     private bool secondOn;
@@ -17,6 +18,7 @@ public class TimerScript : MonoBehaviour
 
     private void Start()
     {
+        arrows.SetActive(false);
         timeLeft = timer;
         audioSource = GetComponent<AudioSource>();
     }
@@ -30,6 +32,7 @@ public class TimerScript : MonoBehaviour
             {
                 audioSource.Play();
                 audioHasPlayed = true;
+                arrows.SetActive(true);
             }
             if (timeLeft > 0)
             {
