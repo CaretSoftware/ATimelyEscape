@@ -70,8 +70,8 @@ public class NewRatCameraController : MonoBehaviour {
 	public bool Accessibility { get; set; } = false;
 
 	private void Awake() {
-		if (_instance != null && _instance != this) 
-			Destroy(this.gameObject);
+		//if (_instance != null && _instance != this) 
+		//	Destroy(this.gameObject);
 		_instance ??= this;
 		_cameraPos = transform.position;
 	}
