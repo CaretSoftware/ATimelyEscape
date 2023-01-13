@@ -67,7 +67,7 @@ public class SettingsMenuController : MonoBehaviour
         }
     }
     
-    public void SetTextToSpeachActive(bool active) // Checkbox for TextForSpeach
+    public void SetTextToSpeachActive(bool active) // Checkbox for TextForSpeech
     {
         SettingsManager.Instance.textToSpeachActive = active;
         textToSpeach.isOn = active;
@@ -83,7 +83,6 @@ public class SettingsMenuController : MonoBehaviour
     {
         SettingsManager.Instance.movmentAccessiblityActive = accessible;
         movementAccessiblityControl.isOn = accessible;
-        Debug.Log($"{accessible} {isPauseMenu}");
         if (isPauseMenu)
         {
             NewRatCharacterController.NewCharacterInput.Accessibility = accessible;
