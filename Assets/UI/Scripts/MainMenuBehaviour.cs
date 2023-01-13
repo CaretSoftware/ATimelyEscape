@@ -23,8 +23,7 @@ public class MainMenuBehaviour : MonoBehaviour
 
     private void Start()
     {
-        Time.timeScale = 1;
-        Debug.Log("" + Time.timeScale);
+        Time.timeScale = SettingsManager.Instance.timeScaleValue;
         startMenyAnimator = gameObject.GetComponent<Animator>();
 
         Cursor.lockState = CursorLockMode.Locked;

@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class KillZone : MonoBehaviour
 {
-    [SerializeField] private GameObject checkPoint;
+    [SerializeField] private Transform checkPoint;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && checkPoint != null)
         {
-            other.transform.position = checkPoint.transform.position;
+            FailStateScript.Instance.PlayDeathVisualization(checkPoint);
+            //other.transform.position = checkPoint.transform.position;
         }
         else if(other.CompareTag("Cube"))
         {

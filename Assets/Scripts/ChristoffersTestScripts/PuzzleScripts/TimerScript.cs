@@ -12,10 +12,13 @@ public class TimerScript : MonoBehaviour
     private float timeLeft;
     private bool firstOn;
     private bool secondOn;
+    private bool audioHasPlayed; 
+    private AudioSource audioSource;
 
     private void Start()
     {
         timeLeft = timer;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -23,6 +26,11 @@ public class TimerScript : MonoBehaviour
     {
         if (firstOn && secondOn)
         {
+            if (!audioHasPlayed)
+            {
+                audioSource.Play();
+                audioHasPlayed = true;
+            }
             if (timeLeft > 0)
             {
                 timeLeft -= Time.deltaTime;
@@ -57,6 +65,7 @@ public class TimerScript : MonoBehaviour
         firstOn = true;
         secondOn = true;
     }
+
 
     public void FirstButtonOn()
     {
