@@ -121,6 +121,7 @@ namespace NewRatCharacterController {
 		public override void Exit() {
 			CubePushState.pushCubeUIOn?.Invoke(true);
 			NewRatCharacter.AnimationController.Push(false);
+			NewRatCharacter.transform.parent = null; // TODO fix?
 			_letGo = false;
 			//NewRatCharacter.transform.parent = null;
 		}
