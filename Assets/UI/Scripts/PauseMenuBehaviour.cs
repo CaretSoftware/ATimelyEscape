@@ -60,8 +60,8 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
     public void PauseGame() {
 
-        //Cursor.lockState = CursorLockMode.Confined;
-        //Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
 
         newRatCharacterController.paused = true;
 
@@ -101,6 +101,9 @@ public class PauseMenuBehaviour : MonoBehaviour {
 
         //CallbackSystem.PauseEvent pauseEvent = new CallbackSystem.PauseEvent { paused = false };
         //pauseEvent.Invoke();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         newRatCharacterController.paused = false;
 
         pauseMenyAnimator.Play("UnPause");
