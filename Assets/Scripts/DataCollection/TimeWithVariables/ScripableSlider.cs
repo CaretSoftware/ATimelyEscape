@@ -47,12 +47,6 @@ public class ScripableSlider : MonoBehaviour
     {
         timer += Time.deltaTime;
     }
-    private void OnDisable()
-    {
-        data.UpdateVariableData(value, timer);
-        timer = 0f;
-    }
-
 
     public void OnValueChange()
     {
@@ -62,19 +56,6 @@ public class ScripableSlider : MonoBehaviour
         RoundValue();
         myUnityEvent.Invoke(value);
 
-    }
-
-    private void OnDestroy()
-    {
-        data.UpdateVariableData(value, timer);
-        SaveDataCollected.SaveVariableData(data);
-    }
-
-    [ContextMenu("Load")]
-
-    private void Load()
-    {
-        data = SaveDataCollected.LoadVariableData(gameObject.name + ".data");
     }
 
     private void RoundValue()
